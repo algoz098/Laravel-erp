@@ -22,3 +22,8 @@ Route::get('/home', 'HomeController@index');
 Auth::routes();
 
 Route::get('/home', 'HomeController@index');
+Route::get('/clientes', 'ClientesController@show');
+Route::get('/clientes/novo', 'ClientesController@showNovo');
+Route::post('/clientes/novo/{id}', 'ClientesController@update');
+Route::post('/clientes/novo', 'ClientesController@novo');
+Route::get('/clientes/{id}', 'ClientesController@showId');
