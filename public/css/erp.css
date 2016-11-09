@@ -149,3 +149,15 @@ body {
 .list-contacts:hover{
   background-color: #ececec;
 }
+.topbar{
+  color: #e1ffff;
+  vertical-align: middle;
+  position: fixed;
+  background-color: #23282e;
+  left: 300px;
+  width: 100%;
+  top: 0;
+  z-index: 100;
+  border-top: 0;
+  height: 50px;
+}

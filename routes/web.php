@@ -11,18 +11,14 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', 'HomeController@index');
+
+Auth::routes();
 
 Auth::routes();
 
 Route::get('/home', 'HomeController@index');
-
-Auth::routes();
-
-Route::get('/home', 'HomeController@index');
-Route::get('/clientes', 'ClientesController@show');
+Route::get('/clientes', 'ClientesController@show')->middleware('auth');
 Route::get('/clientes/novo', 'ClientesController@showNovo');
 Route::post('/clientes/novo/{id}', 'ClientesController@update');
 Route::post('/clientes/novo', 'ClientesController@novo');
