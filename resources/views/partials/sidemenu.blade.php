@@ -4,18 +4,17 @@
     <div class="menu-list">
 
         <ul id="menu-content" class="menu-content collapse out">
-            <li>
-              <a href="index.php/dashboard">
+            <li class="{{{ Request::path()=='/' ? "active" : "" }}}">
+              <a href="{{ url('/') }}">
                 <i class="fa fa-dashboard fa-lg"></i> Painel
               </a>
             </li>
-
-            <li  data-toggle="collapse" data-target="#products" class="collapsed active">
+            <li  data-toggle="collapse" data-target="#products" class="collapsed {{{ Request::is('clientes*') ? "active" : "" }}}">
               <a href="#"><i class="fa fa-gift fa-lg"></i> Clientes <span class="arrow"></span></a>
             </li>
             <ul class="sub-menu collapse" id="products">
-                <li class="active"><a href="/erp/public/index.php/clientes">Consultar</a></li>
-                <li><a href="#">General</a></li>
+                <li class="{{{ Request::path()=='clientes' ? "active" : "" }}}"><a href="{{ url('/clientes') }}">Lista</a></li>
+                <li class="{{{ Request::path()=='clientes/novo' ? "active" : "" }}}"><a href="{{url('/clientes/novo')}}">Novo</a></li>
                 <li><a href="#">Buttons</a></li>
                 <li><a href="#">Tabs & Accordions</a></li>
                 <li><a href="#">Typography</a></li>

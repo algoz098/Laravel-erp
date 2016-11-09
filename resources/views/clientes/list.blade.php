@@ -13,7 +13,7 @@
       <div class="panel panel-default">
         <div class="panel-heading"><i class="fa fa-wrench fa-1x"></i> Caixa de opções</div>
         <div class="panel-body">
-          <a href="/erp/public/index.php/clientes/novo"><span style="font-size:1.5em;"><i class="fa fa-plus fa-1x"></i> Novo</span></a>
+          <a href="{{ url('/clientes/novo') }}"><span style="font-size:1.5em;"><i class="fa fa-plus fa-1x"></i> Novo</span></a>
         </div>
       </div>
     </div>
@@ -24,7 +24,7 @@
         <div class="panel-heading"><i class="fa fa-users fa-1x"></i> Lista de clientes e fornecedores</div>
         <div class="panel-body">
           @foreach($clientes as $key => $cliente)
-            <a href="/erp/public/index.php/clientes/{{$cliente->id}}">
+            <a href="{{ url('/clientes') }}/{{$cliente->id}}">
               <div class="row list-contacts">
                 <div class="col-md-3 text-center">
                   {{$cliente->id}}
