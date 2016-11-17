@@ -161,3 +161,18 @@ body {
   border-top: 0;
   height: 50px;
 }
+.level1{
+  color: red;
+}
+.level2{
+  color: orange;
+}
+.level3{
+  color: yellow;
+}
+.level4{
+  color: green;
+}
+.level5{
+  color: blue;
+}

@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Contatos as contatos;
+use App\Funcionarios as Funcionarios;
 
 class HomeController extends Controller
 {
@@ -23,6 +25,8 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('dashboard.index');
+      $contatos = contatos::all();
+      $funcionarios = Funcionarios::all();
+      return view('dashboard.index')->with('contatos', $contatos)->with('funcionarios', $funcionarios);
     }
 }

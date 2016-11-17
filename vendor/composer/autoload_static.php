@@ -278,9 +278,11 @@ class ComposerStaticIniteb7ed518eae24fc4a2b91da7f84bfb6b
     );
 
     public static $classMap = array (
-        'CreateClientesTable' => __DIR__ . '/../..' . '/database/migrations/2016_11_06_163403_create_clientes_table.php',
+        'CreateContatosTable' => __DIR__ . '/../..' . '/database/migrations/2016_11_06_163403_create_contatos_table.php',
         'CreateFuncionariosTable' => __DIR__ . '/../..' . '/database/migrations/2016_11_06_164116_create_funcionarios_table.php',
         'CreatePasswordResetsTable' => __DIR__ . '/../..' . '/database/migrations/2014_10_12_100000_create_password_resets_table.php',
+        'CreateTelefonesTable' => __DIR__ . '/../..' . '/database/migrations/2016_11_17_123248_create_telefones_table.php',
+        'CreateUsersPermissionsTable' => __DIR__ . '/../..' . '/database/migrations/2016_11_09_164000_create_users_permissions_table.php',
         'CreateUsersTable' => __DIR__ . '/../..' . '/database/migrations/2014_10_12_000000_create_users_table.php',
         'DatabaseSeeder' => __DIR__ . '/../..' . '/database/seeds/DatabaseSeeder.php',
         'File_Iterator' => __DIR__ . '/..' . '/phpunit/php-file-iterator/src/Iterator.php',

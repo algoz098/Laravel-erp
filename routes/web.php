@@ -17,9 +17,12 @@ Auth::routes();
 
 Auth::routes();
 
-Route::get('/home', 'HomeController@index');
-Route::get('/clientes', 'ClientesController@show')->middleware('auth');
-Route::get('/clientes/novo', 'ClientesController@showNovo');
-Route::post('/clientes/novo/{id}', 'ClientesController@update');
-Route::post('/clientes/novo', 'ClientesController@novo');
-Route::get('/clientes/{id}', 'ClientesController@showId');
+Route::get('/home', 'HomeController@index')->middleware('auth');
+Route::get('/contatos', 'ContatosController@show')->middleware('auth');
+Route::get('/contatos/novo', 'ContatosController@showNovo')->middleware('auth');
+Route::post('/contatos/novo/{id}', 'ContatosController@update')->middleware('auth');
+Route::post('/contatos/novo', 'ContatosController@novo')->middleware('auth');
+Route::get('/contatos/{id}', 'ContatosController@showId')->middleware('auth');
+
+
+Route::get('/admin', 'AdminController@index')->middleware('auth');

@@ -9,12 +9,12 @@
                 <i class="fa fa-dashboard fa-lg"></i> Painel
               </a>
             </li>
-            <li  data-toggle="collapse" data-target="#products" class="collapsed {{{ Request::is('clientes*') ? "active" : "" }}}">
-              <a href="#"><i class="fa fa-gift fa-lg"></i> Clientes <span class="arrow"></span></a>
+            <li  data-toggle="collapse" data-target="#products" class="collapsed {{{ Request::is('contatos*') ? "active" : "" }}}">
+              <a href="#"><i class="fa fa-gift fa-lg"></i> contatos <span class="arrow"></span></a>
             </li>
             <ul class="sub-menu collapse" id="products">
-                <li class="{{{ Request::path()=='clientes' ? "active" : "" }}}"><a href="{{ url('/clientes') }}">Lista</a></li>
-                <li class="{{{ Request::path()=='clientes/novo' ? "active" : "" }}}"><a href="{{url('/clientes/novo')}}">Novo</a></li>
+                <li class="{{{ Request::path()=='contatos' ? "active" : "" }}}"><a href="{{ url('/contatos') }}">Lista</a></li>
+                <li class="{{{ Request::path()=='contatos/novo' ? "active" : "" }}}"><a href="{{url('/contatos/novo')}}">Novo</a></li>
                 <li><a href="#">Buttons</a></li>
                 <li><a href="#">Tabs & Accordions</a></li>
                 <li><a href="#">Typography</a></li>
@@ -36,11 +36,11 @@
             </ul>
 
 
-            <li data-toggle="collapse" data-target="#new" class="collapsed">
-              <a href="#"><i class="fa fa-car fa-lg"></i> New <span class="arrow"></span></a>
+            <li data-toggle="collapse" data-target="#new" class="collapsed {{{ Request::is('admin*') ? "active" : "" }}}">
+              <a href="#"><i class="fa fa-wrench fa-lg"></i> Controle <span class="arrow"></span></a>
             </li>
             <ul class="sub-menu collapse" id="new">
-              <li>New New 1</li>
+              <a href="{{ url('/admin') }}"><li class="{{{ Request::path()=='  admin' ? "active" : "" }}}">Painel</li></a>
               <li>New New 2</li>
               <li>New New 3</li>
             </ul>
@@ -52,9 +52,9 @@
               </a>
               </li>
 
-             <li>
+             <li class="">
               <a href="#">
-              <i class="fa fa-users fa-lg"></i> Users
+              <i class="fa fa-wrench fa-lg"></i> Controle
               </a>
             </li>
         </ul>
