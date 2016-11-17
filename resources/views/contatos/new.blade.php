@@ -33,11 +33,11 @@
               <div class="col-md-3">
                 <div class="form-group">
                   <label for="sociabilidade">Sociabilidade</label><br>
-                  <input type="radio" name="sociabilidade" id="sociabilidade" value="1"><i class="fa fa-signal level1"></i>
-                  <input type="radio" name="sociabilidade" id="sociabilidade" value="2"><i class="fa fa-signal level2"></i>
-                  <input type="radio" name="sociabilidade" id="sociabilidade" value="3"><i class="fa fa-signal level3"></i>
-                  <input type="radio" name="sociabilidade" id="sociabilidade" value="4"><i class="fa fa-signal level4"></i>
-                  <input type="radio" name="sociabilidade" id="sociabilidade" value="5"><i class="fa fa-signal level5"></i>
+                  <input type="radio" name="sociabilidade" id="sociabilidade" value="1" @if (!empty($contato->sociabilidade)){{{$contato->sociabilidade==1 ? "checked" : ""}}}@endif><i class="fa fa-signal level1"></i>
+                  <input type="radio" name="sociabilidade" id="sociabilidade" value="2" @if (!empty($contato->sociabilidade)){{{$contato->sociabilidade==2 ? "checked" : ""}}}@endif><i class="fa fa-signal level2"></i>
+                  <input type="radio" name="sociabilidade" id="sociabilidade" value="3" @if (!empty($contato->sociabilidade)){{{$contato->sociabilidade==3 ? "checked" : ""}}}@endif><i class="fa fa-signal level3"></i>
+                  <input type="radio" name="sociabilidade" id="sociabilidade" value="4" @if (!empty($contato->sociabilidade)){{{$contato->sociabilidade==4 ? "checked" : ""}}}@endif><i class="fa fa-signal level4"></i>
+                  <input type="radio" name="sociabilidade" id="sociabilidade" value="5" @if (!empty($contato->sociabilidade)){{{$contato->sociabilidade==5 ? "checked" : ""}}}@endif><i class="fa fa-signal level5"></i>
                 </div>
               </div>
               <div class="col-md-2">

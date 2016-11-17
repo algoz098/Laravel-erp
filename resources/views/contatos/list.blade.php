@@ -38,10 +38,15 @@
                   {{$contato->id}}
                 </div>
                 <div class="col-md-2">
-                  <i class="fa fa-user level{{$contato->active}}"></i> <i class="fa fa-signal level{{$contato->sociabilidade}}"></i> {{$contato->nome}} {{$contato->sobrenome}}
+                  <i class="fa fa-user level{{$contato->active}}"></i>
+                  <i class="fa fa-signal level{{$contato->sociabilidade}}"></i>
+                  {{$contato->nome}} {{$contato->sobrenome}}
                 </div>
                 <div class="col-md-8">
-                  {{$contato->endereco}} - {{$contato->bairro}} {{$contato->cidade}} - {{$contato->uf}}
+                  @foreach($contato->telefones as $key => $telefone)
+                    {{$telefone->numero}} 
+                  @endforeach
+                  {{$contato->endereco}} - {{$contato->bairro}} - {{$contato->cidade}} - {{$contato->uf}}
                 </div>
               </div>
           @endforeach
