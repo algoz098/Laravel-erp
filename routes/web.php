@@ -18,11 +18,16 @@ Auth::routes();
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->middleware('auth');
-Route::get('/contatos', 'ContatosController@show')->middleware('auth');
+Route::get('/contatos', 'ContatosController@show')->name('contatos')->middleware('auth');
 Route::get('/contatos/novo', 'ContatosController@showNovo')->middleware('auth');
 Route::post('/contatos/novo/{id}', 'ContatosController@update')->middleware('auth');
 Route::post('/contatos/novo', 'ContatosController@novo')->middleware('auth');
 Route::get('/contatos/{id}', 'ContatosController@showId')->middleware('auth');
+Route::get('/contatos/{id}/telefones', 'ContatosController@telefones')->middleware('auth');
+Route::post('/contatos/{id}/telefones', 'ContatosController@telefones_new')->middleware('auth');
+Route::get('/contatos/{id}/telefones/{id_tel}', 'ContatosController@telefones_get')->middleware('auth');
+Route::post('/contatos/{id}/telefones/{id_tel}', 'ContatosController@telefones_post')->middleware('auth');
+Route::get('/contatos/{id}/telefones/{id_tel}/delete', 'ContatosController@telefones_delete')->middleware('auth');
 
 
 Route::get('/admin', 'AdminController@index')->middleware('auth');

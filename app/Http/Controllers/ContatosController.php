@@ -3,7 +3,11 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+
+use Illuminate\Support\Facades\Validator;
+
 use App\Contatos as Contatos;
+use App\Telefones as Telefones;
 
 class ContatosController extends Controller
 {
@@ -70,4 +74,41 @@ class ContatosController extends Controller
     return view('contatos.list')->with('contatos', $contatos);
   }
 
+  public function telefones_get( $id, $id_telefone )
+  {
+    $telefone = Telefones::find($id_telefone);
+    return view('contatos.phone')->with('telefone', $telefone);
+  }
+
+  public function telefones_post( Request $request, $id, $id_telefone )
+  {
+    $telefone = Telefones::find($id_telefone);
+    $telefone->numero = $request->numero;
+    $telefone->tipo = $request->tipo;
+    $telefone->update();
+    return redirect()->route('contatos');
+  }
+
+  public function telefones( $id )
+  {
+    $contato = Contatos::find($id);
+    return view('contatos.newphone')->with('contato', $contato);
+  }
+
+  public function telefones_new( Request $request, $id )
+  {
+    $telefone = new Telefones;
+    $telefone->contatos_id = $id;
+    $telefone->tipo = $request->tipo;
+    $telefone->numero = $request->numero;
+    $telefone->save();
+    return redirect()->route('contatos');
+  }
+
+  public function telefones_delete( $id, $id_telefone )
+  {
+    $telefone = Telefones::find($id_telefone);
+    $telefone->delete();
+    return redirect()->route('contatos');
+  }
 }
