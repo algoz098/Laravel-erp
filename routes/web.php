@@ -33,6 +33,7 @@ Route::get('/contatos/{id}/relacoes', 'ContatosController@relacoes')->middleware
 Route::get('/contatos/{id}/relacoes/novo', 'ContatosController@relacoes_novo')->middleware('auth');
 Route::post('/contatos/{id}/relacoes/novo', 'ContatosController@relacoes_post')->middleware('auth');
 Route::get('/contatos/{id}/relacoes/{id_relacao}/delete', 'ContatosController@relacoes_delete')->middleware('auth');
+#Route::post('/contatos/{id}/relacoes/{id_relacao}', 'ContatosController@relacoes_edit')->middleware('auth');
 
 
 Route::get('/admin', 'AdminController@index')->middleware('auth');
