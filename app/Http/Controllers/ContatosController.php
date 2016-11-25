@@ -18,6 +18,24 @@ class ContatosController extends Controller
     return view('contatos.list')->with('contatos', $contatos);
   }
 
+  public function search( Request $request)
+  {
+    if (!empty($request->busca)){
+      $contatos = Contatos::where('nome', 'like', '%' .  $request->busca . '%')
+                            ->orWhere('sobrenome', 'like', '%' .  $request->busca . '%')
+                            ->orWhere('endereco', 'like', '%' .  $request->busca . '%')
+                            ->orWhere('cpf', 'like', '%' .  $request->busca . '%')
+                            ->orWhere('cidade', 'like', '%' .  $request->busca . '%')
+                            ->orWhere('uf', 'like', '%' .  $request->busca . '%')
+                            ->orWhere('bairro', 'like', '%' .  $request->busca . '%')
+                            ->orWhere('cep', 'like', '%' .  $request->busca . '%')
+                            ->get();
+    } else {
+      $contatos = Contatos::all();
+    }
+    return view('contatos.list')->with('contatos', $contatos);
+  }
+
   public function showNovo()
   {
     return view('contatos.new');
@@ -124,6 +142,20 @@ class ContatosController extends Controller
     $contato = Contatos::find($id);
     $contatos = Contatos::all();
     return view('contatos.relacoesnovo')->with('contato', $contato)->with('contatos', $contatos);
+  }
+
+  public function relacoes_busca( Request $request, $id)
+  {
+    $contato = Contatos::find($id);
+    if (!empty($request->busca)){
+      $contatos = Contatos::where('nome', 'like', '%' .  $request->busca . '%')
+                            ->orWhere('sobrenome', 'like', '%' .  $request->busca . '%')
+                            ->get();
+    } else {
+      $contatos = Contatos::all();
+    }
+    return view('contatos.relacoesnovo')->with('contato', $contato)->with('contatos', $contatos);
+    #return $contatos;
   }
 
   public function relacoes_post( Request $request, $id)

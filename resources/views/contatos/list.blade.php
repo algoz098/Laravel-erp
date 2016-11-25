@@ -21,8 +21,21 @@
   <div class="row">
     <div class="col-md-12">
       <div class="panel panel-default">
-        <div class="panel-heading"><i class="fa fa-users fa-1x"></i> Lista de contatos e fornecedores</div>
+        <div class="panel-heading ">
+          <i class="fa fa-users fa-1x"></i> Lista de contatos e fornecedores
+        </div>
         <div class="panel-body">
+          <div class="row">
+            <div class="col-md-12  ">
+              <form method="POST" action="{{ url('/contatos') }}/">
+                <div class="form-group form-inline text-center">
+                  {{ csrf_field() }}
+                  <input type="text" class="form-control" name="busca" id="busca" placeholder="Busca">
+                  <button type="submit" class="btn btn-success">Buscar</button>
+                </div>
+              </form>
+            </div>
+          </div>
           @foreach($contatos as $key => $contato)
               <div class="row list-contacts">
                 <div class="col-md-3 text-center">
