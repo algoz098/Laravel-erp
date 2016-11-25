@@ -29,5 +29,10 @@ Route::get('/contatos/{id}/telefones/{id_tel}', 'ContatosController@telefones_ge
 Route::post('/contatos/{id}/telefones/{id_tel}', 'ContatosController@telefones_post')->middleware('auth');
 Route::get('/contatos/{id}/telefones/{id_tel}/delete', 'ContatosController@telefones_delete')->middleware('auth');
 
+Route::get('/contatos/{id}/relacoes', 'ContatosController@relacoes')->middleware('auth');
+Route::get('/contatos/{id}/relacoes/novo', 'ContatosController@relacoes_novo')->middleware('auth');
+Route::post('/contatos/{id}/relacoes/novo', 'ContatosController@relacoes_post')->middleware('auth');
+Route::get('/contatos/{id}/relacoes/{id_relacao}/delete', 'ContatosController@relacoes_delete')->middleware('auth');
+
 
 Route::get('/admin', 'AdminController@index')->middleware('auth');

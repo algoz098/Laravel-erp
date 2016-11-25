@@ -25,7 +25,7 @@
         <div class="panel-body">
           @foreach($contatos as $key => $contato)
               <div class="row list-contacts">
-                <div class="col-md-2 text-center">
+                <div class="col-md-3 text-center">
                   <a href="{{ url('/contatos') }}/{{$contato->id}}" class="btn btn-primary btn_xs" data-toggle="tooltip" title="Editar">
                     <i class="fa fa-wrench" ></i>
                   </a>
@@ -35,6 +35,9 @@
                   <a href="{{ url('/contatos') }}/{{$contato->id}}/phone" class="btn btn-primary btn_xs" title="Adicionar Telefone"  data-toggle="modal" data-target="#addTelefones">
                     <i class="fa fa-phone"></i>
                   </a>
+                  <a href="{{ url('/contatos') }}/{{$contato->id}}/relacoes" class="btn btn-primary btn_xs" title="Relacionamentos">
+                    <i class="fa fa-users"></i>
+                  </a>
                   {{$contato->id}}
                 </div>
                 <div class="col-md-2">
@@ -42,7 +45,7 @@
                   <i class="fa fa-signal level{{$contato->sociabilidade}}"></i>
                   {{$contato->nome}} {{$contato->sobrenome}}
                 </div>
-                <div class="col-md-8">
+                <div class="col-md-7">
                   @foreach($contato->telefones as $key => $telefone)
                     <span class=""><span class="badge">{{$telefone->tipo}}</span> {{$telefone->numero}}</span>
                   @endforeach

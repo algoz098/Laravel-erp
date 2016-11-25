@@ -278,6 +278,7 @@ class ComposerStaticIniteb7ed518eae24fc4a2b91da7f84bfb6b
     );
 
     public static $classMap = array (
+        'CreateContatosPivotTable2' => __DIR__ . '/../..' . '/database/migrations/2016_11_24_215712_create_contatos_pivot_table2.php',
         'CreateContatosTable' => __DIR__ . '/../..' . '/database/migrations/2016_11_06_163403_create_contatos_table.php',
         'CreateFuncionariosTable' => __DIR__ . '/../..' . '/database/migrations/2016_11_06_164116_create_funcionarios_table.php',
         'CreatePasswordResetsTable' => __DIR__ . '/../..' . '/database/migrations/2014_10_12_100000_create_password_resets_table.php',

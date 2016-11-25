@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 
 use Illuminate\Support\Facades\Validator;
 
+use DB;
 use App\Contatos as Contatos;
 use App\Telefones as Telefones;
 
@@ -110,5 +111,45 @@ class ContatosController extends Controller
     $telefone = Telefones::find($id_telefone);
     $telefone->delete();
     return redirect()->route('contatos');
+  }
+
+  public function relacoes( $id)
+  {
+    $contato = Contatos::find($id);
+    return view('contatos.relacoes')->with('contato', $contato);
+  }
+
+  public function relacoes_novo( $id)
+  {
+    $contato = Contatos::find($id);
+    $contatos = Contatos::all();
+    return view('contatos.relacoesnovo')->with('contato', $contato)->with('contatos', $contatos);
+  }
+
+  public function relacoes_post( Request $request, $id)
+  {
+    $contato = Contatos::find($id);
+    $data = [
+      $request->from_id =>
+      [
+        'from_text' => $request->from_text,
+        'to_id' => $request->to_id,
+        'to_text' => $request->to_text
+      ]
+    ];
+
+    $contato->from()->sync($data);
+    $contatos = Contatos::all();
+
+    return view('contatos.relacoes')->with('contato', $contato)->with('contatos', $contatos);;
+  }
+
+  public function relacoes_delete( $id, $relacao_id){
+    $relation = DB::table('contatos_pivot')->where('id', '=', $relacao_id)->delete();
+
+    $contato = Contatos::find($id);
+    $contatos = Contatos::all();
+
+    return view('contatos.relacoes')->with('contato', $contato)->with('contatos', $contatos);;
   }
 }
