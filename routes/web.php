@@ -35,7 +35,10 @@ Route::get('/contatos/{id}/relacoes/novo', 'ContatosController@relacoes_novo')->
 Route::post('/contatos/{id}/relacoes/novo/busca', 'ContatosController@relacoes_busca')->middleware('auth');
 Route::post('/contatos/{id}/relacoes/novo', 'ContatosController@relacoes_post')->middleware('auth');
 Route::get('/contatos/{id}/relacoes/{id_relacao}/delete', 'ContatosController@relacoes_delete')->middleware('auth');
-#Route::post('/contatos/{id}/relacoes/{id_relacao}', 'ContatosController@relacoes_edit')->middleware('auth');
 
-
-Route::get('/admin', 'AdminController@index')->middleware('auth');
+Route::get('/admin', 'AdminController@index')->name('admin')->middleware('auth')->middleware('admin');
+Route::get('/admin/user/{id}', 'AdminController@user_edit')->middleware('auth')->middleware('admin');
+Route::post('/admin/user/{id}', 'AdminController@user_modify')->middleware('auth')->middleware('admin');
+Route::get('/admin/access/{id}', 'AdminController@access')->middleware('auth')->middleware('admin');
+Route::post('/admin/access/{id}', 'AdminController@access_post')->middleware('auth')->middleware('admin');
+Route::get('/admin/access/{id}/delete/{id_access}', 'AdminController@access_delete')->middleware('auth')->middleware('admin');

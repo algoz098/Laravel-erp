@@ -6,6 +6,7 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
+    'AlterUsersColumnContatosIdTable2' => $baseDir . '/database/migrations/2016_11_26_001906_alter_users_column_contatos_id_table2.php',
     'CreateContatosPivotTable2' => $baseDir . '/database/migrations/2016_11_24_215712_create_contatos_pivot_table2.php',
     'CreateContatosTable' => $baseDir . '/database/migrations/2016_11_06_163403_create_contatos_table.php',
     'CreateFuncionariosTable' => $baseDir . '/database/migrations/2016_11_06_164116_create_funcionarios_table.php',

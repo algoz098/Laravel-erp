@@ -9,7 +9,7 @@
           <div class="panel-body">
             <div class="row text-right">
               <div class="col-sm-offset-2 col-sm-10">
-                <button type="submit" class="btn btn-success">Salvar</button>
+                <a href="{{url()->previous() }}" class="btn btn-warning"><i class="fa fa-arrow-left"></i> Voltar</a>
               </div>
             </div>
             <div class="row form-inline">
@@ -31,7 +31,7 @@
                     @if($contato_to->id==$contato->id)
                     @else
                       <div class="row list-contacts text-center">
-                        <input type="radio" name="to_id" value="{{$contato_to->id}}" onclick="$('#to').text('{{$contato_to->nome}}'); $('#to2').text('{{$contato_to->nome}}'); $('#form').show()" > {{$contato_to->nome}}
+                        <input type="radio" name="to_id" value="{{$contato_to->id}}" onclick="$('#to').text('{{$contato_to->nome}}'); $('#to2').text('{{$contato_to->nome}}'); $('#form').show(); $('#to_id').val('{{$contato_to->id}}');" > {{$contato_to->nome}}
                       </div>
                     @endif
                   @endforeach
@@ -55,6 +55,8 @@
                     de <span class="label label-primary">{{$contato->nome}}</span>
                   </div>
                 </div>
+                <input type="hidden" class="form-control" value="" name="to_id" id="to_id">
+                <button type="submit" class="btn btn-success">Salvar</button>
               </form>
             </div>
           </div>

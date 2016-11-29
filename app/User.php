@@ -5,6 +5,7 @@ namespace App;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use App\Users_permissions;
+use App\Contatos;
 
 class User extends Authenticatable
 {
@@ -19,6 +20,10 @@ class User extends Authenticatable
         'name', 'email', 'password',
     ];
 
+    protected $casts = [
+        'perms' => 'json'
+    ];
+
     /**
      * The attributes that should be hidden for arrays.
      *
@@ -31,5 +36,10 @@ class User extends Authenticatable
     public function roles()
     {
         return $this->hasMany('App\Users_permissions');
+    }
+
+    public function contato()
+    {
+        return $this->belongsTo('App\Contatos', 'contatos_id');
     }
 }

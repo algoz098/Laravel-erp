@@ -6,6 +6,7 @@
         <div class="panel-heading"><i class="fa fa-users fa-1x"></i> Relacionamentos de <span class="label label-primary">{{$contato->nome}}</span></div>
         <div class="panel-body">
           <div class="row text-right">
+            <a href="{{url()->previous() }}" class="btn btn-warning"><i class="fa fa-arrow-left"></i> Voltar</a>
             <a href="{{ url('/contatos') }}/{{$contato->id}}/relacoes/novo" class="btn btn-success">
               <i class="fa fa-plus"></i>
             </a>

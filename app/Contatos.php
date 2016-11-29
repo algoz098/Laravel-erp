@@ -23,4 +23,9 @@ class Contatos extends Model
     {
       return $this->belongsToMany('App\Contatos', 'contatos_pivot', 'to_id', 'from_id')->withPivot('to_text', 'from_text', 'id');
     }
+
+    public function user()
+    {
+        return $this->hasOne('App\User');
+    }
 }

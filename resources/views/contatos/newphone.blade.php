@@ -11,6 +11,7 @@
           <div class="panel-body">
             <div class="row text-right">
               <div class="col-sm-offset-2 col-sm-10">
+                <a href="{{url()->previous() }}" class="btn btn-warning"><i class="fa fa-arrow-left"></i> Voltar</a>
                 <button type="submit" class="btn btn-success">Salvar</button>
               </div>
             </div>

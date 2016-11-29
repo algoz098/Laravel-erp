@@ -9,22 +9,13 @@
                 <i class="fa fa-dashboard fa-lg"></i> Painel
               </a>
             </li>
-            <li  data-toggle="collapse" data-target="#products" class="collapsed {{{ Request::is('contatos*') ? "active" : "" }}}">
-              <a href="#"><i class="fa fa-gift fa-lg"></i> contatos <span class="arrow"></span></a>
+            <li  data-toggle="collapse" data-target="#products" class="{{{ Request::is('contatos*') ? "active" : "collapsed" }}}" aria-expanded="{{{ Request::is('contatos*') ? "true" : "false" }}}">
+              <a href="#"><i class="fa fa-gift fa-lg"></i> Contatos <span class="arrow"></span></a>
             </li>
-            <ul class="sub-menu collapse" id="products">
+            <ul class="sub-menu collapse {{{ Request::is('contatos*') ? "in" : "" }}}" aria-expanded="{{{ Request::is('contatos*') ? "true" : "false" }}}" id="products">
                 <li class="{{{ Request::path()=='contatos' ? "active" : "" }}}"><a href="{{ url('/contatos') }}">Lista</a></li>
                 <li class="{{{ Request::path()=='contatos/novo' ? "active" : "" }}}"><a href="{{url('/contatos/novo')}}">Novo</a></li>
-                <li><a href="#">Buttons</a></li>
-                <li><a href="#">Tabs & Accordions</a></li>
-                <li><a href="#">Typography</a></li>
-                <li><a href="#">FontAwesome</a></li>
-                <li><a href="#">Slider</a></li>
-                <li><a href="#">Panels</a></li>
-                <li><a href="#">Widgets</a></li>
-                <li><a href="#">Bootstrap Model</a></li>
             </ul>
-
 
             <li data-toggle="collapse" data-target="#service" class="collapsed">
               <a href="#"><i class="fa fa-globe fa-lg"></i> Services <span class="arrow"></span></a>
@@ -35,27 +26,17 @@
               <li>New Service 3</li>
             </ul>
 
-
-            <li data-toggle="collapse" data-target="#new" class="collapsed {{{ Request::is('admin*') ? "active" : "" }}}">
-              <a href="#"><i class="fa fa-wrench fa-lg"></i> Controle <span class="arrow"></span></a>
-            </li>
-            <ul class="sub-menu collapse" id="new">
-              <a href="{{ url('/admin') }}"><li class="{{{ Request::path()=='  admin' ? "active" : "" }}}">Painel</li></a>
-              <li>New New 2</li>
-              <li>New New 3</li>
-            </ul>
-
-
-             <li>
-              <a href="#">
-              <i class="fa fa-user fa-lg"></i> Profile
-              </a>
+            @if (Auth::user()->perms["admin"]==1)
+              <li data-toggle="collapse" data-target="#admin" class="collapsed {{{ Request::is('admin*') ? "active" : "" }}}">
+                <a href="#"><i class="fa fa-wrench fa-lg"></i> Controle <span class="arrow"></span></a>
               </li>
+              <ul class="sub-menu collapse {{{ Request::is('admin*') ? "in" : "" }}}" aria-expanded="{{{ Request::is('admin*') ? "true" : "false" }}}" id="admin">
+                <a href="{{ url('/admin') }}"><li class="{{{ Request::path()=='admin' ? "active" : "" }}}">Painel</li></a>
+                <li>New New 2</li>
+                <li>New New 3</li>
+              </ul>
+            @endif
 
-             <li class="">
-              <a href="#">
-              <i class="fa fa-wrench fa-lg"></i> Controle
-              </a>
-            </li>
+
         </ul>
  </div>
