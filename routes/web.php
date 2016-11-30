@@ -52,3 +52,4 @@ Route::post('/admin/user/{id}', 'AdminController@user_modify')->middleware('auth
 Route::get('/admin/access/{id}', 'AdminController@access')->middleware('auth')->middleware('admin');
 Route::post('/admin/access/{id}', 'AdminController@access_post')->middleware('auth')->middleware('admin');
 Route::get('/admin/access/{id}/delete/{id_access}', 'AdminController@access_delete')->middleware('auth')->middleware('admin');
+Route::get('/admin/update', 'AdminController@update_index')->middleware('auth')->middleware('admin');

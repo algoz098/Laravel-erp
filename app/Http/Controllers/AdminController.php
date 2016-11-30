@@ -7,6 +7,7 @@ use App\User as User;
 use App\Contatos as Contatos;
 use App\Users_permissions as Roles;
 
+use File;
 class AdminController extends Controller
 {
     public function index(){
@@ -78,5 +79,13 @@ class AdminController extends Controller
       $contatos = contatos::all();
 
       return view('admin.index')->with('contatos', $contatos);
+    }
+
+    public function update_index(){
+      $file = base_path() . "/manifest.json";
+      $manifest = json_decode(file_get_contents($file), true);
+      $remoto = json_decode(file_get_contents("http://www.webgs.com.br/clientes/erp/manifest.json"), true);
+      #return $content;
+      return view('admin.update')->with('manifest', $manifest)->with('remoto', $remoto);
     }
 }

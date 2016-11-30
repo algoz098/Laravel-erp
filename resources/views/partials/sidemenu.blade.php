@@ -22,6 +22,7 @@
             </li>
             <ul class="sub-menu collapse {{{ Request::is('atendimentos*') ? "in" : "" }}}" aria-expanded="{{{ Request::is('atendimentos*') ? "true" : "false" }}}" id="atendimentos">
                 <li class="{{{ Request::path()=='atendimentos' ? "active" : "" }}}"><a href="{{ url('/atendimentos') }}">Lista</a></li>
+                <li class="{{{ Request::path()=='atendimentos/novo' ? "active" : "" }}}"><a href="{{ url('/atendimentos/novo') }}">Novo</a></li>
             </ul>
 
             @if (Auth::user()->perms["admin"]==1)
@@ -29,8 +30,8 @@
                 <a href="#"><i class="fa fa-wrench fa-lg"></i> Controle <span class="arrow"></span></a>
               </li>
               <ul class="sub-menu collapse {{{ Request::is('admin*') ? "in" : "" }}}" aria-expanded="{{{ Request::is('admin*') ? "true" : "false" }}}" id="admin">
-                <a href="{{ url('/admin') }}"><li class="{{{ Request::path()=='admin' ? "active" : "" }}}">Painel</li></a>
-                <li>New New 2</li>
+                <li class="{{{ Request::path()=='admin' ? "active" : "" }}}"><a href="{{ url('/admin') }}">Controle de Usuarios</a></li>
+                <li class="{{{ Request::path()=='admin/update' ? "active" : "" }}}"><a href="{{ url('/admin/update') }}">Atualizar</a></li>
                 <li>New New 3</li>
               </ul>
             @endif
