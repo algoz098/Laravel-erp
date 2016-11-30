@@ -17,13 +17,11 @@
                 <li class="{{{ Request::path()=='contatos/novo' ? "active" : "" }}}"><a href="{{url('/contatos/novo')}}">Novo</a></li>
             </ul>
 
-            <li data-toggle="collapse" data-target="#service" class="collapsed">
-              <a href="#"><i class="fa fa-globe fa-lg"></i> Services <span class="arrow"></span></a>
+            <li  data-toggle="collapse" data-target="#atendimentos" class="{{{ Request::is('atendimentos*') ? "active" : "collapsed" }}}" aria-expanded="{{{ Request::is('atendimentos*') ? "true" : "false" }}}">
+              <a href="#"><i class="fa fa-globe fa-lg"></i> Atendimentos <span class="arrow"></span></a>
             </li>
-            <ul class="sub-menu collapse" id="service">
-              <li>New Service 1</li>
-              <li>New Service 2</li>
-              <li>New Service 3</li>
+            <ul class="sub-menu collapse {{{ Request::is('atendimentos*') ? "in" : "" }}}" aria-expanded="{{{ Request::is('atendimentos*') ? "true" : "false" }}}" id="atendimentos">
+                <li class="{{{ Request::path()=='atendimentos' ? "active" : "" }}}"><a href="{{ url('/atendimentos') }}">Lista</a></li>
             </ul>
 
             @if (Auth::user()->perms["admin"]==1)

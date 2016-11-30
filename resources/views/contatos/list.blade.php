@@ -65,10 +65,6 @@
                   {{$contato->endereco}} - {{$contato->bairro}} - {{$contato->cidade}} - {{$contato->uf}}
                 </div>
               </div>
-
-              <!-- Button trigger modal -->
-
-
             <!-- Modal -->
             <div class="modal fade" id="addTelefones" tabindex="-1" role="dialog" aria-labelledby="addTelefonesLabel">
               <div class="modal-dialog" role="document">

@@ -36,6 +36,16 @@ Route::post('/contatos/{id}/relacoes/novo/busca', 'ContatosController@relacoes_b
 Route::post('/contatos/{id}/relacoes/novo', 'ContatosController@relacoes_post')->middleware('auth');
 Route::get('/contatos/{id}/relacoes/{id_relacao}/delete', 'ContatosController@relacoes_delete')->middleware('auth');
 
+Route::get('/atendimentos', 'AtendimentoController@index')->middleware('auth')->name('atendimentos');
+Route::post('/atendimentos', 'AtendimentoController@search')->middleware('auth');
+Route::get('/atendimentos/novo', 'AtendimentoController@new')->middleware('auth');
+Route::post('/atendimentos/novo/busca', 'AtendimentoController@searchContatos')->middleware('auth');
+Route::post('/atendimentos/novo', 'AtendimentoController@add')->middleware('auth');
+Route::get('/atendimentos/{id}', 'AtendimentoController@show')->middleware('auth');
+Route::post('/atendimentos/{id}', 'AtendimentoController@novo')->middleware('auth');
+Route::get('/atendimentos/{id}/delete', 'AtendimentoController@delete')->middleware('auth');
+Route::get('/atendimentos/{id}/edit', 'AtendimentoController@edit')->middleware('auth');
+
 Route::get('/admin', 'AdminController@index')->name('admin')->middleware('auth')->middleware('admin');
 Route::get('/admin/user/{id}', 'AdminController@user_edit')->middleware('auth')->middleware('admin');
 Route::post('/admin/user/{id}', 'AdminController@user_modify')->middleware('auth')->middleware('admin');
