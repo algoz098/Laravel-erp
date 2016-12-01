@@ -45,7 +45,7 @@
                   <a href="{{ url('/contatos') }}/{{$contato->id}}" class="btn btn-primary btn_xs" data-toggle="tooltip" title="Detalhes">
                     <i class="fa fa-file-text"></i>
                   </a>
-                  <a href="{{ url('/contatos') }}/{{$contato->id}}/phone" class="btn btn-primary btn_xs" title="Adicionar Telefone"  data-toggle="modal" data-target="#addTelefones">
+                  <a href="{{ url('/contatos') }}/{{$contato->id}}/phone" class="btn btn-primary btn_xs" title="Adicionar Telefone"  data-toggle="modal" data-target="#addTelefones{{$contato->id}}">
                     <i class="fa fa-phone"></i>
                   </a>
                   <a href="{{ url('/contatos') }}/{{$contato->id}}/relacoes" class="btn btn-primary btn_xs" title="Relacionamentos">
@@ -66,7 +66,7 @@
                 </div>
               </div>
             <!-- Modal -->
-            <div class="modal fade" id="addTelefones" tabindex="-1" role="dialog" aria-labelledby="addTelefonesLabel">
+            <div class="modal fade" id="addTelefones{{$contato->id}}" tabindex="-1" role="dialog" aria-labelledby="addTelefonesLabel">
               <div class="modal-dialog" role="document">
                 <div class="modal-content">
                   <div class="modal-header">
@@ -75,14 +75,14 @@
                   </div>
                   <div class="modal-body">
                       @foreach($contato->telefones as $key => $telefone)
-                          <a href="/erp/public/index.php/contatos/{{$contato->id}}/telefones/{{ $telefone->id }}" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i></a>
-                          <a href="/erp/public/index.php/contatos/{{$contato->id}}/telefones/{{ $telefone->id }}/delete" class="btn btn-danger btn-xs"><i class="fa fa-ban"></i></a>
+                          <a href="{{ url('/contatos') }}/{{$contato->id}}/telefones/{{ $telefone->id }}" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i></a>
+                          <a href="{{ url('/contatos') }}/{{$contato->id}}/telefones/{{ $telefone->id }}/delete" class="btn btn-danger btn-xs"><i class="fa fa-ban"></i></a>
                           {{ $telefone->tipo or "" }} {{ $telefone->numero or "" }} <br>
                       @endforeach
                   </div>
                   <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    <a href="/erp/public/index.php/contatos/{{$contato->id}}/telefones"><button type="submit" class="btn btn-primary">Novo</button></a>
+                    <a href="{{ url('/contatos') }}/{{$contato->id}}/telefones"><button type="submit" class="btn btn-primary">Novo</button></a>
                   </div>
                 </div>
               </div>

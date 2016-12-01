@@ -18,7 +18,7 @@ class AtendimentoController extends Controller
     return view('atend.show')->with('atendimento', $atendimento);
   }
 
-  public function new(){
+  public function new_a(){
     $contatos = Contatos::all();
     return view('atend.contatos')->with('contatos', $contatos);
   }

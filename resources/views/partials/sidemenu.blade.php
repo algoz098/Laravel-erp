@@ -25,7 +25,7 @@
                 <li class="{{{ Request::path()=='atendimentos/novo' ? "active" : "" }}}"><a href="{{ url('/atendimentos/novo') }}">Novo</a></li>
             </ul>
 
-            @if (Auth::user()->perms["admin"]==1)
+            @if (isset(Auth::user()->perms["admin"]) and Auth::user()->perms["admin"]==1)
               <li data-toggle="collapse" data-target="#admin" class="collapsed {{{ Request::is('admin*') ? "active" : "" }}}">
                 <a href="#"><i class="fa fa-wrench fa-lg"></i> Controle <span class="arrow"></span></a>
               </li>

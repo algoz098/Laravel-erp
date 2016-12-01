@@ -2,7 +2,7 @@
 @section('content')
   <div class="row">
     <div class="col-md-11">
-      <form method="POST" action="/erp/public/index.php/contatos/novo/{{ $contato->id or "" }}">
+      <form method="POST" action="{{ url('/contatos') }}/novo/{{ $contato->id or "" }}">
 
         <div class="form-group">
         {{ csrf_field() }}

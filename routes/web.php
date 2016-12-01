@@ -38,7 +38,7 @@ Route::get('/contatos/{id}/relacoes/{id_relacao}/delete', 'ContatosController@re
 
 Route::get('/atendimentos', 'AtendimentoController@index')->middleware('auth')->name('atendimentos');
 Route::post('/atendimentos', 'AtendimentoController@search')->middleware('auth');
-Route::get('/atendimentos/novo', 'AtendimentoController@new')->middleware('auth');
+Route::get('/atendimentos/novo', 'AtendimentoController@new_a')->middleware('auth');
 Route::post('/atendimentos/novo/busca', 'AtendimentoController@searchContatos')->middleware('auth');
 Route::post('/atendimentos/novo', 'AtendimentoController@add')->middleware('auth');
 Route::get('/atendimentos/{id}', 'AtendimentoController@show')->middleware('auth');

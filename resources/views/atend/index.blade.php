@@ -86,7 +86,7 @@
                       </div>
                       <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                        <a href="/erp/public/index.php/atendimentos/{{$atendimento->id}}"><button type="submit" class="btn btn-primary">Editar</button></a>
+                        <a href="{{ url('/atendimentos') }}/{{$atendimento->id}}"><button type="submit" class="btn btn-primary">Editar</button></a>
                       </div>
                     </div>
                   </div>
@@ -138,7 +138,7 @@
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-            <a href="/erp/public/index.php/atendimentos/{{$atendimento->id}}"><button type="submit" class="btn btn-primary">Editar</button></a>
+            <a href="{{ url('/atendimentos') }}/{{$atendimento->id}}"><button type="submit" class="btn btn-primary">Editar</button></a>
           </div>
         </div>
       </div>
