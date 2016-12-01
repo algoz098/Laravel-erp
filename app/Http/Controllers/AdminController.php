@@ -8,6 +8,7 @@ use App\Contatos as Contatos;
 use App\Users_permissions as Roles;
 
 use File;
+use ZipArchive;
 class AdminController extends Controller
 {
     public function index(){
@@ -100,13 +101,14 @@ class AdminController extends Controller
         $download = file_put_contents($file_local, file_get_contents($url."/".$file));
       }
       $zip = new ZipArchive;
-      if ($zip->open($file_loca) === TRUE) {
+      if ($zip->open($file_local) === TRUE) {
           $zip->extractTo($base);
           $zip->close();
       } else {
           return 'Erro ao aplicar atualização';
       }
-
-      return $file;
+      $manifest_local = base_path() . "/manifest.json";
+      $manifest = json_decode(file_get_contents($manifest_local), true);
+      return view('admin.update')->with('manifest', $manifest)->with('remoto', $json_remoto);
     }
 }
