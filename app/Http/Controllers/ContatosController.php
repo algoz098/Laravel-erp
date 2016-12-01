@@ -43,7 +43,6 @@ class ContatosController extends Controller
 
   public function novo( Request $request )
   {
-    //return view('contatos.new');
     $contato = new Contatos;
     $contato->nome = $request->nome;
     $contato->cpf = $request->cnpj;
@@ -57,10 +56,35 @@ class ContatosController extends Controller
     $contato->cidade = $request->cidade;
     $contato->cep = $request->cep;
     $contato->sociabilidade = $request->sociabilidade;
+    $contato->tipo = $request->tipo;
     if ($request->active=="1"){
         $contato->active = "4";
     }
     $contato->save();
+    if ($request->relacao=="0"){
+      $data = [
+        $contato->id =>
+        [
+          'from_text' => "Cliente",
+          'to_id' => 1,
+          'to_text' => "Fornecedor"
+        ]
+      ];
+
+      $contato->from()->sync($data);
+    }
+    if ($request->relacao=="1"){
+      $data = [
+        $request->from_id =>
+        [
+          'from_text' => "Fornecedor",
+          'to_id' => 1,
+          'to_text' => "Cliente"
+        ]
+      ];
+
+      $contato->from()->sync($data);
+    }
     $contatos = Contatos::all();
     return view('contatos.list')->with('contatos', $contatos);
   }
@@ -85,8 +109,34 @@ class ContatosController extends Controller
     $contato->cidade = $request->cidade;
     $contato->cep = $request->cep;
     $contato->sociabilidade = $request->sociabilidade;
+    $contato->tipo = $request->tipo;
     if ($request->active=="1"){
         $contato->active = "4";
+    }
+    $contato->save();
+    if ($request->relacao=="0"){
+      $data = [
+        $contato->id =>
+        [
+          'from_text' => "Cliente",
+          'to_id' => 1,
+          'to_text' => "Fornecedor"
+        ]
+      ];
+
+      $contato->from()->sync($data);
+    }
+    if ($request->relacao=="1"){
+      $data = [
+        $request->from_id =>
+        [
+          'from_text' => "Fornecedor",
+          'to_id' => 1,
+          'to_text' => "Cliente"
+        ]
+      ];
+
+      $contato->from()->sync($data);
     }
     $contato->save();
     $contatos = contatos::all();

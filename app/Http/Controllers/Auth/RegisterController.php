@@ -61,6 +61,7 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
+      return "DESATIVADO";
         return User::create([
             'email' => $data['email'],
             'password' => bcrypt($data['password']),

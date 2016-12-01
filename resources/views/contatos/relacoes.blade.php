@@ -12,10 +12,10 @@
             </a>
           </div>
             <div class="row">
-              <div class="col-md-6">
+              <div class="col-md-8">
                 @foreach($contato->from as $key => $from)
                   <div class="row h3 list-contacts">
-                    <div class="col-md-3 text-right">
+                    <div class="col-md-2 text-right">
                       <a href="{{ url('/contatos') }}/{{$contato->id}}/relacoes/{{$contato->from[$key]->pivot->id}}/delete" class="btn btn-danger">
                         <i class="fa fa-ban"></i>
                       </a>
@@ -31,7 +31,7 @@
                         <i class="fa fa-pencil"></i>
                       </a>
                     </div>
-                    <div class="col-md-7">
+                    <div class="col-md-10">
                       {{$contato->nome}} é
                       <span class="label label-success">{{$contato->from[$key]->pivot->from_text}}</span>
                       de {{$contato->from[$key]->nome}}
