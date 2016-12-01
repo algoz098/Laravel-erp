@@ -85,7 +85,28 @@ class AdminController extends Controller
       $file = base_path() . "/manifest.json";
       $manifest = json_decode(file_get_contents($file), true);
       $remoto = json_decode(file_get_contents("http://www.webgs.com.br/clientes/erp/manifest.json"), true);
-      #return $content;
       return view('admin.update')->with('manifest', $manifest)->with('remoto', $remoto);
+    }
+
+    public function update_do(){
+      $storage = storage_path();
+      $base = base_path();
+      $url = "http://www.webgs.com.br/clientes/erp";
+      $json_remoto = json_decode(file_get_contents("http://www.webgs.com.br/clientes/erp/manifest.json"), true);
+      $file_local= $storage.'/'.$json_remoto["versao"].".zip";
+      $file = $json_remoto["versao"].".zip";
+      if (!File::exists($file_local))
+      {
+        $download = file_put_contents($file_local, file_get_contents($url."/".$file));
+      }
+      $zip = new ZipArchive;
+      if ($zip->open($file_loca) === TRUE) {
+          $zip->extractTo($base);
+          $zip->close();
+      } else {
+          return 'Erro ao aplicar atualização';
+      }
+
+      return $file;
     }
 }

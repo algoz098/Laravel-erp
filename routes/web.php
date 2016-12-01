@@ -53,3 +53,4 @@ Route::get('/admin/access/{id}', 'AdminController@access')->middleware('auth')->
 Route::post('/admin/access/{id}', 'AdminController@access_post')->middleware('auth')->middleware('admin');
 Route::get('/admin/access/{id}/delete/{id_access}', 'AdminController@access_delete')->middleware('auth')->middleware('admin');
 Route::get('/admin/update', 'AdminController@update_index')->middleware('auth')->middleware('admin');
+Route::get('/admin/update/do', 'AdminController@update_do')->middleware('auth')->middleware('admin');

@@ -6,9 +6,9 @@
         @if ($manifest["versao"] < $remoto["versao"])
           <div class="row" >
             <div class="col-md-3 pull-right text-right">
-              <button class="btn btn-warning">
+              <a href="{{ url('/admin/update/do') }}" class="btn btn-warning">
                 <i class="fa fa-gear"></i> Atualizar ERP
-              </button>
+              </a>
             </div>
           </div>
         @endif
