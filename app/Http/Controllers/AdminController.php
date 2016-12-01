@@ -9,6 +9,7 @@ use App\Users_permissions as Roles;
 
 use File;
 use ZipArchive;
+use Artisan;
 class AdminController extends Controller
 {
     public function index(){
@@ -110,5 +111,8 @@ class AdminController extends Controller
       $manifest_local = base_path() . "/manifest.json";
       $manifest = json_decode(file_get_contents($manifest_local), true);
       return view('admin.update')->with('manifest', $manifest)->with('remoto', $json_remoto);
+
+      $migrate = Artisan::call('migrate');
+      return $migrate;
     }
 }
