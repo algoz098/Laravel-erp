@@ -8,7 +8,7 @@
           <div class="row text-right">
             <a href="{{url()->previous() }}" class="btn btn-warning"><i class="fa fa-arrow-left"></i> Voltar</a>
             <a href="{{ url('/contatos') }}/{{$contato->id}}/relacoes/novo" class="btn btn-success">
-              <i class="fa fa-plus"></i>
+              <i class="fa fa-plus"></i> Novo
             </a>
           </div>
             <div class="row">

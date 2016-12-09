@@ -9,20 +9,20 @@
                 <i class="fa fa-dashboard fa-lg"></i> Painel
               </a>
             </li>
-            <li  data-toggle="collapse" data-target="#products" class="{{{ Request::is('contatos*') ? "active" : "collapsed" }}}" aria-expanded="{{{ Request::is('contatos*') ? "true" : "false" }}}">
-              <a href="#"><i class="fa fa-gift fa-lg"></i> Contatos <span class="arrow"></span></a>
-            </li>
-            <ul class="sub-menu collapse {{{ Request::is('contatos*') ? "in" : "" }}}" aria-expanded="{{{ Request::is('contatos*') ? "true" : "false" }}}" id="products">
-                <li class="{{{ Request::path()=='contatos' ? "active" : "" }}}"><a href="{{ url('/contatos') }}">Lista</a></li>
-                <li class="{{{ Request::path()=='contatos/novo' ? "active" : "" }}}"><a href="{{url('/contatos/novo')}}">Novo</a></li>
-            </ul>
 
-            <li  data-toggle="collapse" data-target="#atendimentos" class="{{{ Request::is('atendimentos*') ? "active" : "collapsed" }}}" aria-expanded="{{{ Request::is('atendimentos*') ? "true" : "false" }}}">
-              <a href="#"><i class="fa fa-globe fa-lg"></i> Atendimentos <span class="arrow"></span></a>
+            <li  data-toggle="collapse" data-target="#cadastros" class="{{{ Request::is('novo*') ? "active" : "collapsed" }}}" aria-expanded="">
+              <a href="#"><i class="fa fa-file-text fa-lg"></i> Cadastros<span class="arrow"></span></a>
             </li>
-            <ul class="sub-menu collapse {{{ Request::is('atendimentos*') ? "in" : "" }}}" aria-expanded="{{{ Request::is('atendimentos*') ? "true" : "false" }}}" id="atendimentos">
-                <li class="{{{ Request::path()=='atendimentos' ? "active" : "" }}}"><a href="{{ url('/atendimentos') }}">Lista</a></li>
-                <li class="{{{ Request::path()=='atendimentos/novo' ? "active" : "" }}}"><a href="{{ url('/atendimentos/novo') }}">Novo</a></li>
+            <ul class="sub-menu collapse {{{ Request::is('novo*') ? "in" : "" }}}" aria-expanded="{{{ Request::is('novo*') ? "true" : "false" }}}" id="cadastros">
+                <li class="{{{ Request::path()=='novo/contatos' ? "active" : "" }}}"><a href="{{ url('novo/contatos') }}">Contato</a></li>
+                <li class="{{{ Request::path()=='novo/atendimentos' ? "active" : "" }}}"><a href="{{ url('/novo/atendimentos') }}">Atendimento</a></li>
+            </ul>
+            <li  data-toggle="collapse" data-target="#listas" class="{{{ Request::is('lista*') ? "active" : "collapsed" }}}" aria-expanded="">
+              <a href="#"><i class="fa fa-list fa-lg"></i> Listas<span class="arrow"></span></a>
+            </li>
+            <ul class="sub-menu collapse {{{ Request::is('lista*') ? "in" : "" }}}" aria-expanded="{{{ Request::is('lista*') ? "true" : "false" }}}" id="listas">
+                <li class="{{{ Request::path()=='lista/contatos' ? "active" : "" }}}"><a href="{{ url('/lista/contatos') }}">Contato</a></li>
+                <li class="{{{ Request::path()=='lista/atendimentos' ? "active" : "" }}}"><a href="{{ url('/lista/atendimentos') }}">Atendimento</a></li>
             </ul>
 
             @if (isset(Auth::user()->perms["admin"]) and Auth::user()->perms["admin"]==1)

@@ -73,7 +73,7 @@ class AtendimentoController extends Controller
 
   public function novo($id){
     $contato = Contatos::find($id);
-    return view('atend.novo')->with('contato', $contato);
+    return view('atend.index')->with('contato', $contato);
   }
 
   public function edit(request $request, $id){
@@ -82,6 +82,8 @@ class AtendimentoController extends Controller
     $atendimento->texto = $request->texto;
     $atendimento->save();
 
+    $atendimentos = Atendimento::all();
+    $contatos = Contatos::all();
     return view('atend.index')->with('atendimentos', $atendimentos)->with('contatos', $contatos);
   }
 }

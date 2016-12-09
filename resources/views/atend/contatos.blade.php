@@ -54,7 +54,7 @@ use Carbon\Carbon;
                 </div>
                 <div class="form-group">
                   <label>Data</label>
-                  <input type="text" class="form-control" name="data" id="data" value="{{Carbon::now()}}">
+                  <input type="text" class="form-control" name="data" value="{{Carbon::now()}}" id="datepicker">
                 </div>
                 <div class="form-group">
                   <label for="text">Descrição </label>
@@ -68,4 +68,9 @@ use Carbon\Carbon;
       </div>
     </div>
   </div>
+  <script>
+    $( function() {
+      $( "#datepicker" ).datepicker({ dateFormat: 'yy-mm-dd' });
+    } );
+  </script>
 @endsection

@@ -65,25 +65,37 @@ class ContatosController extends Controller
       $data = [
         $contato->id =>
         [
-          'from_text' => "Cliente",
-          'to_id' => 1,
-          'to_text' => "Fornecedor"
-        ]
-      ];
-
-      $contato->from()->sync($data);
-    }
-    if ($request->relacao=="1"){
-      $data = [
-        $request->from_id =>
-        [
           'from_text' => "Fornecedor",
           'to_id' => 1,
           'to_text' => "Cliente"
         ]
       ];
 
-      $contato->from()->sync($data);
+      $contato->from()->sync($data, false);
+    }
+    if ($request->relacao=="1"){
+      $data = [
+        $request->from_id =>
+        [
+          'from_text' => "Cliente",
+          'to_id' => 1,
+          'to_text' => "Fornecedor"
+        ]
+      ];
+
+      $contato->from()->sync($data, false);
+    }
+    if ($request->relacao=="2"){
+      $data = [
+        $request->from_id =>
+        [
+          'from_text' => "Filial",
+          'to_id' => 1,
+          'to_text' => "Matriz"
+        ]
+      ];
+
+      $contato->from()->sync($data, false);
     }
     $contatos = Contatos::all();
     return view('contatos.list')->with('contatos', $contatos);
@@ -124,7 +136,7 @@ class ContatosController extends Controller
         ]
       ];
 
-      $contato->from()->sync($data);
+      $contato->from()->sync($data, false);
     }
     if ($request->relacao=="1"){
       $data = [
@@ -136,8 +148,21 @@ class ContatosController extends Controller
         ]
       ];
 
-      $contato->from()->sync($data);
+      $contato->from()->sync($data, false);
     }
+    if ($request->relacao=="2"){
+      $data = [
+        $request->from_id =>
+        [
+          'from_text' => "Filial",
+          'to_id' => 1,
+          'to_text' => "Matriz"
+        ]
+      ];
+
+      $contato->from()->sync($data, false);
+    }
+
     $contato->save();
     $contatos = contatos::all();
     return view('contatos.list')->with('contatos', $contatos);
@@ -210,20 +235,20 @@ class ContatosController extends Controller
 
   public function relacoes_post( Request $request, $id)
   {
-    $contato = Contatos::find($id);
+    $contato = contatos::Find($id);
     $data = [
-      $request->from_id =>
+      $id =>
       [
         'from_text' => $request->from_text,
         'to_id' => $request->to_id,
         'to_text' => $request->to_text
       ]
     ];
+    $contato->from()->sync($data, false);
 
-    $contato->from()->sync($data);
     $contatos = Contatos::all();
 
-    return view('contatos.relacoes')->with('contato', $contato)->with('contatos', $contatos);;
+    return view('contatos.relacoes')->with('contato', $contato)->with('contatos', $contatos);
   }
 
   public function relacoes_delete( $id, $relacao_id){
@@ -232,6 +257,18 @@ class ContatosController extends Controller
     $contato = Contatos::find($id);
     $contatos = Contatos::all();
 
-    return view('contatos.relacoes')->with('contato', $contato)->with('contatos', $contatos);;
+    return view('contatos.relacoes')->with('contato', $contato)->with('contatos', $contatos);
+  }
+  public function delete($id){
+    $contato = Contatos::find($id);
+    if ($contato->active!="!") {
+      $contato->active="!";
+    } else {
+      $contato->active = "1";
+    }
+    $contato->save();
+    $contatos = Contatos::all();
+
+    return view('contatos.list')->with('contatos', $contatos);
   }
 }

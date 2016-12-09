@@ -18,11 +18,12 @@ Auth::routes();
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->middleware('auth');
-Route::get('/contatos', 'ContatosController@show')->name('contatos')->middleware('auth');
+Route::get('/lista/contatos', 'ContatosController@show')->name('contatos')->middleware('auth');
 Route::post('/contatos', 'ContatosController@search')->middleware('auth');
-Route::get('/contatos/novo', 'ContatosController@showNovo')->middleware('auth');
-Route::post('/contatos/novo/{id}', 'ContatosController@update')->middleware('auth');
+Route::get('/contatos/delete/{id}', 'ContatosController@delete')->middleware('auth');
+Route::get('/novo/contatos', 'ContatosController@showNovo')->middleware('auth');
 Route::post('/contatos/novo', 'ContatosController@novo')->middleware('auth');
+Route::post('/contatos/{id}', 'ContatosController@update')->middleware('auth');
 Route::get('/contatos/{id}', 'ContatosController@showId')->middleware('auth');
 Route::get('/contatos/{id}/telefones', 'ContatosController@telefones')->middleware('auth');
 Route::post('/contatos/{id}/telefones', 'ContatosController@telefones_new')->middleware('auth');
@@ -36,13 +37,13 @@ Route::post('/contatos/{id}/relacoes/novo/busca', 'ContatosController@relacoes_b
 Route::post('/contatos/{id}/relacoes/novo', 'ContatosController@relacoes_post')->middleware('auth');
 Route::get('/contatos/{id}/relacoes/{id_relacao}/delete', 'ContatosController@relacoes_delete')->middleware('auth');
 
-Route::get('/atendimentos', 'AtendimentoController@index')->middleware('auth')->name('atendimentos');
+Route::get('/lista/atendimentos', 'AtendimentoController@index')->middleware('auth')->name('atendimentos');
 Route::post('/atendimentos', 'AtendimentoController@search')->middleware('auth');
-Route::get('/atendimentos/novo', 'AtendimentoController@new_a')->middleware('auth');
+Route::get('/novo/atendimentos', 'AtendimentoController@new_a')->middleware('auth');
 Route::post('/atendimentos/novo/busca', 'AtendimentoController@searchContatos')->middleware('auth');
 Route::post('/atendimentos/novo', 'AtendimentoController@add')->middleware('auth');
 Route::get('/atendimentos/{id}', 'AtendimentoController@show')->middleware('auth');
-Route::post('/atendimentos/{id}', 'AtendimentoController@novo')->middleware('auth');
+Route::post('/atendimentos/{id}', 'AtendimentoController@edit')->middleware('auth');
 Route::get('/atendimentos/{id}/delete', 'AtendimentoController@delete')->middleware('auth');
 Route::get('/atendimentos/{id}/edit', 'AtendimentoController@edit')->middleware('auth');
 

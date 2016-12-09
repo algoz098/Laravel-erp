@@ -2,13 +2,16 @@
 @section('content')
   <div class="row">
     <div class="col-md-11">
-      <form method="POST" action="{{ url('/contatos') }}/novo/{{ $contato->id or "" }}">
-
+      @if (!empty($contato->id))
+        <form method="POST" action="{{ url('/contatos') }}/{{$contato->id}}">
+      @else
+        <form method="POST" action="{{ url('/contatos') }}/novo">
+      @endif
         <div class="form-group">
         {{ csrf_field() }}
         <input type="hidden" name="id" value="{{$contato->id or "" }}">
         <div class="panel panel-default">
-          <div class="panel-heading"><i class="fa fa-users fa-1x"></i> Adicionar fornecedor/contato</div>
+          <div class="panel-heading"><i class="fa fa-users fa-1x"></i> Adicionar contato</div>
           <div class="panel-body">
             <div class="row text-right">
               <div class="col-sm-offset-2 col-sm-10">
@@ -24,13 +27,13 @@
                     <select class="form-control" id="tipo" disabled>
                       <option value="0" selected>Empresa</option>
                     </select>
-                  @elseif($contato->tipo=="1")
+                  @elseif(!empty($contato) and $contato->tipo=="1")
                     <select class="form-control" name="tipo" id="tipo" >
                       <option value=""> - Escolha uma opção - </option>
                       <option value="0" >Empresa</option>
                       <option value="1" selected>Pessoa</option>
                     </select>
-                  @elseif($contato->tipo=="0")
+                  @elseif(!empty($contato) and $contato->tipo=="0")
                     <select class="form-control" name="tipo" id="tipo" >
                       <option value=""> - Escolha uma opção - </option>
                       <option value="0" selected>Empresa</option>
@@ -91,6 +94,7 @@
                       <option selected> - Escolha uma opção - </option>
                       <option value="1" >Fornecedor</option>
                       <option value="0" >Cliente</option>
+                      <option value="2" >Filial</option>
                       <option value="" >Indefinido</option>
                     </select>
                   @endif

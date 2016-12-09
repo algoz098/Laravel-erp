@@ -9,7 +9,7 @@
         <div class="panel-body">
           <div class="row pull-right">
             <div class="col-md-12">
-              <a href="{{ url('/atendimentos') }}/novo" class="btn btn-success"><i class="fa fa-plus"></i> Novo</a>
+              <a href="{{ url('/novo/atendimentos') }}" class="btn btn-success"><i class="fa fa-plus"></i> Novo</a>
             </div>
           </div>
           <div class="row">
