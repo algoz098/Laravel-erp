@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
 use DB;
+use Auth;
 use App\Contatos as Contatos;
 use App\Telefones as Telefones;
 
@@ -15,7 +16,12 @@ class ContatosController extends Controller
   public function show()
   {
     $contatos = contatos::all();
-    return view('contatos.list')->with('contatos', $contatos);
+    if (is_array(Auth::user()->perms) and Auth::user()->perms["admin"]==1){
+        $deletados = Contatos::onlyTrashed()->get();
+    } else {
+      $deletados = 0;
+    }
+    return view('contatos.list')->with('contatos', $contatos)->with('deletados', $deletados);
   }
 
   public function search( Request $request)
@@ -260,15 +266,19 @@ class ContatosController extends Controller
     return view('contatos.relacoes')->with('contato', $contato)->with('contatos', $contatos);
   }
   public function delete($id){
-    $contato = Contatos::find($id);
-    if ($contato->active!="!") {
-      $contato->active="!";
-    } else {
-      $contato->active = "1";
-    }
-    $contato->save();
-    $contatos = Contatos::all();
+    $contato = Contatos::withTrashed()->find($id);
 
-    return view('contatos.list')->with('contatos', $contatos);
+    if ($contato->trashed()) {
+      $contato->restore();
+    } else {
+      $contato->delete();
+    }
+    $contatos = Contatos::all();
+    if (is_array(Auth::user()->perms) and Auth::user()->perms["admin"]==1){
+        $deletados = Contatos::onlyTrashed()->get();
+    } else {
+      $deletados = 0;
+    }
+    return view('contatos.list')->with('contatos', $contatos)->with('deletados', $deletados);
   }
 }

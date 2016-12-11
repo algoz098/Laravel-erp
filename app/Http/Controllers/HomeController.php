@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Contatos as contatos;
 use App\Funcionarios as Funcionarios;
+use App\Contas as Contas;
 
 class HomeController extends Controller
 {
@@ -27,6 +28,7 @@ class HomeController extends Controller
     {
       $contatos = contatos::all();
       $funcionarios = Funcionarios::all();
-      return view('dashboard.index')->with('contatos', $contatos)->with('funcionarios', $funcionarios);
+      $contas = Contas::all();
+      return view('dashboard.index')->with('contatos', $contatos)->with('funcionarios', $funcionarios)->with('contas', $contas);
     }
 }

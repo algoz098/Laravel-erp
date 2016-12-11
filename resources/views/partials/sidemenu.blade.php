@@ -16,6 +16,7 @@
             <ul class="sub-menu collapse {{{ Request::is('novo*') ? "in" : "" }}}" aria-expanded="{{{ Request::is('novo*') ? "true" : "false" }}}" id="cadastros">
                 <li class="{{{ Request::path()=='novo/contatos' ? "active" : "" }}}"><a href="{{ url('novo/contatos') }}">Contato</a></li>
                 <li class="{{{ Request::path()=='novo/atendimentos' ? "active" : "" }}}"><a href="{{ url('/novo/atendimentos') }}">Atendimento</a></li>
+                <li class="{{{ Request::path()=='novo/contas' ? "active" : "" }}}"><a href="{{ url('/novo/contas') }}">Conta</a></li>
             </ul>
             <li  data-toggle="collapse" data-target="#listas" class="{{{ Request::is('lista*') ? "active" : "collapsed" }}}" aria-expanded="">
               <a href="#"><i class="fa fa-list fa-lg"></i> Listas<span class="arrow"></span></a>
@@ -33,7 +34,6 @@
               <ul class="sub-menu collapse {{{ Request::is('admin*') ? "in" : "" }}}" aria-expanded="{{{ Request::is('admin*') ? "true" : "false" }}}" id="admin">
                 <li class="{{{ Request::path()=='admin' ? "active" : "" }}}"><a href="{{ url('/admin') }}">Controle de Usuarios</a></li>
                 <li class="{{{ Request::path()=='admin/update' ? "active" : "" }}}"><a href="{{ url('/admin/update') }}">Atualizar</a></li>
-                <li>New New 3</li>
               </ul>
             @endif
 

@@ -22,10 +22,10 @@ use Carbon\Carbon;
             </div>
           </div>
           <div class="row">
-            <div class="col-md-8 h3">
+            <div class="col-md-8 h4">
               @foreach($contatos as $key => $contato)
                 <div class="row list-contacts">
-                  <div class="col-md-4 text-right">
+                  <div class="col-md-2 text-right">
                     <a class="btn btn-info" onclick="
                                                       $('#form').show();
                                                       $('#contato').val('{{$contato->nome}}');

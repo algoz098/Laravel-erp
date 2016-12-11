@@ -278,6 +278,7 @@ class ComposerStaticIniteb7ed518eae24fc4a2b91da7f84bfb6b
     );
 
     public static $classMap = array (
+        'AddSoftdeleteContatosTable' => __DIR__ . '/../..' . '/database/migrations/2016_12_11_212739_add_softdelete_contatos_table.php',
         'ContatosAddTipoTable' => __DIR__ . '/../..' . '/database/migrations/2016_12_01_221934_contatos_add_tipo_table.php',
         'ContatosTableSeeder' => __DIR__ . '/../..' . '/database/seeds/ContatosTableSeeder.php',
         'CreateAtendimentoTable' => __DIR__ . '/../..' . '/database/migrations/2016_11_29_171816_create_atendimento_table.php',

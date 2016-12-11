@@ -65,4 +65,16 @@ class ContasController extends Controller
     $contas = Contas::all();
     return view('contas.index')->with('contas', $contas);
   }
+
+  public function pago($id){
+    $conta = Contas::find($id);
+    if ($conta->estado==1) {
+      $conta->estado = '0';
+    } elseif ($conta->estado == 0) {
+      $conta->estado = '1';
+    }
+    $conta->save();
+    $contas = Contas::all();
+    return view('contas.index')->with('contas', $contas);
+  }
 }

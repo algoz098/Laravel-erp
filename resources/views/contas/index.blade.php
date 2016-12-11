@@ -28,7 +28,7 @@ use Carbon\Carbon;
           </div>
           @foreach($contas as $key => $conta)
             <div class="row list-contacts">
-              <div class="col-md-2">
+              <div class="col-md-3">
                 <a class="btn btn-warning"  title="Parcelas"  data-toggle="collapse" data-target="#referente{{$conta->id}}" aria-expanded="">
                   <i class="fa fa-paperclip"></i>
                 </a>
@@ -38,12 +38,15 @@ use Carbon\Carbon;
                 <a href="{{ url('/contatos') }}/{{$conta->contatos->id}}"  title="Detalhes do contato" class="btn btn-info">
                   <i class="fa fa-user"></i>
                 </a>
+                <a href="{{ url('/lista/contas') }}/{{$conta->id}}/pago"  title="Creditar" class="btn btn-success">
+                  <i class="fa fa-check"></i>
+                </a>
               </div>
-              <div class="col-md-2">
+              <div class="col-md-3">
                 {{$conta->nome}}
                 <span class="label label-warning">R$ {{ number_format($conta->valor, 2) }}</label>
               </div>
-              <div class="col-md-8">
+              <div class="col-md-6">
                 @if ($conta->tipo==0)
                   <span class="label label-warning">Debito</span>
                 @elseif ($conta->tipo==1)

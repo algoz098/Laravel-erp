@@ -35,7 +35,7 @@
                       <i class="fa fa-file-text-o"></i>
                     </a>
                   </div>
-                  <div class="col-md-2 text-center">
+                  <div class="col-md-3 text-left">
                     <span class="label label-info">
                       {{date('d/m/Y', strtotime($atendimento->created_at))}}
                     </span>

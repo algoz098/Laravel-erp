@@ -3,13 +3,16 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Telefones;
 use App\Atendimento;
 use App\Contas;
 
 class Contatos extends Model
 {
+    use SoftDeletes;
     protected $table = 'contatos';
+    protected $dates = ['deleted_at'];
 
     public function telefones()
     {
