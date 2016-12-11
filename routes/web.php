@@ -37,6 +37,13 @@ Route::post('/contatos/{id}/relacoes/novo/busca', 'ContatosController@relacoes_b
 Route::post('/contatos/{id}/relacoes/novo', 'ContatosController@relacoes_post')->middleware('auth');
 Route::get('/contatos/{id}/relacoes/{id_relacao}/delete', 'ContatosController@relacoes_delete')->middleware('auth');
 
+Route::get('lista/contas', 'ContasController@index')->middleware('auth');
+Route::get('novo/contas', 'ContasController@novo')->middleware('auth');
+Route::post('novo/contas/busca', 'ContasController@searchContatos')->middleware('auth');
+Route::post('novo/contas', 'ContasController@add')->middleware('auth');
+
+
+
 Route::get('/lista/atendimentos', 'AtendimentoController@index')->middleware('auth')->name('atendimentos');
 Route::post('/atendimentos', 'AtendimentoController@search')->middleware('auth');
 Route::get('/novo/atendimentos', 'AtendimentoController@new_a')->middleware('auth');

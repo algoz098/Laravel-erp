@@ -23,6 +23,7 @@
             <ul class="sub-menu collapse {{{ Request::is('lista*') ? "in" : "" }}}" aria-expanded="{{{ Request::is('lista*') ? "true" : "false" }}}" id="listas">
                 <li class="{{{ Request::path()=='lista/contatos' ? "active" : "" }}}"><a href="{{ url('/lista/contatos') }}">Contato</a></li>
                 <li class="{{{ Request::path()=='lista/atendimentos' ? "active" : "" }}}"><a href="{{ url('/lista/atendimentos') }}">Atendimento</a></li>
+                <li class="{{{ Request::path()=='lista/contas' ? "active" : "" }}}"><a href="{{ url('/lista/contas') }}">Conta</a></li>
             </ul>
 
             @if (isset(Auth::user()->perms["admin"]) and Auth::user()->perms["admin"]==1)

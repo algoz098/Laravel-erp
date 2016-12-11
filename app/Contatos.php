@@ -5,6 +5,7 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use App\Telefones;
 use App\Atendimento;
+use App\Contas;
 
 class Contatos extends Model
 {
@@ -14,7 +15,7 @@ class Contatos extends Model
     {
         return $this->hasMany('App\Telefones');
     }
-    
+
     public function atendimento()
     {
       return $this->hasMany('App\Atendimento');
@@ -35,4 +36,8 @@ class Contatos extends Model
         return $this->hasOne('App\User');
     }
 
+    public function contas()
+    {
+      return $this->hasMany('App\Contas');
+    }
 }
