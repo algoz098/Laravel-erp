@@ -8,8 +8,10 @@ use App\Contatos as Contatos;
 use App\Users_permissions as Roles;
 
 use File;
+use Storage;
 use ZipArchive;
 use Artisan;
+use DateTime;
 class AdminController extends Controller
 {
     public function index(){
@@ -110,9 +112,44 @@ class AdminController extends Controller
       }
       $manifest_local = base_path() . "/manifest.json";
       $manifest = json_decode(file_get_contents($manifest_local), true);
-      return view('admin.update')->with('manifest', $manifest)->with('remoto', $json_remoto);
 
       $migrate = Artisan::call('migrate');
-      return $migrate;
+      return view('admin.update')->with('manifest', $manifest)->with('remoto', $json_remoto);
     }
+
+    public function backup_index(){
+      if(!File::exists(storage_path('backups/'))){
+        File::makeDirectory(storage_path('backups/'), 0775);
+      }
+      $files = File::Files(storage_path('backups/'));
+      foreach ($files as $key => $file) {
+        $backups[]=basename($file, ".zip");
+      }
+      if (isset($backups)){
+        $ultimo = DateTime::createFromFormat('Y-m-d-His', end($backups));
+      } else {
+        $backups = 0;
+        $ultimo = 0;
+      }
+      return view('admin.backup')->with('backups', $backups)->with('ultimo', $ultimo);
+    }
+    public function backup_download($file){
+      $pathToFile = storage_path('backups').'/'.$file.'.zip';
+      return response()->download($pathToFile);
+    }
+    public function backup_do(){
+       Artisan::call('backup:run', ['--only-db' => true]);
+       $files = File::Files(storage_path('backups/'));
+       foreach ($files as $key => $file) {
+         $backups[]=basename($file, ".zip");
+       }
+       if (isset($backups)){
+         $ultimo = DateTime::createFromFormat('Y-m-d-His', end($backups));
+       } else {
+         $backups = 0;
+         $ultimo = 0;
+       }
+       return view('admin.backup')->with('backups', $backups)->with('ultimo', $ultimo);
+    }
+
 }

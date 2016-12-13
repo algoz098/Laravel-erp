@@ -34,6 +34,7 @@
               <ul class="sub-menu collapse {{{ Request::is('admin*') ? "in" : "" }}}" aria-expanded="{{{ Request::is('admin*') ? "true" : "false" }}}" id="admin">
                 <li class="{{{ Request::path()=='admin' ? "active" : "" }}}"><a href="{{ url('/admin') }}">Controle de Usuarios</a></li>
                 <li class="{{{ Request::path()=='admin/update' ? "active" : "" }}}"><a href="{{ url('/admin/update') }}">Atualizar</a></li>
+                <li class="{{{ Request::path()=='admin/backup' ? "active" : "" }}}"><a href="{{ url('/admin/backup') }}">Backup</a></li>
               </ul>
             @endif
 

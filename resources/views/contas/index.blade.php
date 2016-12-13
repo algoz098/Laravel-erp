@@ -29,6 +29,9 @@ use Carbon\Carbon;
           @foreach($contas as $key => $conta)
             <div class="row list-contacts">
               <div class="col-md-3">
+                <a href="{{ url('lista/contas') }}/{{$conta->id}}/delete"  title="Apagar" class="btn btn-danger">
+                  <i class="fa fa-ban"></i>
+                </a>
                 <a class="btn btn-warning"  title="Parcelas"  data-toggle="collapse" data-target="#referente{{$conta->id}}" aria-expanded="">
                   <i class="fa fa-paperclip"></i>
                 </a>
@@ -118,7 +121,11 @@ use Carbon\Carbon;
                       <div class="col-md-3">
                         <div class="form-group">
                           <label for="assunto">Valor referente</label>
-                          <div>R$ {{ number_format($conta->referencia->valor, 2) }}</div>
+                          @if ($conta->referencia)
+                            <div>R$ {{ number_format($conta->referencia->valor, 2) }}</div>
+                          @else
+                            <div> Valor referente APAGADO </div>
+                          @endif
                         </div>
                       </div>
                       <div class="col-md-2">
@@ -155,7 +162,7 @@ use Carbon\Carbon;
                         Parcelas
                       </div>
                     </div>
-                    @if (empty($conta->parcelas[0]))
+                    @if (empty($conta->parcelas[0]) and $conta->referencia)
                       @foreach($conta->referencia->parcelas as $key => $parcela)
                           <div class="row list-contacts">
                             <div class="col-md-2 text-right">
@@ -193,6 +200,8 @@ use Carbon\Carbon;
                             </div>
                           </div>
                       @endforeach
+                    @else
+                      <h3> Referencia ou parcelas apagadas </h3>
                     @endif
                     @foreach($conta->parcelas as $key => $parcela)
                         <div class="row list-contacts">
@@ -240,6 +249,49 @@ use Carbon\Carbon;
               </div>
             </div>
           @endforeach
+          @if($deletados!==0)
+            <h3>Deletados</h3>
+            @foreach($deletados as $key => $conta)
+                <div class="row list-contacts">
+                  <div class="col-md-2">
+                    <a href="{{ url('lista/contas') }}/{{$conta->id}}/delete"  title="Restaurar" class="btn btn-danger">
+                      <i class="fa fa-ban"></i>
+                    </a>
+                    <a href="{{ url('/contatos') }}/{{$conta->contatos->id}}"  title="Detalhes do contato" class="btn btn-info">
+                      <i class="fa fa-user"></i>
+                    </a>
+                  </div>
+                  <div class="col-md-3">
+                    {{$conta->nome}}
+                    <span class="label label-warning">R$ {{ number_format($conta->valor, 2) }}</label>
+                  </div>
+                  <div class="col-md-6">
+                    @if ($conta->tipo==0)
+                      <span class="label label-warning">Debito</span>
+                    @elseif ($conta->tipo==1)
+                      <span class="label label-warning">Credito</span>
+                    @endif
+                    @if ($conta->estado==0 AND $conta->tipo==0)
+                      <span class="label label-danger">A pagar</span>
+                    @elseif ($conta->estado==0 AND $conta->tipo==1)
+                      <span class="label label-danger">A receber</span>
+                    @elseif ($conta->estado==1 AND $conta->tipo==0)
+                      <span class="label label-success">Pago</span>
+                    @elseif ($conta->estado==1 AND $conta->tipo==1)
+                      <span class="label label-success">Recebido</span>
+                    @endif
+                    @if (strtotime($conta->vencimento)>strtotime(Carbon::now()))
+                      <span class="label label-warning">
+                    @else
+                      <span class="label label-danger">
+                    @endif
+                      {{date('d/m/Y', strtotime($conta->vencimento))}}
+                    </span> -
+                     {{$conta->descricao}}
+                  </div>
+                </div>
+            @endforeach
+          @endif
         </div>
       </div>
     </div>

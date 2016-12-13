@@ -16,6 +16,7 @@ class ComposerStaticIniteb7ed518eae24fc4a2b91da7f84bfb6b
         'e7223560d890eab89cda23685e711e2c' => __DIR__ . '/..' . '/psy/psysh/src/Psy/functions.php',
         'f0906e6318348a765ffb6eb24e0d0938' => __DIR__ . '/..' . '/laravel/framework/src/Illuminate/Foundation/helpers.php',
         '58571171fd5812e6e447dce228f52f4d' => __DIR__ . '/..' . '/laravel/framework/src/Illuminate/Support/helpers.php',
+        '0c3c22e27afa83be19b4c938f4c6e9ea' => __DIR__ . '/..' . '/spatie/laravel-backup/src/Helpers/functions.php',
     );
 
     public static $prefixLengthsPsr4 = array (
@@ -50,6 +51,8 @@ class ComposerStaticIniteb7ed518eae24fc4a2b91da7f84bfb6b
             'Symfony\\Component\\CssSelector\\' => 30,
             'Symfony\\Component\\Console\\' => 26,
             'SuperClosure\\' => 13,
+            'Spatie\\DbDumper\\' => 16,
+            'Spatie\\Backup\\' => 14,
         ),
         'R' => 
         array (
@@ -177,6 +180,14 @@ class ComposerStaticIniteb7ed518eae24fc4a2b91da7f84bfb6b
         array (
             0 => __DIR__ . '/..' . '/jeremeamia/SuperClosure/src',
         ),
+        'Spatie\\DbDumper\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/spatie/db-dumper/src',
+        ),
+        'Spatie\\Backup\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/spatie/laravel-backup/src',
+        ),
         'Ramsey\\Uuid\\' => 
         array (
             0 => __DIR__ . '/..' . '/ramsey/uuid/src',
@@ -278,6 +289,7 @@ class ComposerStaticIniteb7ed518eae24fc4a2b91da7f84bfb6b
     );
 
     public static $classMap = array (
+        'AddSoftdeleteContasTable' => __DIR__ . '/../..' . '/database/migrations/2016_12_13_113159_add_softdelete_contas_table.php',
         'AddSoftdeleteContatosTable' => __DIR__ . '/../..' . '/database/migrations/2016_12_11_212739_add_softdelete_contatos_table.php',
         'ContatosAddTipoTable' => __DIR__ . '/../..' . '/database/migrations/2016_12_01_221934_contatos_add_tipo_table.php',
         'ContatosTableSeeder' => __DIR__ . '/../..' . '/database/seeds/ContatosTableSeeder.php',

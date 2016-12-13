@@ -39,7 +39,12 @@ class ContatosController extends Controller
     } else {
       $contatos = Contatos::all();
     }
-    return view('contatos.list')->with('contatos', $contatos);
+    if (is_array(Auth::user()->perms) and Auth::user()->perms["admin"]==1){
+        $deletados = Contatos::onlyTrashed()->get();
+    } else {
+      $deletados = 0;
+    }
+    return view('contatos.list')->with('contatos', $contatos)->with('deletados', $deletados);
   }
 
   public function showNovo()
@@ -104,7 +109,12 @@ class ContatosController extends Controller
       $contato->from()->sync($data, false);
     }
     $contatos = Contatos::all();
-    return view('contatos.list')->with('contatos', $contatos);
+    if (is_array(Auth::user()->perms) and Auth::user()->perms["admin"]==1){
+        $deletados = Contatos::onlyTrashed()->get();
+    } else {
+      $deletados = 0;
+    }
+    return view('contatos.list')->with('contatos', $contatos)->with('deletados', $deletados);
   }
   public function showId( $id )
   {
@@ -171,7 +181,12 @@ class ContatosController extends Controller
 
     $contato->save();
     $contatos = contatos::all();
-    return view('contatos.list')->with('contatos', $contatos);
+    if (is_array(Auth::user()->perms) and Auth::user()->perms["admin"]==1){
+        $deletados = Contatos::onlyTrashed()->get();
+    } else {
+      $deletados = 0;
+    }
+    return view('contatos.list')->with('contatos', $contatos)->with('deletados', $deletados);
   }
 
   public function telefones_get( $id, $id_telefone )

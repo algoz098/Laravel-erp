@@ -90,7 +90,21 @@ use Carbon\Carbon;
               <div class="col-md-4" style="display: none;" id="parcelamento">
                 <div class="form-group">
                   <label for="text">Quantidade de parcelas </label>
-                  <input type="number" class="form-control" name="parcelas" id="parcelas" placeholder="" onchange="parcelamento('#maisParcelas')">
+                  <div class="row">
+
+                    <div class="col-md-4">
+                      <span class="btn btn-danger" onclick="parcelamentoRemove()">
+                        <i class="fa fa-minus"></i>
+                      </span>
+                      <span class="btn btn-success" onclick="parcelamentoAdd()">
+                        <i class="fa fa-plus"></i>
+                      </span>
+                    </div>
+                    <div class="col-md-8">
+                      <input type="number" class="form-control" name="parcelas" id="parcelas" value="0" disabled>
+                    </div>
+                  </div>
+
                 </div>
                 <div class="row panel panel-default" id="maisParcelas">
                   <div class="panel-body">
@@ -123,29 +137,43 @@ use Carbon\Carbon;
         $('#parcelamento').show();
       }
     }
-    function parcelamento(parcelas) {
+    function parcelamentoAdd() {
       var i = 0;
-        while (i < $('#parcelas').val()){
-          i++;
-          var $clone = $($('#ToClone').html()).appendTo('#mais');
-          $('#vencimentoTexto', $clone).text('Vencimento '+i);
-          $('#vencimentoData', $clone).attr('name', 'vencimento['+i+']');
-          $('#valorTexto', $clone).text('Valor '+i);
-          $('#valorNumero', $clone).attr('name', 'valor['+i+']');
-      }
+      i = parseInt($('#parcelas').val())+1;
+      var $clone = $($('#ToClone').html());
+      $('#vencimentoTexto', $clone).text('Vencimento '+i);
+      $('#parcelamentos', $clone).attr('id', 'parcelamentos'+i);
+      $('#vencimentoData', $clone).attr('name', 'vencimento['+i+']');
+      $('#valorTexto', $clone).text('Valor '+i);
+      $('#valorNumero', $clone).attr('name', 'valor['+i+']');
+      $clone.appendTo('#mais');
+      $('#parcelas').val(i);
+      $( function() {
+        $( ".datepicker" ).datepicker({ dateFormat: 'yy-mm-dd' });
+      } );
+    }
+    function parcelamentoRemove() {
+      var i = 0;
+      i = parseInt($('#parcelas').val());
+      $('#parcelamentos'+i).remove();
+      i = i-1;
+      $('#parcelas').val(i);
     }
   </script>
 
   <script id="ToClone" type="text/template">
-    <div class="row panel panel-default" id="maisParcelas">
-      <div class="panel-body">
-        <div class="form-group">
-          <label id="vencimentoTexto">Vencimento 0</label>
-          <input type="text" class="form-control datepicker" name="parcela[0]" value="{{Carbon::now()}}" id="vencimentoData">
-        </div>
-        <div class="form-group">
-          <label id="valorTexto">Valor 0</label>
-          <input type="text" class="form-control" name="parcela[0]" value="" id="valorNumero">
+    <div>
+      <div class="row panel panel-default" id="parcelamentos">
+        <div class="panel-body">
+
+          <div class="form-group">
+            <label id="vencimentoTexto">Vencimento 0</label>
+            <input type="text" class="form-control datepicker" name="parcela[0]" value="{{Carbon::now()}}" id="vencimentoData">
+          </div>
+          <div class="form-group">
+            <label id="valorTexto">Valor 0</label>
+            <input type="text" class="form-control" name="parcela[0]" value="" id="valorNumero">
+          </div>
         </div>
       </div>
     </div>

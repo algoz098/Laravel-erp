@@ -41,7 +41,9 @@ Route::get('lista/contas', 'ContasController@index')->middleware('auth');
 Route::get('novo/contas', 'ContasController@novo')->middleware('auth');
 Route::post('novo/contas/busca', 'ContasController@searchContatos')->middleware('auth');
 Route::post('novo/contas', 'ContasController@add')->middleware('auth');
+Route::get('novo/contas/{id}', 'ContasController@edit')->middleware('auth');
 Route::get('lista/contas/{id}/pago', 'ContasController@pago')->middleware('auth');
+Route::get('lista/contas/{id}/delete', 'ContasController@delete')->middleware('auth');
 
 Route::get('/lista/atendimentos', 'AtendimentoController@index')->middleware('auth')->name('atendimentos');
 Route::post('/atendimentos', 'AtendimentoController@search')->middleware('auth');
@@ -61,3 +63,7 @@ Route::post('/admin/access/{id}', 'AdminController@access_post')->middleware('au
 Route::get('/admin/access/{id}/delete/{id_access}', 'AdminController@access_delete')->middleware('auth')->middleware('admin');
 Route::get('/admin/update', 'AdminController@update_index')->middleware('auth')->middleware('admin');
 Route::get('/admin/update/do', 'AdminController@update_do')->middleware('auth')->middleware('admin');
+
+Route::get('/admin/backup', 'AdminController@backup_index')->middleware('auth')->middleware('admin');
+Route::get('/admin/backup/do', 'AdminController@backup_do')->middleware('auth')->middleware('admin');
+Route::get('/admin/backup/download/{file}', 'AdminController@backup_download')->middleware('auth')->middleware('admin');

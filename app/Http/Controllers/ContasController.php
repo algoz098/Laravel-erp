@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Auth;
 use App\Contas as Contas;
 use App\Contatos as Contatos;
 
@@ -10,7 +11,12 @@ class ContasController extends Controller
 {
   public function index(){
     $contas = Contas::all();
-    return view('contas.index')->with('contas', $contas);
+    if (is_array(Auth::user()->perms) and Auth::user()->perms["admin"]==1){
+        $deletados = Contas::onlyTrashed()->get();
+    } else {
+      $deletados = 0;
+    }
+    return view('contas.index')->with('contas', $contas)->with('deletados', $deletados);
   }
 
   public function novo(){
@@ -32,7 +38,12 @@ class ContasController extends Controller
     } else {
       $contatos = Contatos::all();
     }
-    return view('contas.contatos')->with('contatos', $contatos);
+    if (is_array(Auth::user()->perms) and Auth::user()->perms["admin"]==1){
+        $deletados = Contas::onlyTrashed()->get();
+    } else {
+      $deletados = 0;
+    }
+    return view('contas.index')->with('contas', $contas)->with('deletados', $deletados);
   }
   public function add(Request $request){
     $conta = new Contas;
@@ -63,7 +74,12 @@ class ContasController extends Controller
       }
     }
     $contas = Contas::all();
-    return view('contas.index')->with('contas', $contas);
+    if (is_array(Auth::user()->perms) and Auth::user()->perms["admin"]==1){
+        $deletados = Contas::onlyTrashed()->get();
+    } else {
+      $deletados = 0;
+    }
+    return view('contas.index')->with('contas', $contas)->with('deletados', $deletados);
   }
 
   public function pago($id){
@@ -75,6 +91,31 @@ class ContasController extends Controller
     }
     $conta->save();
     $contas = Contas::all();
-    return view('contas.index')->with('contas', $contas);
+    if (is_array(Auth::user()->perms) and Auth::user()->perms["admin"]==1){
+        $deletados = Contas::onlyTrashed()->get();
+    } else {
+      $deletados = 0;
+    }
+    return view('contas.index')->with('contas', $contas)->with('deletados', $deletados);
+  }
+
+  public function delete($id){
+    $conta = Contas::withTrashed()->find($id);
+    if ($conta->trashed()) {
+      $conta->restore();
+    } else {
+      $conta->delete();
+    }
+    $contas = Contas::all();
+    if (is_array(Auth::user()->perms) and Auth::user()->perms["admin"]==1){
+        $deletados = Contas::onlyTrashed()->get();
+    } else {
+      $deletados = 0;
+    }
+    return view('contas.index')->with('contas', $contas)->with('deletados', $deletados);
+  }
+  public function edit($id){
+    $conta = Contas::find($id);
+    return view('contas.edit')->with('conta', $conta);
   }
 }
