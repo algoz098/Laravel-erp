@@ -7,12 +7,12 @@ use Carbon\Carbon;
     <div class="col-md-12">
       <div class="panel panel-default">
         <div class="panel-heading ">
-          <i class="fa fa-usd fa-1x"></i> Nova conta
+          <i class="fa fa-bell-o fa-1x"></i> Novo estoque
         </div>
         <div class="panel-body">
           <div class="row pull-center">
             <div class="col-md-12">
-              <form method="POST" action="{{ url('/novo/contas/busca') }}">
+              <form method="POST" action="{{ url('/novo/estoque/busca') }}">
                 <div class="form-group form-inline text-center">
                   {{ csrf_field() }}
                   <input type="text" class="form-control" name="busca" id="busca" placeholder="Busca" size="10">
@@ -80,7 +80,7 @@ use Carbon\Carbon;
                 </div>
                 <div class="form-group">
                   <label for="text">Parcelamento</label>
-                  <select class="form-control" id="parcelar" name="parcelas" onchange="parcela(this);">
+                  <select class="form-control" id="parcelar" onchange="parcela(this);">
                     <option value="0" selected>Não</option>
                     <option value="1" >Sim</option>
                   </select>
@@ -146,11 +146,10 @@ use Carbon\Carbon;
       $('#vencimentoData', $clone).attr('name', 'vencimento['+i+']');
       $('#valorTexto', $clone).text('Valor '+i);
       $('#valorNumero', $clone).attr('name', 'valor['+i+']');
-      //$('#vencimentoData', $clone).addClass('datepicker'+i);
       $clone.appendTo('#mais');
       $('#parcelas').val(i);
       $( function() {
-        $( ".datepicker"+i ).datepicker({ dateFormat: 'yy-mm-dd' });
+        $( ".datepicker" ).datepicker({ dateFormat: 'yy-mm-dd' });
       } );
     }
     function parcelamentoRemove() {
@@ -169,7 +168,7 @@ use Carbon\Carbon;
 
           <div class="form-group">
             <label id="vencimentoTexto">Vencimento 0</label>
-            <input type="text" class="form-control " name="parcela[0]" value="{{Carbon::now()}}" id="vencimentoData">
+            <input type="text" class="form-control datepicker" name="parcela[0]" value="{{Carbon::now()}}" id="vencimentoData">
           </div>
           <div class="form-group">
             <label id="valorTexto">Valor 0</label>

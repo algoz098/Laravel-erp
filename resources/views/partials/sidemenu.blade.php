@@ -17,6 +17,7 @@
                 <li class="{{{ Request::path()=='novo/contatos' ? "active" : "" }}}"><a href="{{ url('novo/contatos') }}">Contato</a></li>
                 <li class="{{{ Request::path()=='novo/atendimentos' ? "active" : "" }}}"><a href="{{ url('/novo/atendimentos') }}">Atendimento</a></li>
                 <li class="{{{ Request::path()=='novo/contas' ? "active" : "" }}}"><a href="{{ url('/novo/contas') }}">Conta</a></li>
+                <li class="{{{ Request::path()=='novo/estoque' ? "active" : "" }}}"><a href="{{ url('/novo/estoque') }}">Estoque</a></li>
             </ul>
             <li  data-toggle="collapse" data-target="#listas" class="{{{ Request::is('lista*') ? "active" : "collapsed" }}}" aria-expanded="">
               <a href="#"><i class="fa fa-list fa-lg"></i> Listas<span class="arrow"></span></a>
@@ -25,6 +26,7 @@
                 <li class="{{{ Request::path()=='lista/contatos' ? "active" : "" }}}"><a href="{{ url('/lista/contatos') }}">Contato</a></li>
                 <li class="{{{ Request::path()=='lista/atendimentos' ? "active" : "" }}}"><a href="{{ url('/lista/atendimentos') }}">Atendimento</a></li>
                 <li class="{{{ Request::path()=='lista/contas' ? "active" : "" }}}"><a href="{{ url('/lista/contas') }}">Conta</a></li>
+                <li class="{{{ Request::path()=='lista/estoque' ? "active" : "" }}}"><a href="{{ url('/lista/estoque') }}">Estoque</a></li>
             </ul>
 
             @if (isset(Auth::user()->perms["admin"]) and Auth::user()->perms["admin"]==1)

@@ -8,6 +8,7 @@ $baseDir = dirname($vendorDir);
 return array(
     'AddSoftdeleteContasTable' => $baseDir . '/database/migrations/2016_12_13_113159_add_softdelete_contas_table.php',
     'AddSoftdeleteContatosTable' => $baseDir . '/database/migrations/2016_12_11_212739_add_softdelete_contatos_table.php',
+    'AddSoftdeleteEstoqueTable' => $baseDir . '/database/migrations/2016_12_13_155054_add_softdelete_estoque_table.php',
     'ContatosAddTipoTable' => $baseDir . '/database/migrations/2016_12_01_221934_contatos_add_tipo_table.php',
     'ContatosTableSeeder' => $baseDir . '/database/seeds/ContatosTableSeeder.php',
     'CreateAtendimentoTable' => $baseDir . '/database/migrations/2016_11_29_171816_create_atendimento_table.php',

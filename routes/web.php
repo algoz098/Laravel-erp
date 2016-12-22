@@ -38,6 +38,7 @@ Route::post('/contatos/{id}/relacoes/novo', 'ContatosController@relacoes_post')-
 Route::get('/contatos/{id}/relacoes/{id_relacao}/delete', 'ContatosController@relacoes_delete')->middleware('auth');
 
 Route::get('lista/contas', 'ContasController@index')->middleware('auth');
+Route::post('lista/contas', 'ContasController@search')->middleware('auth');
 Route::get('novo/contas', 'ContasController@novo')->middleware('auth');
 Route::post('novo/contas/busca', 'ContasController@searchContatos')->middleware('auth');
 Route::post('novo/contas', 'ContasController@add')->middleware('auth');
@@ -54,6 +55,11 @@ Route::get('/atendimentos/{id}', 'AtendimentoController@show')->middleware('auth
 Route::post('/atendimentos/{id}', 'AtendimentoController@edit')->middleware('auth');
 Route::get('/atendimentos/{id}/delete', 'AtendimentoController@delete')->middleware('auth');
 Route::get('/atendimentos/{id}/edit', 'AtendimentoController@edit')->middleware('auth');
+
+Route::get('lista/estoque', 'EstoqueController@index')->middleware('auth');
+Route::get('novo/estoque', 'EstoqueController@novo')->middleware('auth');
+Route::post('novo/estoque/busca', 'EstoqueController@searchContatos')->middleware('auth');
+Route::get('lista/estoque/{id}/delete', 'EstoqueController@delete')->middleware('auth');
 
 Route::get('/admin', 'AdminController@index')->name('admin')->middleware('auth')->middleware('admin');
 Route::get('/admin/user/{id}', 'AdminController@user_edit')->middleware('auth')->middleware('admin');

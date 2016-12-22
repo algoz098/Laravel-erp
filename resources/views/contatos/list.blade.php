@@ -25,7 +25,7 @@
           </div>
           @foreach($contatos as $key => $contato)
               <div class="row list-contacts">
-                <div class="col-md-3 text-center">
+                <div class="col-md-3">
                   <a href="{{ url('/contatos') }}/delete/{{$contato->id}}" class="btn btn-danger btn_xs" data-toggle="tooltip" title="Deletar">
                     <i class="fa fa-ban" ></i>
                   </a>
@@ -104,7 +104,7 @@
             <h3>Deletados</h3>
             @foreach($deletados as $key => $contato)
                 <div class="row list-contacts">
-                  <div class="col-md-3 text-center">
+                  <div class="col-md-3">
                     <a href="{{ url('/contatos') }}/delete/{{$contato->id}}" class="btn btn-success btn_xs" data-toggle="tooltip" title="Restaurar">
                       <i class="fa fa-check" ></i>
                     </a>

@@ -20,7 +20,16 @@ use Carbon\Carbon;
               <form method="POST" action="{{ url('/lista/contas') }}/">
                 <div class="form-group form-inline text-center">
                   {{ csrf_field() }}
-                  <input type="text" class="form-control" name="busca" id="busca" placeholder="Busca">
+                  <label><input type="checkbox" name="credito">Entrada</label>
+                  <label><input type="checkbox" name="debito">Debito</label>
+                  <label><input type="checkbox" name="vencer">A vencer</label>
+                  <label><input type="checkbox" name="vencido">Vencidos</label>
+                  <label><input type="checkbox" name="pago">Pago</label>
+                  <label><input type="checkbox" name="pagar">Não pago</label>
+                  <label><input type="checkbox" name="referencia">Referencias</label>
+                  <label><input type="checkbox" name="parcelas">Parcelas</label>
+                  <input type="text" class="form-control" name="valor" id="valor" size="13" placeholder="Valores maior que">
+                  <input type="text" class="form-control" name="contato" id="contato" size="13" placeholder="Ref a contato">
                   <button type="submit" class="btn btn-success">Buscar</button>
                 </div>
               </form>
@@ -37,9 +46,6 @@ use Carbon\Carbon;
                 </a>
                 <a class="btn btn-info"  title="Detalhes"  data-toggle="modal" data-target="#detalhes{{$conta->id}}" aria-expanded="">
                   <i class="fa fa-file-text-o"></i>
-                </a>
-                <a href="{{ url('/contatos') }}/{{$conta->contatos->id}}"  title="Detalhes do contato" class="btn btn-info">
-                  <i class="fa fa-user"></i>
                 </a>
                 <a href="{{ url('/lista/contas') }}/{{$conta->id}}/pago"  title="Creditar" class="btn btn-success">
                   <i class="fa fa-check"></i>
@@ -70,7 +76,8 @@ use Carbon\Carbon;
                   <span class="label label-danger">
                 @endif
                   {{date('d/m/Y', strtotime($conta->vencimento))}}
-                </span> -
+                </span>&nbsp
+                <a href="{{ url('/contatos') }}/{{$conta->contatos->id}}" class="label label-success"><i class="fa fa-user"></i> {{$conta->contatos->nome}}</a> -
                  {{$conta->descricao}}
               </div>
             </div>

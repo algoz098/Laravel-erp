@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Telefones;
 use App\Atendimento;
 use App\Contas;
+use App\Estoque;
 
 class Contatos extends Model
 {
@@ -42,5 +43,10 @@ class Contatos extends Model
     public function contas()
     {
       return $this->hasMany('App\Contas');
+    }
+
+    public function estoque()
+    {
+      return $this->hasMany('App\Estoque');
     }
 }
