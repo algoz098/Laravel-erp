@@ -38,6 +38,9 @@
                   <span class="btn btn-primary btn_xs" title="Relacionamentos"  data-toggle="collapse" data-target="#relacionamentos{{$contato->id}}" aria-expanded="">
                     <i class="fa fa-users"></i>
                   </span>
+                  <span class="btn btn-warning btn_xs" title="Anexos"  data-toggle="collapse" data-target="#attachs{{$contato->id}}" aria-expanded="">
+                    <i class="fa fa-paperclip"></i>
+                  </span>
                   {{$contato->id}}
                 </div>
                 <div class="col-md-3">
@@ -77,6 +80,36 @@
                   </div>
                 @endforeach
               </div>
+              <div class="sub-menu collapse " aria-expanded="" id="attachs{{$contato->id}}" style="padding-left: 100px; padding-top: 15px; padding-bottom: 30px;">
+                <a class="btn btn-success" title="Anexos"  data-toggle="modal" data-target="#upload{{$contato->id}}">
+                  Adicionar anexo
+                </a><br>
+                @foreach($contato->attachs as $key => $attach)
+                  <div class="row list-contacts">
+                    {{$attach->name}}
+                    <span class="label label-info" data-toggle="modal" data-target="#attach{{$attach->id}}">Ver</span>
+                    <a href="{{ url('/attach') }}/{{$attach->id}}/get"><span class="label label-info" >Baixar</span></a>
+                  </div>
+                  <div class="modal fade" id="attach{{$attach->id}}" tabindex="-1" role="dialog" aria-labelledby="upload">
+                    <div class="modal-dialog modal-lg" role="document">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                          <h4 class="modal-title" id="">Visualizar anexo</h4>
+                        </div>
+                        <div class="modal-body" >
+                          <object data="{{ url('/attach') }}/{{$attach->id}}" width="100%" height="400">
+                          </object>
+                        </div>
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                          <a href="{{ url('/attach') }}/{{$attach->id}}/get"><button type="submit" class="btn btn-primary">Baixar</button></a>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                @endforeach
+              </div>
             <!-- Modal -->
             <div class="modal fade" id="addTelefones{{$contato->id}}" tabindex="-1" role="dialog" aria-labelledby="addTelefonesLabel">
               <div class="modal-dialog" role="document">
@@ -99,6 +132,34 @@
                 </div>
               </div>
             </div>
+            <!-- Modal -->
+            <form action="{{ url('lista/contatos') }}/{{$contato->id}}/attach" method="post" enctype="multipart/form-data">
+              {{ csrf_field() }}
+            <div class="modal fade" id="upload{{$contato->id}}" tabindex="-1" role="dialog" aria-labelledby="upload">
+              <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="addTelefonesLabel">Adicionar Anexo</h4>
+                  </div>
+                  <div class="modal-body">
+                    <div class="form-group">
+                      <label class="control-label">Escolha o arquivo</label>
+                      <input type="file" name="file" id="fileToUpload" class="file">
+                    </div>
+                    <div class="form-group">
+                      <label class="control-label">Nome</label>
+                      <input type="text" name="name" id="nome" class="form-control">
+                    </div>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Novo</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </form>
           @endforeach
           @if($deletados!==0)
             <h3>Deletados</h3>

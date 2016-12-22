@@ -13,4 +13,8 @@ class Atendimento extends Model
   {
       return $this->belongsTo('App\Contatos');
   }
+  public function attachs()
+  {
+      return $this->morphMany('App\Attachments', 'attachmentable');
+  }
 }

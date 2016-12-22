@@ -10,6 +10,7 @@ use DB;
 use Auth;
 use App\Contatos as Contatos;
 use App\Telefones as Telefones;
+use App\Attachments as Attachs;
 
 class ContatosController extends Controller
 {
@@ -68,6 +69,7 @@ class ContatosController extends Controller
     $contato->cep = $request->cep;
     $contato->sociabilidade = $request->sociabilidade;
     $contato->tipo = $request->tipo;
+    $contato->obs = $request->obs;
     if ($request->active=="1"){
         $contato->active = "4";
     }
@@ -138,6 +140,7 @@ class ContatosController extends Controller
     $contato->cep = $request->cep;
     $contato->sociabilidade = $request->sociabilidade;
     $contato->tipo = $request->tipo;
+    $contato->obs = $request->obs;
     if ($request->active=="1"){
         $contato->active = "4";
     }
@@ -295,5 +298,15 @@ class ContatosController extends Controller
       $deletados = 0;
     }
     return view('contatos.list')->with('contatos', $contatos)->with('deletados', $deletados);
+  }
+
+  public function attach(request $request, $id){
+    $attach = new Attachs;
+    $attach->attachmentable_id = $id;
+    $attach->attachmentable_type = "App\Contatos";
+    $attach->name = $request->name;
+    $attach->path = $request->file->store('public');
+    $attach->save();
+    return redirect()->action('ContatosController@show');
   }
 }

@@ -92,8 +92,8 @@
                   @else
                     <select class="form-control" name="relacao" id="relacao">
                       <option selected> - Escolha uma opção - </option>
-                      <option value="1" >Fornecedor</option>
-                      <option value="0" >Cliente</option>
+                      <option value="0" >Fornecedor</option>
+                      <option value="1" >Cliente</option>
                       <option value="2" >Filial</option>
                       <option value="" >Indefinido</option>
                     </select>
@@ -161,6 +161,14 @@
                 </div>
               </div>
             </div>
+            <div class="row">
+              <div class="form-group">
+                <label for="obs">Obs:</label>
+                <textarea id="froala-editor" name="obs">
+                  {!! $contato->obs or "" !!}
+                </textarea>
+              </div>
+            </div>
             <div class="row text-right">
               <div class="form-group">
                 <div class="col-sm-offset-2 col-sm-10">
@@ -204,5 +212,11 @@
       var a = {value:"0"};
       $(document).ready(tipoChange(a));
     @endif
+
+    $(function() {
+      $('#froala-editor').froalaEditor({
+        direction: 'ltr'
+      })
+    });
   </script>
 @endsection

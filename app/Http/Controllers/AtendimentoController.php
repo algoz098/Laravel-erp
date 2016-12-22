@@ -5,11 +5,13 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Atendimento as Atendimento;
 use App\Contatos as Contatos;
+use App\Attachments as Attachs;
 
 class AtendimentoController extends Controller
 {
   public function index(){
     $atendimentos = Atendimento::all();
+    #return $atendimentos->contatos->nome;
     return view('atend.index')->with('atendimentos', $atendimentos);
   }
 
@@ -86,4 +88,14 @@ class AtendimentoController extends Controller
     $contatos = Contatos::all();
     return view('atend.index')->with('atendimentos', $atendimentos)->with('contatos', $contatos);
   }
+  public function attach(request $request, $id){
+    $attach = new Attachs;
+    $attach->attachmentable_id = $id;
+    $attach->attachmentable_type = "App\Atendimento";
+    $attach->name = $request->name;
+    $attach->path = $request->file->store('public');
+    $attach->save();
+    return redirect()->action('AtendimentoController@index');
+  }
+
 }

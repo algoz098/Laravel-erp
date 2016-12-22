@@ -38,7 +38,7 @@
                 <div class="col-md-12">
                   <div class="form-group">
                     <label for="text">Descrição </label>
-                    <textarea class="form-control" width="100%" id="texto" rows="5" name="texto">{{$atendimento->texto}}</textarea>
+                    <textarea id="froala-editor" name="texto">{{$atendimento->texto}}</textarea>
                   </div>
                 </div>
               </div>
@@ -48,4 +48,11 @@
       </div>
     </div>
 </div>
+<script  language="javascript">
+$(function() {
+  $('#froala-editor').froalaEditor({
+    direction: 'ltr'
+  })
+});
+</script>
 @endsection

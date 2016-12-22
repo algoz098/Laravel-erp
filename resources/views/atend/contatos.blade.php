@@ -22,7 +22,7 @@ use Carbon\Carbon;
             </div>
           </div>
           <div class="row">
-            <div class="col-md-8 h4">
+            <div class="col-md-5 h4">
               @foreach($contatos as $key => $contato)
                 <div class="row list-contacts">
                   <div class="col-md-2 text-right">
@@ -40,7 +40,7 @@ use Carbon\Carbon;
                 </div>
               @endforeach
             </div>
-            <div class="col-md-4" style="display: none;" id="form">
+            <div class="col-md-7" style="display: none;" id="form">
               <form method="POST" action="{{ url('/atendimentos') }}/novo">
                 {{ csrf_field() }}
                 <div class="form-group">
@@ -58,7 +58,9 @@ use Carbon\Carbon;
                 </div>
                 <div class="form-group">
                   <label for="text">Descrição </label>
-                  <textarea class="form-control" id="texto" rows="5" name="texto"></textarea>
+                  <textarea rows="5" class="form-control" id="froala-editor" name="texto">
+                    {!! $contato->obs or "" !!}
+                  </textarea>
                 </div>
                 <button type="submit" class="btn btn-success" id="enviar" >Enviar</button>
               </form>
@@ -72,5 +74,10 @@ use Carbon\Carbon;
     $( function() {
       $( "#datepicker" ).datepicker({ dateFormat: 'yy-mm-dd' });
     } );
+    $(function() {
+      $('#froala-editor').froalaEditor({
+        direction: 'ltr'
+      })
+    });
   </script>
 @endsection

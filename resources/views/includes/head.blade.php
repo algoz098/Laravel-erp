@@ -10,11 +10,15 @@
 <link href="{{ asset('css/bootstrap-theme.min.css') }}" rel="stylesheet">
 <link href="{{ asset('css/font-awesome.min.css') }}" rel="stylesheet">
 <link href="{{ asset('css/jquery-ui.css') }}" rel="stylesheet">
+<link href="{{ asset('css/froala_style.min.css') }}" rel="stylesheet">
+<link href="{{ asset('css/froala_editor.min.css') }}" rel="stylesheet">
 <link href="{{ asset('css/erp.css') }}" rel="stylesheet">
 
 <script src="{{ asset('js/jquery.min.js') }}"></script>
 <script src="{{ asset('js/jquery-ui.js') }}"></script>
 <script src="{{ asset('js/bootstrap.min.js') }}"></script>
+<script src="{{ asset('js/froala_editor.min.js') }}"></script>
+<script src="{{ asset('js/lists.min.js') }}"></script>
 <!-- Scripts -->
 <script>
     window.Laravel = <?php echo json_encode([

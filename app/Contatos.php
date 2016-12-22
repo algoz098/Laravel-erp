@@ -8,6 +8,7 @@ use App\Telefones;
 use App\Atendimento;
 use App\Contas;
 use App\Estoque;
+use App\Attachments;
 
 class Contatos extends Model
 {
@@ -48,5 +49,10 @@ class Contatos extends Model
     public function estoque()
     {
       return $this->hasMany('App\Estoque');
+    }
+
+    public function attachs()
+    {
+        return $this->morphMany('App\Attachments', 'attachmentable');
     }
 }

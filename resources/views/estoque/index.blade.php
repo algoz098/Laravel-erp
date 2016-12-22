@@ -14,10 +14,15 @@
           </div>
           <div class="row">
             <div class="col-md-12  ">
-              <form method="POST" action="{{ url('/lista/contas') }}/">
+              <form method="POST" action="{{ url('/lista/estoque') }}/">
                 <div class="form-group form-inline text-center">
                   {{ csrf_field() }}
-                  <input type="text" class="form-control" name="busca" id="busca" placeholder="Busca">
+                  <label><input type="checkbox" name="estocado">Em Estoque</label>
+                  <label><input type="checkbox" name="falta">Em Falta</label>
+                  <input type="text" class="form-control" size="3" name="valor" id="busca" placeholder="Custo maior que">
+                  <input type="text" class="form-control" size="13"name="contato" id="busca" placeholder="por Filial">
+                  <input type="text" class="form-control" size="13" name="nome" id="busca" placeholder="por Nome">
+                  <input type="text" class="form-control" size="7" name="codigo" id="busca" placeholder="por Codigo">
                   <button type="submit" class="btn btn-success">Buscar</button>
                 </div>
               </form>
@@ -33,17 +38,22 @@
                   <a class="btn btn-info"  title="Detalhes"  data-toggle="modal" data-target="#detalhes{{$estoque->id}}" aria-expanded="">
                     <i class="fa fa-file-text-o"></i>
                   </a>
-                  <a href="{{ url('/contatos') }}/{{$estoque->contato->id}}"  title="Detalhes do contato" class="btn btn-info">
-                    <i class="fa fa-user"></i>
+                  <a href="{{ url('lista/estoque') }}/{{$estoque->id}}/up" class="btn btn-success">
+                    <i class="fa fa-arrow-up"></i>
+                  </a>
+                  <a href="{{ url('lista/estoque') }}/{{$estoque->id}}/down" class="btn btn-danger">
+                    <i class="fa fa-arrow-down"></i>
                   </a>
                 </div>
                 <div class="col-md-3">
                   {{$estoque->nome}}
                   <span class="label label-warning">R$ {{ number_format($estoque->valor_custo, 2) }}</span>
-                  <span class="label label-info">{{$estoque->quantidade}}</span>
+                  <span class="label label-info">Estoque: {{$estoque->quantidade}}</span>
                 </div>
                 <div class="col-md-6">
-                  Filial: <span class="label label-primary">{{$estoque->contato->nome }}</span>
+                  <a href="{{ url('/contatos') }}/{{$estoque->contato->id}}"  title="Detalhes do contato">
+                    <span class="label label-primary"><i class="fa fa-user"></i> {{$estoque->contato->nome }}</span>
+                  </a>
                 </div>
               </div>
 
@@ -58,11 +68,34 @@
                       </h4>
                     </div>
                     <div class="modal-body">
-                      {{$estoque}}
+                      <div class="row">
+                        <div class="col-md-4">
+                          Custo:
+                          <span class="label label-warning">R$ {{ number_format($estoque->valor_custo, 2) }}</span>
+                        </div>
+                        <div class="col-md-4">
+                          Codigo de barras:
+                          <span class="label label-primary">{{$estoque->barras}}</span>
+                        </div>
+                        <div class="col-md-4">
+                          Localizado na filial:
+                          <span class="label label-info">{{$estoque->contato->nome}}</span>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-md-12">
+                          A peça esta localizada em: {{$estoque->contato->endereco }} - {{$estoque->contato->bairro }} - {{$estoque->contato->cidade }}
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-md-12">
+                          <strong>Descrição:</strong> {{$estoque->descricao }}
+                        </div>
+                      </div>
                     </div>
                     <div class="modal-footer">
                       <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                      <a href="{{ url('/novo/contas') }}/{{$estoque->id}}"><button type="submit" class="btn btn-primary">Editar</button></a>
+                      <a href="{{ url('/lista/estoque') }}/{{$estoque->id}}/editar"><button type="submit" class="btn btn-primary">Editar</button></a>
                     </div>
                   </div>
                 </div>
@@ -79,9 +112,6 @@
                   </a>
                   <a class="btn btn-info"  title="Detalhes"  data-toggle="modal" data-target="#detalhes{{$estoque->id}}" aria-expanded="">
                     <i class="fa fa-file-text-o"></i>
-                  </a>
-                  <a href="{{ url('/contatos') }}/{{$estoque->contato->id}}"  title="Detalhes do contato" class="btn btn-info">
-                    <i class="fa fa-user"></i>
                   </a>
                 </div>
                 <div class="col-md-3">
@@ -103,7 +133,30 @@
                       </h4>
                     </div>
                     <div class="modal-body">
-                      {{$estoque}}
+                      <div class="row">
+                        <div class="col-md-4">
+                          Custo:
+                          <span class="label label-warning">R$ {{ number_format($estoque->valor_custo, 2) }}</span>
+                        </div>
+                        <div class="col-md-4">
+                          Codigo de barras:
+                          <span class="label label-primary">{{$estoque->barras}}</span>
+                        </div>
+                        <div class="col-md-4">
+                          Localizado na filial:
+                          <span class="label label-info">{{$estoque->contato->nome}}</span>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-md-12">
+                          A peça esta localizada em: {{$estoque->contato->endereco }} - {{$estoque->contato->bairro }} - {{$estoque->contato->cidade }}
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-md-12">
+                          <strong>Descrição:</strong> {{$estoque->descricao }}
+                        </div>
+                      </div>
                     </div>
                     <div class="modal-footer">
                       <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>

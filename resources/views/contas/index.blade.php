@@ -1,5 +1,35 @@
 <?php
 use Carbon\Carbon;
+$a = 0;
+$b = 0;
+$c = 0;
+$d = 0;
+$saidas = 0;
+$saira = 0;
+$entradas = 0;
+$entrara = 0;
+foreach($contas as $key => $conta){
+  if (strtotime($conta->vencimento)<strtotime(Carbon::now()) and $conta->estado!=1){
+    $a = $a+1;
+  } else{
+    $b = $b+1;
+  }
+  if ($conta->tipo=="0"){
+    $c = $c+1;
+    if (strtotime($conta->vencimento)<strtotime(Carbon::now()) and $conta->estado=="1") {
+      $saidas = $saidas + $conta->valor;
+    } else {
+      $saira = $saira + $conta->valor;
+    }
+  } else {
+    $d = $d+1;
+    if (strtotime($conta->vencimento)<strtotime(Carbon::now()) and $conta->estado=="1") {
+      $entradas = $entradas + $conta->valor;
+    } else {
+      $entrara = $entrara + $conta->valor;
+    }
+  }
+}
 ?>
 @extends('main')
 @section('content')
@@ -10,11 +40,21 @@ use Carbon\Carbon;
           <i class="fa fa-usd fa-1x"></i> Contas
         </div>
         <div class="panel-body">
-          <div class="row pull-right">
-            <div class="col-md-12">
+          <div class="row">
+            <div class="col-md-11">
+              <span class="label label-danger"><i class="fa fa-exclamation"></i> Vencidas: {{$a}} </span>&nbsp
+              <span class="label label-warning"><i class="fa fa-question"></i> A vencer: {{$b}} </span>&nbsp
+              <span class="label label-info"><i class="fa fa-arrow-down"></i> Debitos: {{$c}} </span>&nbsp
+              <span class="label label-success"><i class="fa fa-arrow-up"></i> Creditos: {{$d}} </span>&nbsp&nbsp&nbsp
+              <span class="label label-warning"><i class="fa fa-usd"></i> Debito hoje: R$ {{$saidas}} </span>&nbsp
+              <span class="label label-success"><i class="fa fa-usd"></i> Credito hoje: R$ {{$entradas}} </span>&nbsp&nbsp&nbsp
+              <span class="label label-danger"><i class="fa fa-usd"></i> Debito futuro: R$ {{$saira}} </span>&nbsp
+              <span class="label label-info"><i class="fa fa-usd"></i> Credito futuro: R$ {{$entrara}} </span>
+            </div>
+            <div class="col-md-1 pull-right text-right">
               <a href="{{ url('/novo/contas') }}" class="btn btn-success"><i class="fa fa-plus"></i> Novo</a>
             </div>
-          </div>
+          </div><br>
           <div class="row">
             <div class="col-md-12  ">
               <form method="POST" action="{{ url('/lista/contas') }}/">
