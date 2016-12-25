@@ -10,9 +10,14 @@ use Carbon\Carbon;
           <i class="fa fa-list fa-1x"></i> Novo atendimento
         </div>
         <div class="panel-body">
+          <div class="row">
+            <div class="col-md-3 text-right pull-right">
+              <a class="btn btn-warning" href="{{ url('lista/atendimentos')}}" ><i class="fa fa-list"></i> Voltar a Lista</a>
+            </div>
+          </div>
           <div class="row pull-center">
             <div class="col-md-12">
-              <form method="POST" action="{{ url('/atendimentos') }}/novo/busca">
+              <form method="POST" action="{{ url('novo/atendimentos') }}/busca">
                 <div class="form-group form-inline text-center">
                   {{ csrf_field() }}
                   <input type="text" class="form-control" name="busca" id="busca" placeholder="Busca" size="10">
@@ -39,9 +44,15 @@ use Carbon\Carbon;
                   </div>
                 </div>
               @endforeach
+
+              <div class="row">
+                <div class="col-md-12 text-center">
+                  {{ $contatos->links() }}
+                </div>
+              </div>
             </div>
             <div class="col-md-7" style="display: none;" id="form">
-              <form method="POST" action="{{ url('/atendimentos') }}/novo">
+              <form method="POST" action="{{ url('novo/atendimentos') }}">
                 {{ csrf_field() }}
                 <div class="form-group">
                   <label>Atendimento para</label>

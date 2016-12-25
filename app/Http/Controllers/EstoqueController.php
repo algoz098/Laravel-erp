@@ -11,7 +11,7 @@ class EstoqueController extends Controller
 {
   public function index()
   {
-    $estoques = Estoque::all();
+    $estoques = Estoque::paginate(30);
     if (is_array(Auth::user()->perms) and Auth::user()->perms["admin"]==1){
         $deletados = Estoque::onlyTrashed()->get();
     } else {
@@ -22,7 +22,7 @@ class EstoqueController extends Controller
 
   public function novo()
   {
-    $contatos = Contatos::all();
+    $contatos = Contatos::paginate(15);
     return view('estoque.contatos')->with('contatos', $contatos);
   }
 
@@ -58,7 +58,6 @@ class EstoqueController extends Controller
 
   public function search( Request $request)
   {
-    #return $request;
     $estoques = Estoque::query();
     if ($request->estocado){
       $estoques = $estoques->orWhere('quantidade', '>', '0');
@@ -91,7 +90,7 @@ class EstoqueController extends Controller
           $a++;
         }
     }
-    $estoques = $estoques->get();
+    $estoques = $estoques->paginate(30);
     $deletados = 0;
     return view('estoque.index')->with('estoques', $estoques)->with('deletados', $deletados);
   }
@@ -107,9 +106,9 @@ class EstoqueController extends Controller
                             ->orWhere('uf', 'like', '%' .  $request->busca . '%')
                             ->orWhere('bairro', 'like', '%' .  $request->busca . '%')
                             ->orWhere('cep', 'like', '%' .  $request->busca . '%')
-                            ->get();
+                            ->paginate(15);
     } else {
-      $contatos = Contatos::all();
+      $contatos = Contatos::paginate(15);
     }
     return view('estoque.contatos')->with('contatos', $contatos);
   }
@@ -122,14 +121,7 @@ class EstoqueController extends Controller
     }else{
       $estoque->delete();
     }
-    $estoques = Estoque::all();
-    if (is_array(Auth::user()->perms) and Auth::user()->perms["admin"]==1){
-        $deletados = Estoque::onlyTrashed()->get();
-    } else {
-      $deletados = 0;
-      $estoques = 0;
-    }
-    return view('estoque.index')->with('estoques', $estoques)->with('deletados', $deletados);
+    return redirect()->action('EstoqueController@index');
   }
 
   public function up($id){

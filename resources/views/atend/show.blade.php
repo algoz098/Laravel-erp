@@ -5,12 +5,12 @@
         <div class="form-group">
         <div class="panel panel-default">
           <div class="panel-heading"><i class="fa fa-list fa-1x"></i> Editar atendimento de <span class="label label-primary">{{$atendimento->contatos->nome}}</span></div>
-          <form method="POST" action="{{ url('/atendimentos') }}/{{$atendimento->id}}">
+          <form method="POST" action="{{ url('novo/atendimentos') }}/{{$atendimento->id}}">
             {{ csrf_field() }}
             <div class="panel-body">
               <div class="row text-right">
                 <div class="col-sm-offset-2 col-sm-10">
-                  <a href="{{url()->previous() }}" class="btn btn-warning"><i class="fa fa-arrow-left"></i> Voltar</a>
+                  <a class="btn btn-warning" href="{{ url('lista/atendimentos')}}" ><i class="fa fa-list"></i> Voltar a Lista</a>
                   <button type="submit" class="btn btn-success">Salvar</button>
                 </div>
               </div>

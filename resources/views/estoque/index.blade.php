@@ -4,7 +4,7 @@
     <div class="col-md-12">
       <div class="panel panel-default">
         <div class="panel-heading ">
-          <i class="fa fa-bell-o fa-1x"></i> Contas
+          <i class="fa fa-bell-o fa-1x"></i> Estoque
         </div>
         <div class="panel-body">
           <div class="row pull-right">
@@ -101,6 +101,11 @@
                 </div>
               </div>
             @endforeach
+            <div class="row">
+              <div class="col-md-12 text-center">
+                {{ $estoques->links() }}
+              </div>
+            </div>
           @endif
           @if($deletados!==0)
             <h3>Deletados</h3>

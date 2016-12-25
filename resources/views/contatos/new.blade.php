@@ -1,7 +1,7 @@
 @extends('main')
 @section('content')
   <div class="row">
-    <div class="col-md-11">
+    <div class="col-md-12">
       @if (!empty($contato->id))
         <form method="POST" action="{{ url('/contatos') }}/{{$contato->id}}">
       @else
@@ -15,8 +15,8 @@
           <div class="panel-body">
             <div class="row text-right">
               <div class="col-sm-offset-2 col-sm-10">
-                <a href="{{url()->previous() }}" class="btn btn-warning"><i class="fa fa-arrow-left"></i> Voltar</a>
-                <button type="submit" class="btn btn-success">Salvar</button>
+                <a class="btn btn-warning" href="{{ url('lista/contatos')}}" ><i class="fa fa-users"></i> Voltar a Lista</a>
+                <button type="submit" class="btn btn-success"><i class="fa fa-check"></i> Salvar</button>
               </div>
             </div>
             <div class="row">

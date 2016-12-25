@@ -13,8 +13,8 @@ use Carbon\Carbon;
         <div class="panel-body">
           <div class="row ">
             <div class="col-md-3 pull-right text-right">
-              <a href="{{url()->previous() }}" class="btn btn-warning"><i class="fa fa-arrow-left"></i> Voltar</a>
-              <button type="submit" class="btn btn-success" id="enviar" >Enviar</button>
+              <a class="btn btn-warning" href="{{ url('lista/estoque')}}" ><i class="fa fa-bell-o"></i> Voltar a Lista</a>
+              <button type="submit" class="btn btn-success"><i class="fa fa-check"></i> Salvar</button>
             </div>
           </div>
           <div class="row">

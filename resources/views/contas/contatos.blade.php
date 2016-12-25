@@ -10,6 +10,11 @@ use Carbon\Carbon;
           <i class="fa fa-usd fa-1x"></i> Nova conta
         </div>
         <div class="panel-body">
+          <div class="row">
+            <div class="col-md-3 text-right pull-right">
+              <a class="btn btn-warning" href="{{ url('lista/contas')}}" ><i class="fa fa-usd"></i> Voltar a Lista</a>
+            </div>
+          </div>
           <div class="row pull-center">
             <div class="col-md-12">
               <form method="POST" action="{{ url('/novo/contas/busca') }}">

@@ -14,7 +14,7 @@
           </div>
           <div class="row">
             <div class="col-md-12  ">
-              <form method="POST" action="{{ url('/atendimentos') }}/">
+              <form method="POST" action="{{ url('lista/atendimentos') }}/">
                 <div class="form-group form-inline text-center">
                   {{ csrf_field() }}
                   <input type="text" class="form-control" name="busca" id="busca" placeholder="Busca">
@@ -23,11 +23,11 @@
               </form>
             </div>
           </div>
-          @if ($atendimentos!="")
+          @if (!empty($atendimentos))
             @foreach($atendimentos as $key => $atendimento)
                 <div class="row list-contacts">
                   <div class="col-md-2 text-right">
-                    <a href="{{ url('/atendimentos') }}/{{$atendimento->id}}/delete" class="btn btn-danger btn_xs">
+                    <a href="{{ url('lista/atendimentos') }}/{{$atendimento->id}}/delete" class="btn btn-danger btn_xs">
                       <i class="fa fa-ban"></i>
                     </a>
                     <a href="#" class="btn btn-primary btn_xs" title="Detalhes"  data-toggle="modal" data-target="#detalhes{{$atendimento->id}}">
@@ -146,7 +146,7 @@
                       </div>
                       <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                        <a href="{{ url('/atendimentos') }}/{{$atendimento->id}}"><button type="submit" class="btn btn-primary">Editar</button></a>
+                        <a href="{{ url('novo/atendimentos') }}/{{$atendimento->id}}"><button type="submit" class="btn btn-primary">Editar</button></a>
                       </div>
                     </div>
                   </div>
@@ -192,7 +192,7 @@
                       </div>
                       <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                        <a href="{{ url('/atendimentos') }}/{{$atendimento->id}}"><button type="submit" class="btn btn-primary">Editar</button></a>
+                        <a href="{{ url('novo/atendimentos') }}/{{$atendimento->id}}"><button type="submit" class="btn btn-primary">Editar</button></a>
                       </div>
                     </div>
                   </div>
@@ -200,6 +200,11 @@
 
             @endforeach
 
+            <div class="row">
+              <div class="col-md-10 text-center">
+                {{ $atendimentos->links() }}
+              </div>
+            </div>
           </div>
         </div>
       </div>

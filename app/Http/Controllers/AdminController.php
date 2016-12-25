@@ -21,7 +21,17 @@ class AdminController extends Controller
 
     public function user_edit($id){
       $contato = Contatos::find($id);
-      return view('admin.useredit')->with('contato', $contato);;
+      $matriz = Contatos::find(1);
+
+      $filiais[]=$matriz;
+      #$filiais[]="";
+      foreach ($matriz->to as $key => $relacao) {
+        if ($relacao->from_text="Filial"){
+          $filiais[] = $relacao;
+        }
+      }
+
+      return view('admin.useredit')->with('contato', $contato)->with('filiais', $filiais);
     }
 
     public function user_modify(Request $request, $id){
@@ -36,6 +46,7 @@ class AdminController extends Controller
       $user->email = $request->email;
       $user->password = bcrypt($request->password);
       $user->ativo = $request->ativo;
+      $user->trabalho_id = $request->filial;
       $user->save();
 
       $contatos = contatos::all();

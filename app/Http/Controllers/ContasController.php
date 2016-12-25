@@ -11,7 +11,7 @@ use App\Contatos as Contatos;
 class ContasController extends Controller
 {
   public function index(){
-    $contas = Contas::all();
+    $contas = Contas::paginate(15);
     if (is_array(Auth::user()->perms) and Auth::user()->perms["admin"]==1){
         $deletados = Contas::onlyTrashed()->get();
     } else {
@@ -20,7 +20,6 @@ class ContasController extends Controller
     return view('contas.index')->with('contas', $contas)->with('deletados', $deletados);
   }
   public function search(Request $request){
-    #return $request;
     $contas = Contas::query();
     if ($request->debito){
       $contas = $contas->orWhere('tipo', '0');
@@ -65,13 +64,13 @@ class ContasController extends Controller
           $a++;
         }
     }
-    $contas = $contas->get();
+    $contas = $contas->paginate(15);
     $deletados = 0;
     return view('contas.index')->with('contas', $contas)->with('deletados', $deletados);
   }
 
   public function novo(){
-    $contatos = Contatos::all();
+    $contatos = Contatos::paginate(15);
     return view('contas.contatos')->with('contatos', $contatos);
   }
   public function searchContatos( Request $request)
@@ -85,9 +84,9 @@ class ContasController extends Controller
                             ->orWhere('uf', 'like', '%' .  $request->busca . '%')
                             ->orWhere('bairro', 'like', '%' .  $request->busca . '%')
                             ->orWhere('cep', 'like', '%' .  $request->busca . '%')
-                            ->get();
+                            ->paginate(15);
     } else {
-      $contatos = Contatos::all();
+      $contatos = Contatos::paginate(15);
     }
     if (is_array(Auth::user()->perms) and Auth::user()->perms["admin"]==1){
         $deletados = Contas::onlyTrashed()->get();
@@ -97,7 +96,6 @@ class ContasController extends Controller
     return view('contas.index')->with('contas', $contas)->with('deletados', $deletados);
   }
   public function add(Request $request){
-    #return $request;
     $conta = new Contas;
     $conta->contatos_id = $request->contatos_id;
     $conta->nome = $request->nome;
@@ -125,13 +123,8 @@ class ContasController extends Controller
         $i++;
       }
     }
-    $contas = Contas::all();
-    if (is_array(Auth::user()->perms) and Auth::user()->perms["admin"]==1){
-        $deletados = Contas::onlyTrashed()->get();
-    } else {
-      $deletados = 0;
-    }
-    return view('contas.index')->with('contas', $contas)->with('deletados', $deletados);
+
+    return redirect()->action('ContasController@index');
   }
 
   public function pago($id){
@@ -142,13 +135,7 @@ class ContasController extends Controller
       $conta->estado = '1';
     }
     $conta->save();
-    $contas = Contas::all();
-    if (is_array(Auth::user()->perms) and Auth::user()->perms["admin"]==1){
-        $deletados = Contas::onlyTrashed()->get();
-    } else {
-      $deletados = 0;
-    }
-    return view('contas.index')->with('contas', $contas)->with('deletados', $deletados);
+    return redirect()->action('ContasController@index');
   }
 
   public function delete($id){
@@ -158,13 +145,8 @@ class ContasController extends Controller
     } else {
       $conta->delete();
     }
-    $contas = Contas::all();
-    if (is_array(Auth::user()->perms) and Auth::user()->perms["admin"]==1){
-        $deletados = Contas::onlyTrashed()->get();
-    } else {
-      $deletados = 0;
-    }
-    return view('contas.index')->with('contas', $contas)->with('deletados', $deletados);
+
+    return redirect()->action('ContasController@index');
   }
   public function edit($id){
     $conta = Contas::find($id);

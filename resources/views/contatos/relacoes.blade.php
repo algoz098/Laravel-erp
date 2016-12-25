@@ -6,17 +6,17 @@
         <div class="panel-heading"><i class="fa fa-users fa-1x"></i> Relacionamentos de <span class="label label-primary">{{$contato->nome}}</span></div>
         <div class="panel-body">
           <div class="row text-right">
-            <a href="{{url()->previous() }}" class="btn btn-warning"><i class="fa fa-arrow-left"></i> Voltar</a>
-            <a href="{{ url('/contatos') }}/{{$contato->id}}/relacoes/novo" class="btn btn-success">
+            <a class="btn btn-warning" href="{{ url('lista/contatos')}}" ><i class="fa fa-users"></i> Voltar a Lista</a>
+            <a href="{{ url('/lista/contatos') }}/{{$contato->id}}/relacoes/novo" class="btn btn-success">
               <i class="fa fa-plus"></i> Novo
             </a>
           </div>
             <div class="row">
-              <div class="col-md-8">
+              <div class="col-md-12">
                 @foreach($contato->from as $key => $from)
                   <div class="row h3 list-contacts">
                     <div class="col-md-2 text-right">
-                      <a href="{{ url('/contatos') }}/{{$contato->id}}/relacoes/{{$contato->from[$key]->pivot->id}}/delete" class="btn btn-danger">
+                      <a href="{{ url('lista/contatos') }}/{{$contato->id}}/relacoes/{{$contato->from[$key]->pivot->id}}/delete" class="btn btn-danger">
                         <i class="fa fa-ban"></i>
                       </a>
                       <a class="btn btn-primary" onclick="
@@ -40,8 +40,8 @@
                 @endforeach
                 @foreach($contato->to as $key => $to)
                   <div class="row h3 list-contacts">
-                    <div class="col-md-3  text-right">
-                      <a href="{{ url('/contatos') }}/{{$contato->id}}/relacoes/{{$contato->to[$key]->pivot->id}}/delete" class="btn btn-danger">
+                    <div class="col-md-2  text-right">
+                      <a href="{{ url('/lista/contatos') }}/{{$contato->id}}/relacoes/{{$contato->to[$key]->pivot->id}}/delete" class="btn btn-danger">
                         <i class="fa fa-ban"></i>
                       </a>
                       <a class="btn btn-primary" onclick="
@@ -56,7 +56,7 @@
                         <i class="fa fa-pencil"></i>
                       </a>
                     </div>
-                    <div class="col-md-8">
+                    <div class="col-md-10">
                       {{$contato->nome}} é
                       <span class="label label-success">{{$contato->to[$key]->pivot->to_text}}</span>
                       de {{$contato->to[$key]->nome}}
@@ -65,7 +65,7 @@
                 @endforeach
               </div>
               <div class="col-md-6" id="form" style="display:none">
-                <form id="form_relacao" method="POST" action="{{ url('/contatos') }}/{{$contato->id}}/relacoes/novo">
+                <form id="form_relacao" method="POST" action="{{ url('lista/contatos') }}/{{$contato->id}}/relacoes/novo">
                   <div class="form-group">
                   <input type="hidden" class="form-control" value="" name="to_id" id="to_id" >
                   {{ csrf_field() }}

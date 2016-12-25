@@ -47,6 +47,16 @@
                 @endif
               </div>
             </div>
+            <div class="col-md-5">
+              <div class="form-group">
+                <label for="sel1">Filial do funcionario:</label>
+                <select class="form-control" id="filial" name="filial">
+                  @foreach($filiais as $key => $filial)
+                    <option value="{{$filial->id}}">{{$filial->nome}}</option>
+                  @endforeach
+                </select>
+              </div>
+            </div>
           </div>
         </div>
       </div>

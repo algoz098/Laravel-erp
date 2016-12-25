@@ -10,8 +10,7 @@ use App\Attachments as Attachs;
 class AtendimentoController extends Controller
 {
   public function index(){
-    $atendimentos = Atendimento::all();
-    #return $atendimentos->contatos->nome;
+    $atendimentos = Atendimento::paginate(15);
     return view('atend.index')->with('atendimentos', $atendimentos);
   }
 
@@ -21,7 +20,7 @@ class AtendimentoController extends Controller
   }
 
   public function new_a(){
-    $contatos = Contatos::all();
+    $contatos = Contatos::paginate(15);
     return view('atend.contatos')->with('contatos', $contatos);
   }
 
@@ -32,15 +31,13 @@ class AtendimentoController extends Controller
     $atendimento->created_at = $request->data;
     $atendimento->texto = $request->texto;
     $atendimento->save();
-    $atendimentos = Atendimento::all();
-    return view('atend.index')->with('atendimentos', $atendimentos);
+    return redirect()->action('AtendimentoController@index');
   }
 
   public function delete($id){
     $atendimento = Atendimento::find($id);
     $atendimento->delete();
-    $atendimentos = Atendimento::all();
-    return view('atend.index')->with('atendimentos', $atendimentos);
+    return redirect()->action('AtendimentoController@index');
   }
 
   public function search( Request $request)
@@ -48,9 +45,9 @@ class AtendimentoController extends Controller
     if (!empty($request->busca)){
       $atendimentos = Atendimento::where('assunto', 'like', '%' .  $request->busca . '%')
                             ->orWhere('created_at', 'like', '%' .  $request->busca . '%')
-                            ->get();
+                            ->paginate(30);
     } else {
-      $atendimentos = Atendimento::all();
+      $atendimentos = Atendimento::paginate(30);
     }
     return view('atend.index')->with('atendimentos', $atendimentos);
   }
@@ -66,9 +63,9 @@ class AtendimentoController extends Controller
                             ->orWhere('uf', 'like', '%' .  $request->busca . '%')
                             ->orWhere('bairro', 'like', '%' .  $request->busca . '%')
                             ->orWhere('cep', 'like', '%' .  $request->busca . '%')
-                            ->get();
+                            ->paginate(15);
     } else {
-      $contatos = Contatos::all();
+      $contatos = Contatos::paginate(15);
     }
     return view('atend.contatos')->with('contatos', $contatos);
   }
@@ -84,9 +81,7 @@ class AtendimentoController extends Controller
     $atendimento->texto = $request->texto;
     $atendimento->save();
 
-    $atendimentos = Atendimento::all();
-    $contatos = Contatos::all();
-    return view('atend.index')->with('atendimentos', $atendimentos)->with('contatos', $contatos);
+    return redirect()->action('AtendimentoController@index');
   }
   public function attach(request $request, $id){
     $attach = new Attachs;

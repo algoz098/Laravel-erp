@@ -9,6 +9,7 @@ use App\Atendimento;
 use App\Contas;
 use App\Estoque;
 use App\Attachments;
+use App\Caixas;
 
 class Contatos extends Model
 {
@@ -19,6 +20,10 @@ class Contatos extends Model
     public function telefones()
     {
         return $this->hasMany('App\Telefones');
+    }
+    public function caixas()
+    {
+        return $this->hasMany('App\Caixas', 'filial_id');
     }
 
     public function atendimento()

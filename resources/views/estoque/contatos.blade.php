@@ -10,6 +10,11 @@ use Carbon\Carbon;
           <i class="fa fa-bell-o fa-1x"></i> Novo estoque
         </div>
         <div class="panel-body">
+          <div class="row">
+            <div class="col-md-3 text-right pull-right">
+              <a class="btn btn-warning" href="{{ url('lista/estoque')}}" ><i class="fa fa-bell-o"></i> Voltar a Lista</a>
+            </div>
+          </div>
           <div class="row pull-center">
             <div class="col-md-12">
               <form method="POST" action="{{ url('/novo/estoque/busca') }}">
@@ -39,6 +44,11 @@ use Carbon\Carbon;
                   </div>
                 </div>
               @endforeach
+              <div class="row">
+                <div class="col-md-12 text-center">
+                  {{ $contatos->links() }}
+                </div>
+              </div>
             </div>
             <form method="POST" action="{{ url('/novo/estoque') }}">
               <div class="col-md-8" style="display: none;" id="form">

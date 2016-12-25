@@ -8,6 +8,7 @@ $saidas = 0;
 $saira = 0;
 $entradas = 0;
 $entrara = 0;
+
 foreach($contas as $key => $conta){
   if (strtotime($conta->vencimento)<strtotime(Carbon::now()) and $conta->estado!=1){
     $a = $a+1;
@@ -296,6 +297,11 @@ foreach($contas as $key => $conta){
               </div>
             </div>
           @endforeach
+          <div class="row">
+            <div class="col-md-10 text-center">
+              {{ $contas->links() }}
+            </div>
+          </div>
           @if($deletados!==0)
             <h3>Deletados</h3>
             @foreach($deletados as $key => $conta)

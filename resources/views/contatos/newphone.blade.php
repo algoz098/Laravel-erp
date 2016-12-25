@@ -2,7 +2,7 @@
 @section('content')
   <div class="row">
     <div class="col-md-11">
-      <form method="POST" action="{{ url('/contatos') }}/{{$contato->id}}/telefones/">
+      <form method="POST" action="{{ url('lista/contatos') }}/{{$contato->id}}/telefones/">
         <div class="form-group">
         {{ csrf_field() }}
         <input type="hidden" name="id" value="">
@@ -11,8 +11,8 @@
           <div class="panel-body">
             <div class="row text-right">
               <div class="col-sm-offset-2 col-sm-10">
-                <a href="{{url()->previous() }}" class="btn btn-warning"><i class="fa fa-arrow-left"></i> Voltar</a>
-                <button type="submit" class="btn btn-success">Salvar</button>
+                <a class="btn btn-warning" href="{{ url('lista/contatos')}}" ><i class="fa fa-users"></i> Voltar a Lista</a>
+                <button type="submit" class="btn btn-success"><i class="fa fa-check"></i> Salvar</button>
               </div>
             </div>
             <div class="row">

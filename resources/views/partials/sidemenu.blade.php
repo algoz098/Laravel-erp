@@ -14,19 +14,21 @@
               <a href="#"><i class="fa fa-file-text fa-lg"></i> Cadastros<span class="arrow"></span></a>
             </li>
             <ul class="sub-menu collapse {{{ Request::is('novo*') ? "in" : "" }}}" aria-expanded="{{{ Request::is('novo*') ? "true" : "false" }}}" id="cadastros">
-                <li class="{{{ Request::path()=='novo/contatos' ? "active" : "" }}}"><a href="{{ url('novo/contatos') }}">Contato</a></li>
-                <li class="{{{ Request::path()=='novo/atendimentos' ? "active" : "" }}}"><a href="{{ url('/novo/atendimentos') }}">Atendimento</a></li>
-                <li class="{{{ Request::path()=='novo/contas' ? "active" : "" }}}"><a href="{{ url('/novo/contas') }}">Conta</a></li>
-                <li class="{{{ Request::path()=='novo/estoque' ? "active" : "" }}}"><a href="{{ url('/novo/estoque') }}">Estoque</a></li>
+                <li class="{{{ Request::path()=='novo/contatos' ? "active" : "" }}}"><a href="{{ url('novo/contatos') }}"><i class="fa fa-user"></i> Contato</a></li>
+                <li class="{{{ Request::path()=='novo/atendimentos' ? "active" : "" }}}"><a href="{{ url('/novo/atendimentos') }}"><i class="fa fa-list"></i> Atendimento</a></li>
+                <li class="{{{ Request::path()=='novo/contas' ? "active" : "" }}}"><a href="{{ url('/novo/contas') }}"><i class="fa fa-usd"></i> Conta</a></li>
+                <li class="{{{ Request::path()=='novo/estoque' ? "active" : "" }}}"><a href="{{ url('/novo/estoque') }}"><i class="fa fa-bell"></i> Estoque</a></li>
+                <li class="{{{ Request::path()=='novo/caixa' ? "active" : "" }}}"><a href="{{ url('/novo/caixa') }}"><i class="fa fa-money"></i> Caixa</a></li>
             </ul>
             <li  data-toggle="collapse" data-target="#listas" class="{{{ Request::is('lista*') ? "active" : "collapsed" }}}" aria-expanded="">
               <a href="#"><i class="fa fa-list fa-lg"></i> Listas<span class="arrow"></span></a>
             </li>
             <ul class="sub-menu collapse {{{ Request::is('lista*') ? "in" : "" }}}" aria-expanded="{{{ Request::is('lista*') ? "true" : "false" }}}" id="listas">
-                <li class="{{{ Request::path()=='lista/contatos' ? "active" : "" }}}"><a href="{{ url('/lista/contatos') }}">Contato</a></li>
-                <li class="{{{ Request::path()=='lista/atendimentos' ? "active" : "" }}}"><a href="{{ url('/lista/atendimentos') }}">Atendimento</a></li>
-                <li class="{{{ Request::path()=='lista/contas' ? "active" : "" }}}"><a href="{{ url('/lista/contas') }}">Conta</a></li>
-                <li class="{{{ Request::path()=='lista/estoque' ? "active" : "" }}}"><a href="{{ url('/lista/estoque') }}">Estoque</a></li>
+                <li class="{{{ Request::path()=='lista/contatos' ? "active" : "" }}}"><a href="{{ url('/lista/contatos') }}"><i class="fa fa-user"></i> Contato</a></li>
+                <li class="{{{ Request::path()=='lista/atendimentos' ? "active" : "" }}}"><a href="{{ url('/lista/atendimentos') }}"><i class="fa fa-list"></i> Atendimento</a></li>
+                <li class="{{{ Request::path()=='lista/contas' ? "active" : "" }}}"><a href="{{ url('/lista/contas') }}"><i class="fa fa-usd"></i> Conta</a></li>
+                <li class="{{{ Request::path()=='lista/estoque' ? "active" : "" }}}"><a href="{{ url('/lista/estoque') }}"><i class="fa fa-bell"></i> Estoque</a></li>
+                <li class="{{{ Request::path()=='lista/caixa' ? "active" : "" }}}"><a href="{{ url('/lista/caixa') }}"><i class="fa fa-money"></i> Caixa</a></li>
             </ul>
 
             @if (isset(Auth::user()->perms["admin"]) and Auth::user()->perms["admin"]==1)

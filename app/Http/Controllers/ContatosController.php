@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Validator;
 
 use DB;
 use Auth;
+use Intervention\Image\ImageManagerStatic as Image;
 use App\Contatos as Contatos;
 use App\Telefones as Telefones;
 use App\Attachments as Attachs;
@@ -16,7 +17,7 @@ class ContatosController extends Controller
 {
   public function show()
   {
-    $contatos = contatos::all();
+    $contatos = contatos::paginate(15);
     if (is_array(Auth::user()->perms) and Auth::user()->perms["admin"]==1){
         $deletados = Contatos::onlyTrashed()->get();
     } else {
@@ -36,9 +37,9 @@ class ContatosController extends Controller
                             ->orWhere('uf', 'like', '%' .  $request->busca . '%')
                             ->orWhere('bairro', 'like', '%' .  $request->busca . '%')
                             ->orWhere('cep', 'like', '%' .  $request->busca . '%')
-                            ->get();
+                            ->paginate(15);
     } else {
-      $contatos = Contatos::all();
+      $contatos = Contatos::paginate(15);
     }
     if (is_array(Auth::user()->perms) and Auth::user()->perms["admin"]==1){
         $deletados = Contatos::onlyTrashed()->get();
@@ -110,13 +111,8 @@ class ContatosController extends Controller
 
       $contato->from()->sync($data, false);
     }
-    $contatos = Contatos::all();
-    if (is_array(Auth::user()->perms) and Auth::user()->perms["admin"]==1){
-        $deletados = Contatos::onlyTrashed()->get();
-    } else {
-      $deletados = 0;
-    }
-    return view('contatos.list')->with('contatos', $contatos)->with('deletados', $deletados);
+
+    return redirect()->action('ContatosController@show');
   }
   public function showId( $id )
   {
@@ -183,13 +179,8 @@ class ContatosController extends Controller
     }
 
     $contato->save();
-    $contatos = contatos::all();
-    if (is_array(Auth::user()->perms) and Auth::user()->perms["admin"]==1){
-        $deletados = Contatos::onlyTrashed()->get();
-    } else {
-      $deletados = 0;
-    }
-    return view('contatos.list')->with('contatos', $contatos)->with('deletados', $deletados);
+
+    return redirect()->action('ContatosController@show');
   }
 
   public function telefones_get( $id, $id_telefone )
@@ -204,7 +195,8 @@ class ContatosController extends Controller
     $telefone->numero = $request->numero;
     $telefone->tipo = $request->tipo;
     $telefone->update();
-    return redirect()->route('contatos');
+
+    return redirect()->action('ContatosController@show');
   }
 
   public function telefones( $id )
@@ -220,14 +212,16 @@ class ContatosController extends Controller
     $telefone->tipo = $request->tipo;
     $telefone->numero = $request->numero;
     $telefone->save();
-    return redirect()->route('contatos');
+
+    return redirect()->action('ContatosController@show');
   }
 
   public function telefones_delete( $id, $id_telefone )
   {
     $telefone = Telefones::find($id_telefone);
     $telefone->delete();
-    return redirect()->route('contatos');
+
+    return redirect()->action('ContatosController@show');
   }
 
   public function relacoes( $id)
@@ -239,7 +233,7 @@ class ContatosController extends Controller
   public function relacoes_novo( $id)
   {
     $contato = Contatos::find($id);
-    $contatos = Contatos::all();
+    $contatos = Contatos::paginate(15);
     return view('contatos.relacoesnovo')->with('contato', $contato)->with('contatos', $contatos);
   }
 
@@ -249,9 +243,9 @@ class ContatosController extends Controller
     if (!empty($request->busca)){
       $contatos = Contatos::where('nome', 'like', '%' .  $request->busca . '%')
                             ->orWhere('sobrenome', 'like', '%' .  $request->busca . '%')
-                            ->get();
+                            ->paginate(15);
     } else {
-      $contatos = Contatos::all();
+      $contatos = Contatos::paginate(15);
     }
     return view('contatos.relacoesnovo')->with('contato', $contato)->with('contatos', $contatos);
     #return $contatos;
@@ -270,18 +264,15 @@ class ContatosController extends Controller
     ];
     $contato->from()->sync($data, false);
 
-    $contatos = Contatos::all();
-
-    return view('contatos.relacoes')->with('contato', $contato)->with('contatos', $contatos);
+    return redirect()->action('ContatosController@show');
   }
 
   public function relacoes_delete( $id, $relacao_id){
     $relation = DB::table('contatos_pivot')->where('id', '=', $relacao_id)->delete();
 
     $contato = Contatos::find($id);
-    $contatos = Contatos::all();
 
-    return view('contatos.relacoes')->with('contato', $contato)->with('contatos', $contatos);
+    return redirect()->action('ContatosController@show');
   }
   public function delete($id){
     $contato = Contatos::withTrashed()->find($id);
@@ -291,13 +282,8 @@ class ContatosController extends Controller
     } else {
       $contato->delete();
     }
-    $contatos = Contatos::all();
-    if (is_array(Auth::user()->perms) and Auth::user()->perms["admin"]==1){
-        $deletados = Contatos::onlyTrashed()->get();
-    } else {
-      $deletados = 0;
-    }
-    return view('contatos.list')->with('contatos', $contatos)->with('deletados', $deletados);
+
+    return redirect()->action('ContatosController@show');
   }
 
   public function attach(request $request, $id){
@@ -307,6 +293,16 @@ class ContatosController extends Controller
     $attach->name = $request->name;
     $attach->path = $request->file->store('public');
     $attach->save();
+
+    $path = storage_path() . '/' .'app/'. $attach->path;
+    $file = Image::make($path);
+    if ($file->width() > 1100){
+      $file->resize("1100", null, function ($constraint) {
+          $constraint->aspectRatio();
+          $constraint->upsize();
+      });
+      $file->save();
+    }
     return redirect()->action('ContatosController@show');
   }
 }

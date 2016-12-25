@@ -9,7 +9,7 @@
           <div class="panel-body">
             <div class="row text-right">
               <div class="col-sm-offset-2 col-sm-10">
-                <a href="{{url()->previous() }}" class="btn btn-warning"><i class="fa fa-arrow-left"></i> Voltar</a>
+                <a class="btn btn-warning" href="{{ url('lista/contatos')}}" ><i class="fa fa-users"></i> Voltar a Lista</a>
               </div>
             </div>
             <div class="row form-inline">
@@ -35,6 +35,11 @@
                       </div>
                     @endif
                   @endforeach
+                </div>
+                <div class="row">
+                  <div class="col-md-12 text-center">
+                    {{ $contatos->links() }}
+                  </div>
                 </div>
               </div>
               <div class="col-md-8" style="display:none;" id="form">
