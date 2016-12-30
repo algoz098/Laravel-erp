@@ -72,8 +72,14 @@ Route::post('novo/estoque/busca', 'EstoqueController@searchContatos')->middlewar
 Route::get('lista/caixa', 'CaixasController@index')->middleware('auth');
 Route::post('lista/caixa', 'CaixasController@search')->middleware('auth');
 Route::get('lista/caixa/{id}/delete', 'CaixasController@delete')->middleware('auth');
-Route::get('novo/caixa', 'CaixasController@new')->middleware('auth');
+Route::get('novo/caixa', 'CaixasController@new_a')->middleware('auth');
 Route::post('novo/caixa', 'CaixasController@new_do')->middleware('auth');
+
+Route::get('lista/vendas', 'VendasController@index')->middleware('auth');
+Route::get('novo/vendas', 'VendasController@novo')->middleware('auth');
+Route::get('novo/vendas/{id}', 'VendasController@produtos')->middleware('auth');
+Route::post('novo/vendas/{id}', 'VendasController@confirmar')->middleware('auth');
+Route::post('novo/vendas/{id}/salvar', 'VendasController@salvar')->middleware('auth');
 
 Route::get('attach/{id}', 'AttachmentsController@show')->middleware('auth');
 Route::get('attach/{id}/get', 'AttachmentsController@get')->middleware('auth');

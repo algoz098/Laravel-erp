@@ -133,8 +133,20 @@ body {
 .right-bar{
   margin-left: 310px;
 }
+.list-contacts{
+  border-top: 2px dashed #ececec;
+}
 .list-contacts:hover{
   background-color: #ececec;
+}
+.highlight{
+  background-color: #ececec;
+}
+.sub-list-contacts{
+  border-left: 3px solid #d19b3d;
+}
+.sub-list-item{
+  margin-left: 3px;
 }
 .topbar{
   color: #e1ffff;

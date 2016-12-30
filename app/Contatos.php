@@ -10,6 +10,7 @@ use App\Contas;
 use App\Estoque;
 use App\Attachments;
 use App\Caixas;
+use App\Vendas;
 
 class Contatos extends Model
 {
@@ -54,6 +55,11 @@ class Contatos extends Model
     public function estoque()
     {
       return $this->hasMany('App\Estoque');
+    }
+
+    public function vendas()
+    {
+      return $this->hasMany('App\Vendas', 'funcionario_id');
     }
 
     public function attachs()

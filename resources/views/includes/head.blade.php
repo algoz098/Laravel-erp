@@ -15,8 +15,8 @@
 <link href="{{ asset('css/erp.css') }}" rel="stylesheet">
 
 <script src="{{ asset('js/jquery.min.js') }}"></script>
+<script src="{{ asset('js/bootstrap.min.js') }}"></script>  
 <script src="{{ asset('js/jquery-ui.js') }}"></script>
-<script src="{{ asset('js/bootstrap.min.js') }}"></script>
 <script src="{{ asset('js/froala_editor.min.js') }}"></script>
 <script src="{{ asset('js/lists.min.js') }}"></script>
 <!-- Scripts -->

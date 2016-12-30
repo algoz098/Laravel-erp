@@ -53,9 +53,6 @@ foreach ($caixas as $key => $caixa) {
               </form>
             </div>
           </div>
-          @if (!is_array($caixas))
-            <h1> Nenhum registro encontrado</h1>
-          @endif
           @foreach($caixas as $key => $caixa)
             <div class="row list-contacts">
               <div class="col-md-1">

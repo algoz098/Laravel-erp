@@ -19,12 +19,12 @@ class CaixasController extends Controller
       #return $caixas;
       if (!isset($caixas[0])){
         $messages = "É preciso abrir o caixa";
-        return redirect()->action('CaixasController@new')->withErrors($messages);
+        return redirect()->action('CaixasController@new_a')->withErrors($messages);
       }
       return view('caixa.index')->with('caixas', $caixas)->with('deletados', $deletados);
     }
 
-    public function new(){
+    public function new_a(){
       return view('caixa.new');
     }
 
@@ -54,6 +54,9 @@ class CaixasController extends Controller
     }
 
     public function new_do(request $request ){
+      #
+      #PRECISA SER TORNADO CLASSE!!!! TO DO!
+      #
       $abertura = Caixas::whereRaw('date(created_at) = ?', [Carbon::today()])
                       ->orderBy('created_at', 'aaaa')
                       ->where('filial_id', Auth::user()->trabalho_id)
@@ -68,27 +71,27 @@ class CaixasController extends Controller
       if (is_null($abertura)){
         if ($request->tipo!="0"){
           $messages = "Caixa ainda não aberto!";
-          return redirect()->action('CaixasController@new')->withErrors($messages);
+          return redirect()->action('CaixasController@new_a')->withErrors($messages);
         }
       }
       if (!is_null($abertura)){
         if ($request->tipo=="0" and is_null($fechamento)){
           $messages = "Caixa ja aberto!";
-          return redirect()->action('CaixasController@new')->withErrors($messages);
+          return redirect()->action('CaixasController@new_a')->withErrors($messages);
         }
 
         if (!is_null($fechamento)){
           if ($request->tipo=="0" and strtotime($abertura->created_at) > strtotime($fechamento->created_at)){
             $messages = "Caixa ja aberto";
-            return redirect()->action('CaixasController@new')->withErrors($messages);
+            return redirect()->action('CaixasController@new_a')->withErrors($messages);
           }
           if (!empty($fechamento) and $request->tipo=="1" and strtotime($abertura->created_at) < strtotime($fechamento->created_at)){
             $messages = "Caixa já fechado!";
-            return redirect()->action('CaixasController@new')->withErrors($messages);
+            return redirect()->action('CaixasController@new_a')->withErrors($messages);
           }
           if (!empty($fechamento) and $request->tipo=="2" and strtotime($abertura->created_at) < strtotime($fechamento->created_at)){
             $messages = "Caixa já fechado!";
-            return redirect()->action('CaixasController@new')->withErrors($messages);
+            return redirect()->action('CaixasController@new_a')->withErrors($messages);
           }
         }
       }

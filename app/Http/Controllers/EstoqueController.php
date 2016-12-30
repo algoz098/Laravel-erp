@@ -134,6 +134,7 @@ class EstoqueController extends Controller
     $estoque = Estoque::find($id);
     $estoque->quantidade = $estoque->quantidade-1;
     $estoque->save();
+  }
     return redirect()->action('EstoqueController@index');
   }
 }

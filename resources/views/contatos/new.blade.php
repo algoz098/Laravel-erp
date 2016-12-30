@@ -5,7 +5,7 @@
       @if (!empty($contato->id))
         <form method="POST" action="{{ url('/contatos') }}/{{$contato->id}}">
       @else
-        <form method="POST" action="{{ url('/contatos') }}/novo">
+        <form method="POST" action="{{ url('novo/contatos') }}">
       @endif
         <div class="form-group">
         {{ csrf_field() }}

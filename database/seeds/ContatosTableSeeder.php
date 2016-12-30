@@ -19,6 +19,7 @@ class ContatosTableSeeder extends Seeder
           'email' => "empresa@exemplo.com",
           'password' => bcrypt('123mudar'),
           'ativo' => 1,
+          'trabalho_id' => 1,
           'perms' => '{"admin":1}'
       ]);
     }

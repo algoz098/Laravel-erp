@@ -19,6 +19,7 @@
                 <li class="{{{ Request::path()=='novo/contas' ? "active" : "" }}}"><a href="{{ url('/novo/contas') }}"><i class="fa fa-usd"></i> Conta</a></li>
                 <li class="{{{ Request::path()=='novo/estoque' ? "active" : "" }}}"><a href="{{ url('/novo/estoque') }}"><i class="fa fa-bell"></i> Estoque</a></li>
                 <li class="{{{ Request::path()=='novo/caixa' ? "active" : "" }}}"><a href="{{ url('/novo/caixa') }}"><i class="fa fa-money"></i> Caixa</a></li>
+                <li class="{{{ Request::path()=='novo/vendas' ? "active" : "" }}}"><a href="{{ url('/novo/vendas') }}"><i class="fa fa-shopping-cart"></i> Vendas</a></li>
             </ul>
             <li  data-toggle="collapse" data-target="#listas" class="{{{ Request::is('lista*') ? "active" : "collapsed" }}}" aria-expanded="">
               <a href="#"><i class="fa fa-list fa-lg"></i> Listas<span class="arrow"></span></a>
@@ -29,6 +30,7 @@
                 <li class="{{{ Request::path()=='lista/contas' ? "active" : "" }}}"><a href="{{ url('/lista/contas') }}"><i class="fa fa-usd"></i> Conta</a></li>
                 <li class="{{{ Request::path()=='lista/estoque' ? "active" : "" }}}"><a href="{{ url('/lista/estoque') }}"><i class="fa fa-bell"></i> Estoque</a></li>
                 <li class="{{{ Request::path()=='lista/caixa' ? "active" : "" }}}"><a href="{{ url('/lista/caixa') }}"><i class="fa fa-money"></i> Caixa</a></li>
+                <li class="{{{ Request::path()=='lista/vendas' ? "active" : "" }}}"><a href="{{ url('/lista/vendas') }}"><i class="fa fa-shopping-cart"></i> Vendas</a></li>
             </ul>
 
             @if (isset(Auth::user()->perms["admin"]) and Auth::user()->perms["admin"]==1)
