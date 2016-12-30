@@ -6,20 +6,28 @@ use Illuminate\Http\Request;
 use App\Atendimento as Atendimento;
 use App\Contatos as Contatos;
 use App\Attachments as Attachs;
+use Carbon\Carbon;
+use Log;
+use Auth;
 
 class AtendimentoController extends Controller
 {
   public function index(){
+    Log::info('Mostando atendimentos, para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
     $atendimentos = Atendimento::paginate(15);
     return view('atend.index')->with('atendimentos', $atendimentos);
   }
 
   public function show($id){
     $atendimento = Atendimento::find($id);
+
+    Log::info('Mostando atendimento -> "'.$atendimento.'", para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
+
     return view('atend.show')->with('atendimento', $atendimento);
   }
 
   public function new_a(){
+    Log::info('Criando novo atendimento, selecionando contato, para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
     $contatos = Contatos::paginate(15);
     return view('atend.contatos')->with('contatos', $contatos);
   }
@@ -31,12 +39,17 @@ class AtendimentoController extends Controller
     $atendimento->created_at = $request->data;
     $atendimento->texto = $request->texto;
     $atendimento->save();
+
+    Log::info('Salvando atendimento -> "'.$atendimento.'", para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
+
     return redirect()->action('AtendimentoController@index');
   }
 
   public function delete($id){
     $atendimento = Atendimento::find($id);
+    Log::info('Deletando atendimento -> "'.$atendimento.'", para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
     $atendimento->delete();
+
     return redirect()->action('AtendimentoController@index');
   }
 
@@ -49,6 +62,8 @@ class AtendimentoController extends Controller
     } else {
       $atendimentos = Atendimento::paginate(30);
     }
+    Log::info('Mostando atendimentos com busca -> "'.$request->busca.'", para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
+
     return view('atend.index')->with('atendimentos', $atendimentos);
   }
 
@@ -67,11 +82,14 @@ class AtendimentoController extends Controller
     } else {
       $contatos = Contatos::paginate(15);
     }
+    Log::info('Criando novo atendimento, selecionando contato com busca -> "'.$request->busca.'", para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
+
     return view('atend.contatos')->with('contatos', $contatos);
   }
 
   public function novo($id){
     $contato = Contatos::find($id);
+    Log::info('Criando novo atendimento para contato -> "'.$contato.'", para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
     return view('atend.index')->with('contato', $contato);
   }
 
@@ -80,6 +98,7 @@ class AtendimentoController extends Controller
     $atendimento->assunto = $request->assunto;
     $atendimento->texto = $request->texto;
     $atendimento->save();
+    Log::info('Editando atendimento com -> "'.$atendimento.'", para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
 
     return redirect()->action('AtendimentoController@index');
   }
@@ -90,6 +109,8 @@ class AtendimentoController extends Controller
     $attach->name = $request->name;
     $attach->path = $request->file->store('public');
     $attach->save();
+    Log::info('Anexando arquivo para atendimento, anexo -> "'.$attach.'", para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
+
     return redirect()->action('AtendimentoController@index');
   }
 

@@ -5,12 +5,15 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Contatos as Contatos;
 use App\Estoque as Estoque;
+use Carbon\Carbon;
+use Log;
 use Auth;
 
 class EstoqueController extends Controller
 {
   public function index()
   {
+    Log::info('Vendo estoque, para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
     $estoques = Estoque::paginate(30);
     if (is_array(Auth::user()->perms) and Auth::user()->perms["admin"]==1){
         $deletados = Estoque::onlyTrashed()->get();
@@ -23,6 +26,7 @@ class EstoqueController extends Controller
   public function novo()
   {
     $contatos = Contatos::paginate(15);
+    Log::info('Criando novo estoque, para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
     return view('estoque.contatos')->with('contatos', $contatos);
   }
 
@@ -36,12 +40,16 @@ class EstoqueController extends Controller
     $estoque->valor_custo = $request->valor_custo;
     $estoque->barras = $request->barras;
     $estoque->save();
+    Log::info('Salvando estoque -> "'.$estoque.'", para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
+
     return redirect()->action('EstoqueController@index');
   }
 
   public function edit($id)
   {
     $estoque = Estoque::find($id);
+    Log::info('Editar estoque -> "'.$estoque.'", para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
+
     return view('estoque.edit')->with('estoque', $estoque);
   }
   public function edit_save(request $request, $id)
@@ -53,6 +61,7 @@ class EstoqueController extends Controller
     $estoque->valor_custo = $request->valor_custo;
     $estoque->barras = $request->barras;
     $estoque->save();
+    Log::info('Salvando estoque -> "'.$estoque.'", para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
     return redirect()->action('EstoqueController@index');
   }
 
@@ -91,6 +100,8 @@ class EstoqueController extends Controller
         }
     }
     $estoques = $estoques->paginate(30);
+    Log::info('Vendo estoque com busca -> "'.$request.'", para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
+
     $deletados = 0;
     return view('estoque.index')->with('estoques', $estoques)->with('deletados', $deletados);
   }
@@ -110,6 +121,8 @@ class EstoqueController extends Controller
     } else {
       $contatos = Contatos::paginate(15);
     }
+    Log::info('Criando estoque com busca -> "'.$request->busca.'", para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
+
     return view('estoque.contatos')->with('contatos', $contatos);
   }
 
@@ -117,8 +130,10 @@ class EstoqueController extends Controller
   {
     $estoque = Estoque::withTrashed()->find($id);
     if ($estoque->trashed()){
+      Log::info('Restaurando estoque -> "'.$estoque.'", para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
       $estoque->restore();
     }else{
+      Log::info('Deletando estoque -> "'.$estoque.'", para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
       $estoque->delete();
     }
     return redirect()->action('EstoqueController@index');
@@ -128,13 +143,14 @@ class EstoqueController extends Controller
     $estoque = Estoque::find($id);
     $estoque->quantidade = $estoque->quantidade+1;
     $estoque->save();
+    Log::info('Somando 1 ao estoque -> "'.$estoque.'", para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
     return redirect()->action('EstoqueController@index');
   }
   public function down($id){
     $estoque = Estoque::find($id);
     $estoque->quantidade = $estoque->quantidade-1;
     $estoque->save();
-  }
+    Log::info('Removendo 1 ao estoque -> "'.$estoque.'", para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
     return redirect()->action('EstoqueController@index');
   }
 }

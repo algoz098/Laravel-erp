@@ -10,17 +10,19 @@ use App\Caixas as Caixas;
 use App\Contas as Contas;
 use App\Est_movimentacoes as Movs;
 use Carbon\Carbon;
+use Log;
 use Auth;
 
 class VendasController extends Controller
 {
     public function index(){
       $vendas = Vendas::paginate(15);
+      Log::info('Vendo vendaspara -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
       return view('vendas.index')->with('vendas', $vendas);
     }
     public function novo(){
       $contatos = contatos::paginate(30);
-
+      Log::info('Criando venda, para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
       return view('vendas.contatos')->with('contatos', $contatos);
     }
     public function produtos($id){
@@ -30,6 +32,7 @@ class VendasController extends Controller
       } else {
         $contato = contatos::find($id);
       }
+      Log::info('Criando venda 2 passo para contato -> "'.$contato.'", para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
       return view('vendas.novo')->with('estoques', $estoques)->with('contato', $contato);
     }
 
@@ -47,6 +50,7 @@ class VendasController extends Controller
         $produtos[$key]->valor_custo = $request->quantidade[$key]*$produtos[$key]->valor_custo;
         $total = $total+$produtos[$key]->valor_custo;
       }
+      Log::info('Criando venda 3 passo para contato -> "'.$contato.'" com produtos -> "'.$produtos.'" no total "'.$total.'", para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
       return view('vendas.produtos')->with('produtos', $produtos)->with('contato', $contato)->with('total', $total);
     }
 
@@ -94,6 +98,7 @@ class VendasController extends Controller
       }
 
       $venda->valor = $valor_total;
+
       $venda->save();
 
       foreach ($request->quantidade as $key => $qtd) {
@@ -161,8 +166,7 @@ class VendasController extends Controller
           $subconta2->save();
         }
       }
-
-
+      Log::info('Salvando venda -> "'.$venda.'", para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
       return redirect()->action('VendasController@index');
     }
 

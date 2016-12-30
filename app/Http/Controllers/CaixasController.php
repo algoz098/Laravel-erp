@@ -8,6 +8,7 @@ use App\Contas as Contas;
 Use Carbon\Carbon;
 use Auth;
 use DateTime;
+use Log;
 
 class CaixasController extends Controller
 {
@@ -16,15 +17,16 @@ class CaixasController extends Controller
                       ->where('filial_id', Auth::user()->trabalho_id)
                       ->paginate(15);
       $deletados = 0;
-      #return $caixas;
       if (!isset($caixas[0])){
         $messages = "É preciso abrir o caixa";
         return redirect()->action('CaixasController@new_a')->withErrors($messages);
       }
+      Log::info('Vendo movimentação de caixa da filial -> "'.Auth::user()->trabalho_id.'", para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
       return view('caixa.index')->with('caixas', $caixas)->with('deletados', $deletados);
     }
 
     public function new_a(){
+      Log::info('Criando movimentação de caixa da filial -> "'.Auth::user()->trabalho_id.'", para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
       return view('caixa.new');
     }
 
@@ -50,6 +52,8 @@ class CaixasController extends Controller
       }
 
       $caixas = $caixas->paginate(15);
+      Log::info('Vendo movimentação de caixa da filial -> "'.Auth::user()->trabalho_id.'", com busca -> "data:'.$data.', tipo:'.$request->tipo.'" para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
+
       return view('caixa.index')->with('caixas', $caixas)->with('deletados', $deletados);
     }
 
@@ -136,6 +140,7 @@ class CaixasController extends Controller
         $conta->save();
       }
       $movimentacao->save();
+      Log::info('Salvando movimentação de caixa da filial -> "'.Auth::user()->trabalho_id.'",com dados -> "'.$request.'" para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
 
       return redirect()->action('CaixasController@index');
     }
@@ -143,8 +148,10 @@ class CaixasController extends Controller
     public function delete($id){
       $movimentacao = Caixas::withTrashed()->find($id);
       if ($movimentacao->trashed()) {
+        Log::info('Restaurando movimentação de caixa -> "'.$caixa.'" da filial -> "'.Auth::user()->trabalho_id.'", para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
         $movimentacao->restore();
       } else {
+        Log::info('Deletando movimentação de caixa -> "'.$caixa.'" da filial -> "'.Auth::user()->trabalho_id.'", para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
         $movimentacao->delete();
       }
       return redirect()->action('CaixasController@index');

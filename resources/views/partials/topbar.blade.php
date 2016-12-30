@@ -1,9 +1,11 @@
-<div class="row">
-  <div class="col-md-12">
-    <div class="navbar navbar-default">
-      <div class="container-fluid">
-       <!-- Collect the nav links, forms, and other content for toggling -->
-       <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+<nav class="navbar navbar-default navbar-fixed-top">
+  <div class="container-fluid">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+       <div class="menu-btn navbar-brand">
+         <i class="fa fa-bars"></i>
+       </div>
+     </div>
          <ul class="nav navbar-nav navbar-right">
            <li><a href="#">Olá, {{Auth::user()->contato->nome}}</a></li>
            <li class="dropdown">

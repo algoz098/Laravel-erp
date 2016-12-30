@@ -12,11 +12,15 @@ use Intervention\Image\ImageManagerStatic as Image;
 use App\Contatos as Contatos;
 use App\Telefones as Telefones;
 use App\Attachments as Attachs;
+use Log;
+use Carbon\Carbon;
 
 class ContatosController extends Controller
 {
   public function show()
   {
+    Log::info('Lista de contatos para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
+
     $contatos = contatos::paginate(15);
     if (is_array(Auth::user()->perms) and Auth::user()->perms["admin"]==1){
         $deletados = Contatos::onlyTrashed()->get();
@@ -28,6 +32,7 @@ class ContatosController extends Controller
 
   public function search( Request $request)
   {
+    Log::info('Busca de contatos usando -> "'.$request->busca.'", para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
     if (!empty($request->busca)){
       $contatos = Contatos::where('nome', 'like', '%' .  $request->busca . '%')
                             ->orWhere('sobrenome', 'like', '%' .  $request->busca . '%')
@@ -51,6 +56,7 @@ class ContatosController extends Controller
 
   public function showNovo()
   {
+    Log::info('Criando novo contato, para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
     return view('contatos.new');
   }
 
@@ -112,17 +118,24 @@ class ContatosController extends Controller
       $contato->from()->sync($data, false);
     }
 
+    Log::info('Busca de contatos usando -> "'.$request.'", resultando em -> "'.$contato.'" para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
+
+
     return redirect()->action('ContatosController@show');
   }
   public function showId( $id )
   {
     $contato = contatos::find($id);
+    Log::info('Detalhes de contato -> "'.$contato.'", para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
     return view('contatos.new')->with('contato', $contato);
   }
 
   public function update( Request $request, $id )
   {
     $contato = contatos::find($id);
+
+    Log::info('Atualizar contato de -> "'.$contato.'" novo -> "'.$request.'", para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
+
     $contato->nome = $request->nome;
     $contato->cpf = $request->cpf;
     $contato->rg = $request->rg;
@@ -185,6 +198,8 @@ class ContatosController extends Controller
 
   public function telefones_get( $id, $id_telefone )
   {
+    Log::info('Editar telefone de contato id:'.$id.' telefone id "'.$id_telefone.'", para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
+
     $telefone = Telefones::find($id_telefone);
     return view('contatos.phone')->with('telefone', $telefone);
   }
@@ -196,12 +211,15 @@ class ContatosController extends Controller
     $telefone->tipo = $request->tipo;
     $telefone->update();
 
+    Log::info('Salvar telefone de contato(id:'.$id.') resultando -> "'.$telefone.'", para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
+
     return redirect()->action('ContatosController@show');
   }
 
   public function telefones( $id )
   {
     $contato = Contatos::find($id);
+    Log::info('Criando novo telefone para contato-> "'.$contato.'", para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
     return view('contatos.newphone')->with('contato', $contato);
   }
 
@@ -213,12 +231,17 @@ class ContatosController extends Controller
     $telefone->numero = $request->numero;
     $telefone->save();
 
+    Log::info('Salvo telefone para contato(id'.$id.') resultando em-> "'.$telefone.'", para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
+
     return redirect()->action('ContatosController@show');
   }
 
   public function telefones_delete( $id, $id_telefone )
   {
     $telefone = Telefones::find($id_telefone);
+
+    Log::info('Deletando telefone para contato(id'.$id.') refente -> "'.$telefone.'", para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
+
     $telefone->delete();
 
     return redirect()->action('ContatosController@show');
@@ -227,12 +250,16 @@ class ContatosController extends Controller
   public function relacoes( $id)
   {
     $contato = Contatos::find($id);
+    Log::info('Ver relacionamentos do contato -> "'.$contato.'", para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
     return view('contatos.relacoes')->with('contato', $contato);
   }
 
   public function relacoes_novo( $id)
   {
     $contato = Contatos::find($id);
+
+    Log::info('Novo relacionamento para contato -> "'.$contato.'", para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
+
     $contatos = Contatos::paginate(15);
     return view('contatos.relacoesnovo')->with('contato', $contato)->with('contatos', $contatos);
   }
@@ -247,6 +274,9 @@ class ContatosController extends Controller
     } else {
       $contatos = Contatos::paginate(15);
     }
+
+    Log::info('Novo relacionamento com busca -> "'.$request->busca.'", para contato -> "'.$contato.'", para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
+
     return view('contatos.relacoesnovo')->with('contato', $contato)->with('contatos', $contatos);
     #return $contatos;
   }
@@ -264,6 +294,8 @@ class ContatosController extends Controller
     ];
     $contato->from()->sync($data, false);
 
+    Log::info('Salvando relacionamento do contato -> "'.$contato.'", com -> "'.$data.'", para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
+
     return redirect()->action('ContatosController@show');
   }
 
@@ -272,6 +304,8 @@ class ContatosController extends Controller
 
     $contato = Contatos::find($id);
 
+    Log::info('Deletar relacionamento do contato -> "'.$contato.'", para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
+
     return redirect()->action('ContatosController@show');
   }
   public function delete($id){
@@ -279,10 +313,11 @@ class ContatosController extends Controller
 
     if ($contato->trashed()) {
       $contato->restore();
+      Log::info('Restaurando contato -> "'.$contato.'", para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
     } else {
+      Log::info('Deletando contato -> "'.$contato.'", para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
       $contato->delete();
     }
-
     return redirect()->action('ContatosController@show');
   }
 
@@ -303,6 +338,7 @@ class ContatosController extends Controller
       });
       $file->save();
     }
+    Log::info('Anexando arquivo para contato -> "'.$id.'", anexo -> "'.$attach.'", para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
     return redirect()->action('ContatosController@show');
   }
 }

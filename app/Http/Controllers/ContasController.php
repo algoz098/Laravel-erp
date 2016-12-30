@@ -7,10 +7,15 @@ use Auth;
 use Carbon\Carbon;
 use App\Contas as Contas;
 use App\Contatos as Contatos;
+use Carbon\Carbon;
+use Log;
+use Auth;
+
 
 class ContasController extends Controller
 {
   public function index(){
+    Log::info('Vendo contas, para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
     $contas = Contas::paginate(15);
     if (is_array(Auth::user()->perms) and Auth::user()->perms["admin"]==1){
         $deletados = Contas::onlyTrashed()->get();
@@ -65,11 +70,13 @@ class ContasController extends Controller
         }
     }
     $contas = $contas->paginate(15);
+    Log::info('Vendo contas com busca "'.$request'", para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
     $deletados = 0;
     return view('contas.index')->with('contas', $contas)->with('deletados', $deletados);
   }
 
   public function novo(){
+    Log::info('Adicionando contas, para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
     $contatos = Contatos::paginate(15);
     return view('contas.contatos')->with('contatos', $contatos);
   }
@@ -88,6 +95,7 @@ class ContasController extends Controller
     } else {
       $contatos = Contatos::paginate(15);
     }
+    Log::info('Adicionando contas com busca -> "'.$request->busca.'", para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
     if (is_array(Auth::user()->perms) and Auth::user()->perms["admin"]==1){
         $deletados = Contas::onlyTrashed()->get();
     } else {
@@ -123,7 +131,7 @@ class ContasController extends Controller
         $i++;
       }
     }
-
+    Log::info('Salvando contas -> "'.$conta.'", para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
     return redirect()->action('ContasController@index');
   }
 
@@ -131,8 +139,10 @@ class ContasController extends Controller
     $conta = Contas::find($id);
     if ($conta->estado==1) {
       $conta->estado = '0';
+      Log::info('Mudando conta para NÃO paga -> "'.$conta'", para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
     } elseif ($conta->estado == 0) {
       $conta->estado = '1';
+      Log::info('Mudando conta para paga -> "'.$conta'", para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
     }
     $conta->save();
     return redirect()->action('ContasController@index');
@@ -141,15 +151,17 @@ class ContasController extends Controller
   public function delete($id){
     $conta = Contas::withTrashed()->find($id);
     if ($conta->trashed()) {
+      Log::info('Restaurando conta -> "'.$conta'", para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
       $conta->restore();
     } else {
+      Log::info('Deletando conta -> "'.$conta'", para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
       $conta->delete();
     }
-
     return redirect()->action('ContasController@index');
   }
   public function edit($id){
     $conta = Contas::find($id);
+    Log::info('Editando conta -> "'.$conta'", para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
     return view('contas.edit')->with('conta', $conta);
   }
 }

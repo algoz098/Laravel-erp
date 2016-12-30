@@ -7,6 +7,9 @@ use File;
 use Response;
 use Intervention\Image\ImageManagerStatic as Image;
 use App\Attachments as Attachs;
+use Carbon\Carbon;
+use Log;
+use Auth;
 
 class AttachmentsController extends Controller
 {
@@ -22,11 +25,14 @@ class AttachmentsController extends Controller
     $response = Response::make($file, 200);
     $response->header("Content-Type", $type);
 
+    Log::info('Vendo anexo, anexo -> "'.$attach.'", para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
     return $response;
   }
   public function get($id){
     $attach = Attachs::find($id);
     $path = storage_path() . '/' .'app/'. $attach->path;
+
+    Log::info('Download de anexo -> "'.$attach.'", para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
 
     if(!File::exists($path)) abort(404);
     return response()->download($path);
@@ -36,9 +42,11 @@ class AttachmentsController extends Controller
     $attach = Attachs::withTrashed()->find($id);
 
     if ($attach->trashed()) {
+      Log::info('Restaurando anexo -> "'.$attach.'", para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
       $attach->restore();
     } else {
-       $attach->delete();
+      Log::info('Deletando anexo -> "'.$attach.'", para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
+      $attach->delete();
     }
 
     return redirect()->back();
@@ -50,6 +58,7 @@ class AttachmentsController extends Controller
 
     if(!File::exists($path)) abort(404);
     $file = Image::make($path)->rotate(270);
+    Log::info('Virando anexo sentido relogio -> "'.$attach.'", para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
 
     $file->save();
   }
@@ -59,7 +68,7 @@ class AttachmentsController extends Controller
 
     if(!File::exists($path)) abort(404);
     $file = Image::make($path)->rotate(90);
-
+    Log::info('Virando anexo sentido anti relogio -> "'.$attach.'", para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
     $file->save();
     return $file->response('jpg');
   }
@@ -73,7 +82,7 @@ class AttachmentsController extends Controller
         $constraint->aspectRatio();
         $constraint->upsize();
     });
-
+    Log::info('Redimensionando anexo para ->"'.$width.'" de largura -> "'.$attach.'", para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
     $file->save();
     return $file->response('jpg');
   }
@@ -87,7 +96,7 @@ class AttachmentsController extends Controller
         $constraint->aspectRatio();
         $constraint->upsize();
     });
-
+    Log::info('Mostrando anexo tamanho da tela -> "'.$attach.'", para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
     return $file->response('jpg');
   }
 }

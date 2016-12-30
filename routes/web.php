@@ -97,6 +97,7 @@ Route::post('/admin/access/{id}', 'AdminController@access_post')->middleware('au
 Route::get('/admin/access/{id}/delete/{id_access}', 'AdminController@access_delete')->middleware('auth')->middleware('admin');
 Route::get('/admin/update', 'AdminController@update_index')->middleware('auth')->middleware('admin');
 Route::get('/admin/update/do', 'AdminController@update_do')->middleware('auth')->middleware('admin');
+Route::get('/admin/logs', 'AdminController@logs')->middleware('auth')->middleware('admin');
 
 Route::get('/admin/backup', 'AdminController@backup_index')->middleware('auth')->middleware('admin');
 Route::get('/admin/backup/do', 'AdminController@backup_do')->middleware('auth')->middleware('admin');

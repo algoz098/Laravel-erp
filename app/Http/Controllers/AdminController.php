@@ -12,9 +12,12 @@ use Storage;
 use ZipArchive;
 use Artisan;
 use DateTime;
+use Log;
+use Auth;
 class AdminController extends Controller
 {
     public function index(){
+      Log::info('!!!ADMIN!!! Mostrando index, para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
       $contatos = contatos::all();
       return view('admin.index')->with('contatos', $contatos);
     }
@@ -24,13 +27,13 @@ class AdminController extends Controller
       $matriz = Contatos::find(1);
 
       $filiais[]=$matriz;
-      #$filiais[]="";
       foreach ($matriz->to as $key => $relacao) {
         if ($relacao->from_text="Filial"){
           $filiais[] = $relacao;
         }
       }
 
+      Log::info('!!!ADMIN!!! Editando usuario de -> "'.$contato.'", para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
       return view('admin.useredit')->with('contato', $contato)->with('filiais', $filiais);
     }
 
@@ -49,6 +52,8 @@ class AdminController extends Controller
       $user->trabalho_id = $request->filial;
       $user->save();
 
+      Log::info('!!!ADMIN!!! Salvando usuario -> "'.$user.'", para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
+
       $contatos = contatos::all();
       return view('admin.index')->with('contatos', $contatos);
     }
@@ -62,8 +67,10 @@ class AdminController extends Controller
       }
       if ($perms["admin"]=='1'){
         $valor="0";
+        Log::info('!!!ADMIN!!! Removendo admin do usuario -> "'.$contato.'", para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
       } else{
         $valor="1";
+        Log::info('!!!ADMIN!!! Dando admin ao usuario -> "'.$contato.'", para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
       }
 
       $perms["admin"]=$valor;
@@ -78,8 +85,10 @@ class AdminController extends Controller
       $contato = Contatos::find($id);
       if ($contato->user->perms["admin"]==1){
         $contato->user->perms["admin"]=0;
+        Log::info('!!!ADMIN!!! Removendo admin do usuario -> "'.$contato.'", para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
       } else{
         $contato->user->perms["admin"]=1;
+        Log::info('!!!ADMIN!!! Dando admin ao usuario -> "'.$contato.'", para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
       }
       #$contato->user->perms = $request->role;
       $contato->user->save();
@@ -100,10 +109,13 @@ class AdminController extends Controller
       $file = base_path() . "/manifest.json";
       $manifest = json_decode(file_get_contents($file), true);
       $remoto = json_decode(file_get_contents("http://www.webgs.com.br/clientes/erp/manifest.json"), true);
+      Log::info('!!!ADMIN!!! Visualizando update, para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
       return view('admin.update')->with('manifest', $manifest)->with('remoto', $remoto);
     }
 
     public function update_do(){
+      Log::info('!!!ADMIN!!! Realizando update, para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
+
       $storage = storage_path();
       $base = base_path();
       $url = "http://www.webgs.com.br/clientes/erp";
@@ -129,6 +141,8 @@ class AdminController extends Controller
     }
 
     public function backup_index(){
+      Log::info('!!!ADMIN!!! Visualizando BKPs, para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
+
       if(!File::exists(storage_path('backups/'))){
         File::makeDirectory(storage_path('backups/'), 0775);
       }
@@ -145,10 +159,12 @@ class AdminController extends Controller
       return view('admin.backup')->with('backups', $backups)->with('ultimo', $ultimo);
     }
     public function backup_download($file){
+      Log::info('!!!ADMIN!!! Download de BKP -> "'.$file.'", para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
       $pathToFile = storage_path('backups').'/'.$file.'.zip';
       return response()->download($pathToFile);
     }
     public function backup_do(){
+      Log::info('!!!ADMIN!!! Realizando BKP, para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
        Artisan::call('backup:run', ['--only-db' => true]);
        $files = File::Files(storage_path('backups/'));
        foreach ($files as $key => $file) {
@@ -162,5 +178,30 @@ class AdminController extends Controller
        }
        return view('admin.backup')->with('backups', $backups)->with('ultimo', $ultimo);
     }
+    public function logs(){
+      Log::info('!!!ADMIN!!! Mostrando logs, para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
 
+      $path = storage_path() . '/' .'logs/laravel.log';
+
+      if(!File::exists($path)) abort(404);
+
+      $file = File::get($path);
+      $type = File::mimeType($path);
+
+      $remove = "\n";
+
+      $split = explode($remove, $file);
+      foreach ($split as $key => $line) {
+        $invalid[] = strpos($line, "ERROR:");
+        $invalid[] = strpos($line, "#");
+        $invalid[] = strpos($line, "Next");
+        $invalid[] = strpos($line, "Stack");
+        #return $invalid;
+        if (!in_array(true, $invalid)) {
+          $result[] = $line;
+        }
+      }
+      #return $result;
+      return view('admin.logs')->with('logs', $result);
+    }
 }
