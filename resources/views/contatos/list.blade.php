@@ -8,24 +8,38 @@
         </div>
         <div class="panel-body">
           <div class="row">
-            <div class="col-md-2 pull-right text-right">
-              <a href="{{ url('/novo/contatos') }}" class="btn btn-success"><i class="fa fa-plus fa-1x"></i> Novo</a>
+            <div class="col-md-1 pull-right text-right ajuda-popover"
+                  title="Novo"
+                  data-content="Adicione um novo contato"
+                  data-placement="left">
+              <a href="{{ url('/novo/contatos') }}" class="btn btn-success"><i class="fa fa-plus fa-1x">
+                  </i> Novo</a>
             </div>
           </div>
           <div class="row">
             <div class="col-md-12  ">
               <form method="POST" action="{{ url('lista/contatos') }}/">
-                <div class="form-group form-inline text-center">
+                <div class="form-group form-inline text-center ajuda-popover"
+                      title="Busca"
+                      data-content="Digite para buscar um contato"
+                      data-placement="top"
+                >
                   {{ csrf_field() }}
                   <input type="text" class="form-control" name="busca" id="busca" placeholder="Busca">
-                  <button type="submit" class="btn btn-success">Buscar</button>
+                  <button type="submit" class="btn btn-success"><i class="fa fa-search"></i> Buscar</button>
                 </div>
               </form>
             </div>
           </div>
           @foreach($contatos as $key => $contato)
               <div class="row list-contacts">
-                <div class="col-md-3">
+                <div class="col-md-3 ajuda-popover"
+                    @if ($key==0)
+                      title="Opções"
+                      data-content="Deletar, editar/detalhes, telefones/emails, relacionamentos e anexos do contato"
+                      data-placement="top"
+                    @endif
+                >
                   @if ($contato->id=='1')
                     <a class="btn btn-danger btn_xs disabled" data-toggle="tooltip" title="Matriz, Nao apague">
                   @else
@@ -47,7 +61,18 @@
                   </span>
                   {{$contato->id}}
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-2 ajuda-popover"
+                    @if ($key==0)
+                      title="Sociabilidade"
+                      data-content="
+                                    <i class='fa fa-user level1'></i> = Informações de Contato defasadas<br><i class='fa fa-user level4'></i> = Informações de Contato confiaveis<br>
+                                    Facilidade de interação: <i class='fa fa-signal level1'></i> <i class='fa fa-signal level2'></i> <i class='fa fa-signal level3'></i> <i class='fa fa-signal level4'></i> <i class='fa fa-signal level5'></i> <br>
+                                    E nome ou razão social do contato.
+                      "
+                      data-placement="bottom"
+                      data-html="true"
+                    @endif
+                  >
                   @if(is_null($contato->active))
                     <i class="fa fa-user level1"></i>
                   @else
@@ -56,7 +81,15 @@
                   <i class="fa fa-signal level{{$contato->sociabilidade}}"></i>
                   {{ str_limit($contato->nome, 10) }} {{ str_limit($contato->sobrenome, 3) }}
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-6 ajuda-popover"
+                    @if ($key==0)
+                      title="Outras informações"
+                      data-content="
+                                    Informações extras: relação para com a matriz, telefones, endereço, data de cadastro.
+                      "
+                      data-placement="bottom"
+                    @endif
+                  >
                   @foreach($contato->from as $key => $from)
                     @if ($from->pivot->to_id==1)
                       <span class="label label-warning">{{$from->pivot->from_text}}</span>
@@ -186,7 +219,7 @@
               {{ $contatos->links() }}
             </div>
           </div>
-          
+
           @if($deletados!==0)
             <h3>Deletados</h3>
             @foreach($deletados as $key => $contato)
@@ -222,42 +255,42 @@
     </div>
   </div>
   @if (isset($contato->attachs))
-  <script language="javascript">
-  var imageStatus = false;
-  var height = $(window).height()-200;
-  function loadImage(id) {
-    $('#object' + id).attr("data", "{{ url('/attach') }}/"+id+"/size/"+height);
-    $('#object' + id).attr("height", height);
-    var imageStatus = true;
-  };
-  function fullImage(id) {
-    if (imageStatus=true) {
-      $('#object' + id).attr("data", "{{ url('/attach') }}/"+id);
-      imageStatus=false;
-    } else {
-      loadImage(id);
-      imageStatus=true;
-    }
-  };
-    function rotateClock(id) {
-      $.get( "{{ url('/attach') }}/"+id+"/rotate/clock", function( data ) {
-        $( ".result" ).html( data );
-        $('#object' + id).attr("data", "{{ url('/attach') }}/"+id);
-      });
+    <script language="javascript">
+    var imageStatus = false;
+    var height = $(window).height()-200;
+    function loadImage(id) {
+      $('#object' + id).attr("data", "{{ url('/attach') }}/"+id+"/size/"+height);
+      $('#object' + id).attr("height", height);
+      var imageStatus = true;
     };
-    function rotateUnclock(id) {
-      $.get( "{{ url('/attach') }}/"+id+"/rotate/unclock", function( data ) {
-        $( ".result" ).html( data );
+    function fullImage(id) {
+      if (imageStatus=true) {
         $('#object' + id).attr("data", "{{ url('/attach') }}/"+id);
-      });
+        imageStatus=false;
+      } else {
+        loadImage(id);
+        imageStatus=true;
+      }
     };
-    function changeWidth(id) {
-      var width = $('#widthChanger' + id).val();
-      $.get( "{{ url('/attach') }}/"+id+"/resize/"+width, function( data ) {
-        $( ".result" ).html( data );
-        $('#object' + id).attr("data", "{{ url('/attach') }}/"+id);
-      });
-    };
-  </script>
+      function rotateClock(id) {
+        $.get( "{{ url('/attach') }}/"+id+"/rotate/clock", function( data ) {
+          $( ".result" ).html( data );
+          $('#object' + id).attr("data", "{{ url('/attach') }}/"+id);
+        });
+      };
+      function rotateUnclock(id) {
+        $.get( "{{ url('/attach') }}/"+id+"/rotate/unclock", function( data ) {
+          $( ".result" ).html( data );
+          $('#object' + id).attr("data", "{{ url('/attach') }}/"+id);
+        });
+      };
+      function changeWidth(id) {
+        var width = $('#widthChanger' + id).val();
+        $.get( "{{ url('/attach') }}/"+id+"/resize/"+width, function( data ) {
+          $( ".result" ).html( data );
+          $('#object' + id).attr("data", "{{ url('/attach') }}/"+id);
+        });
+      };
+    </script>
   @endif
 @endsection

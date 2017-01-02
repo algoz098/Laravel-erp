@@ -164,7 +164,7 @@
             <div class="row">
               <div class="form-group">
                 <label for="obs">Obs:</label>
-                <textarea id="froala-editor" name="obs">
+                <textarea  name="obs">
                   {!! $contato->obs or "" !!}
                 </textarea>
               </div>
@@ -213,10 +213,6 @@
       $(document).ready(tipoChange(a));
     @endif
 
-    $(function() {
-      $('#froala-editor').froalaEditor({
-        direction: 'ltr'
-      })
-    });
+    
   </script>
 @endsection

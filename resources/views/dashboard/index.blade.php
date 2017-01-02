@@ -35,7 +35,9 @@
   }
   ?>
   <div class="row">
-      <div class="col-md-3">
+      <div class="col-md-3 ajuda-popover"
+        data-content="Numero de contatos que você possui"
+        data-placement="bottom">
           <div class="panel panel-default text-center">
               <div class="panel-heading"><i class="fa fa-users"></i> Contatos:</div>
               <div class="panel-body">
@@ -44,7 +46,9 @@
               </div>
           </div>
       </div>
-      <div class="col-md-4">
+      <div class="col-md-4 ajuda-popover"
+        data-content="Resumo das contas."
+        data-placement="bottom">
           <div class="panel panel-default text-center">
               <div class="panel-heading"><i class="fa fa-usd"></i> Contas:</div>
               <div class="panel-body">

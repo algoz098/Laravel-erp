@@ -4,18 +4,17 @@
 <meta name="description" content="">
 <meta name="author" content="">
 
-<!-- Bootstrap core CSS -->
 <link href="{{ asset('css/bootstrap.min.css') }}" rel="stylesheet">
 <link href="{{ asset('css/bootstrap-theme.min.css') }}" rel="stylesheet">
 <link href="{{ asset('css/font-awesome.min.css') }}" rel="stylesheet">
 <link href="{{ asset('css/jquery-ui.css') }}" rel="stylesheet">
-<link href="{{ asset('css/froala_style.min.css') }}" rel="stylesheet">
-<link href="{{ asset('css/froala_editor.min.css') }}" rel="stylesheet">
 <link href="{{ asset('css/normalize.css') }}" rel="stylesheet">
 <link href="{{ asset('css/pushy.css') }}" rel="stylesheet">
 <link href="{{ asset('css/erp.css') }}" rel="stylesheet">
 
 <script src="{{ asset('js/jquery.min.js') }}"></script>
 <script src="{{ asset('js/bootstrap.min.js') }}"></script>
-<script src="{{ asset('js/froala_editor.min.js') }}"></script>
 <script src="{{ asset('js/jquery-ui.js') }}"></script>
+<script src="{{ asset('js/jquery.tinymce.min.js') }}"></script>
+<script src="{{ asset('js/tinymce.min.js') }}"></script>
+<script src="{{ asset('js/tinymce.theme.min.js') }}"></script>

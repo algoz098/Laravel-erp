@@ -42,7 +42,10 @@ foreach($contas as $key => $conta){
         </div>
         <div class="panel-body">
           <div class="row">
-            <div class="col-md-11">
+            <div class="col-md-11 ajuda-popover"
+                  title="Balancete"
+                  data-content="Informações genericas"
+                  data-placement="top">
               <span class="label label-danger"><i class="fa fa-exclamation"></i> Vencidas: {{$a}} </span>&nbsp
               <span class="label label-warning"><i class="fa fa-question"></i> A vencer: {{$b}} </span>&nbsp
               <span class="label label-info"><i class="fa fa-arrow-down"></i> Debitos: {{$c}} </span>&nbsp
@@ -52,11 +55,16 @@ foreach($contas as $key => $conta){
               <span class="label label-danger"><i class="fa fa-usd"></i> Debito futuro: R$ {{$saira}} </span>&nbsp
               <span class="label label-info"><i class="fa fa-usd"></i> Credito futuro: R$ {{$entrara}} </span>
             </div>
-            <div class="col-md-1 pull-right text-right">
-              <a href="{{ url('/novo/contas') }}" class="btn btn-success"><i class="fa fa-plus"></i> Novo</a>
+            <div class="col-md-1 pull-right text-right ajuda-popover"
+                  title="Novo"
+                  data-content="Adicione uma nova conta"
+                  data-placement="left">
+              <a href="{{ url('/novo/contas') }}" class="btn btn-success"><i class="fa fa-plus">
+                  </i> Novo</a>
             </div>
           </div><br>
           <div class="row">
+
             <div class="col-md-12  ">
               <form method="POST" action="{{ url('/lista/contas') }}/">
                 <div class="form-group form-inline text-center">
@@ -69,16 +77,28 @@ foreach($contas as $key => $conta){
                   <label><input type="checkbox" name="pagar">Não pago</label>
                   <label><input type="checkbox" name="referencia">Referencias</label>
                   <label><input type="checkbox" name="parcelas">Parcelas</label>
-                  <input type="text" class="form-control" name="valor" id="valor" size="13" placeholder="Valores maior que">
+                  <input type="text" class="form-control ajuda-popover"
+                        title="Busca"
+                        data-content="Selecione e preencha apenas o que precisa filtrar, o sistema ignora os filtros não preenchidos."
+                        data-placement="top"
+                         name="valor" id="valor" size="13" placeholder="Valores maior que">
                   <input type="text" class="form-control" name="contato" id="contato" size="13" placeholder="Ref a contato">
-                  <button type="submit" class="btn btn-success">Buscar</button>
+                  <button type="submit" class="btn btn-success">
+                    <i class="fa fa-search"></i> Buscar
+                  </button>
                 </div>
               </form>
             </div>
           </div>
           @foreach($contas as $key => $conta)
             <div class="row list-contacts">
-              <div class="col-md-3">
+              <div class="col-md-2 ajuda-popover"
+                  @if ($key==0)
+                    title="Opções"
+                    data-content="Deletar, parcelas anexas, detalhes e marcar como pago."
+                    data-placement="top"
+                  @endif
+              >
                 <a href="{{ url('lista/contas') }}/{{$conta->id}}/delete"  title="Apagar" class="btn btn-danger">
                   <i class="fa fa-ban"></i>
                 </a>
@@ -92,11 +112,23 @@ foreach($contas as $key => $conta){
                   <i class="fa fa-check"></i>
                 </a>
               </div>
-              <div class="col-md-3">
+              <div class="col-md-2 ajuda-popover"
+                  @if ($key==0)
+                    title="Informações"
+                    data-content="Nome de referencia e valor."
+                    data-placement="bottom"
+                  @endif
+                  >
                 {{$conta->nome}}
                 <span class="label label-warning">R$ {{ number_format($conta->valor, 2) }}</label>
               </div>
-              <div class="col-md-6">
+              <div class="col-md-8 ajuda-popover"
+                  @if ($key==0)
+                    title="Informações"
+                    data-content="Tipo de conta, se está pago/recebido, seu vencimento, a quem se refere e resumo."
+                    data-placement="bottom"
+                  @endif
+                  >
                 @if ($conta->tipo==0)
                   <span class="label label-warning">Debito</span>
                 @elseif ($conta->tipo==1)

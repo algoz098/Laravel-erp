@@ -1,15 +1,24 @@
 <nav class="navbar navbar-default navbar-fixed-top">
   <div class="container-fluid">
-    <!-- Brand and toggle get grouped for better mobile display -->
     <div class="navbar-header">
        <div class="menu-btn navbar-brand">
-         <i class="fa fa-bars"></i>
+         <i class="fa fa-bars ajuda-popover"
+           data-content="Clique aqui para o menu"
+           data-placement="right"></i>
        </div>
      </div>
          <ul class="nav navbar-nav navbar-right">
+           <li>
+             <a class="navbar-brand" id="mostrarAjuda" href="#"><i class="fa fa-question fa-1x"></i></a>
+           </li>
            <li><a href="#">Olá, {{Auth::user()->contato->nome}}</a></li>
            <li class="dropdown">
-             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-cog"></i> Opções <span class="caret"></span></a>
+             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+               <i class="fa fa-cog ajuda-popover"
+                  data-content="Opções da sua conta"
+                  data-placement="botton"
+                  ></i> Opções <span class="caret"></span>
+             </a>
              <ul class="dropdown-menu">
                <li><a href="{{ url('/logout') }}"
                    onclick="event.preventDefault();

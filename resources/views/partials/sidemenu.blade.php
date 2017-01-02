@@ -1,4 +1,7 @@
 <nav class="pushy pushy-left">
+  <div class="text-center webgs-brand">
+    Web GS - ERP
+  </div>
   <ul>
     <li class="pushy-submenu {{{ Request::path()=='/' ? "active" : "" }}}">
       <a href="{{ url('/') }}"><i class="fa fa-dashboard fa-lg"></i> Painel</a>

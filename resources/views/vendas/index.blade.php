@@ -7,7 +7,10 @@
           <i class="fa fa-shopping-cart fa-1x"></i> Lista de Vendas
         </div>
         <div class="panel-body">
-          <div class="col-md-1 pull-right text-right">
+          <div class="col-md-1 pull-right text-right ajuda-popover"
+                title="Novo"
+                data-content="Adicione uma nova conta"
+                data-placement="top">
             <a href="{{ url('/novo/vendas') }}" class="btn btn-success"><i class="fa fa-plus"></i> Novo</a>
           </div>
           <div class="row">
@@ -18,8 +21,11 @@
                   @if (isset(Auth::user()->perms["admin"]) and Auth::user()->perms["admin"]==1)
                     <label><input type="checkbox" name="deletados">Mostrar deletados</label>
                   @endif
-                  <input type="text" class="form-control datepicker" size="8" name="data" placeholder="Data" id="data">
-                  <button type="submit" class="btn btn-success">Buscar</button>
+                  <input type="text" class="form-control datepicker ajuda-popover"
+                        title="Busca"
+                        data-content="Preencha os campos necessarios."
+                        data-placement="top" size="8" name="data" placeholder="Data" id="data">
+                  <button type="submit" class="btn btn-success"><i class="fa fa-search"></i> Buscar</button>
                 </div>
               </form>
             </div>
@@ -28,12 +34,24 @@
             <div class="col-md-12">
               @foreach($vendas as $key => $venda)
                 <div class="row list-contacts">
-                  <div class="col-md-1" title="Produtos"  data-toggle="collapse" data-target="#produtos{{$venda->id}}" aria-expanded="">
+                  <div class="col-md-1 ajuda-popover"
+                      @if ($key==0)
+                        title="Opções"
+                        data-content="Descrição dos produtos vinculados na venda."
+                        data-placement="top"
+                      @endif
+                    data-toggle="collapse" data-target="#produtos{{$venda->id}}" aria-expanded="">
                     <span class="btn btn-info">
                       <i class="fa fa-list"></i>
                     </span>
                   </div>
-                  <div class="col-md-8">
+                  <div class="col-md-3 ajuda-popover"
+                      @if ($key==0)
+                        title="Informações"
+                        data-content="Numero da venda, filial que realizou a venda, valor da venda e quantidade de produtos vinculados."
+                        data-placement="bottom"
+                      @endif
+                      >
                     <span class="label label-info">nº {{$venda->id}}</span>
                     <a href="{{url('/novo/contatos')}}/{{$venda->funcionario->id}}">
                       <span class="label label-info"><i class="fa fa-user"></i> {{$venda->funcionario->nome}}</span>
@@ -41,7 +59,12 @@
                     <span class="label label-primary">R$ {{$venda->valor}}</span>
                     <span class="label label-info">Movs: {{count($venda->movs)}}</span>
                   </div>
-                  <div class="col-md-2">
+                  <div class="col-md-2 ajuda-popover"
+                      @if ($key==0)
+                        title="Detalhes"
+                        data-content="Data da vendas, e outras informações."
+                        data-placement="right"
+                      @endif
                     <span class="label label-warning">{{$venda->created_at}}</span>
                   </div>
                 </div>

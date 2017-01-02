@@ -9,7 +9,10 @@
         <div class="panel-body">
           <div class="row pull-right">
             <div class="col-md-12">
-              <a href="{{ url('/novo/estoque') }}" class="btn btn-success"><i class="fa fa-plus"></i> Novo</a>
+              <a href="{{ url('/novo/estoque') }}" class="btn btn-success ajuda-popover"
+                    title="Novo"
+                    data-content="Adicione uma nova conta"
+                    data-placement="left"><i class="fa fa-plus"></i> Novo</a>
             </div>
           </div>
           <div class="row">
@@ -20,7 +23,10 @@
                   <label><input type="checkbox" name="estocado">Em Estoque</label>
                   <label><input type="checkbox" name="falta">Em Falta</label>
                   <input type="text" class="form-control" size="3" name="valor" id="busca" placeholder="Custo maior que">
-                  <input type="text" class="form-control" size="13"name="contato" id="busca" placeholder="por Filial">
+                  <input type="text" class="form-control ajuda-popover"
+                        title="Busca"
+                        data-content="Selecione e preencha apenas o que precisa filtrar, o sistema ignora os filtros não preenchidos."
+                        data-placement="top" size="13"name="contato" id="busca" placeholder="por Filial">
                   <input type="text" class="form-control" size="13" name="nome" id="busca" placeholder="por Nome">
                   <input type="text" class="form-control" size="7" name="codigo" id="busca" placeholder="por Codigo">
                   <button type="submit" class="btn btn-success">Buscar</button>
@@ -31,7 +37,13 @@
           @if ($estoques!==0)
             @foreach($estoques as $key => $estoque)
               <div class="row list-contacts">
-                <div class="col-md-3">
+                <div class="col-md-3 ajuda-popover"
+                    @if ($key==0)
+                      title="Opções"
+                      data-content="Deletar, detalhes, aumentar e diminuir estoque."
+                      data-placement="top"
+                    @endif
+                >
                   <a href="{{ url('lista/estoque') }}/{{$estoque->id}}/delete"  title="Apagar" class="btn btn-danger">
                     <i class="fa fa-ban"></i>
                   </a>
@@ -45,12 +57,24 @@
                     <i class="fa fa-arrow-down"></i>
                   </a>
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-3 ajuda-popover"
+                    @if ($key==0)
+                      title="Informações"
+                      data-content="Nome do produto, preço, e quantidade em estoque."
+                      data-placement="bottom"
+                    @endif
+                >
                   {{$estoque->nome}}
                   <span class="label label-warning">R$ {{ number_format($estoque->valor_custo, 2) }}</span>
                   <span class="label label-info">Estoque: {{$estoque->quantidade}}</span>
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-6 ajuda-popover"
+                    @if ($key==0)
+                      title="Detalhes"
+                      data-content="Em qual filial esta este produto."
+                      data-placement="top"
+                    @endif
+                >
                   <a href="{{ url('/contatos') }}/{{$estoque->contato->id}}"  title="Detalhes do contato">
                     <span class="label label-primary"><i class="fa fa-user"></i> {{$estoque->contato->nome }}</span>
                   </a>

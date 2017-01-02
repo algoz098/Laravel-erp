@@ -70,7 +70,6 @@ use Carbon\Carbon;
                 <div class="form-group">
                   <label for="text">Descrição </label>
                   <textarea rows="5" class="form-control" id="froala-editor" name="texto">
-                    {!! $contato->obs or "" !!}
                   </textarea>
                 </div>
                 <button type="submit" class="btn btn-success" id="enviar" >Enviar</button>

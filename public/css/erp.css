@@ -35,6 +35,12 @@ nav > ul > li > ul > li{
     transform: translate3d(-400px, 0, 0); /* Updated the values */
     /* Don't forget the vendor prefixes */
 }
+.webgs-brand{
+  padding: 15px 0px;
+  font-size: 22px;
+  color: #5bc0de;
+  background-color: #2b2b2b;
+}
 body {
   margin: 0px;
   margin-top: 60px;
