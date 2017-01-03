@@ -161,6 +161,46 @@
                     </div>
                   </div>
                 @endforeach
+                @foreach($contato->attachsToo as $key => $attach)
+                  <div class="row list-contacts">
+                    {{$attach->name}}
+                    <span class="label label-info" data-toggle="modal" data-target="#attach{{$attach->id}}" onClick="loadImage({{$attach->id}})"  >Ver</span>
+                    <a href="{{ url('/attach') }}/{{$attach->id}}/get"><span class="label label-info" >Salvar</span></a>
+                    <a href="{{ url('/attach') }}/{{$attach->id}}/delete"><span class="label label-danger" >Apagar</span></a>
+                  </div>
+                  <div class="modal fade" id="attach{{$attach->id}}" tabindex="-1" role="dialog" aria-labelledby="upload">
+                    <div class="modal-dialog modal-lg extra" role="document">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                          <h4 class="modal-title" id="">Visualizar anexo</h4>
+                        </div>
+                        <div class="modal-body" id="modalBodyImage" >
+                          <div class="row text-center" >
+                            <div class="col-md-12 text-center" onClick="fullImage({{$attach->id}})" id="object-holder">
+                              <object data="{{ url('attach/')}}/{{$attach->id}}" id="object{{$attach->id}}" width="100%" height="50" >
+                              </object>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                          <div class="col-md-2 pull-right">
+                            <div class="input-group">
+                              <input type="text" class="form-control" value="" id="widthChanger{{$attach->id}}" placeholder="mudar a">
+                              <span class="input-group-btn">
+                                <button class="btn btn-warning" type="button" onclick="changeWidth({{$attach->id}})">Largura</button>
+                              </span>
+                            </div>
+                          </div>
+                          <button type="submit" class="btn btn-info" onclick="fullImage({{$attach->id}})"><i class="fa fa-search"></i> Alterar tamanho</button>
+                          <button type="submit" class="btn btn-primary" onclick="rotateUnclock({{$attach->id}})"><i class="fa fa-arrow-left"></i> Rotacionar</button>
+                          <button type="submit" class="btn btn-primary" onclick="rotateClock({{$attach->id}})"><i class="fa fa-arrow-right"></i> Rotacionar</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                @endforeach
               </div>
             <!-- Modal -->
             <div class="modal fade" id="addTelefones{{$contato->id}}" tabindex="-1" role="dialog" aria-labelledby="addTelefonesLabel">

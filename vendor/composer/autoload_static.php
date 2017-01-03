@@ -428,6 +428,7 @@ class ComposerStaticIniteb7ed518eae24fc4a2b91da7f84bfb6b
         'Hamcrest\\Type\\IsString' => __DIR__ . '/..' . '/hamcrest/hamcrest-php/hamcrest/Hamcrest/Type/IsString.php',
         'Hamcrest\\Util' => __DIR__ . '/..' . '/hamcrest/hamcrest-php/hamcrest/Hamcrest/Util.php',
         'Hamcrest\\Xml\\HasXPath' => __DIR__ . '/..' . '/hamcrest/hamcrest-php/hamcrest/Hamcrest/Xml/HasXPath.php',
+        'ModifyAttachmentsTable' => __DIR__ . '/../..' . '/database/migrations/2017_01_03_155114_modify_attachments_table.php',
         'ModifyCodigoEstoqueTable' => __DIR__ . '/../..' . '/database/migrations/2016_12_22_183129_modify_codigo_estoque_table.php',
         'ModifyEstoqueTable' => __DIR__ . '/../..' . '/database/migrations/2016_12_26_153252_modify_estoque_table.php',
         'PHPUnit\\Framework\\TestCase' => __DIR__ . '/..' . '/phpunit/phpunit/src/ForwardCompatibility/TestCase.php',

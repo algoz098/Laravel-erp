@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddTrabalhoUsersTable extends Migration
+class ModifyAttachmentsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,8 @@ class AddTrabalhoUsersTable extends Migration
      */
     public function up()
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->integer('trabalho_id');
+        Schema::table('attachments', function (Blueprint $table) {
+            $table->integer('contatos_id')->nullable();
         });
     }
 
@@ -25,8 +25,8 @@ class AddTrabalhoUsersTable extends Migration
      */
     public function down()
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->dropColumn('trabalho_id');
+        Schema::table('attachments', function (Blueprint $table) {
+            $table->dropColumn('contatos_id');
         });
     }
 }

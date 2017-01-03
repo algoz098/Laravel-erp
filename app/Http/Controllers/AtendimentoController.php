@@ -60,8 +60,10 @@ class AtendimentoController extends Controller
       $atendimentos = $atendimentos->whereRaw('date(created_at) = ?', [$request->data]);
     }
     if (!empty($request->busca)){
-      $atendimentos = $atendimentos->where('assunto', 'like', '%' .  $request->busca . '%')
-                            ->paginate(30);
+      $atendimentos = $atendimentos->orWhere('assunto', 'like', '%' .  $request->busca . '%');
+    }
+    if ($request->contatos_id!="0"){
+      $atendimentos = $atendimentos->orWhere('contatos_id', $request->contatos_id);
     }
     $atendimentos = $atendimentos->paginate(30);
     Log::info('Mostando atendimentos com busca -> "'.$request->busca.'", para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
@@ -105,11 +107,13 @@ class AtendimentoController extends Controller
     return redirect()->action('AtendimentoController@index');
   }
   public function attach(request $request, $id){
+    $atendimento = Atendimento::find($id);
     $attach = new Attachs;
     $attach->attachmentable_id = $id;
     $attach->attachmentable_type = "App\Atendimento";
     $attach->name = $request->name;
     $attach->path = $request->file->store('public');
+    $attach->contatos_id = $atendimento->contatos_id;
     $attach->save();
     Log::info('Anexando arquivo para atendimento, anexo -> "'.$attach.'", para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
 

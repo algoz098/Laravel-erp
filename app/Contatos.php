@@ -62,6 +62,11 @@ class Contatos extends Model
       return $this->hasMany('App\Vendas', 'funcionario_id');
     }
 
+    public function attachsToo()
+    {
+        return $this->hasMany('App\Attachments', 'contatos_id');
+    }
+
     public function attachs()
     {
         return $this->morphMany('App\Attachments', 'attachmentable');

@@ -22,6 +22,7 @@ class ContatosController extends Controller
     Log::info('Lista de contatos para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
 
     $contatos = contatos::paginate(15);
+    
     if (is_array(Auth::user()->perms) and Auth::user()->perms["admin"]==1){
         $deletados = Contatos::onlyTrashed()->get();
     } else {
@@ -327,6 +328,7 @@ class ContatosController extends Controller
     $attach->attachmentable_type = "App\Contatos";
     $attach->name = $request->name;
     $attach->path = $request->file->store('public');
+    $attach->contatos_id = $id;
     $attach->save();
 
     $path = storage_path() . '/' .'app/'. $attach->path;
