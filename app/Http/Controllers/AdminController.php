@@ -14,28 +14,30 @@ use Artisan;
 use DateTime;
 use Log;
 use Auth;
+
 class AdminController extends Controller
 {
-    public function index(){
-      Log::info('!!!ADMIN!!! Mostrando index, para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
-      $contatos = contatos::all();
-      return view('admin.index')->with('contatos', $contatos);
-    }
+  public function index(){
 
-    public function user_edit($id){
-      $contato = Contatos::find($id);
-      $matriz = Contatos::find(1);
+    Log::info('!!!ADMIN!!! Mostrando index, para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
+    $contatos = contatos::all();
+    return view('admin.index')->with('contatos', $contatos);
+  }
 
-      $filiais[]=$matriz;
-      foreach ($matriz->to as $key => $relacao) {
-        if ($relacao->from_text="Filial"){
-          $filiais[] = $relacao;
-        }
+  public function user_edit($id){
+    $contato = Contatos::find($id);
+    $matriz = Contatos::find(1);
+
+    $filiais[]=$matriz;
+    foreach ($matriz->to as $key => $relacao) {
+      if ($relacao->from_text="Filial"){
+        $filiais[] = $relacao;
       }
-
-      Log::info('!!!ADMIN!!! Editando usuario de -> "'.$contato.'", para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
-      return view('admin.useredit')->with('contato', $contato)->with('filiais', $filiais);
     }
+
+    Log::info('!!!ADMIN!!! Editando usuario de -> "'.$contato.'", para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
+    return view('admin.useredit')->with('contato', $contato)->with('filiais', $filiais);
+  }
 
     public function user_modify(Request $request, $id){
       $contato = Contatos::find($id);

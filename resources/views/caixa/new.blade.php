@@ -16,18 +16,6 @@
                 <button type="submit" class="btn btn-success"><i class="fa fa-check"></i> Salvar</button>
               </div>
             </div>
-            @if ( $errors->count() > 0 )
-              <div class="row">
-                <div class="col-md-6">
-                  <p>Erros:</p>
-                  <ul>
-                    @foreach( $errors->all() as $message )
-                      <li>{{ $message }}</li>
-                    @endforeach
-                  </ul>
-                </div>
-              </div>
-            @endif
             <div class="row">
               <div class="col-md-3">
                 <div class="form-group">

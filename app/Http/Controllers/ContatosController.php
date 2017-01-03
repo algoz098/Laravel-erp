@@ -294,7 +294,7 @@ class ContatosController extends Controller
     ];
     $contato->from()->sync($data, false);
 
-    Log::info('Salvando relacionamento do contato -> "'.$contato.'", com -> "'.$data.'", para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
+    Log::info('Salvando relacionamento do contato -> "'.$contato.'", para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
 
     return redirect()->action('ContatosController@show');
   }

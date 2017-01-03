@@ -24,6 +24,7 @@
                       data-placement="top"
                 >
                   {{ csrf_field() }}
+                  <input type="text" class="form-control datepicker" name="data" id="data" placeholder="por Data">
                   <input type="text" class="form-control" name="busca" id="busca" placeholder="Busca">
                   <button type="submit" class="btn btn-success"><i class="fa fa-search"></i> Buscar</button>
                 </div>
@@ -286,6 +287,11 @@
           $('#object' + id).attr("data", "{{ url('/attach') }}/"+id);
         });
       };
+    </script>
+    <script language="javascript">
+      $( function() {
+        $( ".datepicker" ).datepicker({ dateFormat: 'yy-mm-dd' });
+      } );
     </script>
   @endif
 @endsection

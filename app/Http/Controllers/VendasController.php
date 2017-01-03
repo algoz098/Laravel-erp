@@ -10,6 +10,7 @@ use App\Caixas as Caixas;
 use App\Contas as Contas;
 use App\Est_movimentacoes as Movs;
 use Carbon\Carbon;
+Use App\Http\Controllers\CaixasLib;
 use Log;
 use Auth;
 
@@ -56,31 +57,14 @@ class VendasController extends Controller
 
     public function salvar($id, request $request){
       if ($request->forma=="0"){
-        #
-        #PRECISA SER TORNADO CLASSE!!!! TO DO!
-        #
-        $abertura = Caixas::whereRaw('date(created_at) = ?', [Carbon::today()])
-                        ->orderBy('created_at', 'aaaa')
-                        ->where('filial_id', Auth::user()->trabalho_id)
-                        ->where('tipo', '0')
-                        ->first();
-        $fechamento = Caixas::whereRaw('date(created_at) = ?', [Carbon::today()])
-                        ->orderBy('created_at', 'aaaa')
-                        ->where('filial_id', Auth::user()->trabalho_id)
-                        ->where('tipo', '1')
-                        ->first();
-
-        if (is_null($abertura)){
-          $messages = "Caixa ainda não aberto!";
+        $estado_caixa = new CaixasLib;
+        if ($estado_caixa->isOpen()){
+          $messages = "Caixa não aberto!";
           return redirect()->action('CaixasController@new_a')->withErrors($messages);
         }
-        if (!is_null($abertura)){
-          if (!is_null($fechamento)){
-            if (strtotime($abertura->created_at) < strtotime($fechamento->created_at)){
-              $messages = "Caixa já fechado!";
-              return redirect()->action('CaixasController@new_a')->withErrors($messages);
-            }
-          }
+        if ($estado_caixa->isClosed()){
+          $messages = "Caixa fechado!";
+          return redirect()->action('CaixasController@new_a')->withErrors($messages);
         }
       }
       $venda = new Vendas;

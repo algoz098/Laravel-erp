@@ -18,7 +18,7 @@
                   <label for="text">Relacionar <span class="label label-primary">{{$contato->nome}}</span> com:</label>
                   <div class="row">
                     <div class="col-md-12  ">
-                      <form method="POST" action="{{ url('/contatos') }}/{{$contato->id}}/relacoes/novo/busca">
+                      <form method="POST" action="{{ url('/lista/contatos') }}/{{$contato->id}}/relacoes/novo/busca">
                         <div class="form-group form-inline text-center">
                           {{ csrf_field() }}
                           <input type="text" class="form-control" name="busca" id="busca" placeholder="Busca" size="10">
@@ -43,7 +43,7 @@
                 </div>
               </div>
               <div class="col-md-8" style="display:none;" id="form">
-                <form method="POST" action="{{ url('/contatos') }}/{{$contato->id}}/relacoes/novo">
+                <form method="POST" action="{{ url('/lista/contatos') }}/{{$contato->id}}/relacoes/novo">
 
                   {{ csrf_field() }}
                 <div class="row">

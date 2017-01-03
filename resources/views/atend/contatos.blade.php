@@ -80,14 +80,9 @@ use Carbon\Carbon;
       </div>
     </div>
   </div>
-  <script>
+  <script language="javascript">
     $( function() {
       $( "#datepicker" ).datepicker({ dateFormat: 'yy-mm-dd' });
     } );
-    $(function() {
-      $('#froala-editor').froalaEditor({
-        direction: 'ltr'
-      })
-    });
   </script>
 @endsection

@@ -1,14 +1,15 @@
 <?php
-
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Caixas as Caixas;
 use App\Contas as Contas;
-Use Carbon\Carbon;
 use Auth;
 use DateTime;
 use Log;
+Use App\Http\Controllers\CaixasLib;
+Use Carbon\Carbon;
+
 
 class CaixasController extends Controller
 {
@@ -58,48 +59,20 @@ class CaixasController extends Controller
     }
 
     public function new_do(request $request ){
-      #
-      #PRECISA SER TORNADO CLASSE!!!! TO DO!
-      #
-      $abertura = Caixas::whereRaw('date(created_at) = ?', [Carbon::today()])
-                      ->orderBy('created_at', 'aaaa')
-                      ->where('filial_id', Auth::user()->trabalho_id)
-                      ->where('tipo', '0')
-                      ->first();
-      $fechamento = Caixas::whereRaw('date(created_at) = ?', [Carbon::today()])
-                      ->orderBy('created_at', 'aaaa')
-                      ->where('filial_id', Auth::user()->trabalho_id)
-                      ->where('tipo', '1')
-                      ->first();
-
-      if (is_null($abertura)){
-        if ($request->tipo!="0"){
-          $messages = "Caixa ainda não aberto!";
-          return redirect()->action('CaixasController@new_a')->withErrors($messages);
-        }
+      $estado_caixa = new CaixasLib;
+      if ($request->tipo=="0" and $estado_caixa->isOpen()){
+        $messages = "Caixa já aberto!";
+        return redirect()->action('CaixasController@new_a')->withErrors($messages);
       }
-      if (!is_null($abertura)){
-        if ($request->tipo=="0" and is_null($fechamento)){
-          $messages = "Caixa ja aberto!";
+      if ($request->tipo=="1" and $estado_caixa->isClosed()){
+          $messages = "Caixa já fechado!";
           return redirect()->action('CaixasController@new_a')->withErrors($messages);
-        }
-
-        if (!is_null($fechamento)){
-          if ($request->tipo=="0" and strtotime($abertura->created_at) > strtotime($fechamento->created_at)){
-            $messages = "Caixa ja aberto";
-            return redirect()->action('CaixasController@new_a')->withErrors($messages);
-          }
-          if (!empty($fechamento) and $request->tipo=="1" and strtotime($abertura->created_at) < strtotime($fechamento->created_at)){
-            $messages = "Caixa já fechado!";
-            return redirect()->action('CaixasController@new_a')->withErrors($messages);
-          }
-          if (!empty($fechamento) and $request->tipo=="2" and strtotime($abertura->created_at) < strtotime($fechamento->created_at)){
-            $messages = "Caixa já fechado!";
-            return redirect()->action('CaixasController@new_a')->withErrors($messages);
-          }
-        }
       }
-
+      if (!$estado_caixa->isOpen() and $request->tipo=="2"){
+        $messages = "É necessario abrir o caixa!";
+        return redirect()->action('CaixasController@new_a')->withErrors($messages);
+      }
+      
       $movimentacao = new Caixas;
       $movimentacao->filial_id = Auth::user()->trabalho->id;
       $movimentacao->funcionario_id = Auth::user()->contato->id;
@@ -148,10 +121,10 @@ class CaixasController extends Controller
     public function delete($id){
       $movimentacao = Caixas::withTrashed()->find($id);
       if ($movimentacao->trashed()) {
-        Log::info('Restaurando movimentação de caixa -> "'.$caixa.'" da filial -> "'.Auth::user()->trabalho_id.'", para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
+        Log::info('Restaurando movimentação de caixa -> "'.$movimentacao.'" da filial -> "'.Auth::user()->trabalho_id.'", para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
         $movimentacao->restore();
       } else {
-        Log::info('Deletando movimentação de caixa -> "'.$caixa.'" da filial -> "'.Auth::user()->trabalho_id.'", para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
+        Log::info('Deletando movimentação de caixa -> "'.$movimentacao.'" da filial -> "'.Auth::user()->trabalho_id.'", para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
         $movimentacao->delete();
       }
       return redirect()->action('CaixasController@index');

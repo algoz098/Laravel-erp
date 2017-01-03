@@ -55,13 +55,15 @@ class AtendimentoController extends Controller
 
   public function search( Request $request)
   {
-    if (!empty($request->busca)){
-      $atendimentos = Atendimento::where('assunto', 'like', '%' .  $request->busca . '%')
-                            ->orWhere('created_at', 'like', '%' .  $request->busca . '%')
-                            ->paginate(30);
-    } else {
-      $atendimentos = Atendimento::paginate(30);
+    $atendimentos = atendimento::query();
+    if (!empty($request->data)){
+      $atendimentos = $atendimentos->whereRaw('date(created_at) = ?', [$request->data]);
     }
+    if (!empty($request->busca)){
+      $atendimentos = $atendimentos->where('assunto', 'like', '%' .  $request->busca . '%')
+                            ->paginate(30);
+    }
+    $atendimentos = $atendimentos->paginate(30);
     Log::info('Mostando atendimentos com busca -> "'.$request->busca.'", para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
 
     return view('atend.index')->with('atendimentos', $atendimentos);
