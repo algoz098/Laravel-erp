@@ -12,6 +12,7 @@ use Intervention\Image\ImageManagerStatic as Image;
 use App\Contatos as Contatos;
 use App\Telefones as Telefones;
 use App\Attachments as Attachs;
+use App\Combobox_texts as Comboboxes;
 use Log;
 use Carbon\Carbon;
 
@@ -58,7 +59,8 @@ class ContatosController extends Controller
   public function showNovo()
   {
     Log::info('Criando novo contato, para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
-    return view('contatos.new');
+    $comboboxes = comboboxes::where('combobox_textable_type', 'App\Relacionamento')->get();
+    return view('contatos.new')->with('comboboxes', $comboboxes);
   }
 
   public function novo( Request $request )
@@ -96,8 +98,7 @@ class ContatosController extends Controller
       ];
 
       $contato->from()->sync($data, false);
-    }
-    if ($request->relacao=="1"){
+    } elseif ($request->relacao=="1"){
       $data = [
         $request->from_id =>
         [
@@ -108,8 +109,7 @@ class ContatosController extends Controller
       ];
 
       $contato->from()->sync($data, false);
-    }
-    if ($request->relacao=="2"){
+    } elseif ($request->relacao=="2"){
       $data = [
         $request->from_id =>
         [
@@ -120,6 +120,19 @@ class ContatosController extends Controller
       ];
 
       $contato->from()->sync($data, false);
+    } else {
+      $combobox = Comboboxes::where('text', $request->relacao)->first();
+      #return $combobox;
+      $data = [
+        $request->from_id =>
+        [
+          'from_text' => $combobox->text,
+          'to_id' => 1,
+          'to_text' => $combobox->value
+        ]
+      ];
+      $contato->from()->sync($data, false);
+
     }
 
     Log::info('Busca de contatos usando -> "'.$request.'", resultando em -> "'.$contato.'" para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
@@ -208,7 +221,8 @@ class ContatosController extends Controller
     Log::info('Editar telefone de contato id:'.$id.' telefone id "'.$id_telefone.'", para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
 
     $telefone = Telefones::find($id_telefone);
-    return view('contatos.phone')->with('telefone', $telefone);
+    $comboboxes = comboboxes::where('combobox_textable_type', 'App\Telefones')->get();
+    return view('contatos.phone')->with('telefone', $telefone)->with("comboboxes", $comboboxes);
   }
 
   public function telefones_post( Request $request, $id, $id_telefone )
@@ -227,14 +241,18 @@ class ContatosController extends Controller
     return redirect()->action('ContatosController@show');
   }
 
-  public function telefones( $id ){
+  public function telefones( $id )
+  {
+    $comboboxes = comboboxes::where('combobox_textable_type', 'App\Telefones')->get();
+    #return $comboboxes;
     $contato = Contatos::find($id);
     Log::info('Criando novo telefone para contato-> "'.$contato.'", para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
-    return view('contatos.newphone')->with('contato', $contato);
+    return view('contatos.newphone')->with('contato', $contato)->with('comboboxes', $comboboxes);
   }
 
   public function telefones_new( Request $request, $id )
   {
+
     $this->validate($request, [
         'tipo' => 'required|max:20',
         'numero' => 'required|max:100',
@@ -275,7 +293,8 @@ class ContatosController extends Controller
     Log::info('Novo relacionamento para contato -> "'.$contato.'", para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
 
     $contatos = Contatos::paginate(15);
-    return view('contatos.relacoesnovo')->with('contato', $contato)->with('contatos', $contatos);
+    $comboboxes = comboboxes::where('combobox_textable_type', 'App\Relacionamento')->get();
+    return view('contatos.relacoesnovo')->with('contato', $contato)->with('contatos', $contatos)->with('comboboxes', $comboboxes);
   }
 
   public function relacoes_busca( Request $request, $id)
@@ -297,18 +316,15 @@ class ContatosController extends Controller
 
   public function relacoes_post( Request $request, $id)
   {
-    $this->validate($request, [
-        'from_text' => 'required|max:20',
-        'to_id' => 'required',
-        'to_text' => 'required|max:20',
-    ]);
+    $combobox = comboboxes::find($request->combobox_id);
+    #return $combobox;
     $contato = contatos::Find($id);
     $data = [
       $id =>
       [
-        'from_text' => $request->from_text,
+        'from_text' => $combobox->text,
         'to_id' => $request->to_id,
-        'to_text' => $request->to_text
+        'to_text' => $combobox->value
       ]
     ];
     $contato->from()->sync($data, false);
@@ -317,6 +333,7 @@ class ContatosController extends Controller
 
     return redirect()->action('ContatosController@show');
   }
+  
 
   public function relacoes_delete( $id, $relacao_id){
     $relation = DB::table('contatos_pivot')->where('id', '=', $relacao_id)->delete();

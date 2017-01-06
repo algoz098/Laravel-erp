@@ -18,7 +18,12 @@
                 <div class="col-md-4">
                   <div class="form-group">
                     <label for="text">Assunto </label>
-                    <input type="text" class="form-control" value="{{$atendimento->assunto}}" name="assunto" id="assunto" placeholder="Assunto">
+                    <select class="form-control" name="assunto" id="assunto">
+                      <option value="" selected> - Escolha uma opção - </option>
+                      @foreach($comboboxes as $key => $combobox)
+                        <option value="{{$combobox->value}}" {{{$combobox->value==$atendimento->assunto? "selected":""}}}>{{$combobox->text}}</option>
+                      @endforeach
+                    </select>
                   </div>
                 </div>
                 <div class="col-md-4">

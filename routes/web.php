@@ -22,8 +22,8 @@ Route::post('lista/contatos/{id}/attach', 'ContatosController@attach')->middlewa
 Route::get('lista/contatos/delete/{id}', 'ContatosController@delete')->middleware('auth');
 Route::get('lista/contatos/{id}/telefones', 'ContatosController@telefones')->middleware('auth');
 Route::post('lista/contatos/{id}/telefones', 'ContatosController@telefones_new')->middleware('auth');
-Route::get('lista/contatos/{id}/telefones/{id_tel}', 'ContatosController@telefones_get')->middleware('auth');
 Route::post('lista/contatos/{id}/telefones/{id_tel}', 'ContatosController@telefones_post')->middleware('auth');
+Route::get('lista/contatos/{id}/telefones/{id_tel}', 'ContatosController@telefones_get')->middleware('auth');
 Route::get('lista/contatos/{id}/telefones/{id_tel}/delete', 'ContatosController@telefones_delete')->middleware('auth');
 Route::post('/novo/contatos', 'ContatosController@novo')->middleware('auth');
 Route::get('/novo/contatos', 'ContatosController@showNovo')->middleware('auth');
@@ -34,6 +34,7 @@ Route::get('lista/contatos/{id}/relacoes', 'ContatosController@relacoes')->middl
 Route::get('lista/contatos/{id}/relacoes/novo', 'ContatosController@relacoes_novo')->middleware('auth');
 Route::post('lista/contatos/{id}/relacoes/novo/busca', 'ContatosController@relacoes_busca')->middleware('auth');
 Route::post('lista/contatos/{id}/relacoes/novo', 'ContatosController@relacoes_post')->middleware('auth');
+Route::get('lista/contatos/{id}/relacoes/{id_relacao}', 'ContatosController@relacoes_edit')->middleware('auth');
 Route::get('lista/contatos/{id}/relacoes/{id_relacao}/delete', 'ContatosController@relacoes_delete')->middleware('auth');
 
 Route::get('lista/contas', 'ContasController@index')->middleware('auth');
@@ -102,6 +103,13 @@ Route::get('/admin/access/{id}/delete/{id_access}', 'AdminController@access_dele
 Route::get('/admin/update', 'AdminController@update_index')->middleware('auth')->middleware('admin');
 Route::get('/admin/update/do', 'AdminController@update_do')->middleware('auth')->middleware('admin');
 Route::get('/admin/logs', 'AdminController@logs')->middleware('auth')->middleware('admin');
+
+Route::get('/admin/combobox', 'AdminController@combobox')->middleware('auth')->middleware('admin');
+Route::get('/admin/combobox/novo', 'AdminController@combobox_novo')->middleware('auth')->middleware('admin');
+Route::post('/admin/combobox/novo', 'AdminController@combobox_salvar')->middleware('auth')->middleware('admin');
+Route::get('/admin/combobox/{id}', 'AdminController@combobox_edit')->middleware('auth')->middleware('admin');
+Route::post('/admin/combobox/novo/{id}', 'AdminController@combobox_atualizar')->middleware('auth')->middleware('admin');
+Route::get('/admin/combobox/delete/{id}', 'AdminController@combobox_delete')->middleware('auth')->middleware('admin');
 
 Route::get('/admin/backup', 'AdminController@backup_index')->middleware('auth')->middleware('admin');
 Route::get('/admin/backup/do', 'AdminController@backup_do')->middleware('auth')->middleware('admin');

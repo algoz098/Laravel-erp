@@ -49,17 +49,16 @@
                 <div class="row">
                   <div class="form-group">
                     <label for="text"><span class="label label-primary">{{$contato->nome}}</span> é </label>
-                    <input type="text" class="form-control" value="" name="from_text" id="from_text" placeholder="Texto de relacionamento">
+                    <select class="form-control" name="combobox_id" id="combobox_id">
+                      <option value="" selected> - Escolha uma opção - </option>
+                      @foreach($comboboxes as $key => $combobox)
+                        <option value="{{$combobox->id}}">{{$combobox->text}}</option>
+                      @endforeach
+                    </select>
                     de <span id="to" class="label label-success"></span>
                   </div>
                 </div>
-                <div class="row">
-                  <div class="form-group">
-                    <label for="text"><span id="to2" class="label label-success"></span> é </label>
-                    <input type="text" class="form-control" value="" name="to_text" id="to_text" placeholder="Texto de relacionamento">
-                    de <span class="label label-primary">{{$contato->nome}}</span>
-                  </div>
-                </div>
+
                 <input type="hidden" class="form-control" value="" name="to_id" id="to_id">
                 <button type="submit" class="btn btn-success">Salvar</button>
               </form>

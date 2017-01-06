@@ -19,7 +19,12 @@
               <div class="col-md-3">
                 <div class="form-group">
                   <label for="text">Tipo</label>
-                  <input type="text" class="form-control" value="" name="tipo" id="tipo" placeholder="">
+                  <select class="form-control" id="tipo" name="tipo">
+                    <option value="" selected> - Escolha uma opção - </option>
+                    @foreach($comboboxes as $key => $combobox)
+                      <option value="{{$combobox->value}}">{{$combobox->text}}</option>
+                    @endforeach
+                  </select>
                 </div>
               </div>
               <div class="col-md-9">

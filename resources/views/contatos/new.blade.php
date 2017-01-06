@@ -95,6 +95,9 @@
                       <option value="0" >Fornecedor</option>
                       <option value="1" >Cliente</option>
                       <option value="2" >Filial</option>
+                      @foreach($comboboxes as $key => $combobox)
+                        <option value="{{$combobox->text}}">{{$combobox->text}}</option>
+                      @endforeach
                       <option value="" >Indefinido</option>
                     </select>
                   @endif

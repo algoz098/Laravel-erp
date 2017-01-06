@@ -7,6 +7,7 @@ use App\User as User;
 use App\Contatos as Contatos;
 use App\Users_permissions as Roles;
 
+use App\Combobox_texts as Comboboxes;
 use File;
 use Storage;
 use ZipArchive;
@@ -205,5 +206,70 @@ class AdminController extends Controller
       }
       #return $result;
       return view('admin.logs')->with('logs', $result);
+    }
+    public function combobox(){
+      Log::info('!!!ADMIN!!! Mostrando edicao de combobox, para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
+
+      $comboboxes = Comboboxes::all();
+      return view('admin.combobox')->with('comboboxes', $comboboxes);
+    }
+    public function combobox_novo(){
+      Log::info('!!!ADMIN!!! Mostrando novo combobox, para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
+
+      return view('admin.combobox_novo');
+    }
+    public function combobox_edit($id){
+      Log::info('!!!ADMIN!!! Mostrando ediçao combobox, para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
+
+      $combobox = Comboboxes::find($id);
+
+      return view('admin.combobox_novo')->with("combobox", $combobox);
+    }
+    public function combobox_salvar(request $request){
+      Log::info('!!!ADMIN!!! Salvando novo combobox, para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
+      $combobox = New Comboboxes;
+      $combobox->combobox_textable_id = "1";
+      if($request->tipo=="Telefones"){
+        $combobox->combobox_textable_type = "App\\".$request->tipo;
+        $combobox->field= "tipo";
+        $combobox->text=$request->text;
+        $combobox->value=$request->text;
+      }
+      if($request->tipo=="Relacionamento"){
+        $combobox->combobox_textable_type = "App\\".$request->tipo;
+        $combobox->field= "tipo";
+        $combobox->text=$request->text;
+        $combobox->value=$request->value;
+      }
+      if($request->tipo=="Atendimentos"){
+        $combobox->combobox_textable_type = "App\\".$request->tipo;
+        $combobox->field= "tipo";
+        $combobox->text=$request->text;
+        $combobox->value=$request->text;
+      }
+      $combobox->save();
+      return redirect()->action('AdminController@combobox');
+    }
+    public function combobox_atualizar(request $request, $id){
+      Log::info('!!!ADMIN!!! Salvando novo combobox, para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
+      $combobox = Comboboxes::find($id);
+      $combobox->combobox_textable_id = "1";
+      $combobox->field= "tipo";
+      $combobox->text=$request->text;
+      $combobox->value=$request->value;
+      $combobox->save();
+      return redirect()->action('AdminController@combobox');
+    }
+    public function combobox_delete($id){
+      #Log::info('!!!ADMIN!!! Deletando opçao '.$id.' combobox, para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
+      $combobox = Comboboxes::withTrashed()->find($id);
+      if ($combobox->trashed()) {
+        $combobox->restore();
+        Log::info('Restaurando opcao do combobox -> "'.$combobox.'", para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
+      } else {
+        Log::info('Deletando opcao do combobox -> "'.$combobox.'", para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
+        $combobox->delete();
+      }
+      return redirect()->action('AdminController@combobox');
     }
 }

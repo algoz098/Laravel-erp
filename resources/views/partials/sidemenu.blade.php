@@ -20,7 +20,7 @@
     <li class="pushy-submenu ">
         <a href="#" class="{{{ Request::is('lista*') ? "active" : ""}}}"><i class="fa fa-list fa-lg"></i> Listas</a>
         <ul class="menu" >
-          <li class="pushy-link"><a class="{{{ Request::path()=='lista/contatos' ? "active" : "" }}}" href="{{ url('/lista/contatos') }}"><i class="fa fa-user"></i> Contato</a></li>
+          <li class="pushy-link"><a class="{{{ Request::path()=='lista/contatos' ? "active" : "" }}}" href="{{ url('/lista/contatos') }}"><i class="fa fa-user"></i> Entidades</a></li>
           <li class="pushy-link"><a class="{{{ Request::path()=='lista/atendimentos' ? "active" : "" }}}" href="{{ url('/lista/atendimentos') }}"><i class="fa fa-list"></i> Atendimento</a></li>
           <li class="pushy-link"><a class="{{{ Request::path()=='lista/contas' ? "active" : "" }}}" href="{{ url('/lista/contas') }}"><i class="fa fa-usd"></i> Fluxo de Caixa</a></li>
           <li class="pushy-link"><a class="{{{ Request::path()=='lista/estoque' ? "active" : "" }}}" href="{{ url('/lista/estoque') }}"><i class="fa fa-bell"></i> Estoque</a></li>
@@ -36,6 +36,7 @@
             <li class="pushy-link"><a class="{{{ Request::path()=='admin/update' ? "active" : "" }}}" href="{{ url('/admin/update') }}">Atualizar</a></li>
             <li class="pushy-link"><a class="{{{ Request::path()=='admin/backup' ? "active" : "" }}}" href="{{ url('/admin/backup') }}">Backup</a></li>
             <li class="pushy-link"><a class="{{{ Request::path()=='admin/logs' ? "active" : "" }}}" href="{{ url('/admin/logs') }}">Logs</a></li>
+            <li class="pushy-link"><a class="{{{ Request::path()=='admin/Combobox' ? "active" : "" }}}" href="{{ url('/admin/combobox') }}">Combobox</a></li>
           </ul class="menu" >
       </li>
     @endif

@@ -1,8 +1,8 @@
 @extends('main')
 @section('content')
   <div class="row">
-    <div class="col-md-11">
-      <form method="POST" action="{{ url('/contatos') }}/{{$telefone->contatos_id}}/telefones/{{$telefone->id}}">
+    <div class="col-md-12">
+      <form method="POST" action="{{ url('/lista/contatos') }}/{{$telefone->contatos_id}}/telefones/{{$telefone->id}}">
         <div class="form-group">
         {{ csrf_field() }}
         <input type="hidden" name="id" value="">
@@ -19,7 +19,11 @@
               <div class="col-md-3">
                 <div class="form-group">
                   <label for="text">Tipo</label>
-                  <input type="text" class="form-control" value="{{$telefone->tipo}}" name="tipo" id="tipo" placeholder="">
+                  <select class="form-control" id="tipo" name="tipo">
+                    @foreach($comboboxes as $key => $combobox)
+                      <option value="{{$combobox->value}}" {{{$telefone->tipo==$combobox->value ? "selected": ""}}}>{{$combobox->text}}</option>
+                    @endforeach
+                  </select>
                 </div>
               </div>
               <div class="col-md-9">

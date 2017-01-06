@@ -17,6 +17,7 @@ return array(
     'CreateAttachmentsTable' => $baseDir . '/database/migrations/2016_12_22_131122_create_attachments_table.php',
     'CreateCaixasTable' => $baseDir . '/database/migrations/2016_12_22_231333_create_caixas_table.php',
     'CreateColunmsContasTable' => $baseDir . '/database/migrations/2016_12_09_183333_create_colunms_contas_table.php',
+    'CreateComboboxTextableTable' => $baseDir . '/database/migrations/2017_01_06_112212_create_combobox_textable_table.php',
     'CreateContasTable' => $baseDir . '/database/migrations/2016_12_01_162001_create_contas_table.php',
     'CreateContatosPivotTable2' => $baseDir . '/database/migrations/2016_11_24_215712_create_contatos_pivot_table2.php',
     'CreateContatosTable' => $baseDir . '/database/migrations/2016_11_06_163403_create_contatos_table.php',

@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Atendimento as Atendimento;
 use App\Contatos as Contatos;
 use App\Attachments as Attachs;
+use App\Combobox_texts as Comboboxes;
 use Carbon\Carbon;
 use Log;
 use Auth;
@@ -20,16 +21,17 @@ class AtendimentoController extends Controller
 
   public function show($id){
     $atendimento = Atendimento::find($id);
-
+    $comboboxes = comboboxes::where('combobox_textable_type', 'App\Atendimentos')->get();
     Log::info('Mostando atendimento -> "'.$atendimento.'", para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
 
-    return view('atend.show')->with('atendimento', $atendimento);
+    return view('atend.show')->with('atendimento', $atendimento)->with('comboboxes', $comboboxes);
   }
 
   public function new_a(){
     Log::info('Criando novo atendimento, selecionando contato, para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
     $contatos = Contatos::paginate(15);
-    return view('atend.contatos')->with('contatos', $contatos);
+    $comboboxes = comboboxes::where('combobox_textable_type', 'App\Atendimentos')->get();
+    return view('atend.contatos')->with('contatos', $contatos)->with('comboboxes', $comboboxes);
   }
 
   public function add(Request $request){
@@ -110,6 +112,7 @@ class AtendimentoController extends Controller
 
   public function novo($id){
     $contato = Contatos::find($id);
+
     Log::info('Criando novo atendimento para contato -> "'.$contato.'", para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
     return view('atend.index')->with('contato', $contato);
   }
@@ -117,7 +120,6 @@ class AtendimentoController extends Controller
   public function edit(request $request, $id){
     $this->validate($request, [
         'assunto' => 'required|max:50',
-        'contatos_id' => 'required',
     ]);
     $atendimento = Atendimento::find($id);
     $atendimento->assunto = $request->assunto;
