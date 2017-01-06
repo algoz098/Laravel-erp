@@ -23,13 +23,21 @@ class ContatosController extends Controller
     Log::info('Lista de contatos para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
 
     $contatos = contatos::paginate(15);
+    $total= contatos::count();
+    $empresas = contatos::where('tipo', '0')->count();
+    $pessoas = contatos::where('tipo', '1')->count();
 
     if (is_array(Auth::user()->perms) and Auth::user()->perms["admin"]==1){
         $deletados = Contatos::onlyTrashed()->get();
     } else {
       $deletados = 0;
     }
-    return view('contatos.list')->with('contatos', $contatos)->with('deletados', $deletados);
+    return view('contatos.list')
+                ->with('contatos', $contatos)
+                ->with('deletados', $deletados)
+                ->with('total', $total)
+                ->with('empresas', $empresas)
+                ->with('pessoas', $pessoas);
   }
 
   public function search( Request $request)
@@ -227,10 +235,6 @@ class ContatosController extends Controller
 
   public function telefones_post( Request $request, $id, $id_telefone )
   {
-    $this->validate($request, [
-        'tipo' => 'required|max:20',
-        'numero' => 'required|max:100',
-    ]);
     $telefone = Telefones::find($id_telefone);
     $telefone->numero = $request->numero;
     $telefone->tipo = $request->tipo;
@@ -253,16 +257,13 @@ class ContatosController extends Controller
   public function telefones_new( Request $request, $id )
   {
 
-    $this->validate($request, [
-        'tipo' => 'required|max:20',
-        'numero' => 'required|max:100',
-    ]);
-    $telefone = new Telefones;
-    $telefone->contatos_id = $id;
-    $telefone->tipo = $request->tipo;
-    $telefone->numero = $request->numero;
-    $telefone->save();
-
+    foreach ($request->tipo as $key => $tipo) {
+      $telefone = new Telefones;
+      $telefone->contatos_id = $id;
+      $telefone->tipo = $request->tipo[$key];
+      $telefone->numero = $request->numero[$key];
+      $telefone->save();
+    }
     Log::info('Salvo telefone para contato(id'.$id.') resultando em-> "'.$telefone.'", para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
 
     return redirect()->action('ContatosController@show');
@@ -333,7 +334,7 @@ class ContatosController extends Controller
 
     return redirect()->action('ContatosController@show');
   }
-  
+
 
   public function relacoes_delete( $id, $relacao_id){
     $relation = DB::table('contatos_pivot')->where('id', '=', $relacao_id)->delete();

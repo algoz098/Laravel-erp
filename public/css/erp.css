@@ -45,6 +45,7 @@ body {
   margin: 0px;
   margin-top: 60px;
   padding: 0px;
+  text-transform: uppercase;
 }
 .right-bar{
   margin-left: 310px;

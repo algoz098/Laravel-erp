@@ -1,17 +1,3 @@
-<?php
-$empresas = 0;
-$pessoas = 0;
-foreach ($contatos as $key => $contato) {
-  if ($contato->tipo=="0"){
-    $empresas = $empresas+1;
-  }
-  if ($contato->tipo=="1"){
-    $pessoas = $pessoas+1;
-  }
-}
-
- ?>
-
 @extends('main')
 @section('content')
     <div class="row">
@@ -285,6 +271,9 @@ foreach ($contatos as $key => $contato) {
               </span>&nbsp
               <span class="label label-primary">
                 PF: {{$pessoas}}
+              </span>&nbsp
+              <span class="label label-primary">
+                Total: {{$total}}
               </span>
             </div>
           </div>

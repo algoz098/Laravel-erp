@@ -74,7 +74,7 @@ use Carbon\Carbon;
               <div class="col-md-1 ajuda-popover">
                 <span class="label label-success">Abertura</span>
               </div>
-              <div class="col-md-2 ajuda-popover"
+              <div class="col-md-4 ajuda-popover"
                     title="Informações"
                     data-content="Tipo de movimentação, valor e Entrada/Saida de valores."
                     data-placement="top"
@@ -110,14 +110,14 @@ use Carbon\Carbon;
                 <div class="col-md-1">
                   <span class="label label-warning">R$ {{ number_format($mov->valor, 2) }}</span>
                 </div>
-                <div class="col-md-1">
+                <div class="col-md-2">
                   @if ($mov->tipo=="1")
                     <span class="label label-danger">Saida de valor</span>
                   @elseif ($mov->tipo=="0")
                     <span class="label label-success">Entrada de valor</span>
                   @endif
                 </div>
-                <div class="col-md-1">
+                <div class="col-md-2">
                   @if ($mov->estado=="1")
                     <span class="label label-success">Contas ok</span>
                   @elseif ($mov->estado=="0")
