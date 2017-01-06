@@ -55,7 +55,12 @@
               <div class="col-md-3" id="b">
                 <div class="form-group">
                   <label for="contato">Descriçao:</label>
-                  <input type="text" class="form-control" name="nome" id="id">
+                  <select class="form-control" id="nome" name="nome">
+                    <option value="" selected> - Escolha uma opção - </option>
+                    @foreach($comboboxes as $key => $combobox)
+                      <option value="{{$combobox->value}}">{{$combobox->text}}</option>
+                    @endforeach
+                  </select>
                 </div>
               </div>
             </div>

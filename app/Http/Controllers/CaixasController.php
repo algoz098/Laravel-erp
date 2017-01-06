@@ -6,6 +6,7 @@ use App\Caixas as Caixas;
 use App\Contas as Contas;
 Use App\Movs as Movs;
 Use App\Movs_prestacao as Prestacao;
+use App\Combobox_texts as Comboboxes;
 use Auth;
 use DateTime;
 use Log;
@@ -38,7 +39,8 @@ class CaixasController extends Controller
 
     public function new_a(){
       Log::info('Criando movimentação de caixa da filial -> "'.Auth::user()->trabalho_id.'", para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
-      return view('caixa.new');
+      $comboboxes = comboboxes::where('combobox_textable_type', 'App\Contas')->get();
+      return view('caixa.new')->with('comboboxes', $comboboxes);
     }
 
     public function search(request $request){
@@ -92,7 +94,7 @@ class CaixasController extends Controller
           $conta->save();
           $conta->referente = $conta->id;
           $conta->save();
-          return redirect()->action('CaixasController@  index');
+          return redirect()->action('CaixasController@index');
         } else {
           $messages = "Caixa já aberto!";
           return redirect()->action('CaixasController@new_a')->withErrors($messages);

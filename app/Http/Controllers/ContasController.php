@@ -7,6 +7,7 @@ use Auth;
 use Carbon\Carbon;
 use App\Contas as Contas;
 use App\Contatos as Contatos;
+use App\Combobox_texts as Comboboxes;
 use Log;
 
 
@@ -102,14 +103,6 @@ class ContasController extends Controller
     return view('contas.index')->with('contas', $contas)->with('deletados', $deletados);
   }
   public function add(Request $request){
-    $this->validate($request, [
-        'contatos_id' => 'required',
-        'nome' => 'required|max:50',
-        'val' => 'required|numeric',
-        'vencimento' => 'required',
-        'tipo' => 'required',
-        'estado' => 'required',
-    ]);
     $conta = new Contas;
     $conta->contatos_id = $request->contatos_id;
     $conta->nome = $request->nome;
@@ -157,6 +150,7 @@ class ContasController extends Controller
 
   public function delete($id){
     $conta = Contas::withTrashed()->find($id);
+
     if ($conta->trashed()) {
       Log::info('Restaurando conta -> "'.$conta.'", para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
       $conta->restore();
@@ -168,8 +162,9 @@ class ContasController extends Controller
   }
   public function add_2(request $request, $id){
     $contato = Contatos::find($id);
+    $comboboxes = comboboxes::where('combobox_textable_type', 'App\Contas')->get();
     Log::info('Adicionar CONTA passo 2, para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
-    return view('contas.valores')->with('contato', $contato);
+    return view('contas.valores')->with('contato', $contato)->with('comboboxes', $comboboxes);
   }
   public function add_3(request $request, $id){
     $this->validate($request, [
@@ -187,7 +182,11 @@ class ContasController extends Controller
     $conta->descricao = $request->descricao;
     $conta->tipo = $request->tipo;
     $conta->estado = $request->estado;
-    $conta->desconto = $request->desconto;
+    if (!$request->desconto){
+      $conta->desconto = "0";
+    } else {
+      $conta->desconto = $request->desconto;
+    }
     $conta->pagamento = $request->forma;
     $conta->save();
     $conta->referente = $conta->id;

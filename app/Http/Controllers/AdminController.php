@@ -229,7 +229,7 @@ class AdminController extends Controller
       Log::info('!!!ADMIN!!! Salvando novo combobox, para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
       $combobox = New Comboboxes;
       $combobox->combobox_textable_id = "1";
-      if($request->tipo=="Telefones"){
+      if($request->tipo=="Telefones" or $request->tipo=="Contas" or $request->tipo=="Caixas"){
         $combobox->combobox_textable_type = "App\\".$request->tipo;
         $combobox->field= "tipo";
         $combobox->text=$request->text;

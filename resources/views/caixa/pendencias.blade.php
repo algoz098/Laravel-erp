@@ -131,13 +131,14 @@ use Carbon\Carbon;
                 </div>
               </form>
             @endforeach
-          @endif
-          <div class="row">
-            <div class="col-md-12 text-center">
-              <h1><span class="label label-default">Tudo ok, fechar caixa?<span></h1>
-              <a href="{{url('lista/caixa/fechar')}}/{{$caixa->id}}/concluir" class="h1"><span class="btn btn-success">Fechar!<span></a>
+          @else
+            <div class="row">
+              <div class="col-md-12 text-center">
+                <h1><span class="label label-default">Tudo ok, fechar caixa?<span></h1>
+                <a href="{{url('lista/caixa/fechar')}}/{{$caixa->id}}/concluir" class="h1"><span class="btn btn-success">Fechar!<span></a>
+              </div>
             </div>
-          </div>
+          @endif
         </div>
       </div>
     </div>

@@ -50,7 +50,12 @@ use Carbon\Carbon;
                 <div class="col-md-3">
                   <div class="form-group">
                     <label>Referencia</label>
-                    <input type="text" class="form-control" id="nome" name="nome" placeholder="Nome">
+                    <select class="form-control" id="nome" name="nome">
+                      <option value="" selected> - Escolha uma opção - </option>
+                      @foreach($comboboxes as $key => $combobox)
+                        <option value="{{$combobox->value}}">{{$combobox->text}}</option>
+                      @endforeach
+                    </select>
                   </div>
                 </div>
               </div>

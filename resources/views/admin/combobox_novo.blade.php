@@ -28,6 +28,8 @@
                 <option value="Telefones">Tipo de telefones</option>
                 <option value="Relacionamento">Relacionamento entre entidades</option>
                 <option value="Atendimentos">Assunto de atendimentos</option>
+                <option value="Contas">Referencia para provisão de contas</option>
+                <option value="Caixas">Descrição de movimentação de caixa</option>
               </select>
             @endif
           </div>
@@ -53,7 +55,7 @@
   $('#tipo').ready(changeModule());
   function changeModule(){
     var tipo = $('#tipo').val();
-    if (tipo=="Telefones"){
+    if (tipo=="Telefones" || tipo=="Contas" || tipo=="Caixas"){
       $("#campoHolder").hide();
       //$("#campoLabel").text("");
       $("#valueHolder").hide();
