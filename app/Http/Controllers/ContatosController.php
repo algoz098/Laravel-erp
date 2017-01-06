@@ -22,7 +22,7 @@ class ContatosController extends Controller
     Log::info('Lista de contatos para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
 
     $contatos = contatos::paginate(15);
-    
+
     if (is_array(Auth::user()->perms) and Auth::user()->perms["admin"]==1){
         $deletados = Contatos::onlyTrashed()->get();
     } else {
@@ -63,6 +63,9 @@ class ContatosController extends Controller
 
   public function novo( Request $request )
   {
+    $this->validate($request, [
+        'nome' => 'required|max:50',
+    ]);
     $contato = new Contatos;
     $contato->nome = $request->nome;
     $contato->cpf = $request->cnpj;
@@ -133,6 +136,9 @@ class ContatosController extends Controller
 
   public function update( Request $request, $id )
   {
+    $this->validate($request, [
+        'nome' => 'required|max:50',
+    ]);
     $contato = contatos::find($id);
 
     Log::info('Atualizar contato de -> "'.$contato.'" novo -> "'.$request.'", para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
@@ -207,6 +213,10 @@ class ContatosController extends Controller
 
   public function telefones_post( Request $request, $id, $id_telefone )
   {
+    $this->validate($request, [
+        'tipo' => 'required|max:20',
+        'numero' => 'required|max:100',
+    ]);
     $telefone = Telefones::find($id_telefone);
     $telefone->numero = $request->numero;
     $telefone->tipo = $request->tipo;
@@ -217,8 +227,7 @@ class ContatosController extends Controller
     return redirect()->action('ContatosController@show');
   }
 
-  public function telefones( $id )
-  {
+  public function telefones( $id ){
     $contato = Contatos::find($id);
     Log::info('Criando novo telefone para contato-> "'.$contato.'", para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
     return view('contatos.newphone')->with('contato', $contato);
@@ -226,6 +235,10 @@ class ContatosController extends Controller
 
   public function telefones_new( Request $request, $id )
   {
+    $this->validate($request, [
+        'tipo' => 'required|max:20',
+        'numero' => 'required|max:100',
+    ]);
     $telefone = new Telefones;
     $telefone->contatos_id = $id;
     $telefone->tipo = $request->tipo;
@@ -284,6 +297,11 @@ class ContatosController extends Controller
 
   public function relacoes_post( Request $request, $id)
   {
+    $this->validate($request, [
+        'from_text' => 'required|max:20',
+        'to_id' => 'required',
+        'to_text' => 'required|max:20',
+    ]);
     $contato = contatos::Find($id);
     $data = [
       $id =>

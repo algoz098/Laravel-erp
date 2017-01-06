@@ -102,6 +102,14 @@ class ContasController extends Controller
     return view('contas.index')->with('contas', $contas)->with('deletados', $deletados);
   }
   public function add(Request $request){
+    $this->validate($request, [
+        'contatos_id' => 'required',
+        'nome' => 'required|max:50',
+        'val' => 'required|numeric',
+        'vencimento' => 'required',
+        'tipo' => 'required',
+        'estado' => 'required',
+    ]);
     $conta = new Contas;
     $conta->contatos_id = $request->contatos_id;
     $conta->nome = $request->nome;
@@ -116,6 +124,7 @@ class ContasController extends Controller
     if ($request->parcelas>0){
       $i = 0;
       while ($i < count($request->valor)) {
+
         $parcela = new Contas;
         $parcela->contatos_id = $request->contatos_id;
         $parcela->referente = $conta->id;
@@ -157,9 +166,69 @@ class ContasController extends Controller
     }
     return redirect()->action('ContasController@index');
   }
-  public function edit($id){
-    $conta = Contas::find($id);
-    Log::info('Editando conta -> "'.$conta.'", para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
-    return view('contas.edit')->with('conta', $conta);
+  public function add_2(request $request, $id){
+    $contato = Contatos::find($id);
+    Log::info('Adicionar CONTA passo 2, para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
+    return view('contas.valores')->with('contato', $contato);
+  }
+  public function add_3(request $request, $id){
+    $this->validate($request, [
+        'tipo' => 'required',
+        'forma' => 'required',
+        'nome' => 'required|max:50',
+        'cheio' => 'required|numeric',
+    ]);
+    $contato = Contatos::find($id);
+    $conta = new Contas;
+    $conta->contatos_id = $contato->id;
+    $conta->nome = $request->nome;
+    $conta->valor = $request->cheio;
+    $conta->vencimento = $request->vencimento;
+    $conta->descricao = $request->descricao;
+    $conta->tipo = $request->tipo;
+    $conta->estado = $request->estado;
+    $conta->desconto = $request->desconto;
+    $conta->pagamento = $request->forma;
+    $conta->save();
+    $conta->referente = $conta->id;
+    $conta->save();
+    Log::info('Adicionar CONTA passo 3, para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
+    if ($request->parcelas>0){
+      $i = 0;
+      if (!empty($conta->desconto)){
+        $parcela = ($conta->valor - $conta->desconto)/$request->parcelas;
+      }
+      $parcela = $conta->valor/$request->parcelas;
+      while ($i < $request->parcelas) {
+        $i = $i + 1;
+        $vencimentos[$i] = Carbon::today()->addMonths($i);
+      }
+      return view('contas.parcelas')->with('contato', $contato)->with('conta', $conta)->with('vencimentos', $vencimentos)->with('parcela', $parcela);
+    }
+    return redirect()->action('ContasController@index');
+  }
+
+  public function add_4(request $request, $id, $conta_id){
+    $conta= Contas::find($conta_id);
+    foreach ($request->parcela as $key => $parcela) {
+      $parcela1 = new Contas;
+      $parcela1->contatos_id = $conta->contatos_id;
+      $parcela1->nome = $conta->nome." ".$key." de ".sizeof($request->parcela);
+      $parcela1->valor = $parcela;
+      $parcela1->vencimento = $request->vencimento[$key];
+      $parcela1->descricao = "";
+      $parcela1->tipo = $conta->tipo;
+      $parcela1->estado = "0";
+      if ($request->desconto[$key]!=""){
+        $parcela1->desconto = $request->desconto[$key];
+      } else {
+        $parcela1->desconto = null;
+      }
+      $parcela1->pagamento = $request->forma[$key];
+      $parcela1->referente = $conta->id;
+      $parcela1->save();
+    }
+    #return "ok";
+    return redirect()->action('ContasController@index');
   }
 }

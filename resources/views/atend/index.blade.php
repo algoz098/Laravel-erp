@@ -26,14 +26,7 @@
                   {{ csrf_field() }}
                   <input type="text" class="form-control datepicker" name="data" id="data" placeholder="por Data">
                   <input type="text" class="form-control" name="busca" id="busca" placeholder="Busca">
-                  <select class="form-control" id="contatos_id" name="contatos_id">
-                    @if (!empty($atendimentos))
-                      <option value="0" selected> - Contatos - </option>
-                      @foreach($atendimentos as $key => $atendimento)
-                        <option value="{{$atendimento->contatos->id}}">{{$atendimento->contatos->nome}}</option>
-                      @endforeach
-                    @endif
-                  </select>
+                  <input type="text" class="form-control" name="contato" id="contato" placeholder="por nome do Contato">
                   <button type="submit" class="btn btn-success"><i class="fa fa-search"></i> Buscar</button>
                 </div>
               </form>

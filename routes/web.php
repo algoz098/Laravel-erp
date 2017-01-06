@@ -15,12 +15,10 @@ Route::get('/', 'HomeController@index');
 
 Auth::routes();
 
-Auth::routes();
-
 Route::get('/home', 'HomeController@index')->middleware('auth');
 Route::get('/lista/contatos', 'ContatosController@show')->name('contatos')->middleware('auth');
 Route::post('lista/contatos', 'ContatosController@search')->middleware('auth');
-Route::post('/lista/contatos/{id}/attach', 'ContatosController@attach')->middleware('auth');
+Route::post('lista/contatos/{id}/attach', 'ContatosController@attach')->middleware('auth');
 Route::get('lista/contatos/delete/{id}', 'ContatosController@delete')->middleware('auth');
 Route::get('lista/contatos/{id}/telefones', 'ContatosController@telefones')->middleware('auth');
 Route::post('lista/contatos/{id}/telefones', 'ContatosController@telefones_new')->middleware('auth');
@@ -45,7 +43,9 @@ Route::get('lista/contas/{id}/delete', 'ContasController@delete')->middleware('a
 Route::get('novo/contas', 'ContasController@novo')->middleware('auth');
 Route::post('novo/contas/busca', 'ContasController@searchContatos')->middleware('auth');
 Route::post('novo/contas', 'ContasController@add')->middleware('auth');
-Route::get('novo/contas/{id}', 'ContasController@edit')->middleware('auth');
+Route::get('novo/contas/{id}', 'ContasController@add_2')->middleware('auth');
+Route::post('novo/contas/{id}/parcelas', 'ContasController@add_3')->middleware('auth');
+Route::post('novo/contas/{id}/parcelas/{conta_id}', 'ContasController@add_4')->middleware('auth');
 
 Route::get('/lista/atendimentos', 'AtendimentoController@index')->middleware('auth')->name('atendimentos');
 Route::post('/lista/atendimentos/{id}/attach', 'AtendimentoController@attach')->middleware('auth');
@@ -71,6 +71,10 @@ Route::post('novo/estoque/busca', 'EstoqueController@searchContatos')->middlewar
 
 Route::get('lista/caixa', 'CaixasController@index')->middleware('auth');
 Route::post('lista/caixa', 'CaixasController@search')->middleware('auth');
+Route::get('lista/caixa/fechar', 'CaixasController@fechar')->middleware('auth');
+Route::get('lista/caixa/fechar/{id}', 'CaixasController@pendencias')->middleware('auth');
+Route::get('lista/caixa/fechar/{id}/concluir', 'CaixasController@concluir')->middleware('auth');
+Route::post('lista/caixa/fechar/{id}/movs/{id_mov}', 'CaixasController@prestacao')->middleware('auth');
 Route::get('lista/caixa/{id}/delete', 'CaixasController@delete')->middleware('auth');
 Route::get('novo/caixa', 'CaixasController@new_a')->middleware('auth');
 Route::post('novo/caixa', 'CaixasController@new_do')->middleware('auth');

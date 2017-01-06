@@ -7,7 +7,7 @@ use Carbon\Carbon;
     <div class="col-md-12">
       <div class="panel panel-default">
         <div class="panel-heading ">
-          <i class="fa fa-usd fa-1x"></i> Nova conta
+          <i class="fa fa-usd fa-1x"></i> Nova provisão de contas
         </div>
         <div class="panel-body">
           <div class="row">
@@ -27,25 +27,43 @@ use Carbon\Carbon;
             </div>
           </div>
           <div class="row">
-            <div class="col-md-4 h4">
+            <div class="col-md-12">
+              <div class="row list-contacts">
+                <div class="col-md-3">
+                  Opções
+                </div>
+                <div class="col-md-5">
+                  Razão Social
+                </div>
+                <div class="col-md-3">
+                  Nome Fantasia
+                </div>
+                <div class="col-md-1">
+                  Detalhes
+                </div>
+              </div>
               @foreach($contatos as $key => $contato)
                 <div class="row list-contacts">
-                  <div class="col-md-4 text-right">
-                    <a class="btn btn-info" onclick="
-                                                      $('#form').show();
-                                                      $('#contato').val('{{$contato->nome}}');
-                                                      $('#contatos_id').val('{{$contato->id}}');
-                    ">
+                  <div class="col-md-1">
+                    <a class="btn btn-info" href="{{ url('/novo/contas')}}/{{$contato->id}}">
                       <i class="fa fa-gear"></i>
                     </a>
                   </div>
-                  <div class="col-md-8">
+                  <div class="col-md-6">
                     {{$contato->nome}}
+                    @if ($contato->tipo=="1"){{ $contato->sobrenome }}@endif
+                    @if ($contato->id=="1")<span class="label label-danger">Matriz</span> @endif
+                  </div>
+                  <div class="col-md-4">
+                     @if ($contato->tipo!="1"){{ $contato->sobrenome }}@endif
+                  </div>
+                  <div class="col-md-1">
+                    <span class="label label-primary">{{date('d/m/Y', strtotime($contato->created_at))}}</label>
                   </div>
                 </div>
               @endforeach
             </div>
-            <form method="POST" action="{{ url('/novo/contas') }}">
+            <!-- <form method="POST" action="{{ url('/novo/contas') }}">
               <div class="col-md-4" style="display: none;" id="form">
                 {{ csrf_field() }}
                 <div class="form-group">
@@ -183,5 +201,5 @@ use Carbon\Carbon;
         </div>
       </div>
     </div>
-  </script>
+  </script>-->
 @endsection

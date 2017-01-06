@@ -3,7 +3,7 @@
   <div class="row">
     <div class="col-md-12">
       @if (!empty($contato->id))
-        <form method="POST" action="{{ url('/contatos') }}/{{$contato->id}}">
+        <form method="POST" action="{{ url('/novo/contatos') }}/{{$contato->id}}">
       @else
         <form method="POST" action="{{ url('novo/contatos') }}">
       @endif
@@ -11,7 +11,7 @@
         {{ csrf_field() }}
         <input type="hidden" name="id" value="{{$contato->id or "" }}">
         <div class="panel panel-default">
-          <div class="panel-heading"><i class="fa fa-users fa-1x"></i> Adicionar contato</div>
+          <div class="panel-heading"><i class="fa fa-users fa-1x"></i> Adicionar entidade</div>
           <div class="panel-body">
             <div class="row text-right">
               <div class="col-sm-offset-2 col-sm-10">
@@ -22,28 +22,28 @@
             <div class="row">
               <div class="col-md-4">
                 <div class="form-group">
-                  <label for="text">Tipo de Contato</label>
+                  <label for="text">Tipo de Entidade</label>
                   @if (!empty($contato) and $contato->id===1)
                     <select class="form-control" id="tipo" disabled>
-                      <option value="0" selected>Empresa</option>
+                      <option value="0" selected>PJ - Pessoa Juridica</option>
                     </select>
                   @elseif(!empty($contato) and $contato->tipo=="1")
                     <select class="form-control" name="tipo" id="tipo" >
                       <option value=""> - Escolha uma opção - </option>
-                      <option value="0" >Empresa</option>
-                      <option value="1" selected>Pessoa</option>
+                      <option value="0" >PJ - Pessoa Juridica</option>
+                      <option value="1" selected>PF - Pessoa Fisica</option>
                     </select>
                   @elseif(!empty($contato) and $contato->tipo=="0")
                     <select class="form-control" name="tipo" id="tipo" >
                       <option value=""> - Escolha uma opção - </option>
-                      <option value="0" selected>Empresa</option>
-                      <option value="1" >Pessoa</option>
+                      <option value="0" selected>PJ - Pessoa Juridica</option>
+                      <option value="1" >PF - Pessoa Fisica</option>
                     </select>
                   @else
                     <select class="form-control" id="tipo" name="tipo" onchange="tipoChange(this)">
                       <option value="" selected> - Escolha uma opção - </option>
-                      <option value="0" >Empresa</option>
-                      <option value="1" >Pessoa</option>
+                      <option value="0" >PJ - Pessoa Juridica</option>
+                      <option value="1" >PF - Pessoa Fisica</option>
                     </select>
                   @endif
                 </div>
@@ -213,6 +213,6 @@
       $(document).ready(tipoChange(a));
     @endif
 
-    
+
   </script>
 @endsection

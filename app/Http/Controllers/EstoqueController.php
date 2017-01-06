@@ -32,6 +32,13 @@ class EstoqueController extends Controller
 
   public function save(request $request)
   {
+    $this->validate($request, [
+        'contatos_id' => 'required',
+        'nome' => 'required|max:50',
+        'quantidade' => 'required|numeric',
+        'valor_custo' => 'required|numeric',
+        'barras' => 'required|max:30',
+    ]);
     $estoque = new Estoque;
     $estoque->contatos_id = $request->contatos_id;
     $estoque->nome = $request->nome;
@@ -54,6 +61,12 @@ class EstoqueController extends Controller
   }
   public function edit_save(request $request, $id)
   {
+    $this->validate($request, [
+        'nome' => 'required|max:50',
+        'quantidade' => 'required|numeric',
+        'valor_custo' => 'required|numeric',
+        'barras' => 'required|max:30',
+    ]);
     $estoque = Estoque::find($id);
     $estoque->nome = $request->nome;
     $estoque->descricao = $request->descricao;

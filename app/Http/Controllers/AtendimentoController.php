@@ -33,6 +33,10 @@ class AtendimentoController extends Controller
   }
 
   public function add(Request $request){
+    $this->validate($request, [
+        'assunto' => 'required|max:50',
+        'contatos_id' => 'required',
+    ]);
     $atendimento = new Atendimento;
     $atendimento->assunto = $request->assunto;
     $atendimento->contatos_id = $request->contatos_id;
@@ -62,8 +66,21 @@ class AtendimentoController extends Controller
     if (!empty($request->busca)){
       $atendimentos = $atendimentos->orWhere('assunto', 'like', '%' .  $request->busca . '%');
     }
-    if ($request->contatos_id!="0"){
-      $atendimentos = $atendimentos->orWhere('contatos_id', $request->contatos_id);
+    if (!empty($request->contato)){
+      $contatos = Contatos::where('nome', 'like', '%' .  $request->contato . '%')
+                            ->orWhere('sobrenome', 'like', '%' .  $request->contato . '%')
+                            ->orWhere('endereco', 'like', '%' .  $request->contato . '%')
+                            ->orWhere('cpf', 'like', '%' .  $request->contato . '%')
+                            ->orWhere('cidade', 'like', '%' .  $request->contato . '%')
+                            ->orWhere('uf', 'like', '%' .  $request->contato . '%')
+                            ->orWhere('bairro', 'like', '%' .  $request->contato . '%')
+                            ->orWhere('cep', 'like', '%' .  $request->contato . '%')
+                            ->get();
+        $a = 0;
+        while ($a < count($contatos)) {
+          $atendimentos = $atendimentos->orWhere('contatos_id', '=', $contatos[$a]->id);
+          $a++;
+        }
     }
     $atendimentos = $atendimentos->paginate(30);
     Log::info('Mostando atendimentos com busca -> "'.$request->busca.'", para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
@@ -98,6 +115,10 @@ class AtendimentoController extends Controller
   }
 
   public function edit(request $request, $id){
+    $this->validate($request, [
+        'assunto' => 'required|max:50',
+        'contatos_id' => 'required',
+    ]);
     $atendimento = Atendimento::find($id);
     $atendimento->assunto = $request->assunto;
     $atendimento->texto = $request->texto;

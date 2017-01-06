@@ -305,7 +305,7 @@ dd {
 
 menu,
 ol,
-ul {
+ul.menu {
     padding: 0 0 0 0px;
 }
 

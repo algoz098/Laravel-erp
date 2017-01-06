@@ -38,6 +38,7 @@ class VendasController extends Controller
     }
 
     public function confirmar($id, request $request){
+
       if ($id==0){
         $contato = "0";
       } else {
@@ -46,12 +47,16 @@ class VendasController extends Controller
 
       $total=0;
       foreach ($request->estoque as $key => $estoque) {
+        if($request->quantidade[$key]<"1"){
+          $messages = "Quantidade de um dos produtos invalido! Use valores positivos maiores que 0";
+          return redirect()->action('VendasController@index')->withErrors($messages);
+        }
         $produtos[$key] = Estoque::find($estoque);
         $produtos[$key]->quantidade = $request->quantidade[$key];
         $produtos[$key]->valor_custo = $request->quantidade[$key]*$produtos[$key]->valor_custo;
         $total = $total+$produtos[$key]->valor_custo;
       }
-      Log::info('Criando venda 3 passo para contato -> "'.$contato.'" com produtos -> "'.$produtos.'" no total "'.$total.'", para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
+      Log::info('Criando venda 3 passo para contato -> "'.$contato.'" -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
       return view('vendas.produtos')->with('produtos', $produtos)->with('contato', $contato)->with('total', $total);
     }
 

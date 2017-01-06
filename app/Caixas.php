@@ -11,7 +11,7 @@ class Caixas extends Model
 {
     use SoftDeletes;
 
-    public function contato()
+    public function filial()
     {
         return $this->belongsTo('App\Contatos', 'filial_id');
     }
@@ -21,8 +21,8 @@ class Caixas extends Model
         return $this->belongsTo('App\Contatos', 'funcionario_id');
     }
 
-    public function venda()
+    public function movs()
     {
-        return $this->belongsTo('App\Vendas', 'vendas_id');
+        return $this->hasMany('App\Movs', 'caixas_id');
     }
 }

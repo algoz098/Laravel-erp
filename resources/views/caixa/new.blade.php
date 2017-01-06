@@ -26,27 +26,44 @@
               <div class="col-md-3">
                 <div class="form-group">
                   <label for="tipo">Tipo de movimentação:</label>
-                  <select class="form-control" id="tipo" name="tipo">
-                    <option value="" selected> - Escolha uma opção - </option>
-                    <option value="2" >Movimentação</option>
-                    <option value="0" >Abertura de caixa</option>
-                    <option value="1" >Fechamento de caixa</option>
+                  <select class="form-control" id="tipo" name="tipo" onchange="abrirCaixa()">
+                    <option value=""> - Escolha uma opção - </option>
+                    <option value="0" selected>Entrada de valor</option>
+                    <option value="1" >Saida de valor</option>
+                    <option value="99" >Abrir o caixa</option>
+                  </select>
+                </div>
+              </div>
+              <div class="col-md-3" id="a">
+                <div class="form-group">
+                  <label for="tipo">Estado da movimentação:</label>
+                  <select class="form-control" id="estado" name="estado">
+                    <option value=""> - Escolha uma opção - </option>
+                    <option value="0" selected>Esperando retorno</option>
+                    <option value="1" >Já prestou contas</option>
                   </select>
                 </div>
               </div>
               <div class="col-md-3">
                 <div class="form-group">
-                  <label for="valor">Valor:</label>
-                  <input type="text" class="form-control" value="" id="valor" name="valor" >
+                  <label for="valor" id="valor_label">Valor:</label>
+                  <input type="numeric" class="form-control" value="" id="valor" name="valor" >
                 </div>
               </div>
-              <div class="col-md-3">
+            </div>
+            <div class="row">
+              <div class="col-md-3" id="b">
                 <div class="form-group">
-                  <label for="tipo_valor">Tipo de valor:</label>
-                  <select class="form-control" id="tipo_valor" name="forma">
-                    <option value="0" selected> Positivo + </option>
-                    <option value="1" >Negativo - </option>
-                  </select>
+                  <label for="contato">Descriçao:</label>
+                  <input type="text" class="form-control" name="nome" id="id">
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-12" id="c">
+                <div class="form-group">
+                  <label for="contato">Observações:</label>
+                  <textarea name="obs"></textarea>
                 </div>
               </div>
             </div>
@@ -55,4 +72,20 @@
       </div>
     </div>
   </div>
+<script language="javascript">
+function abrirCaixa() {
+  var a = $("#tipo").val();
+  if ( a == "99"){
+    $("#a").hide();
+    $("#b").hide();
+    $("#c").hide();
+    $("#valor_label").text('Valor inicial:');
+  } else {
+    $("#a").show();
+    $("#b").show();
+    $("#c").show();
+    $("#valor_label").text('Valor:');
+  }
+}
+</script>
 @endsection

@@ -1,3 +1,17 @@
+<?php
+$empresas = 0;
+$pessoas = 0;
+foreach ($contatos as $key => $contato) {
+  if ($contato->tipo=="0"){
+    $empresas = $empresas+1;
+  }
+  if ($contato->tipo=="1"){
+    $pessoas = $pessoas+1;
+  }
+}
+
+ ?>
+
 @extends('main')
 @section('content')
     <div class="row">
@@ -31,6 +45,20 @@
               </form>
             </div>
           </div>
+          <div class="row list-contacts">
+            <div class="col-md-3">
+              Opções
+            </div>
+            <div class="col-md-5">
+              Razão Social
+            </div>
+            <div class="col-md-3">
+              Nome Fantasia
+            </div>
+            <div class="col-md-1">
+              Detalhes
+            </div>
+          </div>
           @foreach($contatos as $key => $contato)
               <div class="row list-contacts">
                 <div class="col-md-3 ajuda-popover"
@@ -61,7 +89,7 @@
                   </span>
                   {{$contato->id}}
                 </div>
-                <div class="col-md-2 ajuda-popover"
+                <div class="col-md-5 ajuda-popover"
                     @if ($key==0)
                       title="Sociabilidade"
                       data-content="
@@ -79,9 +107,14 @@
                     <i class="fa fa-user level{{$contato->active}}"></i>
                   @endif
                   <i class="fa fa-signal level{{$contato->sociabilidade}}"></i>
-                  {{ str_limit($contato->nome, 10) }} {{ str_limit($contato->sobrenome, 3) }}
+                  {{ $contato->nome }}
+                  @if ($contato->tipo=="1"){{ $contato->sobrenome }}@endif
+                  @if ($contato->id=="1")<span class="label label-danger">Matriz</span> @endif
                 </div>
-                <div class="col-md-6 ajuda-popover"
+                <div class="col-md-3">
+                   @if ($contato->tipo!="1"){{ $contato->sobrenome }}@endif
+                </div>
+                <div class="col-md-1 ajuda-popover"
                     @if ($key==0)
                       title="Outras informações"
                       data-content="
@@ -90,15 +123,7 @@
                       data-placement="bottom"
                     @endif
                   >
-                  @foreach($contato->from as $key => $from)
-                    @if ($from->pivot->to_id==1)
-                      <span class="label label-warning">{{$from->pivot->from_text}}</span>
-                    @endif
-                  @endforeach
-                  @foreach($contato->telefones as $key => $telefone)
-                    <span class=""><span class="badge">{{$telefone->tipo}}</span> {{$telefone->numero}}</span>
-                  @endforeach
-                  {{$contato->endereco}} - {{$contato->bairro}} - {{$contato->cidade}} - {{$contato->uf}} -
+
                   <span class="label label-primary">{{date('d/m/Y', strtotime($contato->created_at))}}</label>
                 </div>
               </div>
@@ -253,7 +278,16 @@
             </div>
           </form>
           @endforeach
-
+          <div class="row">
+            <div class="col-md-10 text-center">
+              <span class="label label-primary">
+                PJ: {{$empresas}}
+              </span>&nbsp
+              <span class="label label-primary">
+                PF: {{$pessoas}}
+              </span>
+            </div>
+          </div>
           <div class="row">
             <div class="col-md-10 text-center">
               {{ $contatos->links() }}
