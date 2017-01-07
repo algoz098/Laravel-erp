@@ -47,7 +47,10 @@
               <div class="col-md-3">
                 <div class="form-group">
                   <label for="valor" id="valor_label">Valor:</label>
-                  <input type="numeric" class="form-control" value="" id="valor" name="valor" >
+                  <div class="input-group">
+                    <span class="input-group-addon" id="basic-addon1">R$</span>
+                    <input type="text" class="form-control" name="valor" id="valor" placeholder="Valor de custo">
+                  </div>
                 </div>
               </div>
             </div>

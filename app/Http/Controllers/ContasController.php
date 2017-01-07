@@ -10,7 +10,6 @@ use App\Contatos as Contatos;
 use App\Combobox_texts as Comboboxes;
 use Log;
 
-
 class ContasController extends Controller
 {
   public function index(){
@@ -21,7 +20,8 @@ class ContasController extends Controller
     } else {
       $deletados = 0;
     }
-    return view('contas.index')->with('contas', $contas)->with('deletados', $deletados);
+    $total= Contas::count();
+    return view('contas.index')->with('contas', $contas)->with('deletados', $deletados)->with('total', $total);
   }
   public function search(Request $request){
     $contas = Contas::query();

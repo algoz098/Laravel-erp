@@ -78,7 +78,13 @@
                   <input type="checkbox" name="active" id="active" value="1" checked>Dados Validos
                 </div>
               </div>
-              <div class="col-md-4 pull-right">
+              <div class="col-md-3">
+                <div class="form-group">
+                  <label for="codigo">Codigo</label>
+                  <input type="text" class="form-control" value="{{ $contato->codigo or "" }}" name="codigo" id="codigo" placeholder="Codigo">
+                </div>
+              </div>
+              <div class="col-md-3 pull-right">
                 <div class="form-group">
                   <label for="actived">Relação com a Matriz</label><br>
                   @if (!empty($contato) and $contato->id===1)

@@ -7,7 +7,7 @@ use Carbon\Carbon;
     <div class="col-md-12">
       <div class="panel panel-default">
         <div class="panel-heading ">
-          <i class="fa fa-bell-o fa-1x"></i> Novo estoque
+          <i class="fa fa-bell-o fa-1x"></i> Criar novo produto ao estoque
         </div>
         <div class="panel-body">
           <div class="row">
@@ -27,10 +27,10 @@ use Carbon\Carbon;
             </div>
           </div>
           <div class="row">
-            <div class="col-md-4 h4">
+            <div class="col-md-5">
               @foreach($contatos as $key => $contato)
                 <div class="row list-contacts">
-                  <div class="col-md-4 text-right">
+                  <div class="col-md-2 text-right">
                     <a class="btn btn-info" onclick="
                                                       $('#form').show();
                                                       $('#contato').val('{{$contato->nome}}');
@@ -39,8 +39,8 @@ use Carbon\Carbon;
                       <i class="fa fa-gear"></i>
                     </a>
                   </div>
-                  <div class="col-md-8">
-                    {{$contato->nome}}
+                  <div class="col-md-10">
+                    {{str_limit($contato->nome, 45)}}
                   </div>
                 </div>
               @endforeach
@@ -51,7 +51,7 @@ use Carbon\Carbon;
               </div>
             </div>
             <form method="POST" action="{{ url('/novo/estoque') }}">
-              <div class="col-md-8" style="display: none;" id="form">
+              <div class="col-md-7" style="display: none;" id="form">
                 {{ csrf_field() }}
                 <div class="form-group">
                   <label>Estoque para</label>
@@ -64,7 +64,10 @@ use Carbon\Carbon;
                 </div>
                 <div class="form-group">
                   <label>Valor</label>
-                  <input type="text" class="form-control" name="valor_custo" id="valor" placeholder="Valor de custo">
+                  <div class="input-group">
+                    <span class="input-group-addon" id="basic-addon1">R$</span>
+                    <input type="text" class="form-control" name="valor_custo" id="valor" placeholder="Valor de custo">
+                  </div>
                 </div>
                 <div class="form-group">
                   <label>Quantidade</label>

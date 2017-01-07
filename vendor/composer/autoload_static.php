@@ -435,6 +435,7 @@ class ComposerStaticIniteb7ed518eae24fc4a2b91da7f84bfb6b
         'ModifyCaixasTable' => __DIR__ . '/../..' . '/database/migrations/2017_01_05_145957_modify_caixas_table.php',
         'ModifyCodigoEstoqueTable' => __DIR__ . '/../..' . '/database/migrations/2016_12_22_183129_modify_codigo_estoque_table.php',
         'ModifyContasTable' => __DIR__ . '/../..' . '/database/migrations/2017_01_05_124255_modify_contas_table.php',
+        'ModifyContatosTable' => __DIR__ . '/../..' . '/database/migrations/2017_01_07_114240_modify_contatos_table.php',
         'ModifyEstoqueTable' => __DIR__ . '/../..' . '/database/migrations/2016_12_26_153252_modify_estoque_table.php',
         'PHPUnit\\Framework\\TestCase' => __DIR__ . '/..' . '/phpunit/phpunit/src/ForwardCompatibility/TestCase.php',
         'PHPUnit_Exception' => __DIR__ . '/..' . '/phpunit/phpunit/src/Exception.php',

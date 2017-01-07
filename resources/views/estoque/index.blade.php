@@ -125,6 +125,14 @@
                 </div>
               </div>
             @endforeach
+            <hr>
+            <div class="row">
+              <div class="col-md-10 text-center">
+                <span class="label label-primary">
+                  Total de atendimentos: {{ $total }}
+                </span>
+              </div>
+            </div>
             <div class="row">
               <div class="col-md-12 text-center">
                 {{ $estoques->links() }}

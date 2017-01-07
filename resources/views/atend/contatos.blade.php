@@ -27,7 +27,7 @@ use Carbon\Carbon;
             </div>
           </div>
           <div class="row">
-            <div class="col-md-5 h4">
+            <div class="col-md-5">
               @foreach($contatos as $key => $contato)
                 <div class="row list-contacts">
                   <div class="col-md-2 text-right">
@@ -39,8 +39,8 @@ use Carbon\Carbon;
                       <i class="fa fa-gear"></i>
                     </a>
                   </div>
-                  <div class="col-md-8">
-                    {{$contato->nome}}
+                  <div class="col-md-10">
+                    {{str_limit($contato->nome, 45)}}
                   </div>
                 </div>
               @endforeach

@@ -15,12 +15,13 @@ class EstoqueController extends Controller
   {
     Log::info('Vendo estoque, para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
     $estoques = Estoque::paginate(30);
+    $total= Estoque::count();
     if (is_array(Auth::user()->perms) and Auth::user()->perms["admin"]==1){
         $deletados = Estoque::onlyTrashed()->get();
     } else {
       $deletados = 0;
     }
-    return view('estoque.index')->with('estoques', $estoques)->with('deletados', $deletados);
+    return view('estoque.index')->with('estoques', $estoques)->with('deletados', $deletados)->with('total', $total);
   }
 
   public function novo()

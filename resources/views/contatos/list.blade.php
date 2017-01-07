@@ -4,7 +4,7 @@
     <div class="col-md-12">
       <div class="panel panel-default">
         <div class="panel-heading ">
-          <i class="fa fa-users fa-1x"></i> Lista de contatos
+          <i class="fa fa-users fa-1x"></i> Lista de entidades
         </div>
         <div class="panel-body">
           <div class="row">
@@ -73,7 +73,9 @@
                   <span class="btn btn-warning btn_xs" title="Anexos"  data-toggle="collapse" data-target="#attachs{{$contato->id}}" aria-expanded="">
                     <i class="fa fa-paperclip"></i>
                   </span>
-                  {{$contato->id}}
+                  <span class="label label-primary">
+                    {{{$contato->codigo!=""? $contato->codigo : $contato->id}}}
+                  </span>
                 </div>
                 <div class="col-md-5 ajuda-popover"
                     @if ($key==0)

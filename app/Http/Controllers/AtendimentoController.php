@@ -16,7 +16,8 @@ class AtendimentoController extends Controller
   public function index(){
     Log::info('Mostando atendimentos, para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
     $atendimentos = Atendimento::paginate(15);
-    return view('atend.index')->with('atendimentos', $atendimentos);
+    $total= Atendimento::count();
+    return view('atend.index')->with('atendimentos', $atendimentos)->with('total', $total);
   }
 
   public function show($id){

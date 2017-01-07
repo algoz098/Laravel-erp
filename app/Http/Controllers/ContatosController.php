@@ -75,6 +75,7 @@ class ContatosController extends Controller
   {
     $this->validate($request, [
         'nome' => 'required|max:50',
+        'relacao' => 'required',
     ]);
     $contato = new Contatos;
     $contato->nome = $request->nome;
@@ -91,6 +92,17 @@ class ContatosController extends Controller
     $contato->sociabilidade = $request->sociabilidade;
     $contato->tipo = $request->tipo;
     $contato->obs = $request->obs;
+    if ($request->codigo==""){
+      $last = Contatos::orderBy('id', 'desc')->where('tipo', $request->tipo)->first();
+      $codigo = intval(substr($last->codigo, 2))+1;
+      if ($request->tipo=="0"){
+        $contato->codigo = "PJ.00".$codigo;
+      } elseif ($request->tipo=="1"){
+        $contato->codigo = "PF.00".$codigo;
+      }
+    } else {
+      $contato->codigo = $request->codigo;
+    }
     if ($request->active=="1"){
         $contato->active = "4";
     }

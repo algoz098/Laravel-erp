@@ -39,7 +39,7 @@
         data-content="Numero de contatos que você possui"
         data-placement="bottom">
           <div class="panel panel-default text-center">
-              <div class="panel-heading"><i class="fa fa-users"></i> Contatos:</div>
+              <div class="panel-heading"><i class="fa fa-users"></i> Entidades:</div>
               <div class="panel-body">
                   <span style="font-size: 2em;">{!! count($contatos) !!}</span><br>
                   <a href="{{ url('lista/contatos') }}">Ver lista</a>

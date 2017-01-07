@@ -4,7 +4,7 @@
     <div class="col-md-12">
       <div class="panel panel-default">
         <div class="panel-heading ">
-          <i class="fa fa-list fa-1x"></i> Atendimentos
+          <i class="fa fa-list fa-1x"></i> Lista de atendimentos realizados
         </div>
         <div class="panel-body">
           <div class="row pull-right text-right">
@@ -35,13 +35,7 @@
           @if (!empty($atendimentos))
             @foreach($atendimentos as $key => $atendimento)
                 <div class="row list-contacts">
-                  <div class="col-md-2 text-left ajuda-popover"
-                    @if ($key==0)
-                        title="Opções"
-                        data-content="Deletar, detalhes e anexos."
-                        data-placement="top"
-                      @endif
-                  >
+                  <div class="col-md-2 text-left ajuda-popover" @if ($key==0) title="Opções" data-content="Deletar, detalhes e anexos." data-placement="top" @endif >
                     <a href="{{ url('lista/atendimentos') }}/{{$atendimento->id}}/delete" class="btn btn-danger btn_xs">
                       <i class="fa fa-ban"></i>
                     </a>
@@ -52,27 +46,21 @@
                       <i class="fa fa-paperclip"></i>
                     </span>
                   </div>
-                  <div class="col-md-2 text-left ajuda-popover"
-                      @if ($key==0)
-                        title="Criação e contato"
-                        data-content="Data do atendimento, e contato atendido."
-                        data-placement="bottom"
-                      @endif
-                  >
+                  <div class="col-md-1 text-left ajuda-popover" @if ($key==0) title="Criação e contato" data-content="Data do atendimento, e contato atendido." data-placement="bottom" @endif >
                     <span class="label label-info">
                       {{date('d/m/Y', strtotime($atendimento->created_at))}}
-                    </span>&nbsp
-                    <a href="{{ url('novo/contatos') }}/{{$atendimento->contatos->id}}" class="label label-primary"><i class="fa fa-user"></i> {{$atendimento->contatos->nome}}</a>
+                    </span>
                   </div>
-                  <div class="col-md-8 ajuda-popover"
-                      @if ($key==0)
-                        title="Detalhes"
-                        data-content="Assunto e descrição."
-                        data-placement="bottom"
-                      @endif
-                  >
-                    {{$atendimento->assunto}} -
-                    {{ str_limit(strip_tags($atendimento->texto, 35))}}
+                  <div class="col-md-3">
+                    <a href="{{ url('novo/contatos') }}/{{$atendimento->contatos->id}}" class="label label-primary">
+                      <i class="fa fa-user"></i> {{ str_limit($atendimento->contatos->nome, 30)}}
+                    </a>
+                  </div>
+                  <div class="col-md-2 ajuda-popover" @if ($key==0) title="Detalhes" data-content="Assunto e descrição." data-placement="bottom" @endif >
+                    {{$atendimento->assunto}}
+                  </div>
+                  <div class="col-md-4">
+                    {{ str_limit(strip_tags($atendimento->texto, 25))}}
                   </div>
                 </div>
                 <div class="sub-menu collapse " aria-expanded="" id="attachs{{$atendimento->id}}" style="padding-left: 100px; padding-top: 15px; padding-bottom: 30px;">
@@ -239,9 +227,14 @@
                     </div>
                   </div>
                 </div>
-
             @endforeach
-
+            <div class="row">
+              <div class="col-md-10 text-center">
+                <span class="label label-primary">
+                  Total de atendimentos: {{ $total }}
+                </span>
+              </div>
+            </div>
             <div class="row">
               <div class="col-md-10 text-center">
                 {{ $atendimentos->links() }}

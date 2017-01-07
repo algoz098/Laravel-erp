@@ -36,7 +36,17 @@
               <div class="col-md-9">
                 <div class="form-group">
                   <label for="text">Numero</label>
-                  <input type="text" class="form-control" value="" name="numero[0]" id="numero" placeholder="">
+                  <div class="input-group">
+                    <input type="text" class="form-control" value="" name="numero[0]" id="numero0" placeholder="">
+                    <div class="input-group-btn">
+                      <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">- Escolher formatação -  <span class="caret"></span></button>
+                      <ul class="dropdown-menu dropdown-menu-right">
+                        <li><a href="#" onclick="selMask(0, 0)">Mascara a usar: (99) 9.9999-9999</a></li>
+                        <li><a href="#" onclick="selMask(1, 0)">Mascara a usar: (99) 9999-9999</a></li>
+                        <li><a href="#" onclick="selMask(99, 0)">Remover mascara</a></li>
+                      </ul>
+                    </div><!-- /btn-group -->
+                  </div>
                 </div>
               </div>
             </div>
@@ -53,11 +63,23 @@
     $('#tipo', $clone).attr('name', 'tipo['+i+']');
     $('#numero', $clone).attr('name', 'numero['+i+']');
     $('.3397', $clone).attr('id', 'linha'+i);
+    $('#lia', $clone).attr('onclick', 'selMask(0, '+i+')');
+    $('#lib', $clone).attr('onclick', 'selMask(1, '+i+')');
+    $('#lic', $clone).attr('onclick', 'selMask(99, '+i+')');
     $clone.appendTo('#mais');
   }
   function remove() {
     $('#linha'+i).remove();
     i = i - 1;
+  }
+  function selMask(a, key){
+    if( a=='99'){
+      $('#numero'+key).mask("");
+    } if (a=='0'){
+      $('#numero'+key).mask("(99) 9.9999-9999");
+    } if (a=='1'){
+      $('#numero'+key).mask("(99) 9999-9999");
+    }
   }
   </script>
 
@@ -78,7 +100,17 @@
       <div class="col-md-9">
         <div class="form-group">
           <label for="text">Numero</label>
-          <input type="text" class="form-control" value="" name="numero[0]" id="numero" placeholder="">
+          <div class="input-group">
+            <input type="text" class="form-control" value="" name="numero[0]" id="numero" placeholder="">
+            <div class="input-group-btn">
+              <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">- Escolher formatação -  <span class="caret"></span></button>
+              <ul class="dropdown-menu dropdown-menu-right">
+                <li><a href="#" id="lia" onclick="selMask(0, 0)">Mascara a usar: (99) 9.9999-9999</a></li>
+                <li><a href="#" id="lib" onclick="selMask(1, 0)">Mascara a usar: (99) 9999-9999</a></li>
+                <li><a href="#" id="lic" onclick="selMask(99, 0)">Remover mascara</a></li>
+              </ul>
+            </div><!-- /btn-group -->
+          </div>
         </div>
       </div>
     </div>

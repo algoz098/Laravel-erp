@@ -29,4 +29,6 @@
    });
   });
 
+  $("#cep").mask("99999-999");
+  $("#valor").maskMoney({thousands:'', decimal:'.', allowZero:true});
 </script>
