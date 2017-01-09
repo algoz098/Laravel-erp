@@ -18,8 +18,18 @@
     toolbar: 'undo redo | insert | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image',
 
   });
-
-
+  jQuery(document).scroll(function() {
+      if (jQuery(this).scrollTop() > 175) {
+          jQuery('#secondNavbar').css({
+             'position': 'fixed',
+             'top': '50px',
+             'width': '100%'
+          });
+      }
+      else {
+          jQuery('.menu-secondary-wrap').css('position','static');
+      }
+  });
   $(document).ready(function(){
     $('#mostrarAjuda').on('click', function(){
         $(".ajuda-popover").popover('toggle');

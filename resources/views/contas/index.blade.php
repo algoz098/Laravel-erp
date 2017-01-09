@@ -150,8 +150,7 @@ foreach($contas as $key => $conta){
                 @endif
                   {{date('d/m/Y', strtotime($conta->vencimento))}}
                 </span>&nbsp
-                <a href="{{ url('/contatos') }}/{{$conta->contatos->id}}" class="label label-success"><i class="fa fa-user"></i> {{$conta->contatos->nome}}</a> -
-                 {{$conta->descricao}}
+                
               </div>
             </div>
 

@@ -47,6 +47,13 @@ body {
   padding: 0px;
   text-transform: uppercase;
 }
+#secondNavbar{
+  background-color: #fff;
+  height: 65px;
+  padding-top: 15px;
+  padding-bottom: 15px;
+  z-index: 1030;
+}
 .right-bar{
   margin-left: 310px;
 }

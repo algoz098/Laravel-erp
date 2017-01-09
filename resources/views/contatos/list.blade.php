@@ -7,17 +7,36 @@
           <i class="fa fa-users fa-1x"></i> Lista de entidades
         </div>
         <div class="panel-body">
-          <div class="row">
-            <div class="col-md-1 pull-right text-right ajuda-popover"
-                  title="Novo"
-                  data-content="Adicione um novo contato"
-                  data-placement="left">
-              <a href="{{ url('/novo/contatos') }}" class="btn btn-success"><i class="fa fa-plus fa-1x">
-                  </i> Novo</a>
+          <div class="row" id="secondNavbar">
+            <div class="col-md-7 text-left ajuda-popover"
+                  title="Opções"
+                  data-content="Deletar, editar/detalhes, telefones/emails, relacionamentos e anexos do contato"
+                  data-placement="top" >
+              <div class=" form-inline col-md-5 text-right">
+                <a id="buttonDelete" href="{{ url('lista/contatos') }}/delete/" class="btn btn-danger btn_xs " data-toggle="tooltip" title="Deletar">
+                  <i class="fa fa-ban" ></i>
+                </a>
+                <a id="buttonEdit" href="{{ url('novo/contatos') }}/" class="btn btn-primary btn_xs" data-toggle="tooltip" title="Detalhes">
+                  <i class="fa fa-pencil"></i>
+                </a>
+                <a id="buttonDetalhes" class="btn btn-primary btn_xs"   data-toggle="modal" data-target="#detalhes">
+                  </i><i class="fa fa-file-text"></i>
+                </a>
+                <a id="buttonTel" class="btn btn-primary btn_xs" title="Adicionar Telefone"  data-toggle="modal" data-target="#addTelefones">
+                  <i class="fa fa-phone"></i>
+                </a>
+                <span id="buttonRelate" class="btn btn-primary btn_xs" title="Relacionamentos"  data-toggle="collapse" data-target="#relacionamentos" aria-expanded="">
+                  <i class="fa fa-users"></i>
+                </span>
+                <span id="buttonAttach" class="btn btn-warning btn_xs" title="Anexos"  data-toggle="collapse" data-target="#attachs" aria-expanded="">
+                  <i class="fa fa-paperclip"></i>
+                </span>
+              </div>
+              <div class=" form-inline col-md-3 text-left">
+                <input type="text" class="form-control" size="4" name="ids" id="ids" placeholder="Detalhes" disabled>
+              </div>
             </div>
-          </div>
-          <div class="row">
-            <div class="col-md-12  ">
+            <div class="col-md-3">
               <form method="POST" action="{{ url('lista/contatos') }}/">
                 <div class="form-group form-inline text-center ajuda-popover"
                       title="Busca"
@@ -30,10 +49,17 @@
                 </div>
               </form>
             </div>
+            <div class="col-md-1 pull-right text-right ajuda-popover"
+                  title="Novo"
+                  data-content="Adicione um novo contato"
+                  data-placement="left">
+              <a href="{{ url('/novo/contatos') }}" class="btn btn-success"><i class="fa fa-plus fa-1x">
+                  </i> Novo</a>
+            </div>
           </div>
           <div class="row list-contacts">
-            <div class="col-md-3">
-              Opções
+            <div class="col-md-1">
+              IDs
             </div>
             <div class="col-md-5">
               Razão Social
@@ -41,41 +67,22 @@
             <div class="col-md-3">
               Nome Fantasia
             </div>
-            <div class="col-md-1">
+            <div class="col-md-1 pull-right">
               Detalhes
             </div>
           </div>
           @foreach($contatos as $key => $contato)
-              <div class="row list-contacts">
-                <div class="col-md-3 ajuda-popover"
-                    @if ($key==0)
-                      title="Opções"
-                      data-content="Deletar, editar/detalhes, telefones/emails, relacionamentos e anexos do contato"
-                      data-placement="top"
-                    @endif
-                >
-                  @if ($contato->id=='1')
-                    <a class="btn btn-danger btn_xs disabled" data-toggle="tooltip" title="Matriz, Nao apague">
-                  @else
-                    <a href="{{ url('lista/contatos') }}/delete/{{$contato->id}}" class="btn btn-danger btn_xs " data-toggle="tooltip" title="Deletar">
-                  @endif
-                    <i class="fa fa-ban" ></i>
-                  </a>
-                  <a href="{{ url('novo/contatos') }}/{{$contato->id}}" class="btn btn-primary btn_xs" data-toggle="tooltip" title="Detalhes">
-                    <i class="fa fa-file-text"></i>
-                  </a>
-                  <a class="btn btn-primary btn_xs" title="Adicionar Telefone"  data-toggle="modal" data-target="#addTelefones{{$contato->id}}">
-                    <i class="fa fa-phone"></i>
-                  </a>
-                  <span class="btn btn-primary btn_xs" title="Relacionamentos"  data-toggle="collapse" data-target="#relacionamentos{{$contato->id}}" aria-expanded="">
-                    <i class="fa fa-users"></i>
-                  </span>
-                  <span class="btn btn-warning btn_xs" title="Anexos"  data-toggle="collapse" data-target="#attachs{{$contato->id}}" aria-expanded="">
-                    <i class="fa fa-paperclip"></i>
-                  </span>
+              <div class="row list-contacts" onclick="selectRow({{$contato->id}})">
+                <div class="col-md-1">
                   <span class="label label-primary">
-                    {{{$contato->codigo!=""? $contato->codigo : $contato->id}}}
+                    {{{$contato->id}}}
                   </span>
+                  @if(is_null($contato->active))
+                    <i class="fa fa-user level1"></i>
+                  @else
+                    <i class="fa fa-user level{{$contato->active}}"></i>
+                  @endif
+                  <i class="fa fa-signal level{{$contato->sociabilidade}}"></i>
                 </div>
                 <div class="col-md-5 ajuda-popover"
                     @if ($key==0)
@@ -89,12 +96,6 @@
                       data-html="true"
                     @endif
                   >
-                  @if(is_null($contato->active))
-                    <i class="fa fa-user level1"></i>
-                  @else
-                    <i class="fa fa-user level{{$contato->active}}"></i>
-                  @endif
-                  <i class="fa fa-signal level{{$contato->sociabilidade}}"></i>
                   {{ $contato->nome }}
                   @if ($contato->tipo=="1"){{ $contato->sobrenome }}@endif
                   @if ($contato->id=="1")<span class="label label-danger">Matriz</span> @endif
@@ -102,7 +103,7 @@
                 <div class="col-md-3">
                    @if ($contato->tipo!="1"){{ $contato->sobrenome }}@endif
                 </div>
-                <div class="col-md-1 ajuda-popover"
+                <div class="col-md-1 pull-right ajuda-popover"
                     @if ($key==0)
                       title="Outras informações"
                       data-content="
@@ -181,7 +182,7 @@
                     <a href="{{ url('/attach') }}/{{$attach->id}}/get"><span class="label label-info" >Salvar</span></a>
                     <a href="{{ url('/attach') }}/{{$attach->id}}/delete"><span class="label label-danger" >Apagar</span></a>
                   </div>
-                  <div class="modal fade" id="attach{{$attach->id}}" tabindex="-1" role="dialog" aria-labelledby="upload">
+                  <div class="modal fade" id="attach{{$attach->id}}" tabindex="0" role="dialog" aria-labelledby="upload">
                     <div class="modal-dialog modal-lg extra" role="document">
                       <div class="modal-content">
                         <div class="modal-header">
@@ -233,6 +234,102 @@
                   <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                     <a href="{{ url('lista/contatos') }}/{{$contato->id}}/telefones"><button type="submit" class="btn btn-primary">Novo</button></a>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- Modal detalhes -->
+            <div class="modal fade" id="detalhes{{$contato->id}}" tabindex="-1" role="dialog" aria-labelledby="upload">
+              <div class="modal-dialog modal-lg extra" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id=""><i class="fa fa-user"></i> Detalhes de contato</h4>
+                  </div>
+                  <div class="modal-body">
+                    <div class="row">
+                      <div class="col-md-12" style="margin-bottom:15px;">
+                        <span class="h1" >
+                          <span class="label label-info">ID: {{$contato->id}}</span>
+                          @if(is_null($contato->active))
+                            <i class="fa fa-user level1"></i>
+                          @else
+                            <i class="fa fa-user level{{$contato->active}}"></i>
+                          @endif
+                          <i class="fa fa-signal level{{$contato->sociabilidade}}"></i>
+                        </span>
+                      </div>
+                    </div>
+                    <div class="row">
+                      @if ($contato->tipo=="0")
+                      <div class="col-md-6">
+                        {{$contato->nome}}
+                      </div>
+                      <div class="col-md-6">
+                        {{$contato->sobrenome}}
+                      </div>
+                      @else
+                        <div class="col-md-8">
+                          {{$contato->nome}}&nbsp{{$contato->sobrenome}}
+                        </div>
+                      @endif
+                    </div>
+                    <hr>
+                    <div class="row">
+                      <div class="col-md-6">
+                        {{$contato->cpf}}<br>
+                        {{$contato->cnpj}}
+                      </div>
+                      <div class="col-md-6">
+                        {{$contato->endereco}}{{{$contato->andar!=""?", $contato->andar":""}}}{{{$contato->sala!=""?", $contato->sala":""}}}<br>
+                        {{$contato->bairro}} - {{$contato->cidade}}, {{$contato->uf}}<br>
+                        {{$contato->cep}}
+                      </div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                      <div class="col-md-6">
+                        @foreach($contato->telefones as $key => $telefone)
+                          <a href="{{ url('lista/contatos') }}/{{$contato->id}}/telefones/{{ $telefone->id }}" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i></a>
+                          <a href="{{ url('lista/contatos') }}/{{$contato->id}}/telefones/{{ $telefone->id }}/delete" class="btn btn-danger btn-xs"><i class="fa fa-ban"></i></a>
+                          <span class="label label-info">{{ $telefone->tipo or "" }}</span> {{ $telefone->numero or "" }} <br>
+                        @endforeach
+                      </div>
+                      <div class="col-md-6">
+                        @foreach($contato->attachsToo as $key => $attach)
+                          <div class="row">
+                            {{$attach->name}}
+                            <a href="{{ url('/attach') }}/{{$attach->id}}/get"><span class="label label-info" >Download</span></a>
+                            <a href="{{ url('/attach') }}/{{$attach->id}}/delete"><span class="label label-danger" >Apagar</span></a>
+                          </div>
+                        @endforeach
+                      </div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                      <div class="col-md-11 pull-right">
+                        @foreach($contato->from as $key => $from)
+                          <div class="row">
+                            {{str_limit($from->nome, 20)}} é <span class="label label-info">{{$from->pivot->to_text}}</span> de {{str_limit($contato->nome, 20)}}
+                          </div>
+                        @endforeach
+                        @foreach($contato->to as $key => $to)
+                          <div class="row">
+                            {{str_limit($to->nome, 20)}} é <span class="label label-info">{{$to->pivot->from_text}}</span> de {{str_limit($contato->nome, 20)}}
+                          </div>
+                        @endforeach
+                      </div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                      <div class="col-md-12">
+                        {!! $contato->obs !!}
+                      </div>
+                    </div>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
+                    <a href="{{url('/novo/contatos/')}}/{{$contato->id}}" class="btn btn-primary"><i class="fa fa-pencil"></i> Editar</a>
                   </div>
                 </div>
               </div>
@@ -356,6 +453,15 @@
           $('#object' + id).attr("data", "{{ url('/attach') }}/"+id);
         });
       };
+      function selectRow(id){
+        $("#ids").val(id);
+        $("#buttonDelete").attr('href', '{{ url('lista/contatos') }}/delete/'+id);
+        $("#buttonEdit").attr('href', '{{ url('novo/contatos') }}/'+id);
+        $("#buttonTel").attr('data-target', '#addTelefones'+id);
+        $("#buttonRelate").attr('data-target', '#relacionamentos'+id);
+        $("#buttonAttach").attr('data-target', '#attachs'+id);
+        $("#buttonDetalhes").attr('data-target', '#detalhes'+id);
+      }
     </script>
   @endif
 @endsection

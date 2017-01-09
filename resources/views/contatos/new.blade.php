@@ -19,6 +19,15 @@
                 <button type="submit" class="btn btn-success"><i class="fa fa-check"></i> Salvar</button>
               </div>
             </div>
+            @if (!empty($contato->id))
+              <div class="row">
+                <div class="col-md-4">
+                  <h1>
+                    <span class="label label-info">ID: {{$contato->id}}</span>
+                  </h1>
+                </div>
+              </div>
+            @endif
             <div class="row">
               <div class="col-md-4">
                 <div class="form-group">
@@ -101,9 +110,11 @@
                       <option value="0" >Fornecedor</option>
                       <option value="1" >Cliente</option>
                       <option value="2" >Filial</option>
-                      @foreach($comboboxes as $key => $combobox)
-                        <option value="{{$combobox->text}}">{{$combobox->text}}</option>
-                      @endforeach
+                      @if (isset($comboboxes))
+                        @foreach($comboboxes as $key => $combobox)
+                          <option value="{{$combobox->text}}">{{$combobox->text}}</option>
+                        @endforeach
+                      @endif
                       <option value="" >Indefinido</option>
                     </select>
                   @endif
@@ -202,6 +213,8 @@
       $("#cpf").attr("placeholder", "CPF");
       $("#nome").attr("placeholder", "Nome");
       $("#sobrenome").attr("placeholder", "Sobrenome");
+      $("#cpf").mask("999.999.999-99")
+      $("#rg").mask("99.999.999-99")
     }
     if (selected.value=="0"){
       $("label[for='rg']").text("Inscrição Estadual");
@@ -212,6 +225,8 @@
       $("#cpf").attr("placeholder", "CNPJ");
       $("#nome").attr("placeholder", "Razão Social");
       $("#sobrenome").attr("placeholder", "Nome Fantasia");
+      $("#cpf").mask("99.999.999/9999-99")
+      $("#rg").mask("999.999.999.999")
     }
    }
    @if (isset($contato->tipo))
