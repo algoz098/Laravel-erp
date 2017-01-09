@@ -18,7 +18,7 @@
     toolbar: 'undo redo | insert | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image',
 
   });
-  jQuery(document).scroll(function() {
+  var scroll = jQuery(document).scroll(function() {
       if (jQuery(this).scrollTop() > 175) {
           jQuery('#secondNavbar').css({
              'position': 'fixed',
@@ -37,6 +37,10 @@
     $(".ajuda-popover").on('hidden.bs.popover', function(){
        //$(".ajuda-popover").popover("destroy");
    });
+  });
+
+  $(function() {
+    $( ".datepicker" ).datepicker({ dateFormat: "yy-mm-dd" });
   });
 
   $("#cep").mask("99999-999");

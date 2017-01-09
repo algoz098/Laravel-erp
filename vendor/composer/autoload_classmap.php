@@ -106,6 +106,7 @@ return array(
     'ModifyCaixasTable' => $baseDir . '/database/migrations/2017_01_05_145957_modify_caixas_table.php',
     'ModifyCodigoEstoqueTable' => $baseDir . '/database/migrations/2016_12_22_183129_modify_codigo_estoque_table.php',
     'ModifyContasTable' => $baseDir . '/database/migrations/2017_01_05_124255_modify_contas_table.php',
+    'ModifyContasTableDmField' => $baseDir . '/database/migrations/2017_01_09_164159_modify_contas_table_dm_field.php',
     'ModifyContatosTable' => $baseDir . '/database/migrations/2017_01_07_114240_modify_contatos_table.php',
     'ModifyEstoqueTable' => $baseDir . '/database/migrations/2016_12_26_153252_modify_estoque_table.php',
     'PHPUnit\\Framework\\TestCase' => $vendorDir . '/phpunit/phpunit/src/ForwardCompatibility/TestCase.php',

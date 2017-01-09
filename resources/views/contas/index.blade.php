@@ -150,7 +150,7 @@ foreach($contas as $key => $conta){
                 @endif
                   {{date('d/m/Y', strtotime($conta->vencimento))}}
                 </span>&nbsp
-                
+
               </div>
             </div>
 
@@ -234,6 +234,11 @@ foreach($contas as $key => $conta){
                             @endif
                           </div>
                         </div>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-md-5 text-center h3">
+                        DM: {{$conta->dm}}
                       </div>
                     </div>
                     <div class="row">

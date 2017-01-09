@@ -61,28 +61,34 @@ use Carbon\Carbon;
               </div>
               <hr>
               <div class="row">
-                <div class="col-md-3">
+                <div class="col-md-2">
                   <div class="form-group">
                     <label for="cheio">Vencimento</label>
                     <input string="numeric" class="form-control datepicker" id="vencimento" name="vencimento" value="{{Carbon::Now()}}">
                   </div>
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-2">
                   <div class="form-group">
                     <label for="cheio">Valor cheio</label>
                     <input type="numeric" class="form-control" id="cheio" name="cheio" placeholder="Valor">
                   </div>
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-2">
                   <div class="form-group">
                     <label for="cheio">Desconto</label>
                     <input type="numeric" class="form-control" id="desconto" name="desconto" placeholder="Valor">
                   </div>
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-3  ">
                   <div class="form-group">
                     <label for="parcelas">Quantidade de parcelas</label>
                     <input type="numeric" class="form-control" id="parcelas" name="parcelas" placeholder="Numero">
+                  </div>
+                </div>
+                <div class="col-md-3  ">
+                  <div class="form-group">
+                    <label for="parcelas">D.M. Numero de documento</label>
+                    <input type="numeric" class="form-control" id="dm" name="dm" placeholder="D.M.">
                   </div>
                 </div>
               </div>

@@ -12,7 +12,8 @@ class ContatosTableSeeder extends Seeder
     public function run()
     {
       DB::table('contatos')->insert([
-          'nome' => "Empresa"
+          'nome' => "Empresa",
+          'tipo' => "0"
       ]);
       DB::table('users')->insert([
           'contatos_id' => "1",

@@ -61,7 +61,7 @@ use Carbon\Carbon;
                 </div>
                 <div class="form-group">
                   <label>Assunto</label>
-                  <select class="form-control" ="assunto" id="assunto" >
+                  <select class="form-control" name="assunto" id="assunto" >
                     <option selected>- Escolha o assunto - </option>
                     @foreach($comboboxes as $key => $combobox)
                       <option value="{{$combobox->value}}">{{$combobox->text}}</option>

@@ -111,13 +111,13 @@ class ContasController extends Controller
     $conta->descricao = $request->descricao;
     $conta->tipo = $request->tipo;
     $conta->estado = $request->estado;
+    $conta->dm = $request->dm;
     $conta->save();
     $conta->referente = $conta->id;
     $conta->save();
     if ($request->parcelas>0){
       $i = 0;
       while ($i < count($request->valor)) {
-
         $parcela = new Contas;
         $parcela->contatos_id = $request->contatos_id;
         $parcela->referente = $conta->id;
@@ -181,6 +181,7 @@ class ContasController extends Controller
     $conta->vencimento = $request->vencimento;
     $conta->descricao = $request->descricao;
     $conta->tipo = $request->tipo;
+    $conta->dm = $request->dm;
     $conta->estado = $request->estado;
     if (!$request->desconto){
       $conta->desconto = "0";
@@ -217,6 +218,7 @@ class ContasController extends Controller
       $parcela1->vencimento = $request->vencimento[$key];
       $parcela1->descricao = "";
       $parcela1->tipo = $conta->tipo;
+      $conta->dm = $conta->dm;
       $parcela1->estado = "0";
       if ($request->desconto[$key]!=""){
         $parcela1->desconto = $request->desconto[$key];

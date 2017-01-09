@@ -21,47 +21,63 @@ class ContatosController extends Controller
   public function show()
   {
     Log::info('Lista de contatos para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
-
     $contatos = contatos::paginate(15);
     $total= contatos::count();
     $empresas = contatos::where('tipo', '0')->count();
     $pessoas = contatos::where('tipo', '1')->count();
-
-    if (is_array(Auth::user()->perms) and Auth::user()->perms["admin"]==1){
-        $deletados = Contatos::onlyTrashed()->get();
-    } else {
-      $deletados = 0;
-    }
+    $deletados = 0;
+    $comboboxes = comboboxes::where('combobox_textable_type', 'App\Relacionamento')->get();
     return view('contatos.list')
                 ->with('contatos', $contatos)
                 ->with('deletados', $deletados)
                 ->with('total', $total)
                 ->with('empresas', $empresas)
-                ->with('pessoas', $pessoas);
+                ->with('pessoas', $pessoas)
+                ->with('comboboxes', $comboboxes);
   }
 
   public function search( Request $request)
   {
+    #return $request->busca;
     Log::info('Busca de contatos usando -> "'.$request->busca.'", para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
-    if (!empty($request->busca)){
-      $contatos = Contatos::where('nome', 'like', '%' .  $request->busca . '%')
-                            ->orWhere('sobrenome', 'like', '%' .  $request->busca . '%')
-                            ->orWhere('endereco', 'like', '%' .  $request->busca . '%')
-                            ->orWhere('cpf', 'like', '%' .  $request->busca . '%')
-                            ->orWhere('cidade', 'like', '%' .  $request->busca . '%')
-                            ->orWhere('uf', 'like', '%' .  $request->busca . '%')
-                            ->orWhere('bairro', 'like', '%' .  $request->busca . '%')
-                            ->orWhere('cep', 'like', '%' .  $request->busca . '%')
-                            ->paginate(15);
-    } else {
-      $contatos = Contatos::paginate(15);
+    $contatos = Contatos::query();
+    if ($request->data_de and !$request->data_ate){
+      $contatos = $contatos->whereBetween('created_at', [$request->data_de, Carbon::today()]);
     }
-    if (is_array(Auth::user()->perms) and Auth::user()->perms["admin"]==1){
+    if ($request->data_de and $request->data_ate){
+      $contatos = $contatos->whereBetween('created_at', [$request->data_de, $request->data_ate]);
+    }
+    if (!empty($request->relacao)){
+      $a = $request->relacao;
+      $contatos = $contatos->whereHas('from', function ($query) use ($a){
+        $query->where('from_text', 'like', '%'.$a.'%');
+      });
+    }
+    if (!empty($request->busca)){
+      $contatos = $contatos->orWhere('nome', 'like', '%' .  $request->busca . '%');
+      $contatos = $contatos->orWhere('sobrenome', 'like', '%' .  $request->busca . '%');
+      $contatos = $contatos->orWhere('endereco', 'like', '%' .  $request->busca . '%');
+      $contatos = $contatos->orWhere('cpf', 'like', '%' .  $request->busca . '%');
+      $contatos = $contatos->orWhere('cidade', 'like', '%' .  $request->busca . '%');
+      $contatos = $contatos->orWhere('uf', 'like', '%' .  $request->busca . '%');
+      $contatos = $contatos->orWhere('bairro', 'like', '%' .  $request->busca . '%');
+      $contatos = $contatos->orWhere('cep', 'like', '%' .  $request->busca . '%');
+    }
+    $contatos = $contatos->paginate(15);
+    if ((is_array(Auth::user()->perms) and Auth::user()->perms["admin"]==1) and $request->deletados){
         $deletados = Contatos::onlyTrashed()->get();
     } else {
       $deletados = 0;
     }
-    return view('contatos.list')->with('contatos', $contatos)->with('deletados', $deletados);
+    $empresas = contatos::where('tipo', '0')->count();
+    $pessoas = contatos::where('tipo', '1')->count();
+    $total= contatos::count();
+    $comboboxes = comboboxes::where('combobox_textable_type', 'App\Relacionamento')->get();
+    return view('contatos.list')->with('contatos', $contatos)->with('deletados', $deletados)
+    ->with('total', $total)
+    ->with('empresas', $empresas)
+    ->with('pessoas', $pessoas)
+    ->with('comboboxes', $comboboxes);
   }
 
   public function showNovo()

@@ -17,15 +17,14 @@
         </div>
         <div class="row">
           <div class="col-md-3">
-            <label>Escolha o modulo</label>
+            <label>Modulo selecionado: </label>
             @if (isset($combobox))
               <select class="form-control" id="tipo" disabled>
                 <option value="{{substr($combobox->combobox_textable_type, 4)}}" selected>{{substr($combobox->combobox_textable_type, 4)}}</option>
               </select>
             @else
               <select class="form-control" id="tipo" name="tipo" onchange="changeModule()">
-                <option value="" selected> - Escolha uma opção - </option>
-                <option value="Telefones">Tipo de telefones</option>
+                <option value="Telefones" selected>Tipo de telefones</option>
                 <option value="Relacionamento">Relacionamento entre entidades</option>
                 <option value="Atendimentos">Assunto de atendimentos</option>
                 <option value="Contas">Referencia para provisão de contas</option>

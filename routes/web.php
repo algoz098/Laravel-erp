@@ -105,7 +105,12 @@ Route::get('/admin/update/do', 'AdminController@update_do')->middleware('auth')-
 Route::get('/admin/logs', 'AdminController@logs')->middleware('auth')->middleware('admin');
 
 Route::get('/admin/combobox', 'AdminController@combobox')->middleware('auth')->middleware('admin');
-Route::get('/admin/combobox/novo', 'AdminController@combobox_novo')->middleware('auth')->middleware('admin');
+Route::get('/novo/combobox/telefone', 'AdminController@combobox_novo_telefone')->middleware('auth')->middleware('admin');
+Route::get('/novo/combobox/relacao', 'AdminController@combobox_novo_relacao')->middleware('auth')->middleware('admin');
+Route::get('/novo/combobox/atend', 'AdminController@combobox_novo_atend')->middleware('auth')->middleware('admin');
+Route::get('/novo/combobox/contas', 'AdminController@combobox_novo_contas')->middleware('auth')->middleware('admin');
+Route::get('/novo/combobox/caixas', 'AdminController@combobox_novo_caixas')->middleware('auth')->middleware('admin');
+
 Route::post('/admin/combobox/novo', 'AdminController@combobox_salvar')->middleware('auth')->middleware('admin');
 Route::get('/admin/combobox/{id}', 'AdminController@combobox_edit')->middleware('auth')->middleware('admin');
 Route::post('/admin/combobox/novo/{id}', 'AdminController@combobox_atualizar')->middleware('auth')->middleware('admin');
