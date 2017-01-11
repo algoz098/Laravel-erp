@@ -246,6 +246,18 @@ foreach($contas as $key => $conta){
                         Parcelas
                       </div>
                     </div>
+                    @if (empty($conta->discriminacoes))
+                      @foreach($conta->discs as $key => $disc)
+                        <div class="row list-contacts">
+                          <div class="col-md-2 text-right">
+                            <span class="label label-info">{{$disc->nome}}</span>
+                          </div>
+                          <div class="col-md-2 text-right">
+                            <span class="label label-warning">R$ {{$disc->valor}}</span>
+                          </div>
+                        </div>
+                      @endforeach
+                    @endif
                     @if (empty($conta->parcelas[0]) and $conta->referencia)
                       @foreach($conta->referencia->parcelas as $key => $parcela)
                           <div class="row list-contacts">

@@ -8,6 +8,7 @@ use Carbon\Carbon;
 use App\Contas as Contas;
 use App\Contatos as Contatos;
 use App\Combobox_texts as Comboboxes;
+use App\Discriminacoes as Discs;
 use Log;
 
 class ContasController extends Controller
@@ -192,6 +193,15 @@ class ContasController extends Controller
     $conta->save();
     $conta->referente = $conta->id;
     $conta->save();
+    if ($request->tipo=="2"){
+      foreach ($request->disc_text as $key => $text) {
+        $disc = new Discs;
+        $disc->contas_id = $conta->id;
+        $disc->nome = $request->disc_text[$key];
+        $disc->valor = $request->disc_valor[$key];
+        $disc->save();
+      }
+    }
     Log::info('Adicionar CONTA passo 3, para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
     if ($request->parcelas>0){
       $i = 0;

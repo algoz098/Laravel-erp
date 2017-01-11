@@ -5,6 +5,7 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Contatos;
+use App\Discriminacoes;
 
 class Contas extends Model
 {
@@ -20,6 +21,10 @@ class Contas extends Model
   public function parcelas()
   {
       return $this->hasMany('App\Contas', 'referente');
+  }
+  public function discs()
+  {
+      return $this->hasMany('App\Discriminacoes');
   }
 
   public function referencia()
