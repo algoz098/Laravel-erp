@@ -3,11 +3,14 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Contatos;
 
 class Atendimento extends Model
 {
   protected $table = 'atendimentos';
+
+  use SoftDeletes;
 
   public function contatos()
   {

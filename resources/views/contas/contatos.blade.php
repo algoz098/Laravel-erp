@@ -1,6 +1,4 @@
-<?php
-use Carbon\Carbon;
-?>
+<?php use Carbon\Carbon; ?>
 @extends('main')
 @section('content')
   <div class="row">

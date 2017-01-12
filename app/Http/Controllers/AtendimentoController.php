@@ -16,8 +16,10 @@ class AtendimentoController extends Controller
   public function index(){
     Log::info('Mostando atendimentos, para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
     $atendimentos = Atendimento::paginate(15);
+    $deletados = "0";
     $total= Atendimento::count();
-    return view('atend.index')->with('atendimentos', $atendimentos)->with('total', $total);
+    $comboboxes = comboboxes::where('combobox_textable_type', 'App\Atendimentos')->get();
+    return view('atend.index')->with('atendimentos', $atendimentos)->with('total', $total)->with('comboboxes', $comboboxes)->with('deletados', $deletados);
   }
 
   public function show($id){
@@ -53,31 +55,39 @@ class AtendimentoController extends Controller
   }
 
   public function delete($id){
-    $atendimento = Atendimento::find($id);
+    $atendimento = Atendimento::withTrashed()->find($id);
     Log::info('Deletando atendimento -> "'.$atendimento.'", para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
-    $atendimento->delete();
+    if ($atendimento->trashed()) {
+      $atendimento->restore();
+    } else {
+      $atendimento->delete();
+    }
 
     return redirect()->action('AtendimentoController@index');
   }
 
   public function search( Request $request)
   {
+    #return $request;
     $atendimentos = atendimento::query();
-    if (!empty($request->data)){
-      $atendimentos = $atendimentos->whereRaw('date(created_at) = ?', [$request->data]);
+    if ($request->data_de and !$request->data_ate){
+      $atendimentos = $atendimentos->whereBetween('created_at', [$request->data_de, Carbon::today()]);
     }
-    if (!empty($request->busca)){
-      $atendimentos = $atendimentos->orWhere('assunto', 'like', '%' .  $request->busca . '%');
+    if ($request->data_de and $request->data_ate){
+      $atendimentos = $atendimentos->whereBetween('created_at', [$request->data_de, $request->data_ate]);
     }
-    if (!empty($request->contato)){
-      $contatos = Contatos::where('nome', 'like', '%' .  $request->contato . '%')
-                            ->orWhere('sobrenome', 'like', '%' .  $request->contato . '%')
-                            ->orWhere('endereco', 'like', '%' .  $request->contato . '%')
-                            ->orWhere('cpf', 'like', '%' .  $request->contato . '%')
-                            ->orWhere('cidade', 'like', '%' .  $request->contato . '%')
-                            ->orWhere('uf', 'like', '%' .  $request->contato . '%')
-                            ->orWhere('bairro', 'like', '%' .  $request->contato . '%')
-                            ->orWhere('cep', 'like', '%' .  $request->contato . '%')
+    if ($request->assunto!=""){
+      $atendimentos = $atendimentos->orWhere('assunto', $request->assunto);
+    }
+    if ($request->busca!=""){
+      $contatos = Contatos::where('nome', 'like', '%' .  $request->busca . '%')
+                            ->orWhere('sobrenome', 'like', '%' .  $request->busca . '%')
+                            ->orWhere('endereco', 'like', '%' .  $request->busca . '%')
+                            ->orWhere('cpf', 'like', '%' .  $request->busca . '%')
+                            ->orWhere('cidade', 'like', '%' .  $request->busca . '%')
+                            ->orWhere('uf', 'like', '%' .  $request->busca . '%')
+                            ->orWhere('bairro', 'like', '%' .  $request->busca . '%')
+                            ->orWhere('cep', 'like', '%' .  $request->busca . '%')
                             ->get();
         $a = 0;
         while ($a < count($contatos)) {
@@ -86,9 +96,19 @@ class AtendimentoController extends Controller
         }
     }
     $atendimentos = $atendimentos->paginate(30);
+
+    if ((is_array(Auth::user()->perms) and Auth::user()->perms["admin"]==1) and $request->deletados){
+        $deletados = atendimento::onlyTrashed()->get();
+    } else {
+      $deletados = 0;
+    }
+
+    $total= Atendimento::count();
+    $comboboxes = comboboxes::where('combobox_textable_type', 'App\Atendimentos')->get();
+
     Log::info('Mostando atendimentos com busca -> "'.$request->busca.'", para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
 
-    return view('atend.index')->with('atendimentos', $atendimentos);
+    return view('atend.index')->with('atendimentos', $atendimentos)->with('total', $total)->with('comboboxes', $comboboxes)->with('deletados', $deletados);
   }
 
   public function searchContatos( Request $request)

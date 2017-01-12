@@ -11,7 +11,7 @@
            <li>
              <a class="navbar-brand" id="mostrarAjuda" href="#"><i class="fa fa-question fa-1x"></i></a>
            </li>
-           <li><a href="#">Olá, {{Auth::user()->contato->nome}}</a></li>
+           <li><a href="#">Olá, {{explode(' ', Auth::user()->contato->nome, 2)[0]}}</a></li>
            <li class="dropdown">
              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
                <i class="fa fa-cog ajuda-popover"

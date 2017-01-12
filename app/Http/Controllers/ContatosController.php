@@ -108,8 +108,10 @@ class ContatosController extends Controller
     $contato->tipo = $request->tipo;
     $contato->obs = $request->obs;
     $contato->codigo = $request->codigo;
-    if ($request->active=="1"){
+    if ($request->active){
         $contato->active = "4";
+    } else {
+      $contato->active="1";
     }
     $contato->save();
     if ($request->relacao=="0"){
@@ -198,8 +200,10 @@ class ContatosController extends Controller
     $contato->sociabilidade = $request->sociabilidade;
     $contato->tipo = $request->tipo;
     $contato->obs = $request->obs;
-    if ($request->active=="1"){
+    if ($request->active){
         $contato->active = "4";
+    } else {
+      $contato->active="1";
     }
     $contato->save();
     if ($request->relacao=="0"){
