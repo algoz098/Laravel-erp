@@ -13,12 +13,14 @@
             <button type="submit" class="btn btn-success">
               <i class="fa fa-plus"></i> Salvar
             </button>
-            <a class="btn btn-danger" onclick="remove()">
-              <i class="fa fa-minus"></i>
-            </a>
-            <a class="btn btn-success" onclick="add()">
-              <i class="fa fa-plus"></i>
-            </a>
+            @if (!isset($combobox))
+              <a class="btn btn-danger" onclick="remove()">
+                <i class="fa fa-minus"></i>
+              </a>
+              <a class="btn btn-success" onclick="add()">
+                <i class="fa fa-plus"></i>
+              </a>
+            @endif
           </div>
         </div>
         <div class="row">

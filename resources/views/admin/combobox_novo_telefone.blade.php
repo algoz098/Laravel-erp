@@ -13,12 +13,14 @@
             <button type="submit" class="btn btn-success">
               <i class="fa fa-plus"></i> Salvar
             </button>
-            <a class="btn btn-danger" onclick="remove()">
-              <i class="fa fa-minus"></i>
-            </a>
-            <a class="btn btn-success" onclick="add()">
-              <i class="fa fa-plus"></i>
-            </a>
+            @if (!isset($combobox))
+              <a class="btn btn-danger" onclick="remove()">
+                <i class="fa fa-minus"></i>
+              </a>
+              <a class="btn btn-success" onclick="add()">
+                <i class="fa fa-plus"></i>
+              </a>
+            @endif
           </div>
         </div>
         <div class="row">
@@ -39,6 +41,10 @@
             <label id="textLabel">Texto da opção</label>
             <input value="{{{isset($combobox) ? $combobox->text : ""}}}" type="text" class="form-control" id="text[0]" name="text[0]">
           </div>
+          <div class="col-md-3" id="maskHolder">
+            <label id="maskLabel">Mascara</label>
+            <input value="{{{isset($combobox) ? $combobox->field : ""}}}" type="field" class="form-control" id="mask[0]" name="mask[0]">
+          </div>
         </div>
         <span id="mais"></span>
       </form>
@@ -51,6 +57,8 @@
     i = i + 1;
     $('#tipo', $clone).attr('name', 'tipo['+i+']');
     $('#text', $clone).attr('name', 'text['+i+']');
+    $('#hidden', $clone).attr('name', 'tipo['+i+']');
+    $('#mask', $clone).attr('name', 'mask['+i+']');
     $('#hidden', $clone).attr('name', 'tipo['+i+']');
     $('.3397', $clone).attr('id', 'linha'+i);
     $clone.appendTo('#mais');
@@ -80,6 +88,10 @@
       <div class="col-md-3" id="textHolder">
         <label id="textLabel">Texto da opção</label>
         <input value="{{{isset($combobox) ? $combobox->text : ""}}}" type="text" class="form-control" id="text" name="text">
+      </div>
+      <div class="col-md-3" id="maskHolder">
+        <label id="maskLabel">Mascara</label>
+        <input value="{{{isset($combobox) ? $combobox->field : ""}}}" type="field" class="form-control" id="mask" name="mask">
       </div>
     </div>
   </div>

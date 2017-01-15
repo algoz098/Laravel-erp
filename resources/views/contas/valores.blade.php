@@ -40,11 +40,10 @@ use Carbon\Carbon;
                   <div class="form-group">
                     <label>Formas de pagamento</label>
                     <select class="form-control" id="forma" name="forma">
-                      <option value="0" selected>Dinheiro</option>
-                      <option value="1">Cartão de credito</option>
-                      <option value="2">Cartão de debito</option>
-                      <option value="3">Cheque</option>
-                      <option value="4">Deposito em conta</option>
+                      <option value="" selected>- Escolha - </option>
+                      @foreach($comboboxes2 as $key => $combobox)
+                        <option value="{{$combobox->value}}">{{$combobox->text}}</option>
+                      @endforeach
                     </select>
                   </div>
                 </div>
@@ -92,16 +91,26 @@ use Carbon\Carbon;
                     </div>
                   </div>
                 </div>
-                <div class="col-md-3  ">
+                <div class="col-md-2  ">
                   <div class="form-group">
-                    <label for="parcelas">Quantidade de parcelas</label>
+                    <label for="parcelas">Qtd de parcelas</label>
                     <input type="numeric" class="form-control integer-mask" id="parcelas" name="parcelas" placeholder="Numero" onchange="parcelaChange()">
                   </div>
                 </div>
                 <div class="col-md-3  ">
                   <div class="form-group">
-                    <label for="parcelas">D.M. Numero de documento</label>
+                    <label for="parcelas">D.M. - Num. documento</label>
                     <input type="numeric" class="form-control" id="dm" name="dm" placeholder="D.M.">
+                  </div>
+                </div>
+                <div class="col-md-1">
+                  <div class="form-group">
+                    <label>Estado</label>
+                    <select class="form-control" id="estado" name="estado">
+                      <option value="">- Escolha -</option>
+                      <option value="0">Pago</option>
+                      <option value="1">A pagar</option>
+                    </select>
                   </div>
                 </div>
               </div>
@@ -181,8 +190,10 @@ use Carbon\Carbon;
       i = i + 1;
       $('#disc_text', $clone).attr('name', 'disc_text['+i+']');
       $('#disc_valor', $clone).attr('name', 'disc_valor['+i+']');
+        $('#disc_valor', $clone).maskMoney({thousands:'', decimal:'.', allowZero:true});
       $('.3397', $clone).attr('id', 'linha'+i);
       $clone.appendTo('#mais');
+      $
     }
     function remove() {
       $('#linha'+i).remove();

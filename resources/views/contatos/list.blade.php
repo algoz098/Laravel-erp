@@ -10,7 +10,7 @@
           <form method="POST" action="{{ url('lista/contatos') }}/">
             <div id="secondNavbar" class="row">
               <div class="row">
-                <div class="col-md-4 text-left ajuda-popover"
+                <div class="col-md-3 text-left ajuda-popover"
                       title="Opções"
                       data-content="Deletar, editar/detalhes, telefones/emails, relacionamentos e anexos do contato"
                       data-placement="top" >
@@ -23,9 +23,6 @@
                     </a>
                     <a id="buttonDetalhes" class="btn btn-primary btn_xs"   data-toggle="modal" data-target="#detalhes">
                       </i><i class="fa fa-file-text"></i>
-                    </a>
-                    <a id="buttonTel" class="btn btn-primary btn_xs" title="Adicionar Telefone"  data-toggle="modal" data-target="#addTelefones">
-                      <i class="fa fa-phone"></i>
                     </a>
                     <span id="buttonRelate" class="btn btn-primary btn_xs" title="Relacionamentos"  data-toggle="collapse" data-target="#relacionamentos" aria-expanded="">
                       <i class="fa fa-users"></i>
@@ -237,35 +234,16 @@
                   </div>
                 @endforeach
               </div>
-            <!-- Modal -->
-            <div class="modal fade" id="addTelefones{{$contato->id}}" tabindex="-1" role="dialog" aria-labelledby="addTelefonesLabel">
-              <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                  <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title" id="addTelefonesLabel">Adicionar Telefone</h4>
-                  </div>
-                  <div class="modal-body">
-                      @foreach($contato->telefones as $key => $telefone)
-                          <a href="{{ url('lista/contatos') }}/{{$contato->id}}/telefones/{{ $telefone->id }}" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i></a>
-                          <a href="{{ url('lista/contatos') }}/{{$contato->id}}/telefones/{{ $telefone->id }}/delete" class="btn btn-danger btn-xs"><i class="fa fa-ban"></i></a>
-                          {{ $telefone->tipo or "" }} {{ $telefone->numero or "" }} <br>
-                      @endforeach
-                  </div>
-                  <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    <a href="{{ url('lista/contatos') }}/{{$contato->id}}/telefones"><button type="submit" class="btn btn-primary">Novo</button></a>
-                  </div>
-                </div>
-              </div>
-            </div>
             <!-- Modal detalhes -->
             <div class="modal fade" id="detalhes{{$contato->id}}" tabindex="-1" role="dialog" aria-labelledby="upload">
               <div class="modal-dialog modal-lg extra" role="document">
                 <div class="modal-content">
                   <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title" id=""><i class="fa fa-user"></i> Detalhes de contato</h4>
+                    <h4 class="modal-title" id="">
+                      <i class="fa fa-user"></i>
+                      Detalhes
+                    </h4>
                   </div>
                   <div class="modal-body">
                     <div class="row">
@@ -284,22 +262,23 @@
                     <div class="row">
                       @if ($contato->tipo=="0")
                       <div class="col-md-6">
-                        {{$contato->nome}}
+                        Razão Social: {{$contato->nome}}
                       </div>
                       <div class="col-md-6">
-                        {{$contato->sobrenome}}
+                        Nome Fantasia: {{$contato->sobrenome}}
                       </div>
                       @else
                         <div class="col-md-8">
-                          {{$contato->nome}}&nbsp{{$contato->sobrenome}}
+                          Nome: {{$contato->nome}}&nbsp{{$contato->sobrenome}}
                         </div>
                       @endif
                     </div>
                     <hr>
                     <div class="row">
                       <div class="col-md-6">
-                        {{$contato->cpf}}<br>
-                        {{$contato->cnpj}}
+                        {{{$contato->tipo=="0" ? "CNPJ" : "CPF"}}}: {{$contato->cpf}}<br>
+                        {{{$contato->tipo=="0" ? "I.E." : "RG"}}}: {{$contato->cnpj}}<br>
+                        Cod. Pref.:{{$contato->cod_prefeitura}}
                       </div>
                       <div class="col-md-6">
                         {{$contato->endereco}}{{{$contato->andar!=""?", $contato->andar":""}}}{{{$contato->sala!=""?", $contato->sala":""}}}<br>
@@ -311,7 +290,6 @@
                     <div class="row">
                       <div class="col-md-6">
                         @foreach($contato->telefones as $key => $telefone)
-                          <a href="{{ url('lista/contatos') }}/{{$contato->id}}/telefones/{{ $telefone->id }}" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i></a>
                           <a href="{{ url('lista/contatos') }}/{{$contato->id}}/telefones/{{ $telefone->id }}/delete" class="btn btn-danger btn-xs"><i class="fa fa-ban"></i></a>
                           <span class="label label-info">{{ $telefone->tipo or "" }}</span> {{ $telefone->numero or "" }} <br>
                         @endforeach

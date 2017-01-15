@@ -13,12 +13,14 @@
             <button type="submit" class="btn btn-success">
               <i class="fa fa-plus"></i> Salvar
             </button>
-            <a class="btn btn-danger" onclick="remove()">
-              <i class="fa fa-minus"></i>
-            </a>
-            <a class="btn btn-success" onclick="add()">
-              <i class="fa fa-plus"></i>
-            </a>
+            @if (!isset($combobox))
+              <a class="btn btn-danger" onclick="remove()">
+                <i class="fa fa-minus"></i>
+              </a>
+              <a class="btn btn-success" onclick="add()">
+                <i class="fa fa-plus"></i>
+              </a>
+            @endif
           </div>
         </div>
         <div class="row">
@@ -37,7 +39,7 @@
           </div>
           <div class="col-md-3" id="textHolder">
             <label id="textLabel"><span class="label label-info">Primeira entidade</span> é</label>
-            <input value="{{{isset($combobox) ? $combobox->text : ""}}}" type="text" class="form-control" id="value[0]" name="value[0]">
+            <input value="{{{isset($combobox) ? $combobox->value : ""}}}" type="text" class="form-control" id="value[0]" name="value[0]">
             <label id="textLabel">de <span class="label label-warning">Segunda pessoa</span></label>
           </div>
           <div class="col-md-3" id="textHolder">

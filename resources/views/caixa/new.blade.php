@@ -9,7 +9,7 @@
         <form method="POST" action="{{ url('/novo/caixa') }}">
           <div class="panel-body">
             {{ csrf_field() }}
-            <input type="hidden" name="id" value="{{ Auth::user()->trabalho->id }}">
+            <input type="hidden" name="caixa_id" value="{{ Auth::user()->trabalho->id }}">
             <div class="row text-right">
               <div class="col-sm-offset-2 col-sm-10">
                 <a class="btn btn-warning" href="{{ url('lista/caixa')}}" ><i class="fa fa-money"></i> Voltar a Lista</a>
@@ -19,8 +19,15 @@
             <div class="row">
               <div class="col-md-3">
                 <div class="form-group">
-                  <label for="contato">Movimentação da Filial:</label>
-                  <input type="text" class="form-control" value="{{ Auth::user()->trabalho->nome }}" id="id" disabled>
+                  @if (isset($caixa))
+                    <label for="contato">Caixa numero:</label>
+                    <input type="text" class="form-control" value="{{$caixa->id}} (na {{$caixa->filial->nome}})" id="id" disabled>
+                    <input type="hidden" class="form-control" name="caixa" value="{{$caixa->id}}" id="id" disabled>
+
+                  @else
+                    <label for="contato">Movimentação da Filial:</label>
+                    <input type="text" class="form-control" value="{{ Auth::user()->trabalho->nome }}" id="id" disabled>
+                  @endif
                 </div>
               </div>
               <div class="col-md-3">

@@ -79,6 +79,7 @@ Route::post('lista/caixa/fechar/{id}/movs/{id_mov}', 'CaixasController@prestacao
 Route::get('lista/caixa/{id}/delete', 'CaixasController@delete')->middleware('auth');
 Route::get('novo/caixa', 'CaixasController@new_a')->middleware('auth');
 Route::post('novo/caixa', 'CaixasController@new_do')->middleware('auth');
+Route::get('novo/caixa/{id}', 'CaixasController@movimentacao_novo')->middleware('auth');
 
 Route::get('lista/vendas', 'VendasController@index')->middleware('auth');
 Route::get('novo/vendas', 'VendasController@novo')->middleware('auth');

@@ -36,7 +36,7 @@ use Carbon\Carbon;
                 <div class="col-md-1">
                   <span class="label label-info">ID: {{$mov->id}}</label>
                 </div>
-                <div class="col-md-1">
+                <div class="col-md-2">
                   @if ($mov->tipo=="1")
                     <span class="label label-danger">Saida de valor</span>
                   @elseif ($mov->tipo=="0")

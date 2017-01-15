@@ -84,11 +84,13 @@ class ContatosController extends Controller
   {
     Log::info('Criando novo contato, para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
     $comboboxes = comboboxes::where('combobox_textable_type', 'App\Relacionamento')->get();
-    return view('contatos.new')->with('comboboxes', $comboboxes);
+    $comboboxes_telefones = comboboxes::where('combobox_textable_type', 'App\Telefones')->get();
+    return view('contatos.new')->with('comboboxes', $comboboxes)->with('comboboxes_telefones', $comboboxes_telefones);
   }
 
   public function novo( Request $request )
   {
+    #return $request;
     $this->validate($request, [
         'nome' => 'required|max:50'
     ]);
@@ -107,6 +109,7 @@ class ContatosController extends Controller
     $contato->sociabilidade = $request->sociabilidade;
     $contato->tipo = $request->tipo;
     $contato->obs = $request->obs;
+    $contato->cod_prefeitura = $request->cod_prefeitura;
     $contato->codigo = $request->codigo;
     if ($request->active){
         $contato->active = "4";
@@ -114,55 +117,30 @@ class ContatosController extends Controller
       $contato->active="1";
     }
     $contato->save();
-    if ($request->relacao=="0"){
-      $data = [
-        $contato->id =>
-        [
-          'from_text' => "Fornecedor",
-          'to_id' => 1,
-          'to_text' => "Cliente"
-        ]
-      ];
+    foreach ($request->tipo_tel as $key => $tipo) {
+      $telefone = new Telefones;
+      $telefone->contatos_id = $contato->id;
+      $telefone->tipo = $request->tipo_tel[$key];
+      $telefone->numero = $request->numero_tel[$key];
+      $telefone->contato = $request->contato_tel[$key];
+      $telefone->setor = $request->setor_tel[$key];
+      $telefone->ramal = $request->ramal_tel[$key];
+      $telefone->save();
+    }
 
-      $contato->from()->sync($data, false);
-    } elseif ($request->relacao=="1"){
-      $data = [
-        $request->from_id =>
-        [
-          'from_text' => "Cliente",
-          'to_id' => 1,
-          'to_text' => "Fornecedor"
-        ]
-      ];
+    $combobox = Comboboxes::where('text', $request->relacao)->first();
+    #return $combobox;
+    if ($combobox){
 
-      $contato->from()->sync($data, false);
-    } elseif ($request->relacao=="2"){
       $data = [
         $request->from_id =>
         [
-          'from_text' => "Filial",
+          'from_text' => $combobox->text,
           'to_id' => 1,
-          'to_text' => "Matriz"
+          'to_text' => $combobox->value
         ]
       ];
-
       $contato->from()->sync($data, false);
-    } else {
-      $combobox = Comboboxes::where('text', $request->relacao)->first();
-      #return $combobox;
-      if ($combobox){
-
-        $data = [
-          $request->from_id =>
-          [
-            'from_text' => $combobox->text,
-            'to_id' => 1,
-            'to_text' => $combobox->value
-          ]
-        ];
-        $contato->from()->sync($data, false);
-      }
-
     }
 
     Log::info('Busca de contatos usando -> "'.$request.'", resultando em -> "'.$contato.'" para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
@@ -173,8 +151,10 @@ class ContatosController extends Controller
   public function showId( $id )
   {
     $contato = contatos::find($id);
+    $comboboxes = comboboxes::where('combobox_textable_type', 'App\Relacionamento')->get();
+    $comboboxes_telefones = comboboxes::where('combobox_textable_type', 'App\Telefones')->get();
     Log::info('Detalhes de contato -> "'.$contato.'", para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
-    return view('contatos.new')->with('contato', $contato);
+    return view('contatos.new')->with('contato', $contato)->with('comboboxes', $comboboxes)->with('comboboxes_telefones', $comboboxes_telefones);
   }
 
   public function update( Request $request, $id )
@@ -199,6 +179,8 @@ class ContatosController extends Controller
     $contato->cep = $request->cep;
     $contato->sociabilidade = $request->sociabilidade;
     $contato->tipo = $request->tipo;
+    $contato->codigo = $request->codigo;
+    $contato->cod_prefeitura = $request->cod_prefeitura;
     $contato->obs = $request->obs;
     if ($request->active){
         $contato->active = "4";
@@ -206,40 +188,42 @@ class ContatosController extends Controller
       $contato->active="1";
     }
     $contato->save();
-    if ($request->relacao=="0"){
-      $data = [
-        $contato->id =>
-        [
-          'from_text' => "Cliente",
-          'to_id' => 1,
-          'to_text' => "Fornecedor"
-        ]
-      ];
-
-      $contato->from()->sync($data, false);
+    if ($request->id_tel){
+      foreach ($request->tipo_id as $a => $tipo_id) {
+        $telefone = Telefones::find($request->id_tel[$a]);
+        $telefone->tipo = $request->tipo_id[$a];
+        $telefone->numero = $request->numero_id[$a];
+        $telefone->contato = $request->contato_id[$a];
+        $telefone->setor = $request->setor_id[$a];
+        $telefone->ramal = $request->ramal_id[$a];
+        $telefone->save();
+      }
     }
-    if ($request->relacao=="1"){
+    if ($request->tipo_tel){
+      foreach ($request->tipo_tel as $key => $tipo) {
+        $telefone = new Telefones;
+        $telefone->contatos_id = $contato->id;
+        $telefone->tipo = $request->tipo_tel[$key];
+        $telefone->numero = $request->numero_tel[$key];
+        $telefone->contato = $request->contato_tel[$key];
+        $telefone->setor = $request->setor_tel[$key];
+        $telefone->ramal = $request->ramal_tel[$key];
+        $telefone->save();
+      }
+    }
+
+    $combobox = Comboboxes::where('text', $request->relacao)->first();
+    #return $combobox;
+    if ($combobox){
+
       $data = [
         $request->from_id =>
         [
-          'from_text' => "Fornecedor",
+          'from_text' => $combobox->text,
           'to_id' => 1,
-          'to_text' => "Cliente"
+          'to_text' => $combobox->value
         ]
       ];
-
-      $contato->from()->sync($data, false);
-    }
-    if ($request->relacao=="2"){
-      $data = [
-        $request->from_id =>
-        [
-          'from_text' => "Filial",
-          'to_id' => 1,
-          'to_text' => "Matriz"
-        ]
-      ];
-
       $contato->from()->sync($data, false);
     }
 

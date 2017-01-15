@@ -16,16 +16,23 @@ class ContasController extends Controller
   public function index(){
     Log::info('Vendo contas, para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
     $contas = Contas::paginate(15);
-    if (is_array(Auth::user()->perms) and Auth::user()->perms["admin"]==1){
-        $deletados = Contas::onlyTrashed()->get();
-    } else {
-      $deletados = 0;
-    }
+    $deletados = 0;
     $total= Contas::count();
-    return view('contas.index')->with('contas', $contas)->with('deletados', $deletados)->with('total', $total);
+    $comboboxes = comboboxes::where('combobox_textable_type', 'App\Contas')->get();
+
+    return view('contas.index')->with('contas', $contas)->with('deletados', $deletados)->with('total', $total)->with('comboboxes', $comboboxes);
   }
   public function search(Request $request){
     $contas = Contas::query();
+    if ($request->data_de and !$request->data_ate){
+      $contas = $contas->whereBetween('vencimento', [$request->data_de, Carbon::today()]);
+    }
+    if ($request->data_de and $request->data_ate){
+      $contas = $contas->whereBetween('vencimento', [$request->data_de, $request->data_ate]);
+    }
+    if ($request->relacao!=""){
+      $contas = $contas->orWhere('nome', $request->relacao);
+    }
     if ($request->debito){
       $contas = $contas->orWhere('tipo', '0');
     }
@@ -70,9 +77,17 @@ class ContasController extends Controller
         }
     }
     $contas = $contas->paginate(15);
+    $total= Contas::count();
+    $comboboxes = comboboxes::where('combobox_textable_type', 'App\Contas')->get();
     Log::info('Vendo contas com busca "'.$request.'", para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
-    $deletados = 0;
-    return view('contas.index')->with('contas', $contas)->with('deletados', $deletados);
+
+    if ((is_array(Auth::user()->perms) and Auth::user()->perms["admin"]==1) and $request->deletados){
+        $deletados = Contas::onlyTrashed()->get();
+    } else {
+      $deletados = 0;
+    };
+
+    return view('contas.index')->with('contas', $contas)->with('deletados', $deletados)->with('total', $total)->with('comboboxes', $comboboxes);
   }
 
   public function novo(){
@@ -164,8 +179,9 @@ class ContasController extends Controller
   public function add_2(request $request, $id){
     $contato = Contatos::find($id);
     $comboboxes = comboboxes::where('combobox_textable_type', 'App\Contas')->get();
+    $comboboxes2 = comboboxes::where('combobox_textable_type', 'App\Contas\Formas')->get();
     Log::info('Adicionar CONTA passo 2, para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
-    return view('contas.valores')->with('contato', $contato)->with('comboboxes', $comboboxes);
+    return view('contas.valores')->with('contato', $contato)->with('comboboxes', $comboboxes)->with('comboboxes2', $comboboxes2);
   }
   public function add_3(request $request, $id){
     $this->validate($request, [
@@ -192,6 +208,9 @@ class ContasController extends Controller
     $conta->pagamento = $request->forma;
     $conta->save();
     $conta->referente = $conta->id;
+    if ($request->estado!="0" and $request->estado!="1"){
+      $conta->estado="0";
+    }
     $conta->save();
     if ($request->tipo=="2"){
       foreach ($request->disc_text as $key => $text) {

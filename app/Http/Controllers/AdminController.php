@@ -241,8 +241,21 @@ class AdminController extends Controller
       Log::info('!!!ADMIN!!! Mostrando ediçao combobox, para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
 
       $combobox = Comboboxes::find($id);
-
-      return view('admin.combobox_novo')->with("combobox", $combobox);
+      if($combobox->combobox_textable_type=="App\Relacionamento"){
+        return view('admin.combobox_novo_relacao')->with("combobox", $combobox);
+      }
+      if($combobox->combobox_textable_type=="App\Atendimentos"){
+        return view('admin.combobox_novo_atend')->with("combobox", $combobox);
+      }
+      if($combobox->combobox_textable_type=="App\Contas"){
+        return view('admin.combobox_novo_contas')->with("combobox", $combobox);
+      }
+      if($combobox->combobox_textable_type=="App\Caixas"){
+        return view('admin.combobox_novo_caixas')->with("combobox", $combobox);
+      }
+      if($combobox->combobox_textable_type=="App\Telefones"){
+        return view('admin.combobox_novo_telefone')->with("combobox", $combobox);
+      }
     }
     public function combobox_salvar(request $request){
       #return $request->tipo;
@@ -276,7 +289,7 @@ class AdminController extends Controller
       Log::info('!!!ADMIN!!! Salvando novo combobox, para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
       $combobox = Comboboxes::find($id);
       $combobox->combobox_textable_id = "1";
-      $combobox->field= "tipo";
+      $combobox->field= $request->field;
       $combobox->text=$request->text;
       $combobox->value=$request->value;
       $combobox->save();
