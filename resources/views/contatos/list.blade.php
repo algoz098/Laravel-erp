@@ -281,6 +281,7 @@
                         Cod. Pref.:{{$contato->cod_prefeitura}}
                       </div>
                       <div class="col-md-6">
+                        <strong>Endereço</strong><br>
                         {{$contato->endereco}}{{{$contato->andar!=""?", $contato->andar":""}}}{{{$contato->sala!=""?", $contato->sala":""}}}<br>
                         {{$contato->bairro}} - {{$contato->cidade}}, {{$contato->uf}}<br>
                         {{$contato->cep}}
@@ -289,12 +290,14 @@
                     <hr>
                     <div class="row">
                       <div class="col-md-6">
+                        <strong>Telefone e E-Mails</strong><br>
                         @foreach($contato->telefones as $key => $telefone)
                           <a href="{{ url('lista/contatos') }}/{{$contato->id}}/telefones/{{ $telefone->id }}/delete" class="btn btn-danger btn-xs"><i class="fa fa-ban"></i></a>
                           <span class="label label-info">{{ $telefone->tipo or "" }}</span> {{ $telefone->numero or "" }} <br>
                         @endforeach
                       </div>
                       <div class="col-md-6">
+                        <strong>Anexos</strong>
                         @foreach($contato->attachsToo as $key => $attach)
                           <div class="row">
                             {{$attach->name}}
@@ -307,6 +310,7 @@
                     <hr>
                     <div class="row">
                       <div class="col-md-11 pull-right">
+                        <strong>Relações:</strong>
                         @foreach($contato->from as $key => $from)
                           <div class="row">
                             {{str_limit($from->nome, 20)}} é <span class="label label-info">{{$from->pivot->to_text}}</span> de {{str_limit($contato->nome, 20)}}
