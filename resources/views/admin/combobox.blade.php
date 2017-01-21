@@ -16,12 +16,13 @@
           <div class=" form-inline col-md-2">
             <input type="text" class="form-control" size="4" name="ids" id="ids" placeholder="Detalhes" disabled>
           </div>
+          <!--
           <div class="col-md-2 pull-right text-right">
             <a href="{{url('admin/combobox/novo')}}" class="btn btn-success">
               <i class="fa fa-plus"></i> Novo
             </a>
           </div>
-        </div>
+        </div>-->
       </div>
       <div class="row">
         <div class="col-md-1">
@@ -30,10 +31,10 @@
         <div class="col-md-2">
           Modulo
         </div>
-        <div class="col-md-2">
+        <div class="col-md-4">
           Texto
         </div>
-        <div class="col-md-2">
+        <div class="col-md-4">
           Para relação
         </div>
       </div>
@@ -47,11 +48,11 @@
           <div class="col-md-2">
             {{substr($combobox->combobox_textable_type,4)}}
           </div>
-          <div class="col-md-2">
+          <div class="col-md-4">
             {{$combobox->value}}
           </div>
           @if($combobox->combobox_textable_type=="App\Relacionamento")
-            <div class="col-md-2">
+            <div class="col-md-4">
               {{$combobox->text}}
             </div>
           @endif

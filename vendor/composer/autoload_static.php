@@ -335,6 +335,7 @@ class ComposerStaticIniteb7ed518eae24fc4a2b91da7f84bfb6b
     );
 
     public static $classMap = array (
+        'AddBirthContatosTable' => __DIR__ . '/../..' . '/database/migrations/2017_01_19_142606_add_birth_contatos_table.php',
         'AddObsContasTable' => __DIR__ . '/../..' . '/database/migrations/2016_12_22_123047_add_obs_contas_table.php',
         'AddSoftdeleteContasTable' => __DIR__ . '/../..' . '/database/migrations/2016_12_13_113159_add_softdelete_contas_table.php',
         'AddSoftdeleteContatosTable' => __DIR__ . '/../..' . '/database/migrations/2016_12_11_212739_add_softdelete_contatos_table.php',
@@ -346,14 +347,17 @@ class ComposerStaticIniteb7ed518eae24fc4a2b91da7f84bfb6b
         'CreateAtendimentoTable' => __DIR__ . '/../..' . '/database/migrations/2016_11_29_171816_create_atendimento_table.php',
         'CreateAttachmentsTable' => __DIR__ . '/../..' . '/database/migrations/2016_12_22_131122_create_attachments_table.php',
         'CreateCaixasTable' => __DIR__ . '/../..' . '/database/migrations/2016_12_22_231333_create_caixas_table.php',
+        'CreateCatsTable' => __DIR__ . '/../..' . '/database/migrations/2017_01_19_142844_create_cats_table.php',
         'CreateColunmsContasTable' => __DIR__ . '/../..' . '/database/migrations/2016_12_09_183333_create_colunms_contas_table.php',
         'CreateComboboxTextableTable' => __DIR__ . '/../..' . '/database/migrations/2017_01_06_112212_create_combobox_textable_table.php',
         'CreateContasTable' => __DIR__ . '/../..' . '/database/migrations/2016_12_01_162001_create_contas_table.php',
         'CreateContatosPivotTable2' => __DIR__ . '/../..' . '/database/migrations/2016_11_24_215712_create_contatos_pivot_table2.php',
         'CreateContatosTable' => __DIR__ . '/../..' . '/database/migrations/2016_11_06_163403_create_contatos_table.php',
         'CreateDiscriminacoesTable' => __DIR__ . '/../..' . '/database/migrations/2017_01_11_225906_create_discriminacoes_table.php',
+        'CreateErpConfigsTable' => __DIR__ . '/../..' . '/database/migrations/2017_01_20_170011_create_erp_configs_table.php',
         'CreateEstMovimentacoesTable' => __DIR__ . '/../..' . '/database/migrations/2016_12_26_205932_create_est_movimentacoes_table.php',
         'CreateEstoqueTable' => __DIR__ . '/../..' . '/database/migrations/2016_12_09_183304_create_estoque_table.php',
+        'CreateFuncionariosTable' => __DIR__ . '/../..' . '/database/migrations/2017_01_18_125211_create_funcionarios_table.php',
         'CreateMovsPrestacaoTable' => __DIR__ . '/../..' . '/database/migrations/2017_01_05_231634_create_movs_prestacao_table.php',
         'CreateMovsTable' => __DIR__ . '/../..' . '/database/migrations/2017_01_05_151209_create_movs_table.php',
         'CreatePasswordResetsTable' => __DIR__ . '/../..' . '/database/migrations/2014_10_12_100000_create_password_resets_table.php',
@@ -441,7 +445,6 @@ class ComposerStaticIniteb7ed518eae24fc4a2b91da7f84bfb6b
         'ModifyContatosTable' => __DIR__ . '/../..' . '/database/migrations/2017_01_07_114240_modify_contatos_table.php',
         'ModifyEstoqueTable' => __DIR__ . '/../..' . '/database/migrations/2016_12_26_153252_modify_estoque_table.php',
         'ModifyTelefonesTable' => __DIR__ . '/../..' . '/database/migrations/2017_01_14_234852_modify_telefones_table.php',
-        'ModifyUsersTable' => __DIR__ . '/../..' . '/database/migrations/2017_01_16_141414_modify_users_table.php',
         'PHPUnit\\Framework\\TestCase' => __DIR__ . '/..' . '/phpunit/phpunit/src/ForwardCompatibility/TestCase.php',
         'PHPUnit_Exception' => __DIR__ . '/..' . '/phpunit/phpunit/src/Exception.php',
         'PHPUnit_Extensions_GroupTestSuite' => __DIR__ . '/..' . '/phpunit/phpunit/src/Extensions/GroupTestSuite.php',

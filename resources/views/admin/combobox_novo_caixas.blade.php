@@ -24,23 +24,32 @@
           </div>
         </div>
         <div class="row">
-          <div class="col-md-3">
-            <label>Modulo selecionado: </label>
+
             @if (isset($combobox))
-              <select class="form-control" id="tipo[0]" name="tipo[0]" disabled>
-                <option value="{{substr($combobox->combobox_textable_type, 4)}}" selected>{{substr($combobox->combobox_textable_type, 4)}}</option>
-              </select>
+              <div class="col-md-3">
+                <label>Modulo selecionado: </label>
+                <select class="form-control" id="tipo[0]" name="tipo[0]" disabled>
+                  <option value="{{substr($combobox->combobox_textable_type, 4)}}" selected>{{substr($combobox->combobox_textable_type, 4)}}</option>
+                </select>
+              </div>
+              <div class="col-md-3" id="textHolder">
+                <label id="textLabel">Texto da descrição</label>
+                <input value="{{{isset($combobox) ? $combobox->text : ""}}}" type="text" class="form-control" id="text" name="text">
+              </div>
             @else
-              <select class="form-control" id="tipo[0]" name="tipo[0]" disabled>
-                <option value="Caixas" selected>Desc. de movimentação de caixa</option>
-              </select>
-              <input value="Caixas" name="tipo[0]" type="hidden">
+              <div class="col-md-3">
+                <label>Modulo selecionado: </label>
+                <select class="form-control" id="tipo[0]" name="tipo" disabled>
+                  <option value="Caixas" selected>Desc. de movimentação de caixa</option>
+                </select>
+                <input value="Caixas" name="tipo[0]" type="hidden">
+                <input value="1" name="field[0]" type="hidden">
+              </div>
+              <div class="col-md-3" id="textHolder">
+                <label id="textLabel">Texto da descrição</label>
+                <input value="{{{isset($combobox) ? $combobox->text : ""}}}" type="text" class="form-control" id="text" name="text[0]">
+              </div>
             @endif
-          </div>
-          <div class="col-md-3" id="textHolder">
-            <label id="textLabel">Texto da descrição</label>
-            <input value="{{{isset($combobox) ? $combobox->text : ""}}}" type="text" class="form-control" id="text[0]" name="text[0]">
-          </div>
         </div>
         <span id="mais"></span>
       </form>
@@ -54,6 +63,7 @@
     $('#tipo', $clone).attr('name', 'tipo['+i+']');
     $('#text', $clone).attr('name', 'text['+i+']');
     $('#hidden', $clone).attr('name', 'tipo['+i+']');
+    $('#hidden2', $clone).attr('name', 'field['+i+']');
     $('.3397', $clone).attr('id', 'linha'+i);
     $clone.appendTo('#mais');
   }
@@ -77,6 +87,7 @@
             <option value="Caixas" selected>Desc. de movimentação de caixa</option>
           </select>
           <input id="hidden" value="Caixas" name="tipo[0]" type="hidden">
+          <input id="hidden2" value="1" name="field[0]" type="hidden">
         @endif
       </div>
       <div class="col-md-3" id="textHolder">

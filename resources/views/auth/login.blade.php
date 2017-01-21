@@ -58,6 +58,12 @@
                 </div>
             </div>
         </div>
+
+    </div>
+    <div class="row">
+      <div class="pull-right text-right">
+        <small>desenvolvido e mantido por <a href="www.webgs.com.br">WebGS</a></small>
+      </div>
     </div>
 </div>
 @endsection

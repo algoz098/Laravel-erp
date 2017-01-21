@@ -30,23 +30,34 @@
               <select class="form-control" id="tipo" name="tipo" disabled>
                 <option value="{{substr($combobox->combobox_textable_type, 4)}}" selected>{{substr($combobox->combobox_textable_type, 4)}}</option>
               </select>
+            </div>
+            <div class="col-md-3" id="textHolder">
+              <label id="textLabel"><span class="label label-info">Primeira entidade</span> é</label>
+              <input value="{{{isset($combobox) ? $combobox->value : ""}}}" type="text" class="form-control" id="value" name="value">
+              <label id="textLabel">de <span class="label label-warning">Segunda pessoa</span></label>
+            </div>
+            <div class="col-md-3" id="textHolder">
+              <label id="textLabel"><span class="label label-warning">Segunda pessoa</span> é</label>
+              <input value="{{{isset($combobox) ? $combobox->text : ""}}}" type="text" class="form-control" id="text" name="text">
+              <label id="textLabel">de <span class="label label-info">Primeira entidade</span></label>
+            </div>
             @else
               <select class="form-control" id="tipo" name="tipo" disabled>
                 <option value="Relacionamento" selected>Padrão de relacionamento</option>
               </select>
-              <input value="Relacionamento" name="tipo[0]" type="hidden">
+              <input value="Relacionamento" name="tipo" type="hidden">
+            </div>
+            <div class="col-md-3" id="textHolder">
+              <label id="textLabel"><span class="label label-info">Primeira entidade</span> é</label>
+              <input value="{{{isset($combobox) ? $combobox->value : ""}}}" type="text" class="form-control" id="value[0]" name="value">
+              <label id="textLabel">de <span class="label label-warning">Segunda pessoa</span></label>
+            </div>
+            <div class="col-md-3" id="textHolder">
+              <label id="textLabel"><span class="label label-warning">Segunda pessoa</span> é</label>
+              <input value="{{{isset($combobox) ? $combobox->text : ""}}}" type="text" class="form-control" id="text[0]" name="text">
+              <label id="textLabel">de <span class="label label-info">Primeira entidade</span></label>
+            </div>
             @endif
-          </div>
-          <div class="col-md-3" id="textHolder">
-            <label id="textLabel"><span class="label label-info">Primeira entidade</span> é</label>
-            <input value="{{{isset($combobox) ? $combobox->value : ""}}}" type="text" class="form-control" id="value[0]" name="value[0]">
-            <label id="textLabel">de <span class="label label-warning">Segunda pessoa</span></label>
-          </div>
-          <div class="col-md-3" id="textHolder">
-            <label id="textLabel"><span class="label label-warning">Segunda pessoa</span> é</label>
-            <input value="{{{isset($combobox) ? $combobox->text : ""}}}" type="text" class="form-control" id="text[0]" name="text[0]">
-            <label id="textLabel">de <span class="label label-info">Primeira entidade</span></label>
-          </div>
         </div>
         <hr>
         <span id="mais"></span>

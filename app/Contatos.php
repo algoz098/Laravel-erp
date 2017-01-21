@@ -11,6 +11,7 @@ use App\Estoque;
 use App\Attachments;
 use App\Caixas;
 use App\Vendas;
+use App\Funcionarios;
 
 class Contatos extends Model
 {
@@ -70,5 +71,10 @@ class Contatos extends Model
     public function attachs()
     {
         return $this->morphMany('App\Attachments', 'attachmentable');
+    }
+
+    public function funcionario()
+    {
+        return $this->hasOne('App\Funcionarios');
     }
 }

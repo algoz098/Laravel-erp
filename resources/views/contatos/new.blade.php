@@ -2,10 +2,14 @@
 @section('content')
   <div class="row">
     <div class="col-md-12">
-      @if (!empty($contato->id))
-        <form method="POST" action="{{ url('/novo/contatos') }}/{{$contato->id}}">
+      @if (isset($is_funcionario))
+        <form method="POST" action="{{ url('/novo/funcionarios') }}">
       @else
-        <form method="POST" action="{{ url('novo/contatos') }}">
+        @if (!empty($contato->id))
+          <form method="POST" action="{{ url('/novo/contatos') }}/{{$contato->id}}">
+        @else
+          <form method="POST" action="{{ url('novo/contatos') }}">
+        @endif
       @endif
         <div class="form-group">
         {{ csrf_field() }}
@@ -32,27 +36,33 @@
               <div class="col-md-3">
                 <div class="form-group">
                   <label for="text">Tipo de Entidade</label>
-                  @if (!empty($contato) and $contato->id===1)
-                    <select class="form-control" id="tipo" disabled>
-                      <option value="0" selected>PJ - Pessoa Juridica</option>
-                    </select>
-                  @elseif(!empty($contato) and $contato->tipo=="1")
-                    <select class="form-control" name="tipo" id="tipo" >
-                      <option value=""> - Escolha uma opção - </option>
-                      <option value="0" >PJ - Pessoa Juridica</option>
-                      <option value="1" selected>PF - Pessoa Fisica</option>
-                    </select>
-                  @elseif(!empty($contato) and $contato->tipo=="0")
-                    <select class="form-control" name="tipo" id="tipo" >
-                      <option value=""> - Escolha uma opção - </option>
-                      <option value="0" selected>PJ - Pessoa Juridica</option>
-                      <option value="1" >PF - Pessoa Fisica</option>
-                    </select>
+                  @if (!isset($is_funcionario))
+                    @if (!empty($contato) and $contato->id===1)
+                      <select class="form-control" id="tipo" disabled>
+                        <option value="0" selected>PJ - Pessoa Juridica</option>
+                      </select>
+                    @elseif(!empty($contato) and $contato->tipo=="1")
+                      <select class="form-control" name="tipo" id="tipo" >
+                        <option value=""> - Escolha uma opção - </option>
+                        <option value="0" >PJ - Pessoa Juridica</option>
+                        <option value="1" selected>PF - Pessoa Fisica</option>
+                      </select>
+                    @elseif(!empty($contato) and $contato->tipo=="0")
+                      <select class="form-control" name="tipo" id="tipo" >
+                        <option value=""> - Escolha uma opção - </option>
+                        <option value="0" selected>PJ - Pessoa Juridica</option>
+                        <option value="1" >PF - Pessoa Fisica</option>
+                      </select>
+                    @else
+                      <select class="form-control" id="tipo" name="tipo" onchange="tipoChange(this)">
+                        <option value="" selected> - Escolha uma opção - </option>
+                        <option value="0" >PJ - Pessoa Juridica</option>
+                        <option value="1" >PF - Pessoa Fisica</option>
+                      </select>
+                    @endif
                   @else
-                    <select class="form-control" id="tipo" name="tipo" onchange="tipoChange(this)">
-                      <option value="" selected> - Escolha uma opção - </option>
-                      <option value="0" >PJ - Pessoa Juridica</option>
-                      <option value="1" >PF - Pessoa Fisica</option>
+                    <select class="form-control" id="tipo" name="tipo" onchange="tipoChange(this)" disabled>
+                      <option value="1" selected>PF - Pessoa Fisica</option>
                     </select>
                   @endif
                 </div>
@@ -66,12 +76,12 @@
               <div class="col-md-3">
                 <div class="form-group">
                   <label for="rg">Inscrição Estadual ou RG</label>
-                  <input type="text" class="form-control" value="{{ $contato->rg or "" }}" name="rg" id="rg" placeholder="I.E.\RG">
+                  <input type="text" class="form-control rg" value="{{ $contato->rg or "" }}" name="rg" id="rg" placeholder="I.E.\RG">
                 </div>
               </div>
               <div class="col-md-3">
                 <div class="form-group">
-                  <label for="cod_prefeitura">Codigo da prefeitura</label>
+                  <label for="cod_prefeitura">Inscrição da Prefeitura</label>
                   <input type="text" class="form-control" value="{{ $contato->cod_prefeitura or "" }}" name="cod_prefeitura" id="cod_prefeitura" placeholder="Codigo da prefeitura">
                 </div>
               </div>
@@ -93,36 +103,22 @@
                   <input type="checkbox" name="active" id="active" value="1" checked>Dados Validos
                 </div>
               </div>
-              <div class="col-md-3">
-                <div class="form-group">
-                  <label for="codigo">Codigo</label>
-                  <input type="text" class="form-control" value="{{ $contato->codigo or "" }}" name="codigo" id="codigo" placeholder="Codigo">
+              @if ($field_codigo->value=="1")
+                <div class="col-md-3">
+                  <div class="form-group">
+                    <label for="codigo">Codigo</label>
+                    <input type="text" class="form-control" value="{{ $contato->codigo or "" }}" name="codigo" id="codigo" placeholder="Codigo">
+                  </div>
                 </div>
-              </div>
-              <div class="col-md-3 pull-right">
-                <div class="form-group">
-                  <label for="actived">Relação com a Matriz</label><br>
-                  @if (!empty($contato) and $contato->id===1)
-                    <select class="form-control" id="relacao" disabled>
-                      <option value="" selected>Matriz</option>
-                    </select>
-                  @else
-                    <select class="form-control" name="relacao" id="relacao">
-                      @if (isset($contato))
-                        <option value="" selected>{{$contato->from->find(1)->pivot->from_text}} (atual)</option>
-                      @else
-                        <option value="" selected>- Escolha - </option>
-                      @endif
-                      @if (isset($comboboxes))
-                        @foreach($comboboxes as $key => $combobox)
-                          <option value="{{$combobox->text}}">{{$combobox->text}}</option>
-                        @endforeach
-                      @endif
-                      <option value="" >Indefinido</option>
-                    </select>
-                  @endif
+              @endif
+              @if (isset($contato) and $contato->tipo=="1")
+                <div class="col-md-3" id=nascimentoHolder>
+                  <div class="form-group">
+                    <label for="codigo">Data de Nascimento</label>
+                    <input type="text" class="form-control datepicker" value="{{ $contato->nascimento or "" }}" name="nascimento" id="nascimento" placeholder="Codigo">
+                  </div>
                 </div>
-              </div>
+              @endif
             </div>
             <div class="row">
               <div class="col-md-4">
@@ -195,7 +191,7 @@
                       <select class="form-control" id="tipo" name="tipo_id[{{$key}}]" onchange="selMask(0)">
                         <option value="{{$telefone->tipo}}" selected>{{$telefone->tipo}}</option>
                         @foreach($comboboxes_telefones as $a => $combobox)
-                          <option value="{{$combobox->value}}">{{$combobox->text}}</option>
+                          <option value="{{$combobox->text}}">{{$combobox->text}}</option>
                         @endforeach
                       </select>
                     </div>
@@ -244,14 +240,14 @@
                       <select class="form-control" id="tipo0" name="tipo_tel[0]" onchange="selMask(0)">
                         <option value="" selected> - Escolha uma opção - </option>
                         @foreach($comboboxes_telefones as $key => $combobox)
-                          <option value="{{$combobox->value}}">{{$combobox->text}}</option>
+                          <option value="{{$combobox->text}}">{{$combobox->text}}</option>
                         @endforeach
                       </select>
                     </div>
                   </div>
                   <div class="col-md-2">
                     <div class="form-group">
-                      <label for="text">Numero</label>
+                      <label for="text" id="numeroText0">Numero</label>
                       <input type="text" class="form-control" value="" name="numero_tel[0]" id="numero0" placeholder="">
                     </div>
                   </div>
@@ -284,6 +280,9 @@
                 </div>
               @endif
             <span id="mais"></span>
+            @if (isset($is_funcionario))
+              @include('contatos.funcionarios.new')
+            @endif
             <div class="row">
               <div class="form-group">
                 <label for="obs">Obs:</label>
@@ -305,24 +304,27 @@
     </div>
   </div>
   <script language="javascript">
-  function tipoChange(selected) {
-    if (selected.value=="1"){
+  function tipoChange() {
+    var b = $("#tipo").val();
+    if (b=="1"){
       $("label[for='rg']").text("RG");
       $("label[for='cpf']").text("CPF");
       $("label[for='nome']").text("Nome");
       $("label[for='sobrenome']").text("Sobrenome");
+      $("#nascimentoHolder").show();
       $("#rg").attr("placeholder", "RG");
       $("#cpf").attr("placeholder", "CPF");
       $("#nome").attr("placeholder", "Nome");
       $("#sobrenome").attr("placeholder", "Sobrenome");
-      $("#cpf").mask("999.999.999-xx")
-      $("#rg").mask("99.999.999-xx")
+      $("#cpf").mask("999.999.999-**")
+      $("#rg").mask("**.***.***-*?*")
     }
-    if (selected.value=="0"){
+    if (b=="0"){
       $("label[for='rg']").text("Inscrição Estadual");
       $("label[for='cpf']").text("CNPJ");
       $("label[for='nome']").text("Razão Social");
       $("label[for='sobrenome']").text("Nome Fantasia");
+      $("#nascimentoHolder").hide();
       $("#rg").attr("placeholder", "I.E.");
       $("#cpf").attr("placeholder", "CNPJ");
       $("#nome").attr("placeholder", "Razão Social");
@@ -331,13 +333,7 @@
       $("#rg").mask("999.999.999.999")
     }
    }
-   @if (!empty($contato->tipo))
-    $(document).ready(tipoChange({{$contato->tipo}}));
-    @elseif(!empty($contato) and $contato->id==1)
-      var a = "a";
-      var a = {value:"0"};
-      $(document).ready(tipoChange(a));
-    @endif
+   $(document).ready(tipoChange());
 </script>
 <script language="javascript">
 window.i = 0;
@@ -349,6 +345,7 @@ function add() {
   $('#tipo', $clone).attr('id', 'tipo'+i);
   $('#numero', $clone).attr('name', 'numero_tel['+i+']');
   $('#numero', $clone).attr('id', 'numero'+i);
+  $('#numeroText', $clone).attr('id', 'numeroText'+i);
   $('#contato', $clone).attr('name', 'contato_tel['+i+']');
   $('#setor', $clone).attr('name', 'setor_tel['+i+']');
   $('#ramal', $clone).attr('name', 'ramal_tel['+i+']');
@@ -362,10 +359,12 @@ function remove() {
 function selMask(a){
   @foreach($comboboxes_telefones as $asas => $combobox)
     if (($("#tipo"+a).val()=="{{$combobox->text}}")){
+      var x = "{{$combobox->value}}";
       $("#numero"+a).mask("{{$combobox->field}}");
       if ("{{$combobox->field}}"==""){
         $("#numero"+a).unmask();
       }
+      $("#numeroText"+a).text(x);
     }
   @endforeach
 }
@@ -387,7 +386,7 @@ function selMask(a){
     </div>
     <div class="col-md-2">
       <div class="form-group">
-        <label for="text">Numero</label>
+        <label for="text" id="numeroText">Numero</label>
         <div class="input-group">
           <input type="text" class="form-control" value="" name="numero_tipo[0]" id="numero" placeholder="">
         </div>

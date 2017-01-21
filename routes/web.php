@@ -30,6 +30,10 @@ Route::get('/novo/contatos', 'ContatosController@showNovo')->middleware('auth');
 Route::get('novo/contatos/{id}', 'ContatosController@showId')->middleware('auth');
 Route::post('novo/contatos/{id}', 'ContatosController@update')->middleware('auth');
 
+Route::get('novo/funcionarios', 'ContatosController@funcionarios_novo')->middleware('auth');
+Route::post('novo/funcionarios', 'ContatosController@novo')->middleware('auth');
+
+
 Route::get('lista/contatos/{id}/relacoes', 'ContatosController@relacoes')->middleware('auth');
 Route::get('lista/contatos/{id}/relacoes/novo', 'ContatosController@relacoes_novo')->middleware('auth');
 Route::post('lista/contatos/{id}/relacoes/novo/busca', 'ContatosController@relacoes_busca')->middleware('auth');
@@ -96,6 +100,10 @@ Route::get('attach/{id}/rotate/unclock', 'AttachmentsController@rotate_unclock')
 Route::get('attach/{id}/resize/{width}', 'AttachmentsController@resize')->middleware('auth');
 
 Route::get('/admin', 'AdminController@index')->name('admin')->middleware('auth')->middleware('admin');
+
+Route::get('/admin/config', 'AdminController@configuration')->name('admin')->middleware('auth')->middleware('admin');
+Route::post('/admin/config', 'AdminController@configuration_save')->name('admin')->middleware('auth')->middleware('admin');
+
 Route::get('/admin/user/{id}', 'AdminController@user_edit')->middleware('auth')->middleware('admin');
 Route::post('/admin/user/{id}', 'AdminController@user_modify')->middleware('auth')->middleware('admin');
 Route::get('/admin/access/{id}', 'AdminController@access')->middleware('auth')->middleware('admin');

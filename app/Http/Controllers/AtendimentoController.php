@@ -126,9 +126,10 @@ class AtendimentoController extends Controller
     } else {
       $contatos = Contatos::paginate(15);
     }
+    $comboboxes = comboboxes::where('combobox_textable_type', 'App\Atendimentos')->get();
     Log::info('Criando novo atendimento, selecionando contato com busca -> "'.$request->busca.'", para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
 
-    return view('atend.contatos')->with('contatos', $contatos);
+    return view('atend.contatos')->with('contatos', $contatos)->with('comboboxes', $comboboxes);
   }
 
   public function novo($id){

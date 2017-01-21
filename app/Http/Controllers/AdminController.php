@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use App\User as User;
 use App\Contatos as Contatos;
 use App\Users_permissions as Roles;
-
+use App\Erp_configs as Configs;
 use App\Combobox_texts as Comboboxes;
 use File;
 use Storage;
@@ -18,11 +18,30 @@ use Auth;
 
 class AdminController extends Controller
 {
+
   public function index(){
 
     Log::info('!!!ADMIN!!! Mostrando index, para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
     $contatos = contatos::all();
     return view('admin.index')->with('contatos', $contatos);
+  }
+
+  public function configuration(){
+    Log::info('!!!ADMIN!!! Mostrando configuration, para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
+    $configs = Configs::all();
+    $field_codigo = Configs::where('field', "field_codigo")->first();
+    return view('admin.configuration')->with('configs', $configs)
+                                      ->with('field_codigo', $field_codigo);
+  }
+  public function configuration_save(request $request){
+    #return $request->codigo;
+    Log::info('!!!ADMIN!!! Salvando configuration, para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
+    $configs = Configs::all();
+    $field_codigo = Configs::where('field', 'field_codigo')->first();
+    $field_codigo->value = $request->codigo;
+    $field_codigo->save();
+    return view('admin.configuration')->with('configs', $configs)
+                                      ->with('field_codigo', $field_codigo);
   }
 
   public function user_edit($id){
@@ -49,7 +68,7 @@ class AdminController extends Controller
         $user->contatos_id = $id;
         $user->perms = "{}";
       }
-      $user->email = $request->email;
+      $user->user = $request->email;
       $user->password = bcrypt($request->password);
       $user->ativo = $request->ativo;
       $user->trabalho_id = $request->filial;
@@ -250,6 +269,9 @@ class AdminController extends Controller
       if($combobox->combobox_textable_type=="App\Contas"){
         return view('admin.combobox_novo_contas')->with("combobox", $combobox);
       }
+      if($combobox->combobox_textable_type=="App\Contas\Formas"){
+        return view('admin.combobox_novo_formas')->with("combobox", $combobox);
+      }
       if($combobox->combobox_textable_type=="App\Caixas"){
         return view('admin.combobox_novo_caixas')->with("combobox", $combobox);
       }
@@ -258,16 +280,16 @@ class AdminController extends Controller
       }
     }
     public function combobox_salvar(request $request){
-      #return $request->tipo;
+      #return $request;
       Log::info('!!!ADMIN!!! Salvando novo combobox, para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
       foreach ($request->text as $key => $text) {
         $combobox = New Comboboxes;
         $combobox->combobox_textable_id = "1";
         if($request->tipo[$key]=="Telefones" or $request->tipo[$key]=="Contas" or $request->tipo[$key]=="Caixas"){
           $combobox->combobox_textable_type = "App\\".$request->tipo[$key];
-          $combobox->field= "tipo";
-          $combobox->text=$request->text[$key];
-          $combobox->value=$request->text[$key];
+          $combobox->field= $request->field[$key];
+          $combobox->text = $request->text[$key];
+          $combobox->value = $request->text[$key];
         }
         if($request->tipo[$key]=="Relacionamento"){
           $combobox->combobox_textable_type = "App\\".$request->tipo[$key];
@@ -289,9 +311,15 @@ class AdminController extends Controller
       Log::info('!!!ADMIN!!! Salvando novo combobox, para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
       $combobox = Comboboxes::find($id);
       $combobox->combobox_textable_id = "1";
-      $combobox->field= $request->field;
-      $combobox->text=$request->text;
-      $combobox->value=$request->value;
+      if ($request->field){
+        $combobox->field= $request->field;
+      }
+      if ($request->text){
+        $combobox->text=$request->text;
+      }
+      if ($request->value){
+        $combobox->value=$request->value;
+      }
       $combobox->save();
       return redirect()->action('AdminController@combobox');
     }

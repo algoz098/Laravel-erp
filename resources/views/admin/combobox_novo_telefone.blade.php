@@ -37,14 +37,33 @@
               <input value="Telefones" name="tipo[0]" type="hidden">
             @endif
           </div>
-          <div class="col-md-3" id="textHolder">
-            <label id="textLabel">Texto da opção</label>
-            <input value="{{{isset($combobox) ? $combobox->text : ""}}}" type="text" class="form-control" id="text[0]" name="text[0]">
-          </div>
-          <div class="col-md-3" id="maskHolder">
-            <label id="maskLabel">Mascara</label>
-            <input value="{{{isset($combobox) ? $combobox->field : ""}}}" type="field" class="form-control" id="mask[0]" name="mask[0]">
-          </div>
+          @if (!isset($combobox))
+            <div class="col-md-3" id="textHolder">
+              <label id="textLabel">Texto da opção</label>
+              <input value="{{{isset($combobox) ? $combobox->text : ""}}}" type="text" class="form-control" id="text[0]" name="text[0]">
+            </div>
+            <div class="col-md-3" id="maskHolder">
+              <label id="maskLabel">Titulo</label>
+              <input value="{{{isset($combobox) ? $combobox->value : ""}}}" type="field" class="form-control" id="value[0]" name="value[0]">
+            </div>
+            <div class="col-md-3" id="maskHolder">
+              <label id="maskLabel">Mascara</label>
+              <input value="{{{isset($combobox) ? $combobox->field : ""}}}" type="field" class="form-control" id="mask[0]" name="field[0]">
+            </div>
+          @else
+            <div class="col-md-3" id="textHolder">
+              <label id="textLabel">Texto da opção</label>
+              <input value="{{{isset($combobox) ? $combobox->text : ""}}}" type="text" class="form-control" id="text[0]" name="text">
+            </div>
+            <div class="col-md-3" id="maskHolder">
+              <label id="maskLabel">Titulo</label>
+              <input value="{{{isset($combobox) ? $combobox->value : ""}}}" type="field" class="form-control" id="value[0]" name="value">
+            </div>
+            <div class="col-md-3" id="maskHolder">
+              <label id="maskLabel">Mascara</label>
+              <input value="{{{isset($combobox) ? $combobox->field : ""}}}" type="field" class="form-control" id="mask[0]" name="field">
+            </div>
+          @endif
         </div>
         <span id="mais"></span>
       </form>
@@ -59,6 +78,7 @@
     $('#text', $clone).attr('name', 'text['+i+']');
     $('#hidden', $clone).attr('name', 'tipo['+i+']');
     $('#mask', $clone).attr('name', 'mask['+i+']');
+    $('#value', $clone).attr('name', 'value['+i+']');
     $('#hidden', $clone).attr('name', 'tipo['+i+']');
     $('.3397', $clone).attr('id', 'linha'+i);
     $clone.appendTo('#mais');
@@ -88,6 +108,11 @@
       <div class="col-md-3" id="textHolder">
         <label id="textLabel">Texto da opção</label>
         <input value="{{{isset($combobox) ? $combobox->text : ""}}}" type="text" class="form-control" id="text" name="text">
+      </div>
+
+      <div class="col-md-3" id="maskHolder">
+        <label id="maskLabel">Titulo</label>
+        <input value="{{{isset($combobox) ? $combobox->value : ""}}}" type="field" class="form-control" id="value" name="value">
       </div>
       <div class="col-md-3" id="maskHolder">
         <label id="maskLabel">Mascara</label>

@@ -17,7 +17,7 @@ class ContatosTableSeeder extends Seeder
       ]);
       DB::table('users')->insert([
           'contatos_id' => "1",
-          'email' => "empresa@exemplo.com",
+          'email' => "empresa",
           'password' => bcrypt('123mudar'),
           'ativo' => 1,
           'trabalho_id' => 1,
@@ -26,53 +26,59 @@ class ContatosTableSeeder extends Seeder
       DB::table('combobox_texts')->insert([
           'combobox_textable_id' => "1",
           'combobox_textable_type' => "App\Telefones",
-          'field' => "(99) 9.9999-9999",
-          'value' => "Cel",
-          'text' => "Cel"
+          'field' => "(99) 9 9999-9999",
+          'text' => "Cel Corp",
+          'value' => "Numero"
       ]);
       DB::table('combobox_texts')->insert([
           'combobox_textable_id' => "1",
           'combobox_textable_type' => "App\Telefones",
-          'field' => "(99) 9.9999-9999",
-          'value' => "Rec Cel",
-          'text' => "Rec Cel"
+          'field' => "(99) 9 9999-9999",
+          'text' => "Cel Part",
+          'value' => "Numero"
       ]);
       DB::table('combobox_texts')->insert([
           'combobox_textable_id' => "1",
           'combobox_textable_type' => "App\Telefones",
-          'field' => "(99) 9999-9999",
-          'value' => "Fixo",
-          'text' => "Fixo"
-      ]);
-      DB::table('combobox_texts')->insert([
-          'combobox_textable_id' => "1",
-          'combobox_textable_type' => "App\Telefones",
-          'field' => "(99) 9999-9999",
-          'value' => "Rec Fixo",
-          'text' => "Rec Fixo"
+          'field' => "(99) 9 9999-9999",
+          'text' => "Cel Rec",
+          'value' => "Numero"
       ]);
       DB::table('combobox_texts')->insert([
           'combobox_textable_id' => "1",
           'combobox_textable_type' => "App\Telefones",
           'field' => "(99) 9999-9999",
-          'value' => "Coml",
-          'text' => "Coml"
+          'text' => "Tel Part",
+          'value' => "Numero"
+      ]);
+      DB::table('combobox_texts')->insert([
+          'combobox_textable_id' => "1",
+          'combobox_textable_type' => "App\Telefones",
+          'field' => "(99) 9999-9999",
+          'text' => "Tel Corp",
+          'value' => "Numero"
+      ]);
+      DB::table('combobox_texts')->insert([
+          'combobox_textable_id' => "1",
+          'combobox_textable_type' => "App\Telefones",
+          'field' => "(99) 9999-9999",
+          'text' => "Tel Rec",
+          'value' => "Numero"
+      ]);
+      DB::table('combobox_texts')->insert([
+          'combobox_textable_id' => "1",
+          'combobox_textable_type' => "App\Telefones",
+          'field' => "",
+          'text' => "E-Mail Corp",
+          'value' => "E-Mail"
       ]);
 
       DB::table('combobox_texts')->insert([
           'combobox_textable_id' => "1",
           'combobox_textable_type' => "App\Telefones",
           'field' => "",
-          'value' => "E-Mail Corp",
-          'text' => "E-Mail Corp"
-      ]);
-
-      DB::table('combobox_texts')->insert([
-          'combobox_textable_id' => "1",
-          'combobox_textable_type' => "App\Telefones",
-          'field' => "",
-          'value' => "E-Mail Part",
-          'text' => "E-Mail Part"
+          'text' => "E-Mail Part",
+          'value' => "E-Mail"
       ]);
       DB::table('combobox_texts')->insert([
           'combobox_textable_id' => "1",
@@ -118,6 +124,48 @@ class ContatosTableSeeder extends Seeder
       ]);
       DB::table('combobox_texts')->insert([
           'combobox_textable_id' => "1",
+          'combobox_textable_type' => "App\Contas",
+          'field' => "tipo",
+          'value' => "Conta de Agua",
+          'text' => "Conta de Agua"
+      ]);
+      DB::table('combobox_texts')->insert([
+          'combobox_textable_id' => "1",
+          'combobox_textable_type' => "App\Contas",
+          'field' => "tipo",
+          'value' => "Internet",
+          'text' =>  "Internet"
+      ]);
+      DB::table('combobox_texts')->insert([
+          'combobox_textable_id' => "1",
+          'combobox_textable_type' => "App\Contas",
+          'field' => "tipo",
+          'value' => "Conta de Energia Eletrica",
+          'text' => "Conta de Energia Eletrica"
+      ]);
+      DB::table('combobox_texts')->insert([
+          'combobox_textable_id' => "1",
+          'combobox_textable_type' => "App\Contas",
+          'field' => "tipo",
+          'value' => "Prestação de serviços",
+          'text' => "Prestação de serviços"
+      ]);
+      DB::table('combobox_texts')->insert([
+          'combobox_textable_id' => "1",
+          'combobox_textable_type' => "App\Contas",
+          'field' => "tipo",
+          'value' => "Material de Escritorio",
+          'text' => "Material de Escritorio"
+      ]);
+      DB::table('combobox_texts')->insert([
+          'combobox_textable_id' => "1",
+          'combobox_textable_type' => "App\Contas",
+          'field' => "tipo",
+          'value' => "Diversos",
+          'text' => "Diversos"
+      ]);
+      DB::table('combobox_texts')->insert([
+          'combobox_textable_id' => "1",
           'combobox_textable_type' => "App\Relacionamento",
           'field' => "tipo",
           'value' => "Cliente",
@@ -150,6 +198,12 @@ class ContatosTableSeeder extends Seeder
           'field' => "tipo",
           'value' => "Funcionario",
           'text' => "Empresa"
+      ]);
+      DB::table('erp_configs')->insert([
+          'field' => "field_codigo",
+          'value' => "0",
+          'options' => "",
+          'text' => "Campo 'Codigo'"
       ]);
     }
 }

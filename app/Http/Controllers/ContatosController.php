@@ -12,6 +12,9 @@ use Intervention\Image\ImageManagerStatic as Image;
 use App\Contatos as Contatos;
 use App\Telefones as Telefones;
 use App\Attachments as Attachs;
+use App\Funcionarios as Funcionarios;
+use App\Erp_configs as Configs;
+use App\User as User;
 use App\Combobox_texts as Comboboxes;
 use Log;
 use Carbon\Carbon;
@@ -80,24 +83,44 @@ class ContatosController extends Controller
     ->with('comboboxes', $comboboxes);
   }
 
+  public function funcionarios_novo()
+  {
+    Log::info('Criando novo contato, para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
+    $comboboxes = comboboxes::where('combobox_textable_type', 'App\Relacionamento')->get();
+    $comboboxes_telefones = comboboxes::where('combobox_textable_type', 'App\Telefones')->get();
+    $a = "Filial";
+    $filiais = Contatos::whereHas('from', function ($query) use ($a){
+                      $query->where('from_text', 'like', '%'.$a.'%');
+                    })->get();
+    $is_funcionario = 1;
+    $field_codigo = Configs::where('field', 'field_codigo')->first();
+    return view('contatos.new')->with('is_funcionario', $is_funcionario)
+                               ->with('filiais', $filiais)
+                               ->with('field_codigo', $field_codigo)
+                               ->with('comboboxes', $comboboxes)
+                               ->with('comboboxes_telefones', $comboboxes_telefones);
+  }
+
   public function showNovo()
   {
     Log::info('Criando novo contato, para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
     $comboboxes = comboboxes::where('combobox_textable_type', 'App\Relacionamento')->get();
     $comboboxes_telefones = comboboxes::where('combobox_textable_type', 'App\Telefones')->get();
-    return view('contatos.new')->with('comboboxes', $comboboxes)->with('comboboxes_telefones', $comboboxes_telefones);
+    $field_codigo = Configs::where('field', 'field_codigo')->first();
+    return view('contatos.new')->with('comboboxes', $comboboxes)
+                                ->with('comboboxes_telefones', $comboboxes_telefones)
+                                ->with('field_codigo', $field_codigo);
   }
 
   public function novo( Request $request )
   {
-    #return $request;
     $this->validate($request, [
         'nome' => 'required|max:50'
     ]);
     $contato = new Contatos;
     $contato->nome = $request->nome;
-    $contato->cpf = $request->cnpj;
-    $contato->rg = $request->ie;
+    $contato->cpf = $request->cpf;
+    $contato->rg = $request->rg;
     $contato->sobrenome = $request->sobrenome;
     $contato->endereco = $request->endereco;
     $contato->andar = $request->andar;
@@ -111,6 +134,7 @@ class ContatosController extends Controller
     $contato->obs = $request->obs;
     $contato->cod_prefeitura = $request->cod_prefeitura;
     $contato->codigo = $request->codigo;
+    $contato->nascimento = $request->nascimento;
     if ($request->active){
         $contato->active = "4";
     } else {
@@ -127,24 +151,71 @@ class ContatosController extends Controller
       $telefone->ramal = $request->ramal_tel[$key];
       $telefone->save();
     }
-
-    $combobox = Comboboxes::where('text', $request->relacao)->first();
-    #return $combobox;
-    if ($combobox){
-
+    if ($request->is_funcionario!="1"){
+      $combobox = Comboboxes::where('text', $request->relacao)->first();
+      if ($combobox){
+        $data = [
+          $request->from_id =>
+          [
+            'from_text' => $combobox->text,
+            'to_id' => 1,
+            'to_text' => $combobox->value
+          ]
+        ];
+        $contato->from()->sync($data, false);
+      }
+    } else {
+      // CASO FOR CADASTRO DE FUNCIONARIO
       $data = [
-        $request->from_id =>
+        $request->filial =>
         [
-          'from_text' => $combobox->text,
+          'from_text' => "Funcionario",
           'to_id' => 1,
-          'to_text' => $combobox->value
+          'to_text' => "Trabalho"
         ]
       ];
       $contato->from()->sync($data, false);
+      $func = new Funcionarios;
+      $func->contatos_id = $contato->id;
+      $func->cargo = $request->cargo;
+      $func->data_adm = $request->data_adm;
+      $func->data_dem = $request->data_dem;
+      $func->cnh = $request->cnh;
+      $func->cnh_cat = $request->cnh_cat;
+      $func->cnh_venc = $request->cnh_venc;
+      $func->cart_trab_num = $request->cart_trab_num;
+      $func->cart_trab_serie = $request->cart_trab_serie;
+      $func->eleitor = $request->eleitor;
+      $func->eleitor_sessao = $request->eleitor_sessao;
+      $func->eleitor_zona = $request->eleitor_zona;
+      $func->eleitor_exp = $request->eleitor_exp;
+      $func->pis = $request->pis;
+      $func->pis_banco = $request->pis_banco;
+      $func->inss = $request->inss;
+      $func->rg_exp = $request->rg_exp;
+      $func->rg_pai = $request->rg_pai;
+      $func->rg_mae = $request->rg_mae;
+      $func->ajuda_custo = $request->ajuda_custo;
+      $func->reservista = $request->reservista;
+      $func->sal = $request->sal;
+      $func->sal_inss = $request->sal_inss;
+      $func->vt = $request->vt;
+      $func->vt_percentual = $request->vt_percentual;
+      $func->va = $request->va;
+      $func->vr = $request->vr;
+      $func->peri = $request->peri;
+      $func->save();
+      $user = new User;
+      $user->email = $request->user;
+      $user->password = bcrypt($request->password);
+      $user->ativo = $request->ativo;
+      $user->trabalho_id = $request->filial;
+      $user->contatos_id = $contato->id;
+      $user->perms="{}";
+      $user->save();
     }
 
     Log::info('Busca de contatos usando -> "'.$request.'", resultando em -> "'.$contato.'" para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
-
 
     return redirect()->action('ContatosController@show');
   }
@@ -153,8 +224,26 @@ class ContatosController extends Controller
     $contato = contatos::find($id);
     $comboboxes = comboboxes::where('combobox_textable_type', 'App\Relacionamento')->get();
     $comboboxes_telefones = comboboxes::where('combobox_textable_type', 'App\Telefones')->get();
+    $field_codigo = Configs::where('field', 'field_codigo')->first();
+    if($contato->funcionario){
+      $is_funcionario = 1;
+      $a = "Filial";
+      $filiais = Contatos::whereHas('from', function ($query) use ($a){
+                        $query->where('from_text', 'like', '%'.$a.'%');
+                      })->get();
+      return view('contatos.new')->with('contato', $contato)
+                                 ->with('comboboxes', $comboboxes)
+                                 ->with('comboboxes_telefones', $comboboxes_telefones)
+                                 ->with('field_codigo', $field_codigo)
+                                 ->with('is_funcionario', $is_funcionario)
+                                 ->with('filiais', $filiais);
+    }
     Log::info('Detalhes de contato -> "'.$contato.'", para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
-    return view('contatos.new')->with('contato', $contato)->with('comboboxes', $comboboxes)->with('comboboxes_telefones', $comboboxes_telefones);
+
+    return view('contatos.new')->with('contato', $contato)
+                               ->with('comboboxes', $comboboxes)
+                               ->with('field_codigo', $field_codigo)
+                               ->with('comboboxes_telefones', $comboboxes_telefones);
   }
 
   public function update( Request $request, $id )
@@ -180,6 +269,7 @@ class ContatosController extends Controller
     $contato->sociabilidade = $request->sociabilidade;
     $contato->tipo = $request->tipo;
     $contato->codigo = $request->codigo;
+    $contato->nascimento = $request->nascimento;
     $contato->cod_prefeitura = $request->cod_prefeitura;
     $contato->obs = $request->obs;
     if ($request->active){
@@ -232,6 +322,7 @@ class ContatosController extends Controller
     return redirect()->action('ContatosController@show');
   }
 
+  /*
   public function telefones_get( $id, $id_telefone )
   {
     Log::info('Editar telefone de contato id:'.$id.' telefone id "'.$id_telefone.'", para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
@@ -261,7 +352,6 @@ class ContatosController extends Controller
     Log::info('Criando novo telefone para contato-> "'.$contato.'", para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
     return view('contatos.newphone')->with('contato', $contato)->with('comboboxes', $comboboxes);
   }
-
   public function telefones_new( Request $request, $id )
   {
 
@@ -276,7 +366,7 @@ class ContatosController extends Controller
 
     return redirect()->action('ContatosController@show');
   }
-
+  */
   public function telefones_delete( $id, $id_telefone )
   {
     $telefone = Telefones::find($id_telefone);
@@ -316,17 +406,14 @@ class ContatosController extends Controller
     } else {
       $contatos = Contatos::paginate(15);
     }
-
     Log::info('Novo relacionamento com busca -> "'.$request->busca.'", para contato -> "'.$contato.'", para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
 
     return view('contatos.relacoesnovo')->with('contato', $contato)->with('contatos', $contatos);
-    #return $contatos;
   }
 
   public function relacoes_post( Request $request, $id)
   {
     $combobox = comboboxes::find($request->combobox_id);
-    #return $combobox;
     $contato = contatos::Find($id);
     $data = [
       $id =>
@@ -377,13 +464,13 @@ class ContatosController extends Controller
 
     $path = storage_path() . '/' .'app/'. $attach->path;
     $file = Image::make($path);
-    if ($file->width() > 1100){
+    /*if ($file->width() > 1100){
       $file->resize("1100", null, function ($constraint) {
           $constraint->aspectRatio();
           $constraint->upsize();
       });
       $file->save();
-    }
+    }*/
     Log::info('Anexando arquivo para contato -> "'.$id.'", anexo -> "'.$attach.'", para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
     return redirect()->action('ContatosController@show');
   }

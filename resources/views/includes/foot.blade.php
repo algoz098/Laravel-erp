@@ -40,7 +40,12 @@
   });
 
   $(function() {
-    $( ".datepicker" ).datepicker({ dateFormat: "yy-mm-dd" });
+    $( ".datepicker" ).datepicker({
+                        changeMonth: true,
+                        changeYear: true,
+                        dateFormat: "dd-mm-yy",
+                        yearRange: "-100:+0"
+                      });
   });
 
   $("#cep").mask("99999-999");

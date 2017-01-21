@@ -277,8 +277,8 @@
                     <div class="row">
                       <div class="col-md-6">
                         {{{$contato->tipo=="0" ? "CNPJ" : "CPF"}}}: {{$contato->cpf}}<br>
-                        {{{$contato->tipo=="0" ? "I.E." : "RG"}}}: {{$contato->cnpj}}<br>
-                        Cod. Pref.:{{$contato->cod_prefeitura}}
+                        {{{$contato->tipo=="0" ? "I.E." : "RG"}}}: {{$contato->rg}}<br>
+                        Ins. Pref.:{{$contato->cod_prefeitura}}
                       </div>
                       <div class="col-md-6">
                         <strong>Endereço</strong><br>

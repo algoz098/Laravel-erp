@@ -20,7 +20,7 @@ class CreateUsersTable extends Migration
             $table->string('password');
             $table->rememberToken();
             $table->integer('ativo');
-            $table->json('perms');
+            $table->string('perms');
             $table->timestamps();
         });
     }

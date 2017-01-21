@@ -24,24 +24,31 @@
           </div>
         </div>
         <div class="row">
-          <div class="col-md-3">
-            <label>Modulo selecionado: </label>
             @if (isset($combobox))
-              <select class="form-control" id="tipo[0]" name="tipo[0]" disabled>
-                <option value="{{substr($combobox->combobox_textable_type, 4)}}" selected>{{substr($combobox->combobox_textable_type, 4)}}</option>
-              </select>
+              <div class="col-md-3">
+                <label>Modulo selecionado: </label>
+                <select class="form-control" id="tipo[0]" name="tipo" disabled>
+                  <option value="{{substr($combobox->combobox_textable_type, 4)}}" selected>{{substr($combobox->combobox_textable_type, 4)}}</option>
+                </select>
+              </div>
+              <div class="col-md-3" id="textHolder">
+                <label id="textLabel">Assunto</label>
+                <input value="{{{isset($combobox) ? $combobox->text : ""}}}" type="text" class="form-control" id="text[0]" name="text">
+              </div>
             @else
-              <select class="form-control" id="tipo[0]" name="tipo[0]" disabled>
-                <option value="Atendimentos" selected>Assunto de atendimento</option>
-              </select>
-              <input value="Atendimentos" name="tipo[0]" type="hidden">
+              <div class="col-md-3">
+                <label>Modulo selecionado: </label>
+                <select class="form-control" id="tipo[0]" name="tipo" disabled>
+                  <option value="Atendimentos" selected>Assunto de atendimento</option>
+                </select>
+                <input value="Atendimentos" name="tipo[0]" type="hidden">
+              </div>
+              <div class="col-md-3" id="textHolder">
+                <label id="textLabel">Assunto</label>
+                <input value="{{{isset($combobox) ? $combobox->text : ""}}}" type="text" class="form-control" id="text[0]" name="text[0]">
+              </div>
             @endif
           </div>
-          <div class="col-md-3" id="textHolder">
-            <label id="textLabel">Assunto</label>
-            <input value="{{{isset($combobox) ? $combobox->text : ""}}}" type="text" class="form-control" id="text[0]" name="text[0]">
-          </div>
-        </div>
         <span id="mais"></span>
       </form>
     </div>
