@@ -2,6 +2,7 @@
 
 namespace App;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Telefones;
@@ -18,6 +19,14 @@ class Contatos extends Model
     use SoftDeletes;
     protected $table = 'contatos';
     protected $dates = ['deleted_at'];
+
+    protected static function boot()
+    {
+        parent::boot();
+        static::addGlobalScope('ordering', function(Builder $builder) {
+            $builder->orderBy('nome', 'asc');
+        });
+    }
 
     public function telefones()
     {

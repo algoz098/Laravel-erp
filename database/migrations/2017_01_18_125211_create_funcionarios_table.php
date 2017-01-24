@@ -39,12 +39,14 @@ class CreateFuncionariosTable extends Migration
             $table->string('ajuda_custo')->nullable();
             $table->string('reservista')->nullable();
             $table->string('sal')->nullable();
+            $table->string('sal_real')->nullable();
             $table->string('sal_inss')->nullable();
             $table->string('vt')->nullable();
             $table->string('vt_percentual')->nullable();
             $table->string('va')->nullable();
             $table->string('vr')->nullable();
             $table->string('peri')->nullable();
+            $table->string('peri_percentual')->nullable();
             $table->string('com_fixo')->nullable();
             $table->string('com_perc')->nullable();
             $table->string('meta')->nullable();

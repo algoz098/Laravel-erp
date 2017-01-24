@@ -54,6 +54,13 @@
             <input type="text" class="form-control real-mask" value="{{ $contato->funcionario->sal or "" }}" name="sal" id="sal" >
           </div>
         </div>
+        <div class="form-group">
+          <label for="uf">Salario real</label>
+          <div class="input-group">
+            <span class="input-group-addon" id="basic-addon1">R$</span>
+            <input type="text" class="form-control real-mask" value="{{ $contato->funcionario->sal_real or "" }}" name="sal_real" id="sal" >
+          </div>
+        </div>
         <div class="row">
           <div class="col-md-8">
             <div class="form-group">
@@ -90,9 +97,19 @@
         </div>
         <div class="form-group">
           <label for="uf">Periculosidade</label>
-          <div class="input-group">
-            <span class="input-group-addon" id="basic-addon1">R$</span>
-            <input type="text" class="form-control real-mask" value="{{ $contato->funcionario->peri or "" }}" name="peri" id="peri">
+          <div class="row">
+            <div class="col-md-8">
+              <div class="input-group">
+                <span class="input-group-addon" id="basic-addon1">R$</span>
+                <input type="text" class="form-control real-mask" value="{{ $contato->funcionario->peri or "" }}" name="peri" id="peri">
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="input-group">
+                <input type="text" class="form-control integer" value="{{ $contato->funcionario->peri_percentual or "" }}" name="peri_percentual" id="peri_percentual">
+                <span class="input-group-addon" id="basic-addon1">%</span>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -152,13 +169,19 @@
           <label for="uf">Banco do PIS</label>
           <input type="text" class="form-control" value="{{ $contato->funcionario->pis_banco or "" }}" name="pis_banco" id="pis_banco" placeholder="PIS">
         </div>
-        <div class="form-group">
-          <label for="uf">INSS</label>
-          <input type="text" class="form-control" value="{{ $contato->funcionario->inss or "" }}" name="inss" id="inss" placeholder="INSS">
-        </div>
-        <div class="form-group">
-          <label for="uf">Salario INSS</label>
-          <input type="text" class="form-control" value="{{ $contato->funcionario->sal_inss or "" }}" name="sal_inss" id="sal_inss" placeholder="Salario">
+        <div class="row">
+          <div class="col-md-8">
+            <div class="form-group">
+              <label for="uf">INSS</label>
+              <input type="text" class="form-control" value="{{ $contato->funcionario->inss or "" }}" name="inss" id="inss" placeholder="INSS">
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="form-group">
+              <label for="uf">Perc.</label>
+              <input type="text" class="form-control" value="{{ $contato->funcionario->sal_inss or "" }}" name="sal_inss" id="sal_inss" placeholder="Salario">
+            </div>
+          </div>
         </div>
       </div>
     </div>

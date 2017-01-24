@@ -7,6 +7,7 @@ use Auth;
 use Carbon\Carbon;
 use App\Contas as Contas;
 use App\Contatos as Contatos;
+use App\Contas_consumos as consumos;
 use App\Combobox_texts as Comboboxes;
 use App\Discriminacoes as Discs;
 use Log;
@@ -95,6 +96,14 @@ class ContasController extends Controller
     $contatos = Contatos::paginate(15);
     return view('contas.contatos')->with('contatos', $contatos);
   }
+  public function consumos_novo(){
+    Log::info('Adicionando consumo, para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
+    $contatos = Contatos::paginate(15);
+    $is_consumos = 1;
+    return view('contas.contatos')->with('contatos', $contatos)->with('is_consumos', $is_consumos);
+  }
+
+
   public function searchContatos( Request $request)
   {
     if (!empty($request->busca)){
@@ -118,6 +127,8 @@ class ContasController extends Controller
     }
     return view('contas.index')->with('contas', $contas)->with('deletados', $deletados);
   }
+
+  /*
   public function add(Request $request){
     $conta = new Contas;
     $conta->contatos_id = $request->contatos_id;
@@ -149,7 +160,7 @@ class ContasController extends Controller
     }
     Log::info('Salvando contas -> "'.$conta.'", para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
     return redirect()->action('ContasController@index');
-  }
+  }*/
 
   public function pago($id){
     $conta = Contas::find($id);
@@ -183,6 +194,18 @@ class ContasController extends Controller
     Log::info('Adicionar CONTA passo 2, para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
     return view('contas.valores')->with('contato', $contato)->with('comboboxes', $comboboxes)->with('comboboxes2', $comboboxes2);
   }
+  public function consumos_novo2(request $request, $id){
+    $contato = Contatos::find($id);
+    $comboboxes = comboboxes::where('combobox_textable_type', 'App\Consumos')->get();
+    $comboboxes2 = comboboxes::where('combobox_textable_type', 'App\Contas\Formas')->get();
+    $is_consumos = 1;
+    Log::info('Adicionar CONSUMOS passo 2, para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
+    return view('contas.valores')->with('contato', $contato)
+                                 ->with('comboboxes', $comboboxes)
+                                 ->with('comboboxes2', $comboboxes2)
+                                 ->with('is_consumos', $is_consumos);
+  }
+
   public function add_3(request $request, $id){
     $this->validate($request, [
         'tipo' => 'required',
@@ -195,7 +218,8 @@ class ContasController extends Controller
     $conta->contatos_id = $contato->id;
     $conta->nome = $request->nome;
     $conta->valor = $request->cheio;
-    $conta->vencimento = $request->vencimento;
+    $date_temp = date_create($request->vencimento);
+    $conta->vencimento = $date_temp;
     $conta->descricao = $request->descricao;
     $conta->tipo = $request->tipo;
     $conta->dm = $request->dm;
@@ -236,6 +260,69 @@ class ContasController extends Controller
     }
     return redirect()->action('ContasController@index');
   }
+  public function consumos_novo3(request $request, $id){
+    $this->validate($request, [
+        'forma' => 'required',
+        'nome' => 'required|max:50',
+        'cheio' => 'required|numeric',
+    ]);
+    $contato = Contatos::find($id);
+    $conta = new Contas;
+    $conta->contatos_id = $contato->id;
+    $conta->nome = $request->nome;
+    $conta->valor = $request->cheio;
+    $date_temp = date_create($request->vencimento);
+    $conta->vencimento = $date_temp;
+    $conta->descricao = $request->descricao;
+    $conta->tipo = "2";
+    $conta->dm = $request->dm;
+    $conta->estado = $request->estado;
+    if (!$request->desconto){
+      $conta->desconto = "0";
+    } else {
+      $conta->desconto = $request->desconto;
+    }
+    $conta->pagamento = $request->forma;
+    $conta->save();
+    $conta->referente = $conta->id;
+    if ($request->estado!="0" and $request->estado!="1"){
+      $conta->estado="0";
+    }
+    $conta->save();
+    $consumo = new Consumos;
+    $consumo->contas_id = $conta->id;
+    $consumo->mes = $request->mes;
+    $consumo->codigo = $request->codigo;
+    $consumo->consumo = $request->consumo;
+    $consumo->cat = $request->cat;
+    $consumo->valor_anterior = $request->valor_anterior;
+    $consumo->valor_atual = $request->valor_atual;
+    $consumo->sub_item1 = $request->sub_item1;
+    $consumo->sub_item2 = $request->sub_item2;
+    $consumo->save();
+    foreach ($request->disc_text as $key => $text) {
+      $disc = new Discs;
+      $disc->contas_id = $conta->id;
+      $disc->nome = $request->disc_text[$key];
+      $disc->valor = $request->disc_valor[$key];
+      $disc->save();
+    }
+    Log::info('Adicionar CONSUMO passo 3, para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
+    if ($request->parcelas>0){
+      $i = 0;
+      if (!empty($conta->desconto)){
+        $parcela = ($conta->valor - $conta->desconto)/$request->parcelas;
+      }
+      $parcela = $conta->valor/$request->parcelas;
+      while ($i < $request->parcelas) {
+        $i = $i + 1;
+        $vencimentos[$i] = Carbon::today()->addMonths($i);
+      }
+      return view('contas.parcelas')->with('contato', $contato)->with('conta', $conta)->with('vencimentos', $vencimentos)->with('parcela', $parcela);
+    }
+    return redirect()->action('ContasController@index');
+  }
+
 
   public function add_4(request $request, $id, $conta_id){
     $conta= Contas::find($conta_id);
@@ -261,4 +348,6 @@ class ContasController extends Controller
     #return "ok";
     return redirect()->action('ContasController@index');
   }
+
+
 }

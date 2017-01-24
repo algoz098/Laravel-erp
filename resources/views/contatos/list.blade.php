@@ -256,6 +256,12 @@
                             <i class="fa fa-user level{{$contato->active}}"></i>
                           @endif
                           <i class="fa fa-signal level{{$contato->sociabilidade}}"></i>
+                          @if ($contato->funcionario)
+                            Funcionario de:
+                            <span class="label label-info">
+                              <i class="fa fa-user"></i> {{$contato->user->trabalho->nome}}
+                            </span>
+                          @endif
                         </span>
                       </div>
                     </div>
@@ -273,6 +279,14 @@
                         </div>
                       @endif
                     </div>
+                    @if ($contato->funcionario)
+                      <div class="row">
+                        <div class="col-md-4">
+                          Data adm.: <span class="label label-info">{{$contato->funcionario->data_adm}}</span>
+                          Data dem.: <span class="label label-info">{{$contato->funcionario->data_dem}}</span>
+                        </div>
+                      </div>
+                    @endif
                     <hr>
                     <div class="row">
                       <div class="col-md-6">

@@ -15,6 +15,40 @@ class ContatosTableSeeder extends Seeder
           'nome' => "Empresa",
           'tipo' => "0"
       ]);
+      DB::table('contatos')->insert([
+          'nome' => "CPFL Paulista",
+          'tipo' => "0",
+      ]);
+      DB::table('telefones')->insert([
+          'contatos_id' => "2",
+          'tipo' => "Atend.",
+          'numero' => "0800 010 10 10​"
+      ]);
+      DB::table('contatos')->insert([
+          'nome' => "DAAE",
+          'tipo' => "0",
+          'cidade' => "Araraquara"
+      ]);
+      DB::table('telefones')->insert([
+          'contatos_id' => "3",
+          'tipo' => "Atend.",
+          'numero' => "0800 770 1595​"
+      ]);
+      DB::table('contatos')->insert([
+          'nome' => "Sabesp",
+          'tipo' => "0",
+          'cidade' => "São Paulo"
+      ]);
+      DB::table('telefones')->insert([
+          'contatos_id' => "4",
+          'tipo' => "Metrop.",
+          'numero' => "0800 011 9911"
+      ]);
+      DB::table('telefones')->insert([
+          'contatos_id' => "4",
+          'tipo' => "Interior",
+          'numero' => "0800 055 0195"
+      ]);
       DB::table('users')->insert([
           'contatos_id' => "1",
           'email' => "empresa",
@@ -91,6 +125,13 @@ class ContatosTableSeeder extends Seeder
           'combobox_textable_id' => "1",
           'combobox_textable_type' => "App\Contas\Formas",
           'field' => "tipo",
+          'value' => "Pagamento online",
+          'text' => "Pagamento online"
+      ]);
+      DB::table('combobox_texts')->insert([
+          'combobox_textable_id' => "1",
+          'combobox_textable_type' => "App\Contas\Formas",
+          'field' => "tipo",
           'value' => "Cartão de Credito",
           'text' => "Cartão de Credito"
       ]);
@@ -124,24 +165,31 @@ class ContatosTableSeeder extends Seeder
       ]);
       DB::table('combobox_texts')->insert([
           'combobox_textable_id' => "1",
-          'combobox_textable_type' => "App\Contas",
+          'combobox_textable_type' => "App\Consumos",
           'field' => "tipo",
-          'value' => "Conta de Agua",
+          'value' => "1001",
           'text' => "Conta de Agua"
       ]);
       DB::table('combobox_texts')->insert([
           'combobox_textable_id' => "1",
-          'combobox_textable_type' => "App\Contas",
+          'combobox_textable_type' => "App\Consumos",
           'field' => "tipo",
-          'value' => "Internet",
-          'text' =>  "Internet"
+          'value' => "1002",
+          'text' => "Conta de Energia Eletrica"
       ]);
       DB::table('combobox_texts')->insert([
           'combobox_textable_id' => "1",
-          'combobox_textable_type' => "App\Contas",
+          'combobox_textable_type' => "App\Consumos",
           'field' => "tipo",
-          'value' => "Conta de Energia Eletrica",
-          'text' => "Conta de Energia Eletrica"
+          'value' => "1003",
+          'text' => "Internet e Telefone"
+      ]);
+      DB::table('combobox_texts')->insert([
+          'combobox_textable_id' => "1",
+          'combobox_textable_type' => "App\Consumos",
+          'field' => "tipo",
+          'value' => "1004",
+          'text' =>  "Gas encanado"
       ]);
       DB::table('combobox_texts')->insert([
           'combobox_textable_id' => "1",
@@ -204,6 +252,12 @@ class ContatosTableSeeder extends Seeder
           'value' => "0",
           'options' => "",
           'text' => "Campo 'Codigo'"
+      ]);
+      DB::table('erp_configs')->insert([
+          'field' => "img_destaque",
+          'value' => "0",
+          'options' => "",
+          'text' => "Imagem de destaque"
       ]);
     }
 }

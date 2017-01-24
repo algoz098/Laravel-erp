@@ -52,6 +52,10 @@ Route::get('novo/contas/{id}', 'ContasController@add_2')->middleware('auth');
 Route::post('novo/contas/{id}/parcelas', 'ContasController@add_3')->middleware('auth');
 Route::post('novo/contas/{id}/parcelas/{conta_id}', 'ContasController@add_4')->middleware('auth');
 
+Route::get('novo/consumos', 'ContasController@consumos_novo')->middleware('auth');
+Route::get('novo/consumos/{id}', 'ContasController@consumos_novo2')->middleware('auth');
+Route::post('novo/consumos/{id}/parcelas', 'ContasController@consumos_novo3')->middleware('auth');
+
 Route::get('/lista/atendimentos', 'AtendimentoController@index')->middleware('auth')->name('atendimentos');
 Route::post('/lista/atendimentos/{id}/attach', 'AtendimentoController@attach')->middleware('auth');
 Route::post('lista/atendimentos', 'AtendimentoController@search')->middleware('auth');

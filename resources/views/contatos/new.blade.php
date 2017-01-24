@@ -17,7 +17,7 @@
         <div class="panel panel-default">
           <div class="panel-heading"><i class="fa fa-users fa-1x"></i> Adicionar entidade</div>
           <div class="panel-body">
-            <div class="row text-right">
+            <div class="row text-right" id="secondNavbar">
               <div class="col-sm-offset-2 col-sm-10">
                 <a class="btn btn-warning" href="{{ url('lista/contatos')}}" ><i class="fa fa-users"></i> Voltar a Lista</a>
                 <button type="submit" class="btn btn-success"><i class="fa fa-check"></i> Salvar</button>
@@ -81,7 +81,7 @@
               </div>
               <div class="col-md-3">
                 <div class="form-group">
-                  <label for="cod_prefeitura">Inscrição da Prefeitura</label>
+                  <label for="cod_prefeitura" id="cod_prefeituraHolder">Inscrição da Prefeitura</label>
                   <input type="text" class="form-control" value="{{ $contato->cod_prefeitura or "" }}" name="cod_prefeitura" id="cod_prefeitura" placeholder="Codigo da prefeitura">
                 </div>
               </div>
@@ -111,14 +111,12 @@
                   </div>
                 </div>
               @endif
-              @if (isset($contato) and $contato->tipo=="1")
-                <div class="col-md-3" id=nascimentoHolder>
-                  <div class="form-group">
-                    <label for="codigo">Data de Nascimento</label>
-                    <input type="text" class="form-control datepicker" value="{{ $contato->nascimento or "" }}" name="nascimento" id="nascimento" placeholder="Codigo">
-                  </div>
+              <div class="col-md-3" id=nascimentoHolder>
+                <div class="form-group">
+                  <label for="codigo">Data de Nascimento</label>
+                  <input type="text" class="form-control datepicker" value="{{ $contato->nascimento or "" }}" name="nascimento" id="nascimento" placeholder="Codigo">
                 </div>
-              @endif
+              </div>
             </div>
             <div class="row">
               <div class="col-md-4">
@@ -316,8 +314,10 @@
       $("#cpf").attr("placeholder", "CPF");
       $("#nome").attr("placeholder", "Nome");
       $("#sobrenome").attr("placeholder", "Sobrenome");
-      $("#cpf").mask("999.999.999-**")
-      $("#rg").mask("**.***.***-*?*")
+      $("#cpf").mask("999.999.999-**");
+      $("#rg").mask("**.***.***-*?*");
+      $("#cod_prefeituraHolder").text("Insc. de Autonomo");
+      $("#cod_prefeitura").attr("placeholder", "Insc. de Autonomo");
     }
     if (b=="0"){
       $("label[for='rg']").text("Inscrição Estadual");
@@ -329,8 +329,10 @@
       $("#cpf").attr("placeholder", "CNPJ");
       $("#nome").attr("placeholder", "Razão Social");
       $("#sobrenome").attr("placeholder", "Nome Fantasia");
-      $("#cpf").mask("99.999.999/9999-99")
-      $("#rg").mask("999.999.999.999")
+      $("#cpf").mask("99.999.999/9999-99");
+      $("#rg").mask("999.999.999.999");
+      $("#cod_prefeituraHolder").text("Insc. da Prefeitura");
+      $("#cod_prefeitura").attr("placeholder", "Insc. da Prefeitura");
     }
    }
    $(document).ready(tipoChange());

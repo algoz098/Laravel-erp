@@ -21,6 +21,7 @@ return array(
     'CreateCatsTable' => $baseDir . '/database/migrations/2017_01_19_142844_create_cats_table.php',
     'CreateColunmsContasTable' => $baseDir . '/database/migrations/2016_12_09_183333_create_colunms_contas_table.php',
     'CreateComboboxTextableTable' => $baseDir . '/database/migrations/2017_01_06_112212_create_combobox_textable_table.php',
+    'CreateContasConsumoTable' => $baseDir . '/database/migrations/2017_01_23_225530_create_contas_consumo_table.php',
     'CreateContasTable' => $baseDir . '/database/migrations/2016_12_01_162001_create_contas_table.php',
     'CreateContatosPivotTable2' => $baseDir . '/database/migrations/2016_11_24_215712_create_contatos_pivot_table2.php',
     'CreateContatosTable' => $baseDir . '/database/migrations/2016_11_06_163403_create_contatos_table.php',

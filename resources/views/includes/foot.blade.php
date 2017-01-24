@@ -47,6 +47,14 @@
                         yearRange: "-100:+0"
                       });
   });
+  $(function() {
+    $( ".datepicker_mes_ano" ).datepicker({
+                        changeMonth: true,
+                        changeYear: true,
+                        dateFormat: "mm-yy",
+                        yearRange: "-100:+0"
+                      });
+  });
 
   $("#cep").mask("99999-999");
   $("#valor").maskMoney({thousands:'', decimal:'.', allowZero:true});

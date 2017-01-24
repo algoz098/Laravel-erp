@@ -43,7 +43,7 @@
               @foreach($contatos as $key => $contato)
                 <div class="row list-contacts">
                   <div class="col-md-1">
-                    <a class="btn btn-info" href="{{ url('/novo/contas')}}/{{$contato->id}}">
+                    <a class="btn btn-info" href="{{{ (isset($is_consumos) and $is_consumos=="1") ? url('/novo/consumos/') : url('/novo/contas')}}}/{{$contato->id}}">
                       <i class="fa fa-gear"></i>
                     </a>
                   </div>

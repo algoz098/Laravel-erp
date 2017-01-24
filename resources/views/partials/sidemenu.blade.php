@@ -2,6 +2,9 @@
   <div class="text-center webgs-brand">
     Web GS - ERP
   </div>
+  <div class="row text-center" style="margin-bottom: 15px; margin-top:15px;">
+    <img src="{{ asset('img_destaque.jpeg') }}" class="img-circle" height="200">
+  </div>
   <ul class="menu" >
     <li class="pushy-submenu {{{ Request::path()=='/' ? "active" : "" }}}">
       <a href="{{ url('/') }}"><i class="fa fa-dashboard fa-lg"></i> Painel</a>
@@ -13,6 +16,7 @@
           <li class="pushy-link "><a class="{{{ Request::path()=='novo/funcionarios' ? "active" : "" }}}" href="{{ url('novo/funcionarios') }}"><i class="fa fa-user-plus"></i> Funcionario</a></li>
           <li class="pushy-link "><a class="{{{ Request::path()=='novo/atendimentos' ? "active" : "" }}}" href="{{ url('/novo/atendimentos') }}"><i class="fa fa-list"></i> Atendimento</a></li>
           <li class="pushy-link "><a class="{{{ Request::path()=='novo/contas' ? "active" : "" }}}" href="{{ url('/novo/contas') }}"><i class="fa fa-usd"></i> Plano de Caixa</a></li>
+          <li class="pushy-link "><a class="{{{ Request::path()=='novo/consumos' ? "active" : "" }}}" href="{{ url('/novo/consumos') }}"><i class="fa fa-arrow-right"></i><i class="fa fa-usd"></i> Conta de Consumo</a></li>
           <li class="pushy-link "><a class="{{{ Request::path()=='novo/estoque' ? "active" : "" }}}" href="{{ url('/novo/estoque') }}"><i class="fa fa-bell"></i> Novo produto</a></li>
           <li class="pushy-link "><a class="{{{ Request::path()=='novo/caixa' ? "active" : "" }}}" href="{{ url('/novo/caixa') }}"><i class="fa fa-money"></i> Movimento de Caixa</a></li>
           <li class="pushy-link "><a class="{{{ Request::path()=='novo/vendas' ? "active" : "" }}}" href="{{ url('/novo/vendas') }}"><i class="fa fa-shopping-cart"></i> Vendas</a></li>

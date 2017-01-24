@@ -350,6 +350,7 @@ class ComposerStaticIniteb7ed518eae24fc4a2b91da7f84bfb6b
         'CreateCatsTable' => __DIR__ . '/../..' . '/database/migrations/2017_01_19_142844_create_cats_table.php',
         'CreateColunmsContasTable' => __DIR__ . '/../..' . '/database/migrations/2016_12_09_183333_create_colunms_contas_table.php',
         'CreateComboboxTextableTable' => __DIR__ . '/../..' . '/database/migrations/2017_01_06_112212_create_combobox_textable_table.php',
+        'CreateContasConsumoTable' => __DIR__ . '/../..' . '/database/migrations/2017_01_23_225530_create_contas_consumo_table.php',
         'CreateContasTable' => __DIR__ . '/../..' . '/database/migrations/2016_12_01_162001_create_contas_table.php',
         'CreateContatosPivotTable2' => __DIR__ . '/../..' . '/database/migrations/2016_11_24_215712_create_contatos_pivot_table2.php',
         'CreateContatosTable' => __DIR__ . '/../..' . '/database/migrations/2016_11_06_163403_create_contatos_table.php',

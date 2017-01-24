@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\User as User;
 use App\Contatos as Contatos;
+use App\Attachments as Attachs;
 use App\Users_permissions as Roles;
 use App\Erp_configs as Configs;
 use App\Combobox_texts as Comboboxes;
@@ -30,18 +31,34 @@ class AdminController extends Controller
     Log::info('!!!ADMIN!!! Mostrando configuration, para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
     $configs = Configs::all();
     $field_codigo = Configs::where('field', "field_codigo")->first();
+    $img_destaque = Configs::where('field', "img_destaque")->first();
+    $matriz = Contatos::find(1);
     return view('admin.configuration')->with('configs', $configs)
-                                      ->with('field_codigo', $field_codigo);
+                                      ->with('field_codigo', $field_codigo)
+                                      ->with('img_destaque', $img_destaque)
+                                      ->with('matriz', $matriz);
   }
   public function configuration_save(request $request){
-    #return $request->codigo;
+    #return $request->img_destaque;
     Log::info('!!!ADMIN!!! Salvando configuration, para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
     $configs = Configs::all();
     $field_codigo = Configs::where('field', 'field_codigo')->first();
-    $field_codigo->value = $request->codigo;
+    $field_codigo->value = $request->field_codigo;
     $field_codigo->save();
-    return view('admin.configuration')->with('configs', $configs)
-                                      ->with('field_codigo', $field_codigo);
+    $img_destaque = Configs::where('field', 'img_destaque')->first();
+    $attach = Attachs::find($request->img_destaque);
+    $file = storage_path().'/app//'.$attach->path;
+    $extension = File::extension($attach->path);
+    $dest = public_path().'/img_destaque.'.$extension;
+    if ( ! File::copy($file, $dest))
+    {
+      die("Couldn't copy file");
+    }
+    $img_destaque->value = $attach->name;
+    $img_destaque->options = $request->img_destaque;
+    $img_destaque->save();
+
+    return redirect()->action('AdminController@configuration');
   }
 
   public function user_edit($id){

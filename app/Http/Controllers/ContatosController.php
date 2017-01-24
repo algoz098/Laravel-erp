@@ -198,12 +198,14 @@ class ContatosController extends Controller
       $func->ajuda_custo = $request->ajuda_custo;
       $func->reservista = $request->reservista;
       $func->sal = $request->sal;
+      $func->sal_real = $request->sal_real;
       $func->sal_inss = $request->sal_inss;
       $func->vt = $request->vt;
       $func->vt_percentual = $request->vt_percentual;
       $func->va = $request->va;
       $func->vr = $request->vr;
       $func->peri = $request->peri;
+      $func->peri_percentual = $request->peri_percentual;
       $func->save();
       $user = new User;
       $user->email = $request->user;

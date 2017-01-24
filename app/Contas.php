@@ -17,7 +17,10 @@ class Contas extends Model
   {
       return $this->belongsTo('App\Contatos');
   }
-
+  public function consumo()
+  {
+      return $this->hasOne('App\Contas_consumos');
+  }
   public function parcelas()
   {
       return $this->hasMany('App\Contas', 'referente');
