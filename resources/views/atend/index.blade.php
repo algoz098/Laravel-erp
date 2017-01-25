@@ -88,13 +88,13 @@
             <div class="col-md-1">
               IDs
             </div>
-            <div class="col-md-3">
+            <div class="col-md-2">
               Quem foi atendido
             </div>
             <div class="col-md-2">
               Assunto
             </div>
-            <div class="col-md-4">
+            <div class="col-md-5">
               Descrição
             </div>
             <div class="col-md-1 pull-right">
@@ -109,15 +109,15 @@
                       ID: {{$atendimento->id}}
                     </span>
                   </div>
-                  <div class="col-md-3">
+                  <div class="col-md-2">
                     <a href="{{ url('novo/contatos') }}/{{$atendimento->contatos->id}}" class="label label-primary">
-                      <i class="fa fa-user"></i> {{ str_limit($atendimento->contatos->nome, 30)}}
+                      <i class="fa fa-user"></i> {{ str_limit($atendimento->contatos->nome, 15)}}
                     </a>
                   </div>
                   <div class="col-md-2 ajuda-popover" @if ($key==0) title="Detalhes" data-content="Assunto e descrição." data-placement="bottom" @endif >
                     {{$atendimento->assunto}}
                   </div>
-                  <div class="col-md-4">
+                  <div class="col-md-5">
                     {{ str_limit(strip_tags($atendimento->texto, 25))}}
                   </div>
                   <div class="col-md-1 pull-right">
@@ -199,9 +199,9 @@
                   </div>
                 </div>
               </form>
-                <!-- Modal -->
+                <!-- Modal detalhes-->
                 <div class="modal fade" id="detalhes{{$atendimento->id}}" tabindex="-1" role="dialog" aria-labelledby="detalhesLabel">
-                  <div class="modal-dialog" role="document">
+                  <div class="modal-dialog  modal-lg extra" role="document">
                     <div class="modal-content">
                       <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
@@ -218,7 +218,7 @@
                           <div class="col-md-4">
                             <div class="form-group">
                               <label for="contato">Contato</label>
-                              <div>{{$atendimento->contatos->nome}} {{$atendimento->contatos->sobrenome}}</div>
+                              <div>{{$atendimento->contatos->nome}}</div>
                             </div>
                           </div>
                           <div class="col-md-4">

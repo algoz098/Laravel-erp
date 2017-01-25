@@ -34,8 +34,16 @@
               </div>
             </div>
           </div>
+          <div class="col-md-3">
+            <div class="form-group">
+              <label for="sel1">{{$modulo_atendimentos->text}}</label>
+              <select class="form-control" id="sel1" name="{{$modulo_atendimentos->field}}">
+                <option value="0" {{{$modulo_atendimentos->value=="0"? "selected" : ""}}}>Desativado</option>
+                <option value="1" {{{$modulo_atendimentos->value=="1"? "selected" : ""}}}>Ativado</option>
+              </select>
+            </div>
+          </div>
         </div>
-
       </div>
     </form>
   </div>

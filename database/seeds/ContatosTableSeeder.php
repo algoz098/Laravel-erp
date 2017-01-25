@@ -259,5 +259,11 @@ class ContatosTableSeeder extends Seeder
           'options' => "",
           'text' => "Imagem de destaque"
       ]);
+      DB::table('erp_configs')->insert([
+          'field' => "modulo_atendimentos",
+          'value' => "1",
+          'options' => "",
+          'text' => 'Modulo "Atendimentos"'
+      ]);
     }
 }

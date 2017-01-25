@@ -16,6 +16,7 @@ use Artisan;
 use DateTime;
 use Log;
 use Auth;
+use Config;
 
 class AdminController extends Controller
 {
@@ -32,19 +33,27 @@ class AdminController extends Controller
     $configs = Configs::all();
     $field_codigo = Configs::where('field', "field_codigo")->first();
     $img_destaque = Configs::where('field', "img_destaque")->first();
+    $modulo_atendimentos = Configs::where('field', "modulo_atendimentos")->first();
     $matriz = Contatos::find(1);
     return view('admin.configuration')->with('configs', $configs)
                                       ->with('field_codigo', $field_codigo)
                                       ->with('img_destaque', $img_destaque)
+                                      ->with('modulo_atendimentos', $modulo_atendimentos)
                                       ->with('matriz', $matriz);
   }
   public function configuration_save(request $request){
     #return $request->img_destaque;
     Log::info('!!!ADMIN!!! Salvando configuration, para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
     $configs = Configs::all();
+
     $field_codigo = Configs::where('field', 'field_codigo')->first();
     $field_codigo->value = $request->field_codigo;
     $field_codigo->save();
+
+    $modulo_atendimentos = Configs::where('field', "modulo_atendimentos")->first();
+    $modulo_atendimentos->value = $request->modulo_atendimentos;
+    $modulo_atendimentos->save();
+
     $img_destaque = Configs::where('field', 'img_destaque')->first();
     $attach = Attachs::find($request->img_destaque);
     $file = storage_path().'/app//'.$attach->path;
