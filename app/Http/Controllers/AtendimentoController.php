@@ -10,16 +10,19 @@ use App\Combobox_texts as Comboboxes;
 use Carbon\Carbon;
 use Log;
 use Auth;
+use Intervention\Image\ImageManagerStatic as Image;
+use File;
+use Storage;
 
 class AtendimentoController  extends BaseController
 {
   public function __construct(){
      parent::__construct();
   }
-  
+
   public function index(){
     Log::info('Mostando atendimentos, para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
-    $atendimentos = Atendimento::paginate(15);
+    $atendimentos = Atendimento::orderBy('created_at', 'desc')->paginate(15);
     $deletados = "0";
     $total= Atendimento::count();
     $comboboxes = comboboxes::where('combobox_textable_type', 'App\Atendimentos')->get();
@@ -99,7 +102,7 @@ class AtendimentoController  extends BaseController
           $a++;
         }
     }
-    $atendimentos = $atendimentos->paginate(30);
+    $atendimentos = $atendimentos->orderBy('created_at', 'desc')->paginate(30);
 
     if ((is_array(Auth::user()->perms) and Auth::user()->perms["admin"]==1) and $request->deletados){
         $deletados = atendimento::onlyTrashed()->get();
@@ -164,6 +167,15 @@ class AtendimentoController  extends BaseController
     $attach->path = $request->file->store('public');
     $attach->contatos_id = $atendimento->contatos_id;
     $attach->save();
+
+    $path = storage_path() . '/' .'app/'. $attach->path;
+    $extension = File::extension($attach->path);
+    if ($extension=="JPG" or $extension=="JPEG" or $extension=="PNG" or $extension=="GIF") {
+      $file = Image::make($path);
+    } else {
+      $file = Storage::put(storage_path() . '/' .'app', $request->file);
+    }
+
     Log::info('Anexando arquivo para atendimento, anexo -> "'.$attach.'", para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
 
     return redirect()->action('AtendimentoController@index');

@@ -29,18 +29,16 @@ use Carbon\Carbon;
           <div class="row">
             <div class="col-md-5">
               @foreach($contatos as $key => $contato)
-                <div class="row list-contacts">
-                  <div class="col-md-2 text-right">
-                    <a class="btn btn-info" onclick="
-                                                      $('#form').show();
-                                                      $('#contato').val('{{$contato->nome}}');
-                                                      $('#contatos_id').val('{{$contato->id}}');
-                    ">
-                      <i class="fa fa-gear"></i>
-                    </a>
+                <div class="row list-contacts"  onclick="
+                                                  $('#form').show();
+                                                  $('#contato').val('{{$contato->nome}}');
+                                                  $('#contatos_id').val('{{$contato->id}}');
+                ">
+                  <div class="col-md-2">
+                    <span class="label label-info">ID: {{$contato->id}}</span>
                   </div>
                   <div class="col-md-10">
-                    {{str_limit($contato->nome, 45)}}
+                    {{{ $contato->tipo!="1" ? str_limit($contato->nome, 15) : $contato->nome." ".str_limit($contato->sobrenome, 15) }}}
                   </div>
                 </div>
               @endforeach

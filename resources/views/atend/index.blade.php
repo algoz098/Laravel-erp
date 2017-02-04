@@ -111,14 +111,14 @@
                   </div>
                   <div class="col-md-2">
                     <a href="{{ url('novo/contatos') }}/{{$atendimento->contatos->id}}" class="label label-primary">
-                      <i class="fa fa-user"></i> {{ str_limit($atendimento->contatos->nome, 15)}}
+                      <i class="fa fa-user"></i> {{{ $atendimento->contatos->tipo!="1" ? str_limit($atendimento->contatos->nome, 15) : $atendimento->contatos->nome." ".str_limit($atendimento->contatos->sobrenome, 15) }}}
                     </a>
                   </div>
                   <div class="col-md-2 ajuda-popover" @if ($key==0) title="Detalhes" data-content="Assunto e descrição." data-placement="bottom" @endif >
                     {{$atendimento->assunto}}
                   </div>
                   <div class="col-md-5">
-                    {{ str_limit(strip_tags($atendimento->texto, 25))}}
+                    {{ str_limit(strip_tags($atendimento->texto), 60)}}
                   </div>
                   <div class="col-md-1 pull-right">
                     <span class="label label-info">
@@ -173,7 +173,7 @@
                 </div>
                 <!-- Modal -->
                 <form action="{{ url('lista/atendimentos') }}/{{$atendimento->id}}/attach" method="post" enctype="multipart/form-data">
-                  {{ csrf_field() }}
+
                 <div class="modal fade" id="upload{{$atendimento->id}}" tabindex="-1" role="dialog" aria-labelledby="upload">
                   <div class="modal-dialog" role="document">
                     <div class="modal-content">
@@ -183,6 +183,7 @@
                       </div>
                       <div class="modal-body">
                         <div class="form-group">
+                          {{ csrf_field() }}
                           <label class="control-label">Escolha o arquivo</label>
                           <input type="file" name="file" id="fileToUpload" class="file">
                         </div>
