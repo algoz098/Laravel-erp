@@ -40,6 +40,12 @@ Route::post('lista/contatos/{id}/relacoes/novo', 'ContatosController@relacoes_po
 Route::get('lista/contatos/{id}/relacoes/{id_relacao}', 'ContatosController@relacoes_edit')->middleware('auth');
 Route::get('lista/contatos/{id}/relacoes/{id_relacao}/delete', 'ContatosController@relacoes_delete')->middleware('auth');
 
+Route::get('lista/tickets/', 'TicketsController@index')->middleware('auth');
+Route::get('novo/tickets/', 'TicketsController@novo')->middleware('auth');
+Route::get('novo/tickets/{id}', 'TicketsController@novo_2')->middleware('auth');
+
+
+
 Route::get('lista/contas', 'ContasController@index')->middleware('auth');
 Route::post('lista/contas', 'ContasController@search')->middleware('auth');
 Route::get('lista/contas/{id}/pago', 'ContasController@pago')->middleware('auth');
