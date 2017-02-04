@@ -15,8 +15,12 @@ Use App\Http\Controllers\CaixasLib;
 Use Carbon\Carbon;
 
 
-class CaixasController extends Controller
+class CaixasController  extends BaseController
 {
+  public function __construct(){
+     parent::__construct();
+  }
+  
     public function index(){
       Log::info('Vendo movimentação de caixa da filial -> "'.Auth::user()->trabalho_id.'", para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
       $estado_caixa = new CaixasLib;

@@ -67,7 +67,7 @@
               <label for="uf">Vale Transporte</label>
               <div class="input-group">
                 <span class="input-group-addon" id="basic-addon1">R$</span>
-                <input type="text" class="form-control real-mask" value="{{ $contato->funcionario->vt or "" }}" name="vt" id="vt">
+                <input type="text" class="form-control real-mask" value="{{ $contato->funcionario->vt or "" }}" name="vt" id="vt" disabled>
               </div>
             </div>
           </div>
@@ -75,7 +75,7 @@
             <div class="form-group">
               <label for="uf">Percentual</label>
               <div class="input-group">
-                <input type="text" class="form-control integer" value="{{ $contato->funcionario->vt_percentual or "" }}" name="vt_percentual" id="vt_percentual">
+                <input type="text" class="form-control integer" value="{{ $contato->funcionario->vt_percentual or "" }}" name="vt_percentual" id="vt_percentual" onchange="calcVT()">
                 <span class="input-group-addon" id="basic-addon1">%</span>
               </div>
             </div>
@@ -198,8 +198,8 @@
           <label for="uf">Categoria da CNH</label>
           <input type="text" class="form-control" value="{{ $contato->funcionario->cnh_cat or "" }}" name="cnh_cat" id="cnh_cat" placeholder="CNH">
         </div>
-        <div class="form-group">
-          <label for="uf">Vencimento da CNH</label>
+        <div class="form-group has-error">
+          <label class="control-label" >Vencimento da CNH</label>
           <input type="text" class="form-control datepicker" value="{{ $contato->funcionario->cnh_venc or "" }}" name="cnh_venc" id="cnh_venc" placeholder="CNH">
         </div>
       </div>
@@ -263,4 +263,8 @@ $(document).ready(function(){
     $("#rg2").val($(this).val());
   });
 });
+function calcVT() {
+  var a = (parseFloat($('#sal').val())*parseFloat($('#vt_percentual').val()))/100;
+  $('#vt').val(a);
+}
 </script>

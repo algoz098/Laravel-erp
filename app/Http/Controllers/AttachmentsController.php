@@ -11,8 +11,12 @@ use Carbon\Carbon;
 use Log;
 use Auth;
 
-class AttachmentsController extends Controller
+class AttachmentsController  extends BaseController
 {
+  public function __construct(){
+     parent::__construct();
+  }
+  
   public function show($id){
     $attach = Attachs::find($id);
     $path = storage_path() . '/' .'app/'. $attach->path;

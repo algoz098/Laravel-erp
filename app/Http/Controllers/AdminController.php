@@ -18,8 +18,11 @@ use Log;
 use Auth;
 use Config;
 
-class AdminController extends Controller
+class AdminController  extends BaseController
 {
+  public function __construct(){
+     parent::__construct();
+  }
 
   public function index(){
 
@@ -32,8 +35,34 @@ class AdminController extends Controller
     Log::info('!!!ADMIN!!! Mostrando configuration, para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
     $configs = Configs::all();
     $field_codigo = Configs::where('field', "field_codigo")->first();
+    if (!isset($field_codigo)) {
+      $field_codigo = new Configs;
+      $field_codigo->field = "field_codigo";
+      $field_codigo->text = 'Campo "Codigo"';
+      $field_codigo->value = '1';
+      $field_codigo->options = '';
+      $field_codigo->save();
+
+    }
     $img_destaque = Configs::where('field', "img_destaque")->first();
+    if (!isset($img_destaque)) {
+      $img_destaque = new Configs;
+      $img_destaque->field = "img_destaque";
+      $img_destaque->text = 'Imagem de destaque';
+      $img_destaque->value = '';
+      $img_destaque->options = '';
+      $img_destaque->save();
+
+    }
     $modulo_atendimentos = Configs::where('field', "modulo_atendimentos")->first();
+    if (!isset($modulo_atendimentos)) {
+      $modulo_atendimentos = new Configs;
+      $modulo_atendimentos->field = "modulo_atendimentos";
+      $modulo_atendimentos->text = 'MODULO "ATENDIMENTOS"';
+      $modulo_atendimentos->value = '1';
+      $modulo_atendimentos->options = '';
+      $modulo_atendimentos->save();
+    }
     $matriz = Contatos::find(1);
     return view('admin.configuration')->with('configs', $configs)
                                       ->with('field_codigo', $field_codigo)
@@ -55,17 +84,19 @@ class AdminController extends Controller
     $modulo_atendimentos->save();
 
     $img_destaque = Configs::where('field', 'img_destaque')->first();
-    $attach = Attachs::find($request->img_destaque);
-    $file = storage_path().'/app//'.$attach->path;
-    $extension = File::extension($attach->path);
-    $dest = public_path().'/img_destaque.'.$extension;
-    if ( ! File::copy($file, $dest))
-    {
-      die("Couldn't copy file");
+    if (!isset($img_destaque)){
+      $attach = Attachs::find($request->img_destaque);
+      $file = storage_path().'/app//'.$attach->path;
+      $extension = File::extension($attach->path);
+      $dest = public_path().'/img_destaque.'.$extension;
+      if ( ! File::copy($file, $dest))
+      {
+        die("Couldn't copy file");
+      }
+      $img_destaque->value = $attach->name;
+      $img_destaque->options = $request->img_destaque;
+      $img_destaque->save();
     }
-    $img_destaque->value = $attach->name;
-    $img_destaque->options = $request->img_destaque;
-    $img_destaque->save();
 
     return redirect()->action('AdminController@configuration');
   }
@@ -282,6 +313,14 @@ class AdminController extends Controller
       Log::info('!!!ADMIN!!! Mostrando novo combobox, para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
       return view('admin.combobox_novo_caixas');
     }
+    public function combobox_novo_consumos(){
+      Log::info('!!!ADMIN!!! Mostrando novo combobox, para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
+      return view('admin.combobox_novo_consumos');
+    }
+    public function combobox_novo_formas(){
+      Log::info('!!!ADMIN!!! Mostrando novo combobox, para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
+      return view('admin.combobox_novo_formas');
+    }
     public function combobox_edit($id){
       Log::info('!!!ADMIN!!! Mostrando ediçao combobox, para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
 
@@ -304,6 +343,9 @@ class AdminController extends Controller
       if($combobox->combobox_textable_type=="App\Telefones"){
         return view('admin.combobox_novo_telefone')->with("combobox", $combobox);
       }
+      if($combobox->combobox_textable_type=="App\Consumos"){
+        return view('admin.combobox_novo_consumos')->with("combobox", $combobox);
+      }
     }
     public function combobox_salvar(request $request){
       #return $request;
@@ -311,19 +353,19 @@ class AdminController extends Controller
       foreach ($request->text as $key => $text) {
         $combobox = New Comboboxes;
         $combobox->combobox_textable_id = "1";
-        if($request->tipo[$key]=="Telefones" or $request->tipo[$key]=="Contas" or $request->tipo[$key]=="Caixas"){
+        if($request->tipo[$key]=="Telefones" or $request->tipo[$key]=="Contas" or $request->tipo[$key]=="Caixas"  ){
           $combobox->combobox_textable_type = "App\\".$request->tipo[$key];
           $combobox->field= $request->field[$key];
           $combobox->text = $request->text[$key];
           $combobox->value = $request->text[$key];
         }
-        if($request->tipo[$key]=="Relacionamento"){
+        if($request->tipo[$key]=="Relacionamento" or $request->tipo[$key]=="Consumos" ){
           $combobox->combobox_textable_type = "App\\".$request->tipo[$key];
           $combobox->field= "tipo";
           $combobox->text=$request->text[$key];
           $combobox->value=$request->value[$key];
         }
-        if($request->tipo[$key]=="Atendimentos"){
+        if($request->tipo[$key]=="Atendimentos" or $request->tipo[$key]=="Contas\Formas" ){
           $combobox->combobox_textable_type = "App\\".$request->tipo[$key];
           $combobox->field= "tipo";
           $combobox->text=$request->text[$key];
@@ -350,7 +392,6 @@ class AdminController extends Controller
       return redirect()->action('AdminController@combobox');
     }
     public function combobox_delete($id){
-      #Log::info('!!!ADMIN!!! Deletando opçao '.$id.' combobox, para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
       $combobox = Comboboxes::withTrashed()->find($id);
       if ($combobox->trashed()) {
         $combobox->restore();

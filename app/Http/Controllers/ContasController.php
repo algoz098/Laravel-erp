@@ -12,16 +12,29 @@ use App\Combobox_texts as Comboboxes;
 use App\Discriminacoes as Discs;
 use Log;
 
-class ContasController extends Controller
+class ContasController  extends BaseController
 {
+  public function __construct(){
+     parent::__construct();
+  }
+
   public function index(){
     Log::info('Vendo contas, para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
     $contas = Contas::paginate(15);
     $deletados = 0;
+    $total_debito = Contas::where('tipo', '!=', '1')->where('estado', '1')->sum('valor');
+    $total_credito = Contas::where('tipo', '1')->where('estado', '1')->sum('valor');
+    $total_atual = $total_credito-$total_debito;
     $total= Contas::count();
     $comboboxes = comboboxes::where('combobox_textable_type', 'App\Contas')->get();
 
-    return view('contas.index')->with('contas', $contas)->with('deletados', $deletados)->with('total', $total)->with('comboboxes', $comboboxes);
+    return view('contas.index')->with('contas', $contas)
+                                ->with('deletados', $deletados)
+                                ->with('total', $total)
+                                ->with('total_debito', $total_debito)
+                                ->with('total_credito', $total_credito)
+                                ->with('total_atual', $total_atual)
+                                ->with('comboboxes', $comboboxes);
   }
   public function search(Request $request){
     $contas = Contas::query();
@@ -125,7 +138,34 @@ class ContasController extends Controller
     } else {
       $deletados = 0;
     }
-    return view('contas.index')->with('contas', $contas)->with('deletados', $deletados);
+    return view('contas.contatos')->with('contatos', $contatos)->with('deletados', $deletados);
+  }
+
+  public function consumos_contato_busca( Request $request)
+  {
+    if (!empty($request->busca)){
+      $contatos = Contatos::where('nome', 'like', '%' .  $request->busca . '%')
+                            ->orWhere('sobrenome', 'like', '%' .  $request->busca . '%')
+                            ->orWhere('endereco', 'like', '%' .  $request->busca . '%')
+                            ->orWhere('cpf', 'like', '%' .  $request->busca . '%')
+                            ->orWhere('cidade', 'like', '%' .  $request->busca . '%')
+                            ->orWhere('uf', 'like', '%' .  $request->busca . '%')
+                            ->orWhere('bairro', 'like', '%' .  $request->busca . '%')
+                            ->orWhere('cep', 'like', '%' .  $request->busca . '%')
+                            ->paginate(15);
+    } else {
+      $contatos = Contatos::paginate(15);
+    }
+    Log::info('Adicionando contas com busca -> "'.$request->busca.'", para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
+    if (is_array(Auth::user()->perms) and Auth::user()->perms["admin"]==1){
+        $deletados = Contas::onlyTrashed()->get();
+    } else {
+      $deletados = 0;
+    }
+    $is_consumos="1";
+    return view('contas.contatos')->with('contatos', $contatos)
+                                  ->with('deletados', $deletados)
+                                  ->with("is_consumos", $is_consumos);
   }
 
   /*

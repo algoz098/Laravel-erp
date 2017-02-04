@@ -14,8 +14,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-      $modulo_atendimentos = Configs::where('field', "modulo_atendimentos")->pluck('value')->first();
-      view()->share('modulo_atendimentos', $modulo_atendimentos);
+      
     }
 
     /**

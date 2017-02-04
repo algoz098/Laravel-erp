@@ -74,7 +74,7 @@
           <label for="text">Valor</label>
           <div class="input-group">
             <span class="input-group-addon" id="basic-addon1">R$</span>
-            <input type="text" class="form-control real-mask" name="disc_valor[0]" id="disc_valor">
+            <input type="text" class="form-control real-mask" name="disc_valor[0]" id="disc_valor" onchange="totalValor(this.value)">
           </div>
         </div>
         <span id="mais"></span>
@@ -82,12 +82,22 @@
     </div>
   </div>
   <div class="col-md-3 pull-right">
-    <a class="btn btn-danger" onclick="remove()">
-      <i class="fa fa-minus"></i>
-    </a>
-    <a class="btn btn-success" onclick="add()">
-      <i class="fa fa-plus"></i>
-    </a>
+    <div class="row">
+      <div class="col-md-12">
+        <a class="btn btn-danger" onclick="remove()">
+          <i class="fa fa-minus"></i>
+        </a>
+        <a class="btn btn-success" onclick="add()">
+          <i class="fa fa-plus"></i>
+        </a>
+      </div>
+    </div>
+    <hr>
+    <div class="row">
+      <div class="col-md-12" >
+        Total discriminado: <span class="label label-info">R$<span id="discTotal">0</span></span>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -147,7 +157,10 @@
 
       }
     }
-
+    function totalValor(valor){
+      var a = parseFloat($('#discTotal').text())+parseFloat(valor);
+      $('#discTotal').text(a);
+    }
 
     window.i = 0;
     function add() {
@@ -177,7 +190,7 @@
       <label for="text">Valor</label>
       <div class="input-group">
         <span class="input-group-addon" id="basic-addon1">R$</span>
-        <input type="text" class="form-control real-mask" name="disc_valor[0]" id="disc_valor" placeholder="valor da discriminação">
+        <input type="text" class="form-control real-mask" name="disc_valor[0]" id="disc_valor" placeholder="valor da discriminação" onchange="totalValor(this.value)">
       </div>
     </div>
   </div>

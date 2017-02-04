@@ -14,8 +14,12 @@ Use App\Http\Controllers\CaixasLib;
 use Log;
 use Auth;
 
-class VendasController extends Controller
+class VendasController  extends BaseController
 {
+  public function __construct(){
+     parent::__construct();
+  }
+  
     public function index(){
       $vendas = Vendas::paginate(15);
       Log::info('Vendo vendaspara -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());

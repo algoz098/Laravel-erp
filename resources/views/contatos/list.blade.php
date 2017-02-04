@@ -258,7 +258,7 @@
                           <i class="fa fa-signal level{{$contato->sociabilidade}}"></i>
                           @if ($contato->funcionario)
                             Funcionario de:
-                            <span class="label label-info">
+                            <span class="label label-success">
                               <i class="fa fa-user"></i> {{$contato->user->trabalho->nome}}
                             </span>
                           @endif
@@ -268,14 +268,13 @@
                     <div class="row">
                       @if ($contato->tipo=="0")
                       <div class="col-md-6">
-                        Razão Social: {{$contato->nome}}
-                      </div>
-                      <div class="col-md-6">
-                        Nome Fantasia: {{$contato->sobrenome}}
+                        <strong>Nome Fantasia</strong><br>
+                        <span style="font-size:30px">{{$contato->sobrenome}}</span>
                       </div>
                       @else
                         <div class="col-md-8">
-                          Nome: {{$contato->nome}}&nbsp{{$contato->sobrenome}}
+                          <strong>Nome: </strong><br>
+                          <span style="font-size: 30px">{{$contato->nome}}&nbsp{{$contato->sobrenome}}</span>
                         </div>
                       @endif
                     </div>
@@ -283,16 +282,47 @@
                       <div class="row">
                         <div class="col-md-4">
                           Data adm.: <span class="label label-info">{{$contato->funcionario->data_adm}}</span>
-                          Data dem.: <span class="label label-info">{{$contato->funcionario->data_dem}}</span>
+                          Data dem.: <span class="label label-danger">{{$contato->funcionario->data_dem}}</span>
                         </div>
                       </div>
                     @endif
                     <hr>
                     <div class="row">
                       <div class="col-md-6">
-                        {{{$contato->tipo=="0" ? "CNPJ" : "CPF"}}}: {{$contato->cpf}}<br>
-                        {{{$contato->tipo=="0" ? "I.E." : "RG"}}}: {{$contato->rg}}<br>
-                        Ins. Pref.:{{$contato->cod_prefeitura}}
+                        @if ($contato->tipo=="0")
+                          <div class="row">
+                            <div class="col-md-3">
+                              <strong>Razão Social:</strong>
+                            </div>
+                            <div class="col-md-5">
+                              <span class="label label-info">{{$contato->nome}}</span>
+                            </div>
+                          </div>
+                        @endif
+                        <div class="row">
+                          <div class="col-md-3">
+                            <strong>{{{$contato->tipo=="0" ? "CNPJ" : "CPF"}}}:</strong>
+                          </div>
+                          <div class="col-md-5">
+                            <span class="label label-info">{{$contato->cpf}}</span>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-md-3">
+                            <strong>{{{$contato->tipo=="0" ? "I.E." : "RG"}}}:</strong>
+                          </div>
+                          <div class="col-md-5">
+                            <span class="label label-info">{{$contato->rg}}</span>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-md-3">
+                            <strong>Ins. Pref.:</strong>
+                          </div>
+                          <div class="col-md-5">
+                            <span class="label label-info">{{$contato->cod_prefeitura}}</span>
+                          </div>
+                        </div>
                       </div>
                       <div class="col-md-6">
                         <strong>Endereço</strong><br>
@@ -321,6 +351,242 @@
                         @endforeach
                       </div>
                     </div>
+                    @if ($contato->funcionario)
+                      <hr>
+                      <strong> Do funcionario</strong>
+                      <div class="row">
+                        <div class="col-md-3">
+                          <div class="row">
+                            <div class="col-md-7">
+                              <strong>Cargo:</strong>
+                            </div>
+                            <div class="col-md-5">
+                              <span class="label label-info">{{$contato->funcionario->cargo}}</span>
+                            </div>
+                          </div>
+                          <div class="row">
+                            <div class="col-md-7">
+                              <strong>N. CNH:</strong>
+                            </div>
+                            <div class="col-md-5">
+                            <span class="label label-info">{{$contato->funcionario->cnh}}</span>
+                            </div>
+                          </div>
+                          <div class="row">
+                            <div class="col-md-7">
+                              <strong>Cat. CNH:</strong>
+                            </div>
+                            <div class="col-md-5">
+                              <span class="label label-info">{{$contato->funcionario->cnh_cat}}</span>
+                            </div>
+                          </div>
+                          <div class="row">
+                            <div class="col-md-7">
+                              <strong>Venc. CNH:</strong>
+                            </div>
+                            <div class="col-md-5">
+                              <span class="label label-danger">{{$contato->funcionario->cnh_venc}}</span>
+                            </div>
+                          </div>
+                          <div class="row">
+                            <div class="col-md-7">
+                              <strong>Cart. Trab.:</strong>
+                            </div>
+                            <div class="col-md-5">
+                              <span class="label label-info">{{$contato->funcionario->cart_trab_num}}</span>
+                            </div>
+                          </div>
+                          <div class="row">
+                            <div class="col-md-7">
+                              <strong>Cart. Trab. Serie:</strong>
+                            </div>
+                            <div class="col-md-5">
+                              <span class="label label-info">{{$contato->funcionario->cart_trab_serie}}</span>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-md-4">
+                          <div class="row">
+                            <div class="col-md-7">
+                              <strong>N. Eleitor:</strong>
+                            </div>
+                            <div class="col-md-5">
+                              <span class="label label-info">{{$contato->funcionario->eleitor}}</span>
+                            </div>
+                          </div>
+                          <div class="row">
+                            <div class="col-md-7">
+                              <strong>Sessão de Eleitor:</strong>
+                            </div>
+                            <div class="col-md-5">
+                              <span class="label label-danger">{{$contato->funcionario->eleitor_sessao}}</span>
+                            </div>
+                          </div>
+                          <div class="row">
+                            <div class="col-md-7">
+                              <strong>Zona de Eleitor:</strong>
+                            </div>
+                            <div class="col-md-5">
+                              <span class="label label-info">{{$contato->funcionario->eleitor_zona}}</span>
+                            </div>
+                          </div>
+                          <div class="row">
+                            <div class="col-md-7">
+                              <strong>Data de Exp. de Eleitor:</strong>
+                            </div>
+                            <div class="col-md-5">
+                              <span class="label label-info">{{$contato->funcionario->eleitor_exp}}</span>
+                            </div>
+                          </div>
+                          <div class="row">
+                            <div class="col-md-7">
+                              <strong>N. do RG:</strong>
+                            </div>
+                            <div class="col-md-5">
+                              <span class="label label-info">{{$contato->funcionario->rg}}</span>
+                            </div>
+                          </div>
+                          <div class="row">
+                            <div class="col-md-7">
+                              <strong>Nome do Pai (no RG):</strong>
+                            </div>
+                            <div class="col-md-5">
+                              <span class="label label-info">{{$contato->funcionario->rg_pai}}</span>
+                            </div>
+                          </div>
+                          <div class="row">
+                            <div class="col-md-7">
+                              <strong>Nome da Mãe (no RG):</strong>
+                            </div>
+                            <div class="col-md-5">
+                              <span class="label label-info">{{$contato->funcionario->rg_mae}}</span>
+                            </div>
+                          </div>
+
+                        </div>
+                        <div class="col-md-4">
+                          <div class="row">
+                            <div class="col-md-7">
+                              <strong>N. do PIS:</strong>
+                            </div>
+                            <div class="col-md-5">
+                              <span class="label label-info">{{$contato->funcionario->pis}}</span>
+                            </div>
+                          </div>
+                          <div class="row">
+                            <div class="col-md-7">
+                              <strong>Banco do PIS:</strong>
+                            </div>
+                            <div class="col-md-5">
+                              <span class="label label-info">{{$contato->funcionario->pis_banco}}</span>
+                            </div>
+                          </div>
+                          <div class="row">
+                            <div class="col-md-7">
+                              <strong>N. do INSS:</strong>
+                            </div>
+                            <div class="col-md-5">
+                              <span class="label label-info">{{$contato->funcionario->inss}}</span>
+                            </div>
+                          </div>
+                          <div class="row">
+                            <div class="col-md-7">
+                              <strong>N. de reservista:</strong>
+                            </div>
+                            <div class="col-md-5">
+                              <span class="label label-info">{{$contato->funcionario->reservista}}</span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <hr>
+                      <div class="row">
+                        <div class="col-md-3">
+                          <div class="row">
+                            <div class="col-md-7">
+                              <strong>Salario:</strong>
+                            </div>
+                            <div class="col-md-5">
+                              <span class="label label-info">R$ {{$contato->funcionario->sal}}</span>
+                            </div>
+                          </div>
+                          <div class="row">
+                            <div class="col-md-7">
+                              <strong>Salario real:</strong>
+                            </div>
+                            <div class="col-md-5">
+                              <span class="label label-info">R$ {{$contato->funcionario->sal_real}}</span>
+                            </div>
+                          </div>
+                          <div class="row">
+                            <div class="col-md-7">
+                              <strong>V. Transp.:</strong>
+                            </div>
+                            <div class="col-md-5">
+                              <span class="label label-info">R$ {{$contato->funcionario->vt}}</span>
+                            </div>
+                          </div>
+                          <div class="row">
+                            <div class="col-md-7">
+                              <strong>Percentual do VT:</strong>
+                            </div>
+                            <div class="col-md-5">
+                              <span class="label label-info">{{$contato->funcionario->vt_percentual}} %</span>
+                            </div>
+                          </div>
+                          <div class="row">
+                            <div class="col-md-7">
+                              <strong>V. Alim.:</strong>
+                            </div>
+                            <div class="col-md-5">
+                              <span class="label label-info">R$ {{$contato->funcionario->va}}</span>
+                            </div>
+                          </div>
+                          <div class="row">
+                            <div class="col-md-7">
+                              <strong>V. Refei.:</strong>
+                            </div>
+                            <div class="col-md-5">
+                              <span class="label label-info">R$ {{$contato->funcionario->vr}}</span>
+                            </div>
+                          </div>
+                          <div class="row">
+                            <div class="col-md-7">
+                              <strong>INSS:</strong>
+                            </div>
+                            <div class="col-md-5">
+                              <span class="label label-info">R$ {{$contato->funcionario->inss}}</span>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-md-3">
+                          <div class="row">
+                            <div class="col-md-7">
+                              <strong>Usuario:</strong>
+                            </div>
+                            <div class="col-md-5">
+                              <span class="label label-info">{{$contato->user->email}}</span>
+                            </div>
+                          </div>
+                          <div class="row">
+                            <div class="col-md-7">
+                              <strong>Senha:</strong>
+                            </div>
+                            <div class="col-md-5">
+                              <span class="label label-warning">***</span>
+                            </div>
+                          </div>
+                          <div class="row">
+                            <div class="col-md-7">
+                              <strong>Estado:</strong>
+                            </div>
+                            <div class="col-md-5">
+                              <span class="label label-info">{{{$contato->user->ativo=="1" ? "Ativo" : "Inativo"}}}</span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    @endif
                     <hr>
                     <div class="row">
                       <div class="col-md-11 pull-right">

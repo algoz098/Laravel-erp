@@ -46,19 +46,22 @@
             <li class="pushy-link"><a class="{{{ Request::path()=='admin/update' ? "active" : "" }}}" href="{{ url('/admin/update') }}">Atualizar</a></li>
             <li class="pushy-link"><a class="{{{ Request::path()=='admin/backup' ? "active" : "" }}}" href="{{ url('/admin/backup') }}">Backup</a></li>
             <li class="pushy-link"><a class="{{{ Request::path()=='admin/logs' ? "active" : "" }}}" href="{{ url('/admin/logs') }}">Logs</a></li>
-            <li class="pushy-link"><a class="{{{ Request::path()=='admin/Combobox' ? "active" : "" }}}" href="{{ url('/admin/combobox') }}">Combobox</a></li>
           </ul class="menu" >
       </li>
       <li class="pushy-submenu {{{ Request::is('admin*') ? "active" : ""}}}">
           <a href="#"><i class="fa fa-file-o fa-lg"></i> Combobox</a>
           <ul class="menu" >
+            <li class="pushy-link"><a class="{{{ Request::path()=='admin/Combobox' ? "active" : "" }}}" href="{{ url('/admin/combobox') }}"><i class="fa fa-gear"></i> Painel</a></li>
             <li class="pushy-link "><a class="{{{ Request::path()=='novo/combobox/telefone' ? "active" : "" }}}" href="{{ url('novo/combobox/telefone') }}"><i class="fa fa-phone"></i> Tipo de telefone</a></li>
             <li class="pushy-link "><a class="{{{ Request::path()=='novo/combobox/relacao' ? "active" : "" }}}" href="{{ url('novo/combobox/relacao') }}"><i class="fa fa-share-square"></i> Relacionamento</a></li>
             @if ($modulo_atendimentos=="1")
               <li class="pushy-link "><a class="{{{ Request::path()=='novo/combobox/atend' ? "active" : "" }}}" href="{{ url('novo/combobox/atend') }}"><i class="fa fa-list"></i> Assunto de Atend.</a></li>
             @endif
-            <li class="pushy-link "><a class="{{{ Request::path()=='novo/combobox/contas' ? "active" : "" }}}" href="{{ url('novo/combobox/contas') }}"><i class="fa fa-list"></i> Ref. para Contas</a></li>
-            <li class="pushy-link "><a class="{{{ Request::path()=='novo/combobox/caixas' ? "active" : "" }}}" href="{{ url('novo/combobox/caixas') }}"><i class="fa fa-list"></i> Desc. movimentação</a></li>          </ul class="menu" >
+            <li class="pushy-link "><a class="{{{ Request::path()=='novo/combobox/contas' ? "active" : "" }}}" href="{{ url('novo/combobox/contas') }}"><i class="fa fa-usd"></i> Ref. para Contas</a></li>
+            <li class="pushy-link "><a class="{{{ Request::path()=='novo/combobox/consumos' ? "active" : "" }}}" href="{{ url('novo/combobox/consumos') }}"><i class="fa fa-arrow-right"></i><i class="fa fa-usd"></i> Ref. de Consumo</a></li>
+            <li class="pushy-link "><a class="{{{ Request::path()=='novo/combobox/formas' ? "active" : "" }}}" href="{{ url('novo/combobox/formas') }}"><i class="fa fa-money"></i> Forma de pagamentos</a></li>
+            <li class="pushy-link "><a class="{{{ Request::path()=='novo/combobox/caixas' ? "active" : "" }}}" href="{{ url('novo/combobox/caixas') }}"><i class="fa fa-list"></i> Desc. movimentação</a></li>
+          </ul class="menu" >
       </li>
     @endif
   </ul class="menu" >

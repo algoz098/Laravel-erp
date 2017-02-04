@@ -11,8 +11,12 @@ use Carbon\Carbon;
 use Log;
 use Auth;
 
-class AtendimentoController extends Controller
+class AtendimentoController  extends BaseController
 {
+  public function __construct(){
+     parent::__construct();
+  }
+  
   public function index(){
     Log::info('Mostando atendimentos, para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
     $atendimentos = Atendimento::paginate(15);

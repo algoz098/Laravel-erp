@@ -3,7 +3,11 @@
   <div class="row">
     <div class="col-md-12">
       @if (isset($is_funcionario))
-        <form method="POST" action="{{ url('/novo/funcionarios') }}">
+        @if (!empty($contato->id))
+          <form method="POST" action="{{ url('/novo/contatos') }}/{{$contato->id}}">
+        @else
+          <form method="POST" action="{{ url('/novo/funcionarios') }}">
+        @endif
       @else
         @if (!empty($contato->id))
           <form method="POST" action="{{ url('/novo/contatos') }}/{{$contato->id}}">
@@ -190,72 +194,74 @@
               <div class="panel panel-default">
                 <div class="panel-heading">Telefones</div>
                 <div class="panel-body">
-                  <div class="row">
                     <div class="col-md-3 pull-right text-right">
-                      <div class="row">
-                        <div class="col-md-6 pull-right text-right" id="controleTel">
-                          <div class="panel panel-default">
-                            <div class="panel-body">
-                              <a class="btn btn-danger" onclick="remove()">
-                                <i class="fa fa-minus"></i>
-                              </a>
-                              <a class="btn btn-success" onclick="add()">
-                                <i class="fa fa-plus"></i>
-                              </a>
-                            </div>
-                            <div class="panel-heading">Controle</div>
+                      <div class="col-md-6 pull-right text-right" id="controleTel">
+                        <div class="panel panel-default">
+                          <div class="panel-body">
+                            <a class="btn btn-danger" onclick="remove()">
+                              <i class="fa fa-minus"></i>
+                            </a>
+                            <a class="btn btn-success" onclick="add()">
+                              <i class="fa fa-plus"></i>
+                            </a>
                           </div>
+                          <div class="panel-heading">Controle</div>
                         </div>
                       </div>
                     </div>
                     @foreach($contato->telefones as $key => $telefone)
-                      <div class="col-md-3" id="primeiroTel">
+                      <div class="col-md-9" id="telDiv{{$telefone->id}}">
                         <div class="panel panel-default">
                           <div class="panel-body">
-                            <div class="form-group">
-                              <input type="hidden" class="form-control" value="{{$telefone->id}}" name="id_tel[{{$key}}]" id="id_tel[{{$key}}]" placeholder="">
-                              <label for="text">Tipo</label>
-                              <select class="form-control" id="tipo" name="tipo_id[{{$key}}]" onchange="selMask(0)">
-                                <option value="{{$telefone->tipo}}" selected>{{$telefone->tipo}}</option>
-                                @foreach($comboboxes_telefones as $a => $combobox)
-                                  <option value="{{$combobox->text}}">{{$combobox->text}}</option>
-                                @endforeach
-                              </select>
+                            <div class="col-md-1">
+                              <div class="form-group">
+                                <label for="text">Deletar</label>
+                                <button type="button" class="btn btn-danger" onclick="telDelete({{$telefone->id}})">
+                                  <i class="fa fa-ban"></i>
+                                </button>
+                              </div>
                             </div>
-                            <div class="form-group">
-                              <label for="text">Numero</label>
-                              <input type="text" class="form-control" value="{{$telefone->numero}}" name="numero_id[{{$key}}]" id="numero{{$key}}" placeholder="">
+                            <div class="col-md-2">
+                              <div class="form-group">
+                                <input type="hidden" class="form-control" value="{{$telefone->id}}" name="id_tel[{{$key}}]" id="id_tel[{{$key}}]" placeholder="">
+                                <label for="text">Tipo</label>
+                                <select class="form-control" id="tipo" name="tipo_id[{{$key}}]" onchange="selMask({{$key}})">
+                                  <option value="{{$telefone->tipo}}" selected>{{$telefone->tipo}}</option>
+                                  @foreach($comboboxes_telefones as $a => $combobox)
+                                    <option value="{{$combobox->text}}">{{$combobox->text}}</option>
+                                  @endforeach
+                                </select>
+                              </div>
                             </div>
-                            <div class="form-group">
-                              <label for="text">Contato</label>
-                              <input type="text" class="form-control" value="{{$telefone->contato}}" name="contato_id[{{$key}}]" id="contato{{$key}}" placeholder="">
+                            <div class="col-md-3">
+                              <div class="form-group">
+                                <label for="text">Numero</label>
+                                <input type="text" class="form-control" value="{{$telefone->numero}}" name="numero_id[{{$key}}]" id="numero{{$key}}" placeholder="">
+                              </div>
                             </div>
-                            <div class="form-group">
-                              <label for="text">Depto/Setor</label>
-                              <input type="text" class="form-control" value="{{$telefone->setor}}" name="setor_id[{{$key}}]" id="setor{{$key}}" placeholder="">
+                            <div class="col-md-2">
+                              <div class="form-group">
+                                <label for="text">Contato</label>
+                                <input type="text" class="form-control" value="{{$telefone->contato}}" name="contato_id[{{$key}}]" id="contato{{$key}}" placeholder="">
+                              </div>
                             </div>
-                            <div class="form-group">
-                              <label for="text">Ramal</label>
-                              <input type="text" class="form-control" value="{{$telefone->ramal}}" name="ramal_id[{{$key}}]" id="numero{{$key}}" placeholder="">
+                            <div class="col-md-2">
+                              <div class="form-group">
+                                <label for="text">Depto/Setor</label>
+                                <input type="text" class="form-control" value="{{$telefone->setor}}" name="setor_id[{{$key}}]" id="setor{{$key}}" placeholder="">
+                              </div>
+                            </div>
+                            <div class="col-md-2">
+                              <div class="form-group">
+                                <label for="text">Ramal</label>
+                                <input type="text" class="form-control" value="{{$telefone->ramal}}" name="ramal_id[{{$key}}]" id="numero{{$key}}" placeholder="">
+                              </div>
                             </div>
                           </div>
                         </div>
                       </div>
                     @endforeach
-
-
-
                     <span id="mais"></span>
-                  </div>
-                  <div class="row">
-                    <span id="maisRow2"></span>
-                  </div>
-                  <div class="row">
-                    <span id="maisRow3"></span>
-                  </div>
-                  <div class="row">
-                    <span id="maisRow4"></span>
-                  </div>
                 </div>
               </div>
               @else
@@ -276,48 +282,51 @@
                           <div class="panel-heading">Controle</div>
                         </div>
                       </div>
-                      <div class="col-md-3">
+                      <div class="col-md-9">
                         <div class="panel panel-default">
                           <div class="panel-body">
-                            <div class="form-group">
-                              <label for="text">Tipo</label>
-                              <select class="form-control" id="tipo0" name="tipo_tel[0]" onchange="selMask(0)">
-                                <option value="" selected> - Escolha uma opção - </option>
-                                @foreach($comboboxes_telefones as $key => $combobox)
-                                  <option value="{{$combobox->text}}">{{$combobox->text}}</option>
-                                @endforeach
-                              </select>
-                            </div>
-                            <div class="form-group">
-                              <label for="text" id="numeroText0">Numero</label>
-                              <input type="text" class="form-control" value="" name="numero_tel[0]" id="numero0" placeholder="">
-                            </div>
-                            <div class="form-group">
-                              <label for="text">Contato</label>
-                              <input type="text" class="form-control" value="" name="contato_tel[0]" id="contato0" placeholder="">
-                            </div>
-                            <div class="form-group">
-                              <label for="text">Depto/Setor</label>
-                              <input type="text" class="form-control" value="" name="setor_tel[0]" id="setor0" placeholder="">
-                            </div>
-                            <div class="form-group">
-                              <label for="text">Ramal</label>
-                              <input type="text" class="form-control" value="" name="ramal_tel[0]" id="ramal0" placeholder="">
+                            <div class="row">
+                              <div class="col-md-2">
+                                <div class="form-group">
+                                  <label for="text">Tipo</label>
+                                  <select class="form-control" id="tipo0" name="tipo_tel[0]" onchange="selMask(0)">
+                                    <option value="" selected>- Escolha -</option>
+                                    @foreach($comboboxes_telefones as $key => $combobox)
+                                      <option value="{{$combobox->text}}">{{$combobox->text}}</option>
+                                    @endforeach
+                                  </select>
+                                </div>
+                              </div>
+                              <div class="col-md-3">
+                                <div class="form-group">
+                                  <label for="text" id="numeroText0">Numero</label>
+                                  <input type="text" class="form-control" value="" name="numero_tel[0]" id="numero0" placeholder="">
+                                </div>
+                              </div>
+                              <div class="col-md-3">
+                                <div class="form-group">
+                                  <label for="text">Contato</label>
+                                  <input type="text" class="form-control" value="" name="contato_tel[0]" id="contato0" placeholder="">
+                                </div>
+                              </div>
+                              <div class="col-md-2">
+                                <div class="form-group">
+                                  <label for="text">Depto/Setor</label>
+                                  <input type="text" class="form-control" value="" name="setor_tel[0]" id="setor0" placeholder="">
+                                </div>
+                              </div>
+                              <div class="col-md-2">
+                                <div class="form-group">
+                                  <label for="text">Ramal</label>
+                                  <input type="text" class="form-control" value="" name="ramal_tel[0]" id="ramal0" placeholder="">
+                                </div>
+                              </div>
                             </div>
                           </div>
                         </div>
                       </div>
-                      <span id="mais"></span>
                     </div>
-                    <div class="row">
-                      <span id="maisRow2"></span>
-                    </div>
-                    <div class="row">
-                      <span id="maisRow3"></span>
-                    </div>
-                    <div class="row">
-                      <span id="maisRow4"></span>
-                    </div>
+                    <span id="mais"></span>
                   </div>
                 </div>
               @endif
@@ -379,15 +388,24 @@
       $("#cod_prefeitura").attr("placeholder", "Insc. da Prefeitura");
     }
    }
-   function heightControleTel(){
-     $('#controleTel').height($('#primeiroTel').height());
-   }
+
+   @if (isset($contato))
+     function telDelete(id){
+        var a = "{{url('/lista/contatos')}}/{{$contato->id}}/telefones/"+id+"/delete"
+        $.get( a, function( data ) {
+          $( "#telDiv"+id ).remove();
+        });
+     }
+   @endif
 
    $(document).ready(tipoChange());
-   $(document).ready(heightControleTel());
 </script>
 <script language="javascript">
-window.i = 0;
+@if (isset($contato))
+  window.i = parseInt("{{count($contato->telefones)}}");
+@else
+  window.i = 0;
+@endif
 function add() {
   var $clone = $($('#ToClone').html());
   i = i + 1;
@@ -401,21 +419,15 @@ function add() {
   $('#setor', $clone).attr('name', 'setor_tel['+i+']');
   $('#ramal', $clone).attr('name', 'ramal_tel['+i+']');
   $('.3397', $clone).attr('id', 'linha'+i);
-  if (i>=9){
-    $clone.appendTo('#maisRow4');
-  }
-  if (i>=6){
-    $clone.appendTo('#maisRow3');
-  }
-  if (i>=3){
-    $clone.appendTo('#maisRow2');
-  } else {
-    $clone.appendTo('#mais');
-  }
+  $clone.appendTo('#mais');
 }
 function remove() {
-  $('#linha'+i).remove();
-  i = i - 1;
+  if (i<0){}else {
+    $('#linha'+i).remove();
+    if(i>0){
+      i = i - 1;
+    }
+  }
 }
 function selMask(a){
   @foreach($comboboxes_telefones as $asas => $combobox)
@@ -432,40 +444,48 @@ function selMask(a){
 </script>
 
 <script id="ToClone" type="text/template">
-<div>
-  <div class="3397" id="a">
-    <div class="col-md-3">
-      <div class="panel panel-default">
-        <div class="panel-body">
+<span>
+  <div class="3397 col-md-9" id="a">
+    <div class="panel panel-default">
+      <div class="panel-body">
+        <div class="col-md-2">
           <div class="form-group">
             <label for="text">Tipo</label>
             <select class="form-control" id="tipo" name="tipo_tel[0]" onchange="selMask()">
               <option value="" selected> - Escolha uma opção - </option>
               @foreach($comboboxes_telefones as $key => $combobox)
-                <option value="{{$combobox->value}}">{{$combobox->text}}</option>
+              <option value="{{$combobox->text}}">{{$combobox->text}}</option>
               @endforeach
             </select>
           </div>
+        </div>
+        <div class="col-md-3">
           <div class="form-group">
             <label for="text" id="numeroText">Numero</label>
-            <input type="text" class="form-control" value="" name="numero_tipo[0]" id="numero" placeholder="">
+            <input type="text" class="form-control" value="" name="numero_tipo" id="numero" placeholder="">
           </div>
+        </div>
+        <div class="col-md-3">
           <div class="form-group">
             <label for="text">Contato</label>
-            <input type="text" class="form-control" value="" name="contato_tel[0]" id="contato" placeholder="">
+            <input type="text" class="form-control" value="" name="contato_tel" id="contato" placeholder="">
           </div>
+        </div>
+        <div class="col-md-2">
           <div class="form-group">
             <label for="text">Depto/Setor</label>
-            <input type="text" class="form-control" value="" name="setor_tel[0]" id="setor" placeholder="">
+            <input type="text" class="form-control" value="" name="setor_tel" id="setor" placeholder="">
           </div>
+        </div>
+        <div class="col-md-2">
           <div class="form-group">
             <label for="text">Ramal</label>
-            <input type="text" class="form-control" value="" name="ramal_tel[0]" id="ramal" placeholder="">
+            <input type="text" class="form-control" value="" name="ramal_tel" id="ramal" placeholder="">
           </div>
         </div>
       </div>
     </div>
   </div>
-</div>
+</span>
 </script>
 @endsection

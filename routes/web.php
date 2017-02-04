@@ -33,7 +33,6 @@ Route::post('novo/contatos/{id}', 'ContatosController@update')->middleware('auth
 Route::get('novo/funcionarios', 'ContatosController@funcionarios_novo')->middleware('auth');
 Route::post('novo/funcionarios', 'ContatosController@novo')->middleware('auth');
 
-
 Route::get('lista/contatos/{id}/relacoes', 'ContatosController@relacoes')->middleware('auth');
 Route::get('lista/contatos/{id}/relacoes/novo', 'ContatosController@relacoes_novo')->middleware('auth');
 Route::post('lista/contatos/{id}/relacoes/novo/busca', 'ContatosController@relacoes_busca')->middleware('auth');
@@ -53,6 +52,7 @@ Route::post('novo/contas/{id}/parcelas', 'ContasController@add_3')->middleware('
 Route::post('novo/contas/{id}/parcelas/{conta_id}', 'ContasController@add_4')->middleware('auth');
 
 Route::get('novo/consumos', 'ContasController@consumos_novo')->middleware('auth');
+Route::post('novo/consumos/busca', 'ContasController@consumos_contato_busca')->middleware('auth');
 Route::get('novo/consumos/{id}', 'ContasController@consumos_novo2')->middleware('auth');
 Route::post('novo/consumos/{id}/parcelas', 'ContasController@consumos_novo3')->middleware('auth');
 
@@ -123,6 +123,8 @@ Route::get('/novo/combobox/relacao', 'AdminController@combobox_novo_relacao')->m
 Route::get('/novo/combobox/atend', 'AdminController@combobox_novo_atend')->middleware('auth')->middleware('admin');
 Route::get('/novo/combobox/contas', 'AdminController@combobox_novo_contas')->middleware('auth')->middleware('admin');
 Route::get('/novo/combobox/caixas', 'AdminController@combobox_novo_caixas')->middleware('auth')->middleware('admin');
+Route::get('/novo/combobox/consumos', 'AdminController@combobox_novo_consumos')->middleware('auth')->middleware('admin');
+Route::get('/novo/combobox/formas', 'AdminController@combobox_novo_formas')->middleware('auth')->middleware('admin');
 
 Route::post('/admin/combobox/novo', 'AdminController@combobox_salvar')->middleware('auth')->middleware('admin');
 Route::get('/admin/combobox/{id}', 'AdminController@combobox_edit')->middleware('auth')->middleware('admin');

@@ -19,12 +19,15 @@ use App\Combobox_texts as Comboboxes;
 use Log;
 use Carbon\Carbon;
 
-class ContatosController extends Controller
+class ContatosController extends BaseController
 {
+  public function __construct(){
+     parent::__construct();
+  }
   public function show()
   {
     Log::info('Lista de contatos para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
-    $contatos = contatos::paginate(15);
+    $contatos = contatos::orderBy('nome', 'asc')->paginate(15);
     $total= contatos::count();
     $empresas = contatos::where('tipo', '0')->count();
     $pessoas = contatos::where('tipo', '1')->count();
@@ -66,7 +69,7 @@ class ContatosController extends Controller
       $contatos = $contatos->orWhere('bairro', 'like', '%' .  $request->busca . '%');
       $contatos = $contatos->orWhere('cep', 'like', '%' .  $request->busca . '%');
     }
-    $contatos = $contatos->paginate(15);
+    $contatos = $contatos->orderBy('nome', 'asc')->paginate(15);
     if ((is_array(Auth::user()->perms) and Auth::user()->perms["admin"]==1) and $request->deletados){
         $deletados = Contatos::onlyTrashed()->get();
     } else {
@@ -302,6 +305,70 @@ class ContatosController extends Controller
         $telefone->ramal = $request->ramal_tel[$key];
         $telefone->save();
       }
+    }
+    if ($request->is_funcionario!="1"){
+      $combobox = Comboboxes::where('text', $request->relacao)->first();
+      if ($combobox){
+        $data = [
+          $request->from_id =>
+          [
+            'from_text' => $combobox->text,
+            'to_id' => 1,
+            'to_text' => $combobox->value
+          ]
+        ];
+        $contato->from()->sync($data, false);
+      }
+    } else {
+      // CASO FOR CADASTRO DE FUNCIONARIO
+      $data = [
+        $request->filial =>
+        [
+          'from_text' => "Funcionario",
+          'to_id' => 1,
+          'to_text' => "Trabalho"
+        ]
+      ];
+      $contato->from()->sync($data, false);
+      $func = Funcionarios::where('contatos_id', $id)->first();
+      $func->contatos_id = $contato->id;
+      $func->cargo = $request->cargo;
+      $func->data_adm = $request->data_adm;
+      $func->data_dem = $request->data_dem;
+      $func->cnh = $request->cnh;
+      $func->cnh_cat = $request->cnh_cat;
+      $func->cnh_venc = $request->cnh_venc;
+      $func->cart_trab_num = $request->cart_trab_num;
+      $func->cart_trab_serie = $request->cart_trab_serie;
+      $func->eleitor = $request->eleitor;
+      $func->eleitor_sessao = $request->eleitor_sessao;
+      $func->eleitor_zona = $request->eleitor_zona;
+      $func->eleitor_exp = $request->eleitor_exp;
+      $func->pis = $request->pis;
+      $func->pis_banco = $request->pis_banco;
+      $func->inss = $request->inss;
+      $func->rg_exp = $request->rg_exp;
+      $func->rg_pai = $request->rg_pai;
+      $func->rg_mae = $request->rg_mae;
+      $func->ajuda_custo = $request->ajuda_custo;
+      $func->reservista = $request->reservista;
+      $func->sal = $request->sal;
+      $func->sal_real = $request->sal_real;
+      $func->sal_inss = $request->sal_inss;
+      $func->vt = $request->vt;
+      $func->vt_percentual = $request->vt_percentual;
+      $func->va = $request->va;
+      $func->vr = $request->vr;
+      $func->peri = $request->peri;
+      $func->peri_percentual = $request->peri_percentual;
+      $func->save();
+      $contato->user->email = $request->user;
+      $contato->user->password = bcrypt($request->password);
+      $contato->user->ativo = $request->ativo;
+      $contato->user->trabalho_id = $request->filial;
+      $contato->user->contatos_id = $contato->id;
+      $contato->user->perms="{}";
+      $contato->user->save();
     }
 
     $combobox = Comboboxes::where('text', $request->relacao)->first();

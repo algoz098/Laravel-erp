@@ -35,20 +35,29 @@
                 <label id="textLabel">Texto da referencia</label>
                 <input value="{{{isset($combobox) ? $combobox->text : ""}}}" type="text" class="form-control" id="text" name="text">
               </div>
+              <div class="col-md-3" id="textHolder">
+                <label id="textLabel">Valor de Identificação</label>
+                <input value="{{{isset($combobox) ? $combobox->value : ""}}}" type="text" class="form-control" id="value" name="value">
+              </div>
             @else
               <div class="col-md-3">
                 <label>Modulo selecionado: </label>
                 <select class="form-control" id="tipo[0]" name="tipo[0]" disabled>
-                  <option value="Contas" selected>Contas\Formas</option>
+                  <option value="Contas" selected>Referencia para Consumos</option>
                 </select>
-                <input value="Contas\Formas" name="tipo[0]" type="hidden">
+                <input value="Consumos" name="tipo[0]" type="hidden">
                 <input value="1" name="field[0]" type="hidden">
               </div>
               <div class="col-md-3" id="textHolder">
                 <label id="textLabel">Texto da referencia</label>
                 <input value="{{{isset($combobox) ? $combobox->text : ""}}}" type="text" class="form-control" id="text" name="text[0]">
               </div>
+              <div class="col-md-3" id="textHolder">
+                <label id="textLabel">Valor de Identificação</label>
+                <input value="{{{isset($combobox) ? $combobox->value : ""}}}" type="text" class="form-control" id="value" name="value[0]">
+              </div>
             @endif
+
         </div>
         <span id="mais"></span>
       </form>
@@ -61,6 +70,7 @@
     i = i + 1;
     $('#tipo', $clone).attr('name', 'tipo['+i+']');
     $('#text', $clone).attr('name', 'text['+i+']');
+    $('#value', $clone).attr('name', 'value['+i+']');
     $('#hidden', $clone).attr('name', 'tipo['+i+']');
     $('#hidden2', $clone).attr('name', 'field['+i+']');
     $('.3397', $clone).attr('id', 'linha'+i);
@@ -83,15 +93,19 @@
           </select>
         @else
           <select class="form-control" id="tipo[0]"disabled>
-            <option value="Contas\Formas" selected>Referencia da conta</option>
+            <option value="Contas" selected>Referencia da conta</option>
           </select>
-          <input id="hidden" value="Contas\Formas" name="tipo[0]" type="hidden">
+          <input id="hidden" value="Contas" name="tipo[0]" type="hidden">
           <input id="hidden2" value="1" name="field[0]" type="hidden">
         @endif
       </div>
       <div class="col-md-3" id="textHolder">
         <label id="textLabel">Texto da referencia</label>
-        <input value="{{{isset($combobox) ? $combobox->text : ""}}}" type="text" class="form-control" id="text" name="text">
+        <input value="" type="text" class="form-control" id="text" name="text">
+      </div>
+      <div class="col-md-3" id="textHolder">
+        <label id="textLabel">Valor de Identificação</label>
+        <input value="" type="text" class="form-control" id="value" name="value">
       </div>
     </div>
   </div>

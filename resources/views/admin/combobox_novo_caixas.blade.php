@@ -84,9 +84,9 @@
           </select>
         @else
           <select class="form-control" id="tipo[0]"disabled>
-            <option value="Caixas" selected>Desc. de movimentação de caixa</option>
+            <option value="Caixas" selected>Desc. de Consumos</option>
           </select>
-          <input id="hidden" value="Caixas" name="tipo[0]" type="hidden">
+          <input id="hidden" value="Consumos" name="tipo[0]" type="hidden">
           <input id="hidden2" value="1" name="field[0]" type="hidden">
         @endif
       </div>

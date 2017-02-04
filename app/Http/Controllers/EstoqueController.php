@@ -9,8 +9,12 @@ use Carbon\Carbon;
 use Log;
 use Auth;
 
-class EstoqueController extends Controller
+class EstoqueController  extends BaseController
 {
+  public function __construct(){
+     parent::__construct();
+  }
+  
   public function index()
   {
     Log::info('Vendo estoque, para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());

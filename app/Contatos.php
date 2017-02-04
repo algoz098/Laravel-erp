@@ -20,14 +20,6 @@ class Contatos extends Model
     protected $table = 'contatos';
     protected $dates = ['deleted_at'];
 
-    protected static function boot()
-    {
-        parent::boot();
-        static::addGlobalScope('ordering', function(Builder $builder) {
-            $builder->orderBy('nome', 'asc');
-        });
-    }
-
     public function telefones()
     {
         return $this->hasMany('App\Telefones');

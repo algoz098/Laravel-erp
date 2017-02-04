@@ -125,7 +125,7 @@
           @foreach($contas as $key => $conta)
             <div class="row list-contacts" onclick="selectRow({{$conta->id}})">
               <div class="col-md-1" >
-                <span class="label label-info">
+                <span class="label label-{{{$conta->tipo!="1" ? "danger" : "success"}}}">
                   ID: {{$conta->id}}
                 </span>
               </div>
@@ -141,37 +141,37 @@
                 @endif
               </div>
               <div class="col-md-1 ">
-                <span class="label label-warning">
+                <span class="label label-{{{$conta->tipo!="1" ? "danger" : "success"}}}">
                   R$ {{ number_format($conta->valor, 2) }}
                 </span>
               </div>
 
               <div class="col-md-1">
-                @if ($conta->tipo==0)
-                  <span class="label label-warning">Debito</span>
-                @elseif ($conta->tipo==1)
-                  <span class="label label-warning">Credito</span>
-                @elseif ($conta->tipo==2)
-                  <span class="label label-warning">Consumo</span>
-                @endif
+                <span class="label label-{{{$conta->tipo!="1" ? "danger" : "success"}}}">
+                  @if ($conta->tipo==0)
+                    Debito
+                  @elseif ($conta->tipo==1)
+                    Credito
+                  @elseif ($conta->tipo==2)
+                    Consumo
+                  @endif
+                </span>
               </div>
               <div class="col-md-1">
-                @if ($conta->estado==0 AND ($conta->tipo==0 OR $conta->tipo==2))
-                  <span class="label label-danger">A pagar</span>
-                @elseif ($conta->estado==0 AND ($conta->tipo==1 OR $conta->tipo==2))
-                  <span class="label label-danger">A receber</span>
-                @elseif ($conta->estado==1 AND ($conta->tipo==0 OR $conta->tipo==2))
-                  <span class="label label-success">Pago</span>
-                @elseif ($conta->estado==1 AND ($conta->tipo==1 OR $conta->tipo==2))
-                  <span class="label label-success">Recebido</span>
-                @endif
+                <span class="label label-{{{$conta->tipo!="1" ? "danger" : "success"}}}">
+                  @if ($conta->estado==0 AND ($conta->tipo==0 OR $conta->tipo==2))
+                    A pagar
+                  @elseif ($conta->estado==0 AND ($conta->tipo==1 OR $conta->tipo==2))
+                    A receber
+                  @elseif ($conta->estado==1 AND ($conta->tipo==0 OR $conta->tipo==2))
+                    Pago
+                  @elseif ($conta->estado==1 AND ($conta->tipo==1 OR $conta->tipo==2))
+                    Recebido
+                  @endif
+                </span>
               </div>
               <div class="col-md-1">
-                @if (strtotime($conta->vencimento)>strtotime(Carbon::now()))
-                  <span class="label label-warning">
-                @else
-                  <span class="label label-danger">
-                @endif
+                <span class="label label-{{{$conta->tipo!="1" ? "danger" : "success"}}}">
                   {{date('d/m/Y', strtotime($conta->vencimento))}}
                 </span>&nbsp
               </div>
@@ -182,7 +182,7 @@
                 </a>
               </div>
               <div class="col-md-1 pull-right">
-                <span class="label label-primary">
+                <span class="label label-{{{$conta->tipo!="1" ? "danger" : "success"}}}">
                   {{date('d/m/Y', strtotime($conta->created_at))}}
                 </span>
               </div>
@@ -227,9 +227,7 @@
                           @endif
                       </div>
                       <div class="col-md-2">
-                        Pgto. em:
                         <span class="label label-info">{{$conta->pagamento}}</span><br>
-                        Venc.:
                         @if (strtotime($conta->vencimento)>strtotime(Carbon::now()))
                           <span class="label label-warning">
                         @else
@@ -238,7 +236,6 @@
                           {{$conta->vencimento}}
                         </span><br>
                         @if ($conta->referencia)
-                          Valor cheio:
                           <span class="label label-warning">
                             R$ {{ number_format($conta->referencia->valor, 2) }}
                           </span>
@@ -249,22 +246,8 @@
                         @endif
                       </div>
                       <div class="col-md-2">
-                        Desc.: <span class="label label-info">R$ {{ number_format($conta->desconto, 2) }}</span><br>
-                        @if ($conta->nome=="1001")
-                          Matriculla
-                        @elseif ($conta->nome=="1002")
-                          N. Medidor
-                        @elseif($conta->nome=="1003")
-                          D.M.
-                        @elseif($conta->nome=="1004")
-                          D.M.
-                        @else
-                          D.M.
-                        @endif
-                        :  <span class="label label-info">
-                          {{$conta->dm}}
-                        </span><br>
-                        Estado:
+                        <span class="label label-info">R$ {{ number_format($conta->desconto, 2) }}</span><br>
+                        <span class="label label-info">{{$conta->dm}}</span><br>
                         @if ($conta->estado==0 AND ($conta->tipo==0 OR $conta->tipo==2))
                           <span class="label label-danger">A pagar</span>
                         @elseif ($conta->estado==0 AND ($conta->tipo==1 OR $conta->tipo==2))
@@ -390,6 +373,16 @@
                               </div>
                             @endforeach
                           @endif
+                          <div class="row">
+                            <div class="col-md-12 text-center">
+                              @php $total_disc = 0; @endphp
+                              @foreach($conta->discs as $key => $disc)
+                                @php $total_disc = $total_disc + $disc->valor; @endphp
+                              @endforeach
+                              Total: <span class="label label-warning">R$ {{$total_disc}}</span>
+
+                            </div>
+                          </div>
                         </div>
                       </div>
                     @endif
@@ -497,8 +490,14 @@
           <hr>
           <div class="row">
             <div class="col-md-10 text-center">
+              <span class="label label-danger">
+                Debito pagos: {{ $total_debito }}
+              </span>&nbsp
               <span class="label label-primary">
-                Total: {{ $total }}
+                Credito recebidos: {{ $total_credito }}
+              </span>&nbsp
+              <span class="label label-primary">
+                Total atualmente: {{ $total_atual }}
               </span>
             </div>
           </div>
@@ -561,8 +560,6 @@
     $("#buttonEdit").attr('href', '{{ url('novo/contas') }}/'+id);
     $("#buttonPagar").attr('href', '{{ url('/lista/contas') }}/'+id+'/pago');
     $("#buttonDetalhes").attr('data-target', '#detalhes'+id);
-
-
   }
   function listaTop(){
     var css = $('#lista').css('margin-top');

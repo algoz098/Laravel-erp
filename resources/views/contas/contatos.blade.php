@@ -8,14 +8,23 @@
           <i class="fa fa-usd fa-1x"></i> Nova provisão de contas
         </div>
         <div class="panel-body">
-          <div class="row">
-            <div class="col-md-3 text-right pull-right">
-              <a class="btn btn-warning" href="{{ url('lista/contas')}}" ><i class="fa fa-usd"></i> Voltar a Lista</a>
+          <div class="row" id="secondNavbar">
+            <div class="col-md-2">
+              <div class="col-md-4">
+                <a class="btn btn-info" id="buttonNovo">
+                  <i class="fa fa-gear"></i>
+                </a>
+              </div>
+              <div class="col-md-8">
+                <input type="text" class="form-control" size="4" name="ids" id="ids" placeholder="Detalhes" disabled>
+              </div>
             </div>
-          </div>
-          <div class="row pull-center">
-            <div class="col-md-12">
-              <form method="POST" action="{{ url('/novo/contas/busca') }}">
+            <div class="col-md-8 text-center">
+              @if (isset($is_consumos) and $is_consumos=="1" )
+                <form method="POST" action="{{url('/novo/consumos/busca/')}}">
+              @else
+                <form method="POST" action="{{url('/novo/contas/busca/')}}">
+              @endif
                 <div class="form-group form-inline text-center">
                   {{ csrf_field() }}
                   <input type="text" class="form-control" name="busca" id="busca" placeholder="Busca" size="10">
@@ -23,17 +32,20 @@
                 </div>
               </form>
             </div>
+            <div class="col-md-2 text-right pull-right">
+              <a class="btn btn-warning" href="{{ url('lista/contas')}}" ><i class="fa fa-usd"></i> Voltar a Lista</a>
+            </div>
           </div>
           <div class="row">
             <div class="col-md-12">
               <div class="row list-contacts">
-                <div class="col-md-3">
-                  Opções
+                <div class="col-md-1">
+                  ID
                 </div>
-                <div class="col-md-5">
+                <div class="col-md-6">
                   Razão Social
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-4">
                   Nome Fantasia
                 </div>
                 <div class="col-md-1">
@@ -41,11 +53,9 @@
                 </div>
               </div>
               @foreach($contatos as $key => $contato)
-                <div class="row list-contacts">
+                <div class="row list-contacts" onclick="selectRow({{$contato->id}})">
                   <div class="col-md-1">
-                    <a class="btn btn-info" href="{{{ (isset($is_consumos) and $is_consumos=="1") ? url('/novo/consumos/') : url('/novo/contas')}}}/{{$contato->id}}">
-                      <i class="fa fa-gear"></i>
-                    </a>
+                    <span class="label label-info">ID: {{$contato->id}}</span>
                   </div>
                   <div class="col-md-6">
                     {{$contato->nome}}
@@ -61,4 +71,17 @@
                 </div>
               @endforeach
             </div>
+          </div>
+          <div class="row">
+            <div class="col-md-12 text-center">
+              {{ $contatos->links() }}
+            </div>
+          </div>
+
+          <script>
+            function selectRow(id){
+              $("#ids").val(id);
+              $("#buttonNovo").attr('href', '{{{ (isset($is_consumos) and $is_consumos=="1") ? url('/novo/consumos/') : url('/novo/contas')}}}/'+id);
+            }
+            </script>
 @endsection
