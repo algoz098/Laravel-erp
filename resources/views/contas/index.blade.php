@@ -176,7 +176,7 @@
                 </span>&nbsp
               </div>
               <div class="col-md-2">
-                <a href="{{url('novo/contatos/')}}/{{$conta->contatos->id}}" class="label label-info">
+                <a data-toggle="modal" data-url="{{url('lista/contatos')}}/{{$conta->contatos->id}}" data-target="#modal" class="label label-info">
                   <i class="fa fa-user"></i>
                   {{str_limit($conta->contatos->nome,15)}}
                 </a>
@@ -553,6 +553,9 @@
       </div>
     </div>
   </div>
+
+  <!-- Modal -->
+  <div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"></div>
 <script>
   function selectRow(id){
     $("#ids").val(id);

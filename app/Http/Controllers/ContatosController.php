@@ -86,6 +86,11 @@ class ContatosController extends BaseController
     ->with('comboboxes', $comboboxes);
   }
 
+  public function detalhes($id){
+    $contato = contatos::find($id);
+    return view('contatos.detalhes')->with('contato', $contato);
+  }
+
   public function funcionarios_novo()
   {
     Log::info('Criando novo contato, para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
@@ -521,7 +526,11 @@ class ContatosController extends BaseController
     }
     return redirect()->action('ContatosController@show');
   }
+  public function attachs_detalhes($id){
+    $attachs = Contatos::find($id)->attachs;
+    return view('contatos.attachs')->with('attachs', $attachs)->with('contato_id', $id);
 
+  }
   public function attach(request $request, $id){
     $attach = new Attachs;
     $attach->attachmentable_id = $id;

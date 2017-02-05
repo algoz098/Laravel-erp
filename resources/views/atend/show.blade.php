@@ -53,11 +53,4 @@
       </div>
     </div>
 </div>
-<script  language="javascript">
-$(function() {
-  $('#froala-editor').froalaEditor({
-    direction: 'ltr'
-  })
-});
-</script>
 @endsection

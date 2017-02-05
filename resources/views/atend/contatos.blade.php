@@ -75,6 +75,7 @@ use Carbon\Carbon;
                   <textarea rows="5" class="form-control" id="froala-editor" name="texto">
                   </textarea>
                 </div>
+
                 <button type="submit" class="btn btn-success" id="enviar" >Enviar</button>
               </form>
             </div>
@@ -87,5 +88,6 @@ use Carbon\Carbon;
     $( function() {
       $( "#datepicker" ).datepicker({ dateFormat: 'yy-mm-dd' });
     } );
+    
   </script>
 @endsection

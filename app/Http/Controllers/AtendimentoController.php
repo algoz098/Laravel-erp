@@ -37,6 +37,13 @@ class AtendimentoController  extends BaseController
     return view('atend.show')->with('atendimento', $atendimento)->with('comboboxes', $comboboxes);
   }
 
+  public function detalhes($id){
+    $atendimento = Atendimento::find($id);
+    Log::info('Mostando detalhes atendimento -> "'.$atendimento.'", para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
+
+    return view('atend.detalhes')->with('atendimento', $atendimento);
+  }
+
   public function new_a(){
     Log::info('Criando novo atendimento, selecionando contato, para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
     $contatos = Contatos::paginate(15);

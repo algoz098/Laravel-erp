@@ -16,7 +16,24 @@ class AttachmentsController  extends BaseController
   public function __construct(){
      parent::__construct();
   }
-  
+  public function novo($modulo, $id){
+    return view('attachs.novo')->with('modulo', $modulo)->with('id', $id);
+  }
+  public function salva($modulo, $id, request $request){
+    #return "ok";
+    #return $request->file;
+    $attach = new Attachs;
+    $attach->attachmentable_id = $id;
+    $attach->attachmentable_type = "App\\".$modulo;
+    $attach->name = $request->name;
+    $attach->path = $request->file->store('public');
+    $attach->contatos_id = $id;
+    $attach->save();
+
+    $path = storage_path() . '/' .'app/'. $attach->path;
+    $file = Image::make($path);
+    Log::info('Anexando arquivo para contato -> "'.$id.'", anexo -> "'.$attach.'", para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
+  }
   public function show($id){
     $attach = Attachs::find($id);
     $path = storage_path() . '/' .'app/'. $attach->path;

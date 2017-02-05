@@ -18,8 +18,10 @@ Auth::routes();
 Route::get('/home', 'HomeController@index')->middleware('auth');
 Route::get('/lista/contatos', 'ContatosController@show')->name('contatos')->middleware('auth');
 Route::post('lista/contatos', 'ContatosController@search')->middleware('auth');
+Route::get('lista/contatos/{id}/attachs', 'ContatosController@attachs_detalhes')->middleware('auth');
 Route::post('lista/contatos/{id}/attach', 'ContatosController@attach')->middleware('auth');
 Route::get('lista/contatos/delete/{id}', 'ContatosController@delete')->middleware('auth');
+Route::get('lista/contatos/{id}', 'ContatosController@detalhes')->middleware('auth');
 Route::get('lista/contatos/{id}/telefones', 'ContatosController@telefones')->middleware('auth');
 Route::post('lista/contatos/{id}/telefones', 'ContatosController@telefones_new')->middleware('auth');
 Route::post('lista/contatos/{id}/telefones/{id_tel}', 'ContatosController@telefones_post')->middleware('auth');
@@ -40,12 +42,6 @@ Route::post('lista/contatos/{id}/relacoes/novo', 'ContatosController@relacoes_po
 Route::get('lista/contatos/{id}/relacoes/{id_relacao}', 'ContatosController@relacoes_edit')->middleware('auth');
 Route::get('lista/contatos/{id}/relacoes/{id_relacao}/delete', 'ContatosController@relacoes_delete')->middleware('auth');
 
-Route::get('lista/tickets/', 'TicketsController@index')->middleware('auth');
-Route::get('novo/tickets/', 'TicketsController@novo')->middleware('auth');
-Route::get('novo/tickets/{id}', 'TicketsController@novo_2')->middleware('auth');
-
-
-
 Route::get('lista/contas', 'ContasController@index')->middleware('auth');
 Route::post('lista/contas', 'ContasController@search')->middleware('auth');
 Route::get('lista/contas/{id}/pago', 'ContasController@pago')->middleware('auth');
@@ -63,6 +59,7 @@ Route::get('novo/consumos/{id}', 'ContasController@consumos_novo2')->middleware(
 Route::post('novo/consumos/{id}/parcelas', 'ContasController@consumos_novo3')->middleware('auth');
 
 Route::get('/lista/atendimentos', 'AtendimentoController@index')->middleware('auth')->name('atendimentos');
+Route::get('/lista/atendimentos/{id}', 'AtendimentoController@detalhes')->middleware('auth');
 Route::post('/lista/atendimentos/{id}/attach', 'AtendimentoController@attach')->middleware('auth');
 Route::post('lista/atendimentos', 'AtendimentoController@search')->middleware('auth');
 Route::get('lista/atendimentos/{id}/delete', 'AtendimentoController@delete')->middleware('auth');
@@ -108,6 +105,9 @@ Route::get('attach/{id}/delete', 'AttachmentsController@delete')->middleware('au
 Route::get('attach/{id}/rotate/clock', 'AttachmentsController@rotate_clock')->middleware('auth');
 Route::get('attach/{id}/rotate/unclock', 'AttachmentsController@rotate_unclock')->middleware('auth');
 Route::get('attach/{id}/resize/{width}', 'AttachmentsController@resize')->middleware('auth');
+
+Route::get('attach/{modulo}/{id}', 'AttachmentsController@novo')->middleware('auth');
+Route::post('attach/{modulo}/{id}', 'AttachmentsController@salva')->middleware('auth');
 
 Route::get('/admin', 'AdminController@index')->name('admin')->middleware('auth')->middleware('admin');
 
