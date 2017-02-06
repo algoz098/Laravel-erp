@@ -78,4 +78,8 @@ class Contatos extends Model
     {
         return $this->hasOne('App\Funcionarios');
     }
+    public function tickets()
+    {
+      return $this->hasMany('App\Tickets'); 
+    }
 }

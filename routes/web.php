@@ -98,6 +98,13 @@ Route::get('novo/vendas/{id}', 'VendasController@produtos')->middleware('auth');
 Route::post('novo/vendas/{id}', 'VendasController@confirmar')->middleware('auth');
 Route::post('novo/vendas/{id}/salvar', 'VendasController@salvar')->middleware('auth');
 
+
+Route::get('lista/tickets/', 'TicketsController@index')->middleware('auth');
+Route::get('novo/tickets/', 'TicketsController@novo')->middleware('auth');
+Route::get('novo/tickets/{id}', 'TicketsController@novo_2')->middleware('auth');
+ 
+
+
 Route::get('attach/{id}', 'AttachmentsController@show')->middleware('auth');
 Route::get('attach/{id}/get', 'AttachmentsController@get')->middleware('auth');
 Route::get('attach/{id}/size/{height}', 'AttachmentsController@size')->middleware('auth');
