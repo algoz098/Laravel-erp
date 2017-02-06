@@ -17,6 +17,10 @@ class Contas extends Model
   {
       return $this->belongsTo('App\Contatos');
   }
+  public function attachs()
+  {
+      return $this->morphMany('App\Attachments', 'attachmentable');
+  }
   public function consumo()
   {
       return $this->hasOne('App\Contas_consumos');

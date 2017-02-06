@@ -6,6 +6,7 @@
     ]); ?>
 </script>
 <script language="javascript">
+  var height = $(window).height()-200;
   tinymce.init({
     selector: 'textarea',
     height: 200,

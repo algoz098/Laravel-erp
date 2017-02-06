@@ -36,6 +36,16 @@ class ContasController  extends BaseController
                                 ->with('total_atual', $total_atual)
                                 ->with('comboboxes', $comboboxes);
   }
+  public function detalhes($id){
+    $conta=Contas::find($id);
+    return view('contas.detalhes')->with('conta', $conta);
+
+  }
+  public function attachs($id){
+    $attachs=Contas::find($id)->attachs;
+    return view('contas.attachs')->with('attachs', $attachs)->with('conta_id', $id);
+
+  }
   public function search(Request $request){
     $contas = Contas::query();
     if ($request->data_de and !$request->data_ate){

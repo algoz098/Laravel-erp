@@ -175,7 +175,6 @@
     <div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"></div>
     <script language="javascript">
     var imageStatus = false;
-    var height = $(window).height()-200;
       function selectRow(id){
         window.id_attach_form = id;
         $("#ids").val(id);

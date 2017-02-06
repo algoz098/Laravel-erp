@@ -269,7 +269,6 @@
 
   @if (isset($contato->attachs))
     <script language="javascript">
-    var height = $(window).height()-200;
 
       function selectRow(id){
         window.id_attach_form = id;
