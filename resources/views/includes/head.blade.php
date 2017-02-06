@@ -11,6 +11,7 @@
 <link href="{{ asset('css/normalize.css') }}" rel="stylesheet">
 <link href="{{ asset('css/pushy.css') }}" rel="stylesheet">
 <link href="{{ asset('css/uploadfile.css') }}" rel="stylesheet">
+<link href="{{ asset('css/morris.css') }}" rel="stylesheet">
 <link href="{{ asset('css/erp.css') }}" rel="stylesheet">
 
 <script src="{{ asset('js/jquery.min.js') }}"></script>
@@ -22,3 +23,5 @@
 <script src="{{ asset('js/jquery.maskedinput.min.js') }}"></script>
 <script src="{{ asset('js/jquery.maskMoney.min.js') }}"></script>
 <script src="{{ asset('js/jquery.uploadfile.min.js') }}"></script>
+<script src="{{ asset('js/raphael-min.js') }}"></script>
+<script src="{{ asset('js/morris.min.js') }}"></script>

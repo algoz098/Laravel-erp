@@ -31,9 +31,13 @@ class AttachmentsController  extends BaseController
     $attach->save();
 
     $path = storage_path() . '/' .'app/'. $attach->path;
-    $file = Image::make($path);
+
+    $type = File::mimeType($path);
+    return $type;
+    #$file = Image::make($path);
     Log::info('Anexando arquivo para contato -> "'.$id.'", anexo -> "'.$attach.'", para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
   }
+
   public function show($id){
     $attach = Attachs::find($id);
     $path = storage_path() . '/' .'app/'. $attach->path;
@@ -113,6 +117,18 @@ class AttachmentsController  extends BaseController
     $path = storage_path() . '/' .'app/'. $attach->path;
 
     if(!File::exists($path)) abort(404);
+
+    if (!exif_imagetype($path)){
+      $file = File::get($path);
+      $type = File::mimeType($path);
+      
+      $response = Response::make($file, 200);
+      $response->header("Content-Type", $type);
+
+      Log::info('Vendo anexo, anexo -> "'.$attach.'", para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
+      return $response;
+    }
+
     $file = Image::make($path)->resize(null, $height, function ($constraint) {
         $constraint->aspectRatio();
         $constraint->upsize();
