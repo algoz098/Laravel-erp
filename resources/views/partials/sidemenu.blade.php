@@ -3,7 +3,7 @@
     Web GS - ERP
   </div>
   <div class="row text-center" style="margin-bottom: 15px; margin-top:15px;">
-    <img src="{{ asset('img_destaque.jpeg') }}" class="img-circle" height="200">
+    <img src="{{$imagem_destaque}}" class="img-circle" height="200">
   </div>
   <ul class="menu" >
     <li class="pushy-submenu {{{ Request::path()=='/' ? "active" : "" }}}">
@@ -22,7 +22,9 @@
           <li class="pushy-link "><a class="{{{ Request::path()=='novo/estoque' ? "active" : "" }}}" href="{{ url('/novo/estoque') }}"><i class="fa fa-bell"></i> Novo produto</a></li>
           <li class="pushy-link "><a class="{{{ Request::path()=='novo/caixa' ? "active" : "" }}}" href="{{ url('/novo/caixa') }}"><i class="fa fa-money"></i> Movimento de Caixa</a></li>
           <li class="pushy-link "><a class="{{{ Request::path()=='novo/vendas' ? "active" : "" }}}" href="{{ url('/novo/vendas') }}"><i class="fa fa-shopping-cart"></i> Vendas</a></li>
-          <li class="pushy-link "><a class="{{{ Request::path()=='novo/tickets' ? "active" : "" }}}" href="{{ url('/novo/tickets') }}"><i class="fa fa-book"></i> Tickets</a></li> 
+          @if ($modulo_tickets=="1")
+            <li class="pushy-link "><a class="{{{ Request::path()=='novo/tickets' ? "active" : "" }}}" href="{{ url('/novo/tickets') }}"><i class="fa fa-book"></i> Tickets</a></li>
+          @endif
         </ul class="menu" >
     </li>
     <li class="pushy-submenu ">
@@ -36,7 +38,9 @@
           <li class="pushy-link"><a class="{{{ Request::path()=='lista/estoque' ? "active" : "" }}}" href="{{ url('/lista/estoque') }}"><i class="fa fa-bell"></i> Estoque</a></li>
           <li class="pushy-link"><a class="{{{ Request::path()=='lista/caixa' ? "active" : "" }}}" href="{{ url('/lista/caixa') }}"><i class="fa fa-money"></i> Movimentações e Caixas</a></li>
           <li class="pushy-link"><a class="{{{ Request::path()=='lista/vendas' ? "active" : "" }}}" href="{{ url('/lista/vendas') }}"><i class="fa fa-shopping-cart"></i> Vendas</a></li>
-          <li class="pushy-link"><a class="{{{ Request::path()=='lista/tickets' ? "active" : "" }}}" href="{{ url('/lista/tickets') }}"><i class="fa fa-book"></i> Tickets</a></li>
+          @if ($modulo_tickets=="1")
+            <li class="pushy-link"><a class="{{{ Request::path()=='lista/tickets' ? "active" : "" }}}" href="{{ url('/lista/tickets') }}"><i class="fa fa-book"></i> Tickets</a></li>
+          @endif
         </ul class="menu" >
     </li>
     @if (isset(Auth::user()->perms["admin"]) and Auth::user()->perms["admin"]==1)

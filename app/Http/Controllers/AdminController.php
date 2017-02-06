@@ -63,11 +63,21 @@ class AdminController  extends BaseController
       $modulo_atendimentos->options = '';
       $modulo_atendimentos->save();
     }
+    $modulo_tickets = Configs::where('field', "modulo_tickets")->first();
+    if (!isset($modulo_tickets)) {
+      $modulo_tickets = new Configs;
+      $modulo_tickets->field = "modulo_tickets";
+      $modulo_tickets->text = 'MODULO "Tickets"';
+      $modulo_tickets->value = '1';
+      $modulo_tickets->options = '';
+      $modulo_tickets->save();
+    }
     $matriz = Contatos::find(1);
     return view('admin.configuration')->with('configs', $configs)
                                       ->with('field_codigo', $field_codigo)
                                       ->with('img_destaque', $img_destaque)
                                       ->with('modulo_atendimentos', $modulo_atendimentos)
+                                      ->with('modulo_tickets', $modulo_tickets)
                                       ->with('matriz', $matriz);
   }
   public function configuration_save(request $request){
@@ -83,16 +93,13 @@ class AdminController  extends BaseController
     $modulo_atendimentos->value = $request->modulo_atendimentos;
     $modulo_atendimentos->save();
 
+    $modulo_tickets = Configs::where('field', "modulo_tickets")->first();
+    $modulo_tickets->value = $request->modulo_tickets;
+    $modulo_tickets->save();
+
     $img_destaque = Configs::where('field', 'img_destaque')->first();
-    if (!isset($img_destaque)){
+    if ($request->img_destaque!=""){
       $attach = Attachs::find($request->img_destaque);
-      $file = storage_path().'/app//'.$attach->path;
-      $extension = File::extension($attach->path);
-      $dest = public_path().'/img_destaque.'.$extension;
-      if ( ! File::copy($file, $dest))
-      {
-        die("Couldn't copy file");
-      }
       $img_destaque->value = $attach->name;
       $img_destaque->options = $request->img_destaque;
       $img_destaque->save();

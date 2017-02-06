@@ -15,15 +15,6 @@
         <div class="row">
           <div class="col-md-3">
             <div class="form-group">
-              <label for="sel1">{{$field_codigo->text}}</label>
-              <select class="form-control" id="sel1" name="{{$field_codigo->field}}">
-                <option value="0" {{{$field_codigo->value=="0"? "selected" : ""}}}>Não usar</option>
-                <option value="1" {{{$field_codigo->value=="1"? "selected" : ""}}}>Usar o campo</option>
-              </select>
-            </div>
-          </div>
-          <div class="col-md-3">
-            <div class="form-group">
               <label for="sel1">{{$img_destaque->text}}</label>
               <div class="input-group">
                 <span class="input-group-btn">
@@ -36,10 +27,28 @@
           </div>
           <div class="col-md-3">
             <div class="form-group">
+              <label for="sel1">{{$field_codigo->text}}</label>
+              <select class="form-control" id="sel1" name="{{$field_codigo->field}}">
+                <option value="0" {{{$field_codigo->value=="0"? "selected" : ""}}}>Não usar</option>
+                <option value="1" {{{$field_codigo->value=="1"? "selected" : ""}}}>Usar o campo</option>
+              </select>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="form-group">
               <label for="sel1">{{$modulo_atendimentos->text}}</label>
               <select class="form-control" id="sel1" name="{{$modulo_atendimentos->field}}">
                 <option value="0" {{{$modulo_atendimentos->value=="0"? "selected" : ""}}}>Desativado</option>
                 <option value="1" {{{$modulo_atendimentos->value=="1"? "selected" : ""}}}>Ativado</option>
+              </select>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="form-group">
+              <label for="sel1">{{$modulo_tickets->text}}</label>
+              <select class="form-control" id="sel1" name="{{$modulo_tickets->field}}">
+                <option value="0" {{{$modulo_tickets->value=="0"? "selected" : ""}}}>Desativado</option>
+                <option value="1" {{{$modulo_tickets->value=="1"? "selected" : ""}}}>Ativado</option>
               </select>
             </div>
           </div>
