@@ -102,8 +102,13 @@ Route::post('novo/vendas/{id}/salvar', 'VendasController@salvar')->middleware('a
 
 
 Route::get('lista/tickets/', 'TicketsController@index')->middleware('auth');
+Route::get('lista/tickets/{id}', 'TicketsController@detalhes')->middleware('auth');
+Route::get('lista/tickets/{id}/delete', 'TicketsController@delete')->middleware('auth');
 Route::get('novo/tickets/', 'TicketsController@novo')->middleware('auth');
+Route::get('novo/tickets/{id}/edit', 'TicketsController@editar')->middleware('auth');
+Route::post('novo/tickets/{id}/edit', 'TicketsController@editar_salvar')->middleware('auth');
 Route::get('novo/tickets/{id}', 'TicketsController@novo_2')->middleware('auth');
+Route::post('novo/tickets/{id}', 'TicketsController@salvar')->middleware('auth');
 
 
 
