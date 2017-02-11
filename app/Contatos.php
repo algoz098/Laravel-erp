@@ -13,6 +13,7 @@ use App\Attachments;
 use App\Caixas;
 use App\Vendas;
 use App\Funcionarios;
+use App\Frotas;
 
 class Contatos extends Model
 {
@@ -80,6 +81,10 @@ class Contatos extends Model
     }
     public function tickets()
     {
-      return $this->hasMany('App\Tickets'); 
+      return $this->hasMany('App\Tickets');
+    }
+    public function frotas()
+    {
+        return $this->hasMany('App\Frotas');
     }
 }

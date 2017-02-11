@@ -454,7 +454,7 @@ function selMask(a){
             <select class="form-control" id="tipo" name="tipo_tel[0]" onchange="selMask()">
               <option value="" selected> - Escolha uma opção - </option>
               @foreach($comboboxes_telefones as $key => $combobox)
-              <option value="{{$combobox->text}}">{{$combobox->text}}</option>
+                <option value="{{$combobox->text}}">{{$combobox->text}}</option>
               @endforeach
             </select>
           </div>
