@@ -1,11 +1,8 @@
 <?php
 
 namespace App\Http\Controllers;
-
 use Illuminate\Http\Request;
-
 use Illuminate\Support\Facades\Validator;
-
 use DB;
 use Auth;
 use Intervention\Image\ImageManagerStatic as Image;
@@ -131,8 +128,8 @@ class ContatosController extends BaseController
     $contato->rg = $request->rg;
     $contato->sobrenome = $request->sobrenome;
     $contato->endereco = $request->endereco;
-    $contato->andar = $request->andar;
-    $contato->sala = $request->sala;
+    $contato->numero = $request->numero;
+    $contato->complemento = $request->complemento;
     $contato->bairro = $request->bairro;
     $contato->uf = $request->uf;
     $contato->cidade = $request->cidade;
@@ -219,7 +216,11 @@ class ContatosController extends BaseController
       $user->email = $request->user;
       $user->password = bcrypt($request->password);
       $user->ativo = $request->ativo;
-      $user->trabalho_id = $request->filial;
+      if ($request->filial!=""){
+        $user->trabalho_id = $request->filial;
+      } else {
+        $user->trabalho_id = 1;
+      }
       $user->contatos_id = $contato->id;
       $user->perms="{}";
       $user->save();
@@ -270,8 +271,8 @@ class ContatosController extends BaseController
     $contato->rg = $request->rg;
     $contato->sobrenome = $request->sobrenome;
     $contato->endereco = $request->endereco;
-    $contato->andar = $request->andar;
-    $contato->sala = $request->sala;
+    $contato->numero = $request->numero;
+    $contato->complemento = $request->complemento;
     $contato->bairro = $request->bairro;
     $contato->uf = $request->uf;
     $contato->cidade = $request->cidade;

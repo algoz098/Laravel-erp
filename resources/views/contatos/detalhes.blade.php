@@ -88,7 +88,7 @@
         </div>
         <div class="col-md-6">
           <strong>Endereço</strong><br>
-          {{$contato->endereco}}{{{$contato->andar!=""?", $contato->andar":""}}}{{{$contato->sala!=""?", $contato->sala":""}}}<br>
+          {{$contato->endereco}} {{$contato->numero}} {{$contato->complemento}}<br>
           {{$contato->bairro}} - {{$contato->cidade}}, {{$contato->uf}}<br>
           {{$contato->cep}}
         </div>

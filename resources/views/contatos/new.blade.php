@@ -139,7 +139,7 @@
                   <div class="panel-heading">Endereço</div>
                   <div class="panel-body">
                     <div class="row">
-                      <div class="col-md-3">
+                      <div class="col-md-2">
                         <div class="form-group">
                           <label for="cep">CEP</label>
                           <input type="text" class="form-control" value="{{ $contato->cep or "" }}" name="cep" id="cep" placeholder="CEP">
@@ -152,25 +152,25 @@
                           <label for="endereco">Endereço</label>
                           <input type="text" class="form-control" value="{{ $contato->endereco or "" }}"  name="endereco" id="endereco" placeholder="Endereço">
                         </div>
+                      </div><div class="col-md-1">
+                        <div class="form-group">
+                          <label for="endereco">Numero</label>
+                          <input type="text" class="form-control" value="{{ $contato->numero or "" }}"  name="numero" id="numero" placeholder="Nº">
+                        </div>
                       </div>
+                      <div class="col-md-3">
+                        <div class="form-group">
+                          <label for="sala">Complemento</label>
+                          <input type="text" class="form-control" value="{{ $contato->complemento or "" }}" name="complemento" id="complemento" placeholder="Complemento">
+                        </div>
+                      </div>
+
+                    </div>
+                    <div class="row">
                       <div class="col-md-4">
                         <div class="form-group">
                           <label for="bairro">Bairro</label>
                           <input type="text" class="form-control" value="{{ $contato->bairro or "" }}" name="bairro" id="bairro" placeholder="Bairro">
-                        </div>
-                      </div>
-                    </div>
-                    <div class="row">
-                      <div class="col-md-3">
-                        <div class="form-group">
-                          <label for="sala">Sala</label>
-                          <input type="text" class="form-control" value="{{ $contato->sala or "" }}" name="sala" id="Sala" placeholder="Sala">
-                        </div>
-                      </div>
-                      <div class="col-md-3">
-                        <div class="form-group">
-                          <label for="andar">Andar</label>
-                          <input type="text" class="form-control" value="{{ $contato->andar or "" }}" name="andar" id="andar" placeholder="Andar">
                         </div>
                       </div>
                       <div class="col-md-4">
@@ -326,7 +326,9 @@
                         </div>
                       </div>
                     </div>
-                    <span id="mais"></span>
+                    <div class="row">
+                      <span id="mais"></span>
+                    </div>
                   </div>
                 </div>
               @endif
