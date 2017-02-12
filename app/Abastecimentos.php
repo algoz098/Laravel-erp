@@ -7,7 +7,7 @@ use App\Contatos;
 use App\frotas;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Abastecimentos extends Model
+class abastecimentos extends Model
 {
   use SoftDeletes;
   public function por()

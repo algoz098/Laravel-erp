@@ -178,40 +178,6 @@ class ContasController  extends BaseController
                                   ->with("is_consumos", $is_consumos);
   }
 
-  /*
-  public function add(Request $request){
-    $conta = new Contas;
-    $conta->contatos_id = $request->contatos_id;
-    $conta->nome = $request->nome;
-    $conta->valor = $request->val;
-    $conta->vencimento = $request->venc;
-    $conta->descricao = $request->descricao;
-    $conta->tipo = $request->tipo;
-    $conta->estado = $request->estado;
-    $conta->dm = $request->dm;
-    $conta->save();
-    $conta->referente = $conta->id;
-    $conta->save();
-    if ($request->parcelas>0){
-      $i = 0;
-      while ($i < count($request->valor)) {
-        $parcela = new Contas;
-        $parcela->contatos_id = $request->contatos_id;
-        $parcela->referente = $conta->id;
-        $parcela->nome = $request->nome.' '.$i;
-        $parcela->valor = $request->valor[$i];
-        $parcela->vencimento = $request->vencimento[$i];
-        $parcela->descricao = $request->descricao;
-        $parcela->tipo = $request->tipo;
-        $parcela->estado = $request->estado;
-        $parcela->save();
-        $i++;
-      }
-    }
-    Log::info('Salvando contas -> "'.$conta.'", para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
-    return redirect()->action('ContasController@index');
-  }*/
-
   public function pago($id){
     $conta = Contas::find($id);
     if ($conta->estado==1) {

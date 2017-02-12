@@ -17,4 +17,8 @@ class Frotas extends Model
   {
       return $this->morphMany('App\Attachments', 'attachmentable');
   }
+  public function abastecimentos()
+  {
+      return $this->hasMany('App\Abastecimentos');
+  }
 }

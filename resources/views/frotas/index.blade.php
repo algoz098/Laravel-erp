@@ -10,7 +10,7 @@
           <form method="POST" action="{{ url('/lista/contas') }}/">
             <div id="secondNavbar" class="row">
               <div class="row">
-                <div class="col-md-2 text-left" >
+                <div class="col-md-3 text-left" >
                   <div class=" form-inline col-md-10 text-right">
                     <a href="{{ url('lista/contas') }}/id/delete"  id="buttonDelete" title="Apagar" class="btn btn-danger">
                       <i class="fa fa-ban"></i>
@@ -20,6 +20,9 @@
                     </a>
                     <a class="btn btn-info"  id="buttonDetalhes" title="Detalhes"  data-toggle="modal"  data-target="#modal" data-url="">
                       <i class="fa fa-file-text-o"></i>
+                    </a>
+                    <a class="btn btn-info"  id="buttonAbastecer" title="Abastecer" href="">
+                      <i class="fa fa-tint"></i>
                     </a>
                   </div>
                   <div class=" form-inline col-md-2 text-left">
@@ -174,6 +177,7 @@
     $("#buttonDelete").attr('href', '{{ url('lista/frotas') }}/'+id+'/delete/');
     $("#buttonEdit").attr('href', '{{ url('novo/frotas') }}/'+id+'/edit');
     $("#buttonDetalhes").attr('data-url', '{{url('lista/frotas')}}/'+id);
+    $("#buttonAbastecer").attr('href', '{{url('lista/frotas')}}/'+id+'/abastecer');
   }
   function listaTop(){
     var css = $('#lista').css('margin-top');

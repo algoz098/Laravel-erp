@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Frotas;
+use App\Contas;
 use App\Contatos;
+use App\Abastecimentos;
 use Log;
 use Auth;
 
@@ -70,6 +72,54 @@ class FrotasController extends BaseController
     } else {
       $frota->delete();
     }
+
+    return redirect()->action('FrotasController@index');
+  }
+  public function abastecer($id){
+    Log::info('Mostrando abastecimento de Frota com ID: '.$id.' para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
+    $frota = frotas::find($id);
+    return view('frotas.abastecer')
+                ->with('frota', $frota);
+  }
+  public function abastecer_salvar($id, request $request){
+    Log::info('Mostrando abastecimento de Frota com ID: '.$id.' para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
+    $date_temp = date_create($request->data);
+    $frota = frotas::find($id);
+    $abastecer = new abastecimentos;
+    $abastecer->frotas_id = $id;
+    $abastecer->data = $date_temp;
+    $abastecer->combustivel = $request->combustivel;
+    $abastecer->documento = $request->documento;
+    $abastecer->lts = $request->lts;
+    $abastecer->preco_lts = $request->preco_lts;
+    $abastecer->km_anterior = $request->km_anterior;
+    $abastecer->km_atual = $request->km_atual;
+    $abastecer->km_rodado = $request->km_rodado;
+    $abastecer->km_lts = $request->km_lts;
+    $abastecer->abastecido_em = $request->abastecido_em;
+    $abastecer->abastecido_por = $request->abastecido_por;
+
+    $conta = new contas;
+    $conta->tipo = 0;
+    $conta->contatos_id = $request->abastecido_em;
+    $conta->nome = "Abastecer ".$frota->placa;
+    $conta->pagamento = "Dinheiro";
+    $conta->vencimento = $date_temp;
+    $conta->valor = $request->preco_lts*$request->lts;
+    $conta->dm = $request->documento;
+
+    if($request->km_atual!=""){
+      $conta->estado="0";
+      $abastecer->estado = "0";
+    } else {
+      $conta->estado="1";
+      $abastecer->estado = "1";
+    }
+
+    $conta->descricao = "Referente a abastecimento";
+    $conta->save();
+    $abastecer->contas_id = $conta->id;
+    $abastecer->save();
 
     return redirect()->action('FrotasController@index');
   }

@@ -21,6 +21,13 @@ class ContatosController extends BaseController
   public function __construct(){
      parent::__construct();
   }
+  public function selecionar()
+  {
+    Log::info('Selecionar de contatos para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
+    $contatos = contatos::orderBy('nome', 'asc')->paginate(15);
+    return view('contatos.selecionar')
+                ->with('contatos', $contatos);
+  }
   public function show()
   {
     Log::info('Lista de contatos para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());

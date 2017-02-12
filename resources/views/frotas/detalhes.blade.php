@@ -24,31 +24,40 @@
         </div>
         <div class="col-md-9">
           <div class="row" id="contentDiv">
-            <div class="col-md-4">
-              Vinculado a:
-              <span class="label label-info">{{$frota->contato->nome}}</span>
-              <br>
-              Marca:
-              <span class="label label-info">{{$frota->marca}}</span>
-              <br>
-              Placa:
-              <span class="label label-info">{{$frota->placa}}</span>
-              <br>
-              Modelo do ano:
-              <span class="label label-info">{{$frota->modelo}}</span>
+            <div class="row">
+              <div class="col-md-4">
+                Vinculado a:
+                <span class="label label-info">{{$frota->contato->nome}}</span>
+                <br>
+                Marca:
+                <span class="label label-info">{{$frota->marca}}</span>
+                <br>
+                Placa:
+                <span class="label label-info">{{$frota->placa}}</span>
+                <br>
+                Modelo do ano:
+                <span class="label label-info">{{$frota->modelo}}</span>
+              </div>
+              <div class="col-md-4">
+                Combustivel:
+                <span class="label label-info">{{$frota->combustivel}}</span>
+                <br>
+                Ano da compra:
+                <span class="label label-info">{{$frota->compra}}</span>
+                <br>
+                Renavam:
+                <span class="label label-info">{{$frota->renavan}}</span>
+                <br>
+                Chassi:
+                <span class="label label-info">{{$frota->chassis}}</span>
+              </div>
             </div>
-            <div class="col-md-4">
-              Combustivel:
-              <span class="label label-info">{{$frota->combustivel}}</span>
-              <br>
-              Ano da compra:
-              <span class="label label-info">{{$frota->compra}}</span>
-              <br>
-              Renavam:
-              <span class="label label-info">{{$frota->renavan}}</span>
-              <br>
-              Chassi:
-              <span class="label label-info">{{$frota->chassis}}</span>
+            <div class="row text-right">
+              <div class="col-md-12">
+                @foreach ($frota->abastecimentos as $key => $abastecimento)
+                  {{$abastecimento}}
+                @endforeach
+              </div>
             </div>
           </div>
           <span id="dataSpace"></span>

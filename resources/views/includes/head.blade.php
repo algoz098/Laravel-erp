@@ -20,6 +20,7 @@
 <script src="{{ asset('js/jquery.tinymce.min.js') }}"></script>
 <script src="{{ asset('js/tinymce.min.js') }}"></script>
 <script src="{{ asset('js/tinymce.theme.min.js') }}"></script>
+<script src="{{ asset('js/jquery.mask.min.js') }}"></script> <!-- Conferir se vai manter -->
 <script src="{{ asset('js/jquery.maskedinput.min.js') }}"></script>
 <script src="{{ asset('js/jquery.maskMoney.min.js') }}"></script>
 <script src="{{ asset('js/jquery.uploadfile.min.js') }}"></script>

@@ -13,7 +13,7 @@ class CreateAbastecimentosTable extends Migration
      */
     public function up()
     {
-        Schema::create('abasteciamentos', function (Blueprint $table) {
+        Schema::create('abastecimentos', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('frotas_id')->nullable();
             $table->string('data')->nullable();
@@ -26,7 +26,7 @@ class CreateAbastecimentosTable extends Migration
             $table->string('km_atual')->nullable();
             $table->string('km_rodado')->nullable();
             $table->string('km_lts')->nullable();
-            $table->string('abastacido_em')->nullable();
+            $table->string('abastecido_em')->nullable();
             $table->string('abastecido_por')->nullable();
             $table->string('estado')->nullable();
             $table->timestamps();
@@ -41,6 +41,6 @@ class CreateAbastecimentosTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('abasteciamentos');
+        Schema::dropIfExists('abastecimentos');
     }
 }

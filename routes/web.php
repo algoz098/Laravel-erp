@@ -17,6 +17,7 @@ Auth::routes();
 
 Route::get('/home', 'HomeController@index')->middleware('auth');
 Route::get('/lista/contatos', 'ContatosController@show')->name('contatos')->middleware('auth');
+Route::get('/lista/contatos/selecionar', 'ContatosController@selecionar')->middleware('auth');
 Route::post('lista/contatos', 'ContatosController@search')->middleware('auth');
 Route::get('lista/contatos/{id}/attachs', 'ContatosController@attachs_detalhes')->middleware('auth');
 Route::post('lista/contatos/{id}/attach', 'ContatosController@attach')->middleware('auth');
@@ -112,6 +113,8 @@ Route::post('novo/tickets/{id}', 'TicketsController@salvar')->middleware('auth')
 Route::get('lista/frotas', 'FrotasController@index')->middleware('auth');
 Route::get('lista/frotas/{id}', 'FrotasController@detalhes')->middleware('auth');
 Route::get('lista/frotas/{id}/delete', 'FrotasController@delete')->middleware('auth');
+Route::get('lista/frotas/{id}/abastecer', 'FrotasController@abastecer')->middleware('auth');
+Route::post('lista/frotas/{id}/abastecer', 'FrotasController@abastecer_salvar')->middleware('auth');
 Route::get('novo/frotas', 'FrotasController@novo')->middleware('auth');
 Route::get('novo/frotas/{id}', 'FrotasController@novo_2')->middleware('auth');
 Route::post('novo/frotas/{id}', 'FrotasController@criar')->middleware('auth');

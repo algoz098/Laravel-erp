@@ -78,11 +78,11 @@
     });
   });
   $(function() {
-      $('#modal').on("show.bs.modal", function (e) {
-        var url = $(e.relatedTarget).data('url');
-        $.get( url, function( data ) {
-         $( "#modal" ).html( data );
-        });
-     });
+    $('#modal').on("show.bs.modal", function (e) {
+      var url = $(e.relatedTarget).data('url');
+      $.get( url, function( data ) {
+       $( "#modal" ).html( data );
+      });
+   });
   });
 </script>
