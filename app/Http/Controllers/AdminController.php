@@ -63,6 +63,15 @@ class AdminController  extends BaseController
       $modulo_atendimentos->options = '';
       $modulo_atendimentos->save();
     }
+    $modulo_contas = Configs::where('field', "modulo_contas")->first();
+    if (!isset($modulo_contas)) {
+      $modulo_contas = new Configs;
+      $modulo_contas->field = "modulo_contas";
+      $modulo_contas->text = 'Modulo "Contas"';
+      $modulo_contas->value = '1';
+      $modulo_contas->options = '';
+      $modulo_contas->save();
+    }
     $modulo_tickets = Configs::where('field', "modulo_tickets")->first();
     if (!isset($modulo_tickets)) {
       $modulo_tickets = new Configs;
@@ -72,12 +81,58 @@ class AdminController  extends BaseController
       $modulo_tickets->options = '';
       $modulo_tickets->save();
     }
+
+    $modulo_caixas = Configs::where('field', "modulo_caixas")->first();
+    if (!isset($modulo_caixas)) {
+      $modulo_caixas = new Configs;
+      $modulo_caixas->field = "modulo_caixas";
+      $modulo_caixas->text = 'Modulo "Caixas"';
+      $modulo_caixas->value = '1';
+      $modulo_caixas->options = '';
+      $modulo_caixas->save();
+    }
+
+    $modulo_vendas = Configs::where('field', "modulo_vendas")->first();
+    if (!isset($modulo_vendas)) {
+      $modulo_vendas = new Configs;
+      $modulo_vendas->field = "modulo_vendas";
+      $modulo_vendas->text = 'Modulo "Vendas"';
+      $modulo_vendas->value = '1';
+      $modulo_vendas->options = '';
+      $modulo_vendas->save();
+    }
+
+    $modulo_estoques = Configs::where('field', "modulo_estoques")->first();
+    if (!isset($modulo_estoques)) {
+      $modulo_estoques = new Configs;
+      $modulo_estoques->field = "modulo_estoques";
+      $modulo_estoques->text = 'Modulo "Estoques"';
+      $modulo_estoques->value = '1';
+      $modulo_estoques->options = '';
+      $modulo_estoques->save();
+    }
+
+    $modulo_frotas = Configs::where('field', "modulo_frotas")->first();
+    if (!isset($modulo_frotas)) {
+      $modulo_frotas = new Configs;
+      $modulo_frotas->field = "modulo_frotas";
+      $modulo_frotas->text = 'Modulo "Estoques"';
+      $modulo_frotas->value = '1';
+      $modulo_frotas->options = '';
+      $modulo_frotas->save();
+    }
+
     $matriz = Contatos::find(1);
     return view('admin.configuration')->with('configs', $configs)
                                       ->with('field_codigo', $field_codigo)
                                       ->with('img_destaque', $img_destaque)
                                       ->with('modulo_atendimentos', $modulo_atendimentos)
                                       ->with('modulo_tickets', $modulo_tickets)
+                                      ->with('modulo_contas', $modulo_contas)
+                                      ->with('modulo_caixas', $modulo_caixas)
+                                      ->with('modulo_vendas', $modulo_vendas)
+                                      ->with('modulo_estoques', $modulo_estoques)
+                                      ->with('modulo_frotas', $modulo_frotas)
                                       ->with('matriz', $matriz);
   }
   public function configuration_save(request $request){
@@ -96,6 +151,26 @@ class AdminController  extends BaseController
     $modulo_tickets = Configs::where('field', "modulo_tickets")->first();
     $modulo_tickets->value = $request->modulo_tickets;
     $modulo_tickets->save();
+
+    $modulo_contas = Configs::where('field', "modulo_contas")->first();
+    $modulo_contas->value = $request->modulo_contas;
+    $modulo_contas->save();
+
+    $modulo_caixas = Configs::where('field', "modulo_caixas")->first();
+    $modulo_caixas->value = $request->modulo_caixas;
+    $modulo_caixas->save();
+
+    $modulo_vendas = Configs::where('field', "modulo_vendas")->first();
+    $modulo_vendas->value = $request->modulo_vendas;
+    $modulo_vendas->save();
+
+    $modulo_estoques = Configs::where('field', "modulo_estoques")->first();
+    $modulo_estoques->value = $request->modulo_estoques;
+    $modulo_estoques->save();
+
+    $modulo_frotas = Configs::where('field', "modulo_frotas")->first();
+    $modulo_frotas->value = $request->modulo_frotas;
+    $modulo_frotas->save();
 
     $img_destaque = Configs::where('field', 'img_destaque')->first();
     if ($request->img_destaque!=""){

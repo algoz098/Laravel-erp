@@ -17,12 +17,22 @@
           @if ($modulo_atendimentos=="1")
             <li class="pushy-link "><a class="{{{ Request::path()=='novo/atendimentos' ? "active" : "" }}}" href="{{ url('/novo/atendimentos') }}"><i class="fa fa-list"></i> Atendimento</a></li>
           @endif
-          <li class="pushy-link "><a class="{{{ Request::path()=='novo/contas' ? "active" : "" }}}" href="{{ url('/novo/contas') }}"><i class="fa fa-usd"></i> Plano de Caixa</a></li>
-          <li class="pushy-link "><a class="{{{ Request::path()=='novo/consumos' ? "active" : "" }}}" href="{{ url('/novo/consumos') }}"><i class="fa fa-arrow-right"></i><i class="fa fa-usd"></i> Conta de Consumo</a></li>
-          <li class="pushy-link "><a class="{{{ Request::path()=='novo/estoque' ? "active" : "" }}}" href="{{ url('/novo/estoque') }}"><i class="fa fa-bell"></i> Novo produto</a></li>
-          <li class="pushy-link "><a class="{{{ Request::path()=='novo/caixa' ? "active" : "" }}}" href="{{ url('/novo/caixa') }}"><i class="fa fa-money"></i> Movimento de Caixa</a></li>
-          <li class="pushy-link "><a class="{{{ Request::path()=='novo/vendas' ? "active" : "" }}}" href="{{ url('/novo/vendas') }}"><i class="fa fa-shopping-cart"></i> Vendas</a></li>
-          <li class="pushy-link "><a class="{{{ Request::path()=='novo/frotas' ? "active" : "" }}}" href="{{ url('/novo/frotas') }}"><i class="fa fa-car"></i> Adicionar veiculo</a></li>
+          @if ($modulo_contas=="1")
+            <li class="pushy-link "><a class="{{{ Request::path()=='novo/contas' ? "active" : "" }}}" href="{{ url('/novo/contas') }}"><i class="fa fa-usd"></i> Plano de Caixa</a></li>
+            <li class="pushy-link "><a class="{{{ Request::path()=='novo/consumos' ? "active" : "" }}}" href="{{ url('/novo/consumos') }}"><i class="fa fa-arrow-right"></i><i class="fa fa-usd"></i> Conta de Consumo</a></li>
+          @endif
+          @if ($modulo_estoques=="1")
+            <li class="pushy-link "><a class="{{{ Request::path()=='novo/estoque' ? "active" : "" }}}" href="{{ url('/novo/estoque') }}"><i class="fa fa-bell"></i> Novo produto</a></li>
+          @endif
+          @if ($modulo_caixas=="1")
+            <li class="pushy-link "><a class="{{{ Request::path()=='novo/caixa' ? "active" : "" }}}" href="{{ url('/novo/caixa') }}"><i class="fa fa-money"></i> Movimento de Caixa</a></li>
+          @endif
+          @if ($modulo_vendas=="1")
+            <li class="pushy-link "><a class="{{{ Request::path()=='novo/vendas' ? "active" : "" }}}" href="{{ url('/novo/vendas') }}"><i class="fa fa-shopping-cart"></i> Vendas</a></li>
+          @endif
+          @if ($modulo_frotas=="1")
+            <li class="pushy-link "><a class="{{{ Request::path()=='novo/frotas' ? "active" : "" }}}" href="{{ url('/novo/frotas') }}"><i class="fa fa-car"></i> Adicionar veiculo</a></li>
+          @endif
           @if ($modulo_tickets=="1")
             <li class="pushy-link "><a class="{{{ Request::path()=='novo/tickets' ? "active" : "" }}}" href="{{ url('/novo/tickets') }}"><i class="fa fa-book"></i> Tickets</a></li>
           @endif
@@ -35,11 +45,21 @@
           @if ($modulo_atendimentos=="1")
             <li class="pushy-link"><a class="{{{ Request::path()=='lista/atendimentos' ? "active" : "" }}}" href="{{ url('/lista/atendimentos') }}"><i class="fa fa-list"></i> Atendimento</a></li>
           @endif
-          <li class="pushy-link"><a class="{{{ Request::path()=='lista/contas' ? "active" : "" }}}" href="{{ url('/lista/contas') }}"><i class="fa fa-usd"></i> Plano de Caixa</a></li>
-          <li class="pushy-link"><a class="{{{ Request::path()=='lista/estoque' ? "active" : "" }}}" href="{{ url('/lista/estoque') }}"><i class="fa fa-bell"></i> Estoque</a></li>
-          <li class="pushy-link"><a class="{{{ Request::path()=='lista/caixa' ? "active" : "" }}}" href="{{ url('/lista/caixa') }}"><i class="fa fa-money"></i> Movimentações e Caixas</a></li>
-          <li class="pushy-link"><a class="{{{ Request::path()=='lista/vendas' ? "active" : "" }}}" href="{{ url('/lista/vendas') }}"><i class="fa fa-shopping-cart"></i> Vendas</a></li>
-          <li class="pushy-link"><a class="{{{ Request::path()=='lista/frotas' ? "active" : "" }}}" href="{{ url('/lista/frotas') }}"><i class="fa fa-car"></i> Frotas</a></li>
+          @if ($modulo_contas=="1")
+            <li class="pushy-link"><a class="{{{ Request::path()=='lista/contas' ? "active" : "" }}}" href="{{ url('/lista/contas') }}"><i class="fa fa-usd"></i> Plano de Caixa</a></li>
+          @endif
+          @if ($modulo_estoques=="1")
+            <li class="pushy-link"><a class="{{{ Request::path()=='lista/estoque' ? "active" : "" }}}" href="{{ url('/lista/estoque') }}"><i class="fa fa-bell"></i> Estoque</a></li>
+          @endif
+          @if ($modulo_caixas=="1")
+            <li class="pushy-link"><a class="{{{ Request::path()=='lista/caixa' ? "active" : "" }}}" href="{{ url('/lista/caixa') }}"><i class="fa fa-money"></i> Movimentações e Caixas</a></li>
+          @endif
+          @if ($modulo_vendas=="1")
+            <li class="pushy-link"><a class="{{{ Request::path()=='lista/vendas' ? "active" : "" }}}" href="{{ url('/lista/vendas') }}"><i class="fa fa-shopping-cart"></i> Vendas</a></li>
+          @endif
+          @if ($modulo_frotas=="1")
+            <li class="pushy-link"><a class="{{{ Request::path()=='lista/frotas' ? "active" : "" }}}" href="{{ url('/lista/frotas') }}"><i class="fa fa-car"></i> Frotas</a></li>
+          @endif
           @if ($modulo_tickets=="1")
             <li class="pushy-link"><a class="{{{ Request::path()=='lista/tickets' ? "active" : "" }}}" href="{{ url('/lista/tickets') }}"><i class="fa fa-book"></i> Tickets</a></li>
           @endif
@@ -65,10 +85,16 @@
             @if ($modulo_atendimentos=="1")
               <li class="pushy-link "><a class="{{{ Request::path()=='novo/combobox/atend' ? "active" : "" }}}" href="{{ url('novo/combobox/atend') }}"><i class="fa fa-list"></i> Assunto de Atend.</a></li>
             @endif
-            <li class="pushy-link "><a class="{{{ Request::path()=='novo/combobox/contas' ? "active" : "" }}}" href="{{ url('novo/combobox/contas') }}"><i class="fa fa-usd"></i> Ref. para Contas</a></li>
-            <li class="pushy-link "><a class="{{{ Request::path()=='novo/combobox/consumos' ? "active" : "" }}}" href="{{ url('novo/combobox/consumos') }}"><i class="fa fa-arrow-right"></i><i class="fa fa-usd"></i> Ref. de Consumo</a></li>
-            <li class="pushy-link "><a class="{{{ Request::path()=='novo/combobox/formas' ? "active" : "" }}}" href="{{ url('novo/combobox/formas') }}"><i class="fa fa-money"></i> Forma de pagamentos</a></li>
-            <li class="pushy-link "><a class="{{{ Request::path()=='novo/combobox/caixas' ? "active" : "" }}}" href="{{ url('novo/combobox/caixas') }}"><i class="fa fa-list"></i> Desc. movimentação</a></li>
+            @if ($modulo_contas=="1")
+              <li class="pushy-link "><a class="{{{ Request::path()=='novo/combobox/contas' ? "active" : "" }}}" href="{{ url('novo/combobox/contas') }}"><i class="fa fa-usd"></i> Ref. para Contas</a></li>
+              <li class="pushy-link "><a class="{{{ Request::path()=='novo/combobox/consumos' ? "active" : "" }}}" href="{{ url('novo/combobox/consumos') }}"><i class="fa fa-arrow-right"></i><i class="fa fa-usd"></i> Ref. de Consumo</a></li>
+            @endif
+            @if ($modulo_caixas=="1" or $modulo_contas=="1")
+              <li class="pushy-link "><a class="{{{ Request::path()=='novo/combobox/formas' ? "active" : "" }}}" href="{{ url('novo/combobox/formas') }}"><i class="fa fa-money"></i> Forma de pagamentos</a></li>
+            @endif
+            @if ($modulo_caixas=="1")
+              <li class="pushy-link "><a class="{{{ Request::path()=='novo/combobox/caixas' ? "active" : "" }}}" href="{{ url('novo/combobox/caixas') }}"><i class="fa fa-list"></i> Desc. movimentação</a></li>
+            @endif
           </ul class="menu" >
       </li>
     @endif

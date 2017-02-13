@@ -13,43 +13,119 @@
           </div>
         </div>
         <div class="row">
-          <div class="col-md-3">
-            <div class="form-group">
-              <label for="sel1">{{$img_destaque->text}}</label>
-              <div class="input-group">
-                <span class="input-group-btn">
-                  <button class="btn btn-info" type="button" data-toggle="modal" data-target="#img_destaque">Escolher foto</button>
-                </span>
-                <input class="form-control" id="img_destaqueInput" type="text" value="{{$img_destaque->value}}" disabled="false">
-                <input class="form-control" id="img_destaqueHidden" type="hidden" name="{{$img_destaque->field}}" value="{{$img_destaque->options}}">
+            <!-- Nav tabs -->
+            <ul class="nav nav-tabs" role="tablist">
+              <li role="presentation" class="active"><a href="#modulos" aria-controls="modulos" role="tab" data-toggle="tab">Modulos</a></li>
+              <li role="presentation"><a href="#geral" aria-controls="geral" role="tab" data-toggle="tab">Geral</a></li>
+              <li role="presentation"><a href="#contatos" aria-controls="contatos" role="tab" data-toggle="tab">Contatos</a></li>
+
+            </ul>
+
+            <!-- Tab panes -->
+            <div class="tab-content">
+              <div role="tabpanel" class="tab-pane fade" id="geral"><br>
+                <div class="row">
+                  <div class="col-md-3">
+                    <div class="panel panel-default">
+                      <div class="panel-body">
+                        <div class="form-group">
+                          <label for="sel1">{{$img_destaque->text}}</label>
+                          <div class="input-group">
+                            <span class="input-group-btn">
+                              <button class="btn btn-info" type="button" data-toggle="modal" data-target="#img_destaque">Escolher foto</button>
+                            </span>
+                            <input class="form-control" id="img_destaqueInput" type="text" value="{{$img_destaque->value}}" disabled="false">
+                            <input class="form-control" id="img_destaqueHidden" type="hidden" name="{{$img_destaque->field}}" value="{{$img_destaque->options}}">
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
-            </div>
-          </div>
-          <div class="col-md-3">
-            <div class="form-group">
-              <label for="sel1">{{$field_codigo->text}}</label>
-              <select class="form-control" id="sel1" name="{{$field_codigo->field}}">
-                <option value="0" {{{$field_codigo->value=="0"? "selected" : ""}}}>Não usar</option>
-                <option value="1" {{{$field_codigo->value=="1"? "selected" : ""}}}>Usar o campo</option>
-              </select>
-            </div>
-          </div>
-          <div class="col-md-3">
-            <div class="form-group">
-              <label for="sel1">{{$modulo_atendimentos->text}}</label>
-              <select class="form-control" id="sel1" name="{{$modulo_atendimentos->field}}">
-                <option value="0" {{{$modulo_atendimentos->value=="0"? "selected" : ""}}}>Desativado</option>
-                <option value="1" {{{$modulo_atendimentos->value=="1"? "selected" : ""}}}>Ativado</option>
-              </select>
-            </div>
-          </div>
-          <div class="col-md-3">
-            <div class="form-group">
-              <label for="sel1">{{$modulo_tickets->text}}</label>
-              <select class="form-control" id="sel1" name="{{$modulo_tickets->field}}">
-                <option value="0" {{{$modulo_tickets->value=="0"? "selected" : ""}}}>Desativado</option>
-                <option value="1" {{{$modulo_tickets->value=="1"? "selected" : ""}}}>Ativado</option>
-              </select>
+              <div role="tabpanel" class="tab-pane fade" id="contatos"><br>
+                <div class="row">
+                  <div class="col-md-3">
+                    <div class="panel panel-default">
+                      <div class="panel-body">
+                        <div class="form-group">
+                          <label for="sel1">{{$field_codigo->text}}</label>
+                          <select class="form-control" id="sel1" name="{{$field_codigo->field}}">
+                            <option value="0" {{{$field_codigo->value=="0"? "selected" : ""}}}>Não usar</option>
+                            <option value="1" {{{$field_codigo->value=="1"? "selected" : ""}}}>Usar o campo</option>
+                          </select>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div role="tabpanel" class="tab-pane fade in active" id="modulos"><br>
+                <div class="row">
+                  <div class="col-md-3">
+                    <div class="panel panel-default">
+                      <div class="panel-body">
+                        <div class="form-group">
+                          <label for="sel1">{{$modulo_atendimentos->text}}</label>
+                          <select class="form-control" id="sel1" name="{{$modulo_atendimentos->field}}">
+                            <option value="0" {{{$modulo_atendimentos->value=="0"? "selected" : ""}}}>Desativado</option>
+                            <option value="1" {{{$modulo_atendimentos->value=="1"? "selected" : ""}}}>Ativado</option>
+                          </select>
+                        </div>
+                        <div class="form-group">
+                          <label for="sel1">{{$modulo_tickets->text}}</label>
+                          <select class="form-control" id="sel1" name="{{$modulo_tickets->field}}">
+                            <option value="0" {{{$modulo_tickets->value=="0"? "selected" : ""}}}>Desativado</option>
+                            <option value="1" {{{$modulo_tickets->value=="1"? "selected" : ""}}}>Ativado</option>
+                          </select>
+                        </div>
+                        <div class="form-group">
+                          <label for="sel1">{{$modulo_contas->text}}</label>
+                          <select class="form-control" id="sel1" name="{{$modulo_contas->field}}">
+                            <option value="0" {{{$modulo_contas->value=="0"? "selected" : ""}}}>Desativado</option>
+                            <option value="1" {{{$modulo_contas->value=="1"? "selected" : ""}}}>Ativado</option>
+                          </select>
+                        </div>
+                        <div class="form-group">
+                          <label for="sel1">{{$modulo_caixas->text}}</label>
+                          <select class="form-control" id="sel1" name="{{$modulo_caixas->field}}">
+                            <option value="0" {{{$modulo_caixas->value=="0"? "selected" : ""}}}>Desativado</option>
+                            <option value="1" {{{$modulo_caixas->value=="1"? "selected" : ""}}}>Ativado</option>
+                          </select>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-3">
+                    <div class="panel panel-default">
+                      <div class="panel-body">
+                        <div class="form-group">
+                          <label for="sel1">{{$modulo_vendas->text}}</label>
+                          <select class="form-control" id="sel1" name="{{$modulo_vendas->field}}">
+                            <option value="0" {{{$modulo_vendas->value=="0"? "selected" : ""}}}>Desativado</option>
+                            <option value="1" {{{$modulo_vendas->value=="1"? "selected" : ""}}}>Ativado</option>
+                          </select>
+                        </div>
+                        <div class="form-group">
+                          <label for="sel1">{{$modulo_estoques->text}}</label>
+                          <select class="form-control" id="sel1" name="{{$modulo_estoques->field}}">
+                            <option value="0" {{{$modulo_estoques->value=="0"? "selected" : ""}}}>Desativado</option>
+                            <option value="1" {{{$modulo_estoques->value=="1"? "selected" : ""}}}>Ativado</option>
+                          </select>
+                        </div>
+                        <div class="form-group">
+                          <label for="sel1">{{$modulo_frotas->text}}</label>
+                          <select class="form-control" id="sel1" name="{{$modulo_frotas->field}}">
+                            <option value="0" {{{$modulo_frotas->value=="0"? "selected" : ""}}}>Desativado</option>
+                            <option value="1" {{{$modulo_frotas->value=="1"? "selected" : ""}}}>Ativado</option>
+                          </select>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>

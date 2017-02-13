@@ -20,14 +20,21 @@ class BaseController extends Controller {
 
       $modulo_atendimentos = Configs::where('field', 'modulo_atendimentos')->pluck('value')->first();
       $modulo_tickets = Configs::where('field', 'modulo_tickets')->pluck('value')->first();
-
-      if($modulo_atendimentos=="" or $modulo_tickets==""){
-        return redirect()->action('AdminController@configuration');
-      }
+      $modulo_contas = Configs::where('field', 'modulo_contas')->pluck('value')->first();
+      $modulo_caixas = Configs::where('field', 'modulo_caixas')->pluck('value')->first();
+      $modulo_vendas = Configs::where('field', 'modulo_vendas')->pluck('value')->first();
+      $modulo_estoques = Configs::where('field', 'modulo_estoques')->pluck('value')->first();
+      $modulo_frotas = Configs::where('field', 'modulo_frotas')->pluck('value')->first();
 
       View::share ( 'imagem_destaque', $imagem_destaque );
       View::share ( 'modulo_atendimentos', $modulo_atendimentos );
       View::share ( 'modulo_tickets', $modulo_tickets );
+      View::share ( 'modulo_contas', $modulo_contas );
+      View::share ( 'modulo_caixas', $modulo_caixas );
+      View::share ( 'modulo_vendas', $modulo_vendas );
+      View::share ( 'modulo_estoques', $modulo_estoques );
+      View::share ( 'modulo_frotas', $modulo_frotas );
+
     }
 
 }
