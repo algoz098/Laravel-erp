@@ -113,6 +113,8 @@ Route::post('novo/tickets/{id}', 'TicketsController@salvar')->middleware('auth')
 Route::get('lista/frotas', 'FrotasController@index')->middleware('auth');
 Route::get('lista/frotas/{id}', 'FrotasController@detalhes')->middleware('auth');
 Route::get('lista/frotas/{id}/delete', 'FrotasController@delete')->middleware('auth');
+Route::get('lista/frotas/{id}/abastecer/{id_abastecimento}', 'FrotasController@abastecer_editar')->middleware('auth');
+Route::post('lista/frotas/{id}/abastecer/{id_abastecimento}', 'FrotasController@abastecer_guardar')->middleware('auth');
 Route::get('lista/frotas/{id}/abastecer', 'FrotasController@abastecer')->middleware('auth');
 Route::post('lista/frotas/{id}/abastecer', 'FrotasController@abastecer_salvar')->middleware('auth');
 Route::get('novo/frotas', 'FrotasController@novo')->middleware('auth');
@@ -120,6 +122,9 @@ Route::get('novo/frotas/{id}', 'FrotasController@novo_2')->middleware('auth');
 Route::post('novo/frotas/{id}', 'FrotasController@criar')->middleware('auth');
 Route::get('novo/frotas/{id}/edit', 'FrotasController@edit')->middleware('auth');
 Route::post('novo/frotas/{id}/edit', 'FrotasController@salvar')->middleware('auth');
+
+Route::get('lista/abastecimentos/{id}/delete', 'FrotasController@abastecer_delete')->middleware('auth');
+
 
 
 Route::get('attach/{id}', 'AttachmentsController@show')->middleware('auth');

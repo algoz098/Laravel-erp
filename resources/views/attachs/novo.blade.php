@@ -1,12 +1,10 @@
-<form id="attachNovo"action="{{url('attach/')}}/{{$modulo}}/{{$id}}" method="post"enctype="multipart/form-data">
-  <div class="row">
-    <div class="col-md-1"></div>
-    <div class="col-md-9">
-      <div id="fileuploader">Escolher arquivo</div>
-      <div id="extrabutton" class="btn btn-success">Enviar</div>
-    </div>
+<div class="row">
+  <div class="col-md-1"></div>
+  <div class="col-md-9">
+    <div id="fileuploader">Escolher arquivo</div>
+    <div id="extrabutton" class="btn btn-success">Enviar</div>
   </div>
-</form>
+</div>
 <script>
 $(document).ready(function(){
   var extraObj = $("#fileuploader").uploadFile({

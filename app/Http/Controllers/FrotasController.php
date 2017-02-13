@@ -81,8 +81,24 @@ class FrotasController extends BaseController
     return view('frotas.abastecer')
                 ->with('frota', $frota);
   }
+  public function abastecer_editar($id, $id_abastecimento){
+    Log::info('Mostrando abastecimento de Frota com ID: '.$id.' para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
+    $frota = frotas::find($id);
+    $abastecimento = abastecimentos::find($id_abastecimento);
+    return view('frotas.abastecer')
+                ->with('frota', $frota)
+                ->with('abastecimento', $abastecimento);
+
+  }
   public function abastecer_salvar($id, request $request){
     Log::info('Mostrando abastecimento de Frota com ID: '.$id.' para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
+
+    $this->validate($request, [
+      'abastecido_em' => 'required',
+      'abastecido_por' => 'required',
+      'data' => 'required',
+    ]);
+
     $date_temp = date_create($request->data);
     $frota = frotas::find($id);
     $abastecer = new abastecimentos;
@@ -123,6 +139,49 @@ class FrotasController extends BaseController
 
     return redirect()->action('FrotasController@index');
   }
+  public function abastecer_guardar($id, $id_abastecimento, request $request){
+    Log::info('Mostrando abastecimento de Frota com ID: '.$id.' para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
+    $date_temp = date_create($request->data);
+    $abastecer = abastecimentos::find($id_abastecimento);
+    $abastecer->data = $date_temp;
+    $abastecer->combustivel = $request->combustivel;
+    $abastecer->documento = $request->documento;
+    $abastecer->lts = $request->lts;
+    $abastecer->preco_lts = $request->preco_lts;
+    $abastecer->km_anterior = $request->km_anterior;
+    $abastecer->km_atual = $request->km_atual;
+    $abastecer->km_rodado = $request->km_rodado;
+    $abastecer->km_lts = $request->km_lts;
+    $abastecer->abastecido_em = $request->abastecido_em;
+    $abastecer->abastecido_por = $request->abastecido_por;
+
+    if($request->km_atual!=""){
+      $abastecer->estado = "0";
+    } else {
+      $abastecer->estado = "1";
+    }
+
+    $abastecer->save();
+
+    return redirect()->action('FrotasController@index');
+  }
+  public function abastecer_delete($id){
+    Log::info('Apagar abastecimento de Frota com ID: '.$id.' para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
+    $abastecimento = abastecimentos::withTrashed()->find($id);
+    $conta = contas::withTrashed()->find($abastecimento->conta->id);
+
+    if ($abastecimento->trashed()) {
+      $abastecimento->restore();
+    } else {
+      $abastecimento->delete();
+    }
+    if ($conta->trashed()) {
+      $conta->restore();
+    } else {
+      $conta->delete();
+    }
+  }
+
   public function edit($id){
     Log::info('Editar Frota com ID: '.$id.' para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
 

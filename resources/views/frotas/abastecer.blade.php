@@ -7,10 +7,18 @@
           <i class="fa fa-tint fa-1x"></i> Abastecer
         </div>
         <div class="panel-body">
+          @if (isset($abastecimento))
+            <form method="POST" action="{{ url('/lista/frotas') }}/{{$frota->id}}/abastecer/{{$abastecimento->id}}">
+          @else
           <form method="POST" action="{{ url('/lista/frotas') }}/{{$frota->id}}/abastecer">
+          @endif
             {{ csrf_field() }}
             <div id="secondNavbar" class="row">
-              <div class="col-md-1 pull-right text-right ajuda-popover">
+              <div class="col-md-3 pull-right text-right ajuda-popover">
+                <a  href="{{url('lista/frotas')}}" class="btn btn-warning">
+                  <i class="fa fa-tint fa-1x"></i>
+                  Voltar a lista
+                </a>
                 <button type="submit" class="btn btn-success">
                   <i class="fa fa-check fa-1x"></i>
                   Salvar
@@ -28,16 +36,16 @@
                     <div class="form-group">
                       <label for="por">Abastecido por:</label>
                       <div class="input-group">
-                        <input type="hidden" class="form-control" id="porHidden" name="abastecido_por" >
-                        <input type="text" class="form-control" id="por" disabled>
+                        <input type="hidden" class="form-control" id="porHidden" name="abastecido_por" value="{{isset($abastecimento) ? $abastecimento->por->id : ""}}">
+                        <input type="text" class="form-control" id="por" value="{{isset($abastecimento) ? $abastecimento->por->nome : ""}}" disabled>
                         <a onclick="window.activeTarget='por'" data-toggle="modal"  data-target="#modal" data-url="{{url('lista/contatos/selecionar')}}" class="input-group-addon btn btn-info"><i class="fa fa-gear"></i></a>
                       </div>
                     </div>
                     <div class="form-group">
                       <label for="por">Abastecido em:</label>
                       <div class="input-group">
-                        <input type="hidden" class="form-control" id="emHidden" name="abastecido_em" >
-                        <input type="text" class="form-control" id="em" disabled>
+                        <input type="hidden" class="form-control" id="emHidden" name="abastecido_em" value="{{isset($abastecimento) ? $abastecimento->em->id : ""}}">
+                        <input type="text" class="form-control" id="em" disabled value="{{isset($abastecimento) ? $abastecimento->em->nome : ""}}">
                         <a onclick="window.activeTarget='em'" data-toggle="modal"  data-target="#modal" data-url="{{url('lista/contatos/selecionar')}}" class="input-group-addon btn btn-info"><i class="fa fa-gear"></i></a>
                       </div>
                     </div>
@@ -49,20 +57,20 @@
                   <div class="panel-body">
                     <div class="form-group">
                       <label for="data">Data:</label>
-                      <input type="text" class="form-control datepicker" id="data" name="data" placeholder="Data">
+                      <input type="text" class="form-control datepicker" id="data" name="data" placeholder="Data" value="{{isset($abastecimento) ? $abastecimento->data : ""}}">
                     </div>
                     <div class="form-group">
                       <label for="combustivel">Combustivel usado:</label>
                       <select class="form-control" id="combustivel" name="combustivel">
-                        <option value="">- Escolha -</option>
-                        <option value="Gasolina">Gasolina</option>
-                        <option value="Alcool">Alcool</option>
-                        <option value="Gas">Gas</option>
+                        <option value="" selected>- Escolha -</option>
+                        <option value="Gasolina" {{isset($abastecimento) and $abastecimento->combustivel=="Gasolina" ? "selected" : ""}}>Gasolina</option>
+                        <option value="Alcool" {{isset($abastecimento) and $abastecimento->combustivel=="Alcool" ? "selected" : ""}}>Alcool</option>
+                        <option value="Gas" {{isset($abastecimento) and $abastecimento->combustivel=="Gas" ? "selected" : ""}}>Gas</option>
                       </select>
                     </div>
                     <div class="form-group">
                       <label for="documento">Documento:</label>
-                      <input type="text" class="form-control " id="documento" name="documento" placeholder="documento">
+                      <input type="text" class="form-control " id="documento" name="documento" placeholder="documento" value="{{isset($abastecimento) ? $abastecimento->documento : ""}}">
                     </div>
                   </div>
                 </div>
@@ -73,7 +81,7 @@
                     <div class="form-group">
                       <label for="lts">Litros abastecidos:</label>
                       <div class="input-group">
-                        <input type="text" class="form-control" id="lts" name="lts">
+                        <input type="text" class="form-control" id="lts" name="lts" value="{{isset($abastecimento) ? $abastecimento->lts : ""}}">
                         <span class="input-group-addon">Lts</span>
                       </div>
                     </div>
@@ -81,14 +89,14 @@
                       <label for="preco_lts">Preço por litro:</label>
                       <div class="input-group">
                         <span class="input-group-addon">R$</span>
-                        <input type="text" class="form-control real-mask" id="preco_lts" name="preco_lts">
+                        <input type="text" class="form-control real-mask" id="preco_lts" name="preco_lts" value="{{isset($abastecimento) ? $abastecimento->preco_lts : ""}}">
                       </div>
                     </div>
                     <div class="form-group">
                       <label for="preco_lts">Total gasto:</label>
                       <div class="input-group">
                         <span class="input-group-addon">R$</span>
-                        <input type="text" class="form-control real-mask" id="total_lts" disabled>
+                        <input type="text" class="form-control real-mask" id="total_lts" disabled value="{{isset($abastecimento) ? $abastecimento->conta->valor : ""}}">
                       </div>
                     </div>
                   </div>
@@ -101,26 +109,26 @@
                       <label for="km_anterior">Kilometragem Anterior:</label>
                       <div class="input-group">
                         <span class="input-group-addon">KM</span>
-                        <input type="text" class="form-control integer-mask" id="km_anterior" name="km_anterior">
+                        <input type="text" class="form-control integer-mask" id="km_anterior" name="km_anterior" value="{{isset($abastecimento) ? $abastecimento->km_anterior : ""}}">
                       </div>
                     </div>
                     <div class="form-group">
                       <label for="km_atual">Kilometragem Atual:</label>
                       <div class="input-group">
                         <span class="input-group-addon">KM</span>
-                        <input type="text" class="form-control integer-mask" id="km_atual" name="km_atual">
+                        <input type="text" class="form-control integer-mask" id="km_atual" name="km_atual" value="{{isset($abastecimento) ? $abastecimento->km_atual : ""}}">
                       </div>
                     </div>
                     <div class="form-group">
                       <label for="km_rodado">Kilometros rodados:</label>
                       <div class="input-group">
                         <span class="input-group-addon">KM</span>
-                        <input type="text" class="form-control integer-mask" id="km_rodado" name="km_rodado">
+                        <input type="text" class="form-control integer-mask" id="km_rodado" name="km_rodado" value="{{isset($abastecimento) ? $abastecimento->km_rodado : ""}}">
                       </div>
                     </div>
                     <div class="form-group">
                       <label for="km_lts">KM/Lts:</label>
-                      <input type="text" class="form-control integer-mask" id="km_lts" name="km_lts">
+                      <input type="text" class="form-control integer-mask" id="km_lts" name="km_lts" >
                     </div>
                   </div>
                 </div>
