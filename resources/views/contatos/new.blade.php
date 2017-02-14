@@ -356,8 +356,6 @@
       </form>
     </div>
   </div>
-  <pre id="data">
-  </pre>
   <script language="javascript">
   function tipoChange() {
     var b = $("#tipo").val();

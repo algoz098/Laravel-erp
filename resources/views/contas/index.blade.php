@@ -46,15 +46,25 @@
                     </a>
                   </div>
                 </div>
-                  <div class="col-md-3 pull-right text-right ajuda-popover"
-                        title="Novo"
-                        data-content="Adicione uma nova conta"
-                        data-placement="left">
-                    <a href="{{ url('/novo/contas') }}" class="btn btn-success"><i class="fa fa-plus fa-1x">
-                      </i> Nova Conta</a>
-                    <a href="{{ url('/novo/consumos') }}" class="btn btn-success"><i class="fa fa-plus fa-1x">
-                    </i> Novo Consumo</a>
+                <div class="col-md-2 pull-right ajuda-popover"
+                      title="Novo"
+                      data-content="Adicione uma nova conta"
+                      data-placement="left">
+
+                  <div class="btn-group">
+                    <a href="{{ url('/novo/contas') }}" class="btn btn-success">
+                      <i class="fa fa-plus fa-1x"></i> Novo
+                    </a>
+                    <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                      <span class="caret"></span>
+                      <span class="sr-only">Toggle Dropdown</span>
+                    </button>
+                    <ul class="dropdown-menu">
+                      <li><a href="{{ url('/novo/consumos') }}">Novo Consumo</a></li>
+                      <li><a href="{{ url('/novo/contas') }}">Nova Conta</a></li>
+                    </ul>
                   </div>
+                </div>
               </div>
               <div id="buscaAvançada" class="row collapse " aria-expanded="" style="background-color: #fff; z-index:1030;">
                 <div class="col-md-2">
