@@ -10,10 +10,11 @@
           <div class="row" id="secondNavbar">
             <div class="col-md-3">
               <div class="row">
-                <div class="col-md-6">
+                <div class="col-md-8">
                   <a href="" class="btn btn-danger" id="buttonDelete"><i class="fa fa-ban"></i></a>
                   <a href="" class="btn btn-info" id="buttonEdit"><i class="fa fa-gear"></i></a>
                   <button class="btn btn-info" id="buttonDetalhes" data-toggle="modal" data-url=""  data-target="#modal"><i class="fa fa-file-text"></i></button>
+                  <a href="" class="btn btn-info" id="buttonAndamento"><i class="fa fa-file-text-o"></i></a>
                 </div>
                 <div class="col-md-3">
                   <input type="text" class="form-control" size="4" name="ids" id="ids" disabled>
@@ -81,6 +82,7 @@
       window.id_attach_form = id;
       $("#ids").val(id);
       $("#buttonDelete").attr('href', '{{ url('lista/tickets') }}/'+id+'/delete/');
+      $("#buttonAndamento").attr('href', '{{ url('lista/tickets') }}/'+id+'/andamento/');
       $("#buttonEdit").attr('href', '{{ url('novo/tickets') }}/'+id+'/edit/');
       $("#buttonDetalhes").attr('data-url', '{{ url('lista/tickets') }}/'+id);
     }

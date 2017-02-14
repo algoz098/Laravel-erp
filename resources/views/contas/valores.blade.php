@@ -101,7 +101,7 @@ use Carbon\Carbon;
                       </div>
                       <div class="form-group">
                         <label for="parcelas" id="parcelasText">D.M. - Num. documento</label>
-                        <input type="numeric" class="form-control" id="dm" name="dm" placeholder="D.M.">
+                        <input type="numeric" class="form-control" id="dm" name="dm" placeholder="">
                       </div>
                     </div>
                   </div>

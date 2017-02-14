@@ -45,10 +45,10 @@ Route::get('lista/contatos/{id}/relacoes/{id_relacao}/delete', 'ContatosControll
 
 Route::get('lista/contas', 'ContasController@index')->middleware('auth');
 Route::post('lista/contas', 'ContasController@search')->middleware('auth');
-Route::post('lista/contas', 'ContasController@search')->middleware('auth');
 Route::get('lista/contas/{id}', 'ContasController@detalhes')->middleware('auth');
 Route::get('lista/contas/{id}/attachs', 'ContasController@attachs')->middleware('auth');
 Route::get('lista/contas/{id}/delete', 'ContasController@delete')->middleware('auth');
+Route::get('lista/contas/{id}/pago', 'ContasController@pago')->middleware('auth');
 Route::get('novo/contas', 'ContasController@novo')->middleware('auth');
 Route::post('novo/contas/busca', 'ContasController@searchContatos')->middleware('auth');
 Route::post('novo/contas', 'ContasController@add')->middleware('auth');
@@ -104,6 +104,7 @@ Route::post('novo/vendas/{id}/salvar', 'VendasController@salvar')->middleware('a
 Route::get('lista/tickets/', 'TicketsController@index')->middleware('auth');
 Route::get('lista/tickets/{id}', 'TicketsController@detalhes')->middleware('auth');
 Route::get('lista/tickets/{id}/delete', 'TicketsController@delete')->middleware('auth');
+Route::get('lista/tickets/{id}/andamento', 'TicketsController@andamento')->middleware('auth');
 Route::get('novo/tickets/', 'TicketsController@novo')->middleware('auth');
 Route::get('novo/tickets/{id}/edit', 'TicketsController@editar')->middleware('auth');
 Route::post('novo/tickets/{id}/edit', 'TicketsController@editar_salvar')->middleware('auth');

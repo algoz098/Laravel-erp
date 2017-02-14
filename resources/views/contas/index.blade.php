@@ -46,12 +46,14 @@
                     </a>
                   </div>
                 </div>
-                  <div class="col-md-1 pull-right text-right ajuda-popover"
+                  <div class="col-md-3 pull-right text-right ajuda-popover"
                         title="Novo"
-                        data-content="Adicione um novo contato"
+                        data-content="Adicione uma nova conta"
                         data-placement="left">
                     <a href="{{ url('/novo/contas') }}" class="btn btn-success"><i class="fa fa-plus fa-1x">
-                        </i> Novo</a>
+                      </i> Nova Conta</a>
+                    <a href="{{ url('/novo/consumos') }}" class="btn btn-success"><i class="fa fa-plus fa-1x">
+                    </i> Novo Consumo</a>
                   </div>
               </div>
               <div id="buscaAvançada" class="row collapse " aria-expanded="" style="background-color: #fff; z-index:1030;">

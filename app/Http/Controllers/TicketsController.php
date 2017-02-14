@@ -65,5 +65,11 @@ class TicketsController extends BaseController
     $ticket->save();
     return redirect()->action('TicketsController@index');
   }
+  public function andamento($id){
+    $ticket = Tickets::find($id);
+    Log::info('Adicionando andamento -> "'.$ticket.'", para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
+
+    return view('tickets.andamento')->with('ticket', $ticket);
+  }
     //
 }

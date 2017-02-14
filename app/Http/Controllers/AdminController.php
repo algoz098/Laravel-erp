@@ -116,7 +116,7 @@ class AdminController  extends BaseController
     if (!isset($modulo_frotas)) {
       $modulo_frotas = new Configs;
       $modulo_frotas->field = "modulo_frotas";
-      $modulo_frotas->text = 'Modulo "Estoques"';
+      $modulo_frotas->text = 'Modulo "Frotas"';
       $modulo_frotas->value = '1';
       $modulo_frotas->options = '';
       $modulo_frotas->save();
