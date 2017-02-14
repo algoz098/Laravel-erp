@@ -170,3 +170,5 @@ Route::get('/admin/combobox/delete/{id}', 'AdminController@combobox_delete')->mi
 Route::get('/admin/backup', 'AdminController@backup_index')->middleware('auth')->middleware('admin');
 Route::get('/admin/backup/do', 'AdminController@backup_do')->middleware('auth')->middleware('admin');
 Route::get('/admin/backup/download/{file}', 'AdminController@backup_download')->middleware('auth')->middleware('admin');
+
+Route::get('/busca/cep/{cep}', 'CepController@buscacep')->middleware('auth')->middleware('admin');

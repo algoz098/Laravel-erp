@@ -119,7 +119,7 @@
                   <div class="panel-body">
                     <div class="form-group">
                       <label for="sociabilidade">Sociabilidade</label><br>
-                      <input type="radio" name="sociabilidade" id="sociabilidade" value="1" @if (!empty($contato->sociabilidade)){{{$contato->sociabilidade==1 ? "checked" : ""}}}@endif><i class="fa fa-signal level1"></i>
+                      <input type="radio" name="sociabilidade" id="sociabilidade" value="1" @if (!empty($contato->sociabilidade)){{{$contato->sociabilidade==1 ? "checked" : ""}}}@endif > <i class="fa fa-signal level1"></i>
                       <input type="radio" name="sociabilidade" id="sociabilidade" value="2" @if (!empty($contato->sociabilidade)){{{$contato->sociabilidade==2 ? "checked" : ""}}}@endif><i class="fa fa-signal level2"></i>
                       <input type="radio" name="sociabilidade" id="sociabilidade" value="3" @if (!empty($contato->sociabilidade)){{{$contato->sociabilidade==3 ? "checked" : ""}}}@endif><i class="fa fa-signal level3"></i>
                       <input type="radio" name="sociabilidade" id="sociabilidade" value="4" @if (!empty($contato->sociabilidade)){{{$contato->sociabilidade==4 ? "checked" : ""}}}@endif><i class="fa fa-signal level4"></i>
@@ -142,7 +142,7 @@
                       <div class="col-md-2">
                         <div class="form-group">
                           <label for="cep">CEP</label>
-                          <input type="text" class="form-control" value="{{ $contato->cep or "" }}" name="cep" id="cep" placeholder="CEP">
+                          <input type="text" class="form-control" value="{{ $contato->cep or "" }}" name="cep" id="cep" placeholder="CEP" onchange="selectCep()">
                         </div>
                       </div>
                     </div>
@@ -356,6 +356,8 @@
       </form>
     </div>
   </div>
+  <pre id="data">
+  </pre>
   <script language="javascript">
   function tipoChange() {
     var b = $("#tipo").val();
@@ -442,6 +444,24 @@ function selMask(a){
       $("#numeroText"+a).text(x);
     }
   @endforeach
+}
+
+function selectCep(){
+  var cep = "{{url('busca/cep')}}/"+$('#cep').val()
+  $.ajax({
+    type: 'GET',
+    url: cep,
+    data: { get_param: 'value' },
+    dataType: 'json',
+    success: function( data ) {
+      $( "#data" ).html( data.cidade );
+      $("#endereco").val(data.tp_logradouro+" "+data.logradouro);
+      $("#bairro").val(data.bairro);
+      $("#cidade").val(data.cidade);
+      $("#uf").val(data.uf);
+
+    }
+  });
 }
 </script>
 
