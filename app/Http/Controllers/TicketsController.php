@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Tickets as Tickets;
 use App\Contatos as Contatos;
+use App\Andamentos as Andamentos;
 use Log;
 use Auth;
 
@@ -70,6 +71,17 @@ class TicketsController extends BaseController
     Log::info('Adicionando andamento -> "'.$ticket.'", para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
 
     return view('tickets.andamento')->with('ticket', $ticket);
+  }
+
+  public function andamento_salvar($id, request $request){
+    Log::info('Adicionando andamento -> , para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
+    $andamento=new andamentos;
+    $andamento->tickets_id=$id;
+    $andamento->titulo=$request->titulo;
+    $andamento->data=$request->data;
+    $andamento->descricao=$request->descricao;
+    $andamento->save();
+    return redirect()->action('TicketsController@index');
   }
     //
 }

@@ -105,6 +105,7 @@ Route::get('lista/tickets/', 'TicketsController@index')->middleware('auth');
 Route::get('lista/tickets/{id}', 'TicketsController@detalhes')->middleware('auth');
 Route::get('lista/tickets/{id}/delete', 'TicketsController@delete')->middleware('auth');
 Route::get('lista/tickets/{id}/andamento', 'TicketsController@andamento')->middleware('auth');
+Route::post('lista/tickets/{id}/andamento', 'TicketsController@andamento_salvar')->middleware('auth');
 Route::get('novo/tickets/', 'TicketsController@novo')->middleware('auth');
 Route::get('novo/tickets/{id}/edit', 'TicketsController@editar')->middleware('auth');
 Route::post('novo/tickets/{id}/edit', 'TicketsController@editar_salvar')->middleware('auth');

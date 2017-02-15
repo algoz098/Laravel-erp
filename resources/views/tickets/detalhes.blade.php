@@ -36,6 +36,38 @@
       <div class="row">
         <div class="col-md-12">
           <div class="form-group">
+            <label for="Descricao">Andamentos:</label>
+            @foreach ($ticket->andamentos as $key => $andamento)
+              <div class="row list-contacts" >
+                <div class="col-md-2">
+                  <span class="label label-info">
+                    {{$andamento->data}}
+                  </span>
+                </div>
+                <div class="col-md-2">
+                  <span class="label label-info">
+                    {{$andamento->titulo}}
+                  </span>
+                </div>
+                <div class="col-md-8 panel-collapse collapse in">
+                  <button class="btn btn-success btn-xs" data-toggle="collapse" data-target="#descricao{{$andamento->id}}" aria-expanded="" aria-controls="descricao{{$andamento->id}}">
+                    Ver mais
+                  </button>
+                </div>
+              </div>
+              <div class="collapse" id="descricao{{$andamento->id}}">
+                <br>
+                <div class="well">
+                  {!!$andamento->descricao!!}
+                </div>
+              </div>
+            @endforeach
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12">
+          <div class="form-group">
             <label for="Solucao">Solução:</label>
             <div>{{$ticket->solucao}}</div>
           </div>
