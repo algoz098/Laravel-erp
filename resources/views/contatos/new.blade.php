@@ -445,19 +445,28 @@ function selMask(a){
 }
 
 function selectCep(){
-  var cep = "{{url('busca/cep')}}/"+$('#cep').val()
+  var cep = "{{url('busca/cep')}}/"+$('#cep').val();
+  $('#endereco').prop('disabled', true);
+  $('#bairro').prop('disabled', true);
+  $('#cidade').prop('disabled', true);
+  $('#uf').prop('disabled', true);
   $.ajax({
     type: 'GET',
     url: cep,
     data: { get_param: 'value' },
     dataType: 'json',
     success: function( data ) {
-      $( "#data" ).html( data.cidade );
       $("#endereco").val(data.tp_logradouro+" "+data.logradouro);
       $("#bairro").val(data.bairro);
       $("#cidade").val(data.cidade);
       $("#uf").val(data.uf);
 
+    },
+    complete: function () {
+      $('#endereco').prop('disabled', false);
+      $('#bairro').prop('disabled', false);
+      $('#cidade').prop('disabled', false);
+      $('#uf').prop('disabled', false);
     }
   });
 }

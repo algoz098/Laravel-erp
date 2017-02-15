@@ -28,6 +28,25 @@ class ContatosController extends BaseController
     return view('contatos.selecionar')
                 ->with('contatos', $contatos);
   }
+  public function selecionar_busca(request $request)
+  {
+    #return $request;
+    Log::info('Selecionar de contatos para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
+    $contatos = Contatos::query();
+    if (!empty($request->busca)){
+      $contatos = $contatos->orWhere('nome', 'like', '%' .  $request->busca . '%');
+      $contatos = $contatos->orWhere('sobrenome', 'like', '%' .  $request->busca . '%');
+      $contatos = $contatos->orWhere('endereco', 'like', '%' .  $request->busca . '%');
+      $contatos = $contatos->orWhere('cpf', 'like', '%' .  $request->busca . '%');
+      $contatos = $contatos->orWhere('cidade', 'like', '%' .  $request->busca . '%');
+      $contatos = $contatos->orWhere('uf', 'like', '%' .  $request->busca . '%');
+      $contatos = $contatos->orWhere('bairro', 'like', '%' .  $request->busca . '%');
+      $contatos = $contatos->orWhere('cep', 'like', '%' .  $request->busca . '%');
+    }
+    $contatos = $contatos->orderBy('nome', 'asc')->get();
+    return view('contatos.selecionarbusca')
+                ->with('contatos', $contatos);
+  }
   public function show()
   {
     Log::info('Lista de contatos para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
