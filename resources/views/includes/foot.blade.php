@@ -1,4 +1,4 @@
-
+<div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby=""></div>
 <script src="{{ asset('js/pushy.min.js') }}"></script>
 <script>
     window.Laravel = <?php echo json_encode([
@@ -77,12 +77,21 @@
         }
     });
   });
-  $(function() {
-    $('#modal').on("show.bs.modal", function (e) {
-      var url = $(e.relatedTarget).data('url');
-      $.get( url, function( data ) {
-       $( "#modal" ).html( data );
-      });
-   });
+  function openModal(url){
+    $("#modal").modal('show');
+    $( "#modal" ).html();
+    $.ajax({
+      type: 'GET',
+      url: url,
+      success: function( data ) {
+        $( "#modal" ).html( data );
+      }
+    });
+  };
+  $('#modal').on("hidden.bs.modal", function (e) {
+    if (typeof activeTarget != 'undefined'){
+      $('#'+activeTarget+'Hidden').val(window.contatos_id);
+      $('#'+activeTarget).val(window.contatos_nome);
+    }
   });
 </script>

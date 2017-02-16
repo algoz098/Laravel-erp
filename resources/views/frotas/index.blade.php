@@ -18,7 +18,7 @@
                     <a class="btn btn-info"  id="buttonEdit" title="Editar" >
                       <i class="fa fa-pencil"></i>
                     </a>
-                    <a class="btn btn-info"  id="buttonDetalhes" title="Detalhes"  data-toggle="modal"  data-target="#modal" data-url="">
+                    <a class="btn btn-info"  id="buttonDetalhes" title="Detalhes">
                       <i class="fa fa-file-text-o"></i>
                     </a>
                     <a class="btn btn-info"  id="buttonAbastecer" title="Abastecer" href="">
@@ -106,7 +106,7 @@
                 </span>
               </div>
               <div class="col-md-2" >
-                <a class="label label-primary" data-toggle="modal"  data-target="#modal" data-url="{{url('lista/contatos/')}}/{{$frota->contato->id}}">
+                <a class="label label-primary" onclick="openModal('{{url('lista/contatos/')}}/{{$frota->contato->id}}')">
                   <i class="fa fa-user"></i>
                   {{$frota->contato->nome}}
                 </a>
@@ -168,15 +168,12 @@
       </div>
     </div>
   </div>
-
-  <!-- Modal -->
-  <div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"></div>
 <script>
   function selectRow(id){
     $("#ids").val(id);
     $("#buttonDelete").attr('href', '{{ url('lista/frotas') }}/'+id+'/delete/');
     $("#buttonEdit").attr('href', '{{ url('novo/frotas') }}/'+id+'/edit');
-    $("#buttonDetalhes").attr('data-url', '{{url('lista/frotas')}}/'+id);
+    $("#buttonDetalhes").attr('onclick', 'openModal("{{url('lista/frotas')}}/'+id+'")');
     $("#buttonAbastecer").attr('href', '{{url('lista/frotas')}}/'+id+'/abastecer');
   }
   function listaTop(){

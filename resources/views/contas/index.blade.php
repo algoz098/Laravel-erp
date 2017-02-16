@@ -16,10 +16,10 @@
                     <a href="{{ url('lista/contas') }}/id/delete"  id="buttonDelete" title="Apagar" class="btn btn-danger">
                       <i class="fa fa-ban"></i>
                     </a>
-                    <a class="btn btn-info"  id="buttonDetalhes" title="Detalhes"  data-toggle="modal"  data-target="#modal" data-url="">
+                    <a class="btn btn-info"  id="buttonDetalhes" title="Detalhes" >
                       <i class="fa fa-file-text-o"></i>
                     </a>
-                    <span id="buttonAttach" class="btn btn-warning btn_xs" title="Anexos"  data-toggle="modal" data-target="#modal" data-url="1">
+                    <span id="buttonAttach" class="btn btn-warning btn_xs" title="Anexos">
                       <i class="fa fa-paperclip"></i>
                     </span>
 
@@ -190,7 +190,7 @@
                 </span>&nbsp
               </div>
               <div class="col-md-2">
-                <a data-toggle="modal" data-url="{{url('lista/contatos')}}/{{$conta->contatos->id}}" data-target="#modal" class="label label-info">
+                <a onclick="openModal('{{url('lista/contatos')}}/{{$conta->contatos->id}}')" class="label label-primary">
                   <i class="fa fa-user"></i>
                   {{str_limit($conta->contatos->nome,15)}}
                 </a>
@@ -270,17 +270,14 @@
       </div>
     </div>
   </div>
-
-  <!-- Modal -->
-  <div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"></div>
 <script>
   function selectRow(id){
     $("#ids").val(id);
     $("#buttonDelete").attr('href', '{{ url('lista/contas') }}/'+id+'/delete/');
     $("#buttonEdit").attr('href', '{{ url('novo/contas') }}/'+id);
     $("#buttonPagar").attr('href', '{{ url('/lista/contas') }}/'+id+'/pago');
-    $("#buttonDetalhes").attr('data-url', '{{url('lista/contas')}}/'+id);
-    $("#buttonAttach").attr('data-url', '{{url('lista/contas')}}/'+id+'/attachs');
+    $("#buttonDetalhes").attr('onclick', 'openModal("{{url('lista/contas')}}/'+id+'")');
+    $("#buttonAttach").attr('onclick', 'openModal("{{url('lista/contas')}}/'+id+'/attachs")');
   }
   function listaTop(){
     var css = $('#lista').css('margin-top');

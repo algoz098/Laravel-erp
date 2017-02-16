@@ -21,13 +21,13 @@
                     <a id="buttonEdit" href="{{ url('novo/contatos') }}/" class="btn btn-primary btn_xs" data-toggle="tooltip" title="Editar">
                       <i class="fa fa-pencil"></i>
                     </a>
-                    <a id="buttonDetalhes" class="btn btn-primary btn_xs"   data-toggle="modal" data-target="#modal" data-url="1">
+                    <a id="buttonDetalhes" class="btn btn-primary btn_xs" >
                       </i><i class="fa fa-file-text"></i>
                     </a>
                     <span id="buttonRelate" class="btn btn-primary btn_xs" title="Relacionamentos"  data-toggle="collapse" data-target="#relacionamentos" aria-expanded="">
                       <i class="fa fa-users"></i>
                     </span>
-                    <span id="buttonAttach" class="btn btn-warning btn_xs" title="Anexos"  data-toggle="modal" data-target="#modal" data-url="1">
+                    <span id="buttonAttach" class="btn btn-warning btn_xs" title="Anexos">
                       <i class="fa fa-paperclip"></i>
                     </span>
                   </div>
@@ -288,8 +288,8 @@
         $("#buttonEdit").attr('href', '{{ url('novo/contatos') }}/'+id);
         $("#buttonTel").attr('data-target', '#addTelefones'+id);
         $("#buttonRelate").attr('data-target', '#relacionamentos'+id);
-        $("#buttonAttach").attr('data-url', '{{url('lista/contatos')}}/'+id+'/attachs');
-        $("#buttonDetalhes").attr('data-url', "{{url('lista/contatos')}}/"+id);
+        $("#buttonAttach").attr('onclick', "openModal('{{url('lista/contatos')}}/"+id+"/attachs')");
+        $("#buttonDetalhes").attr('onclick', "openModal('{{url('lista/contatos')}}/"+id+"')");
       }
       function listaTop(){
         var css = $('#lista').css('margin-top');

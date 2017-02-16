@@ -1,20 +1,5 @@
-@extends('main')
-@section('content')
   <div class="row">
     <div class="col-md-12">
-      @if (isset($is_funcionario))
-        @if (!empty($contato->id))
-          <form method="POST" action="{{ url('/novo/contatos') }}/{{$contato->id}}">
-        @else
-          <form method="POST" action="{{ url('/novo/funcionarios') }}">
-        @endif
-      @else
-        @if (!empty($contato->id))
-          <form method="POST" action="{{ url('/novo/contatos') }}/{{$contato->id}}">
-        @else
-          <form method="POST" action="{{ url('novo/contatos') }}">
-        @endif
-      @endif
         <div class="form-group">
         {{ csrf_field() }}
         <input type="hidden" name="id" value="{{$contato->id or "" }}">
@@ -24,7 +9,7 @@
             <div class="row text-right" id="secondNavbar">
               <div class="col-sm-offset-2 col-sm-10">
                 <a class="btn btn-warning" href="{{ url('lista/contatos')}}" ><i class="fa fa-users"></i> Voltar a Lista</a>
-                <button type="submit" class="btn btn-success"><i class="fa fa-check"></i> Salvar</button>
+                <button onclick="enviarContato()" class="btn btn-success"><i class="fa fa-check"></i> Salvar</button>
               </div>
             </div>
             @if (!empty($contato->id))
@@ -300,7 +285,7 @@
                               <div class="col-md-3">
                                 <div class="form-group">
                                   <label for="text" id="numeroText0">Numero</label>
-                                  <input type="text" class="form-control" value="" name="numero_tel[0]" id="numero0" placeholder="">
+                                  <input type="text" class="form-control" value="" name="numero_tel[0]" id="numero0" placeholder="" onchange="numero_tel[0] = $(this).val()">
                                 </div>
                               </div>
                               <div class="col-md-3">
@@ -357,6 +342,7 @@
     </div>
   </div>
   <script language="javascript">
+  var numero_tel = new Array;
   function tipoChange() {
     var b = $("#tipo").val();
     if (b=="1"){
@@ -403,18 +389,77 @@
    $(document).ready(tipoChange());
 </script>
 <script language="javascript">
-@if (isset($contato))
-  window.i = parseInt("{{count($contato->telefones)}}");
-@else
-  window.i = 0;
-@endif
+function enviarContato(){
+  var a = 0;
+  var tipo_tel = new Array;
+  var numero_tel = new Array;
+  var contato_tel = new Array;
+  var setor_tel = new Array;
+  while (a <= i){
+    tipo_tel[a] = $('#tipo'+a).val();
+    numero_tel[a] = $('#numero'+a).val();
+    contato_tel[a] = $('#contato'+a).val();
+    setor_tel[a] = $('#setor'+a).val();
+    a++;
+  }
+  var tipo = new Array;
+  var url = "{{url('lista/contatos/selecionar/novo')}}";
+  var data = {
+            '_token'            : $('input[name=_token]').val(),
+            'tipo'              : $('input[name=tipo]').val(),
+            'nome'              : $('input[name=nome]').val(),
+            'sobrenome'         : $('input[name=sobrenome]').val(),
+            'codigo'            : $('input[name=codigo]').val(),
+            'cpf'               : $('input[name=cpf]').val(),
+            'rg'                : $('input[name=rg]').val(),
+            'cod_prefeitura'    : $('input[name=cod_prefeitura]').val(),
+            'nascimento'        : $('input[name=nascimento]').val(),
+            'sociabilidade'     : $('input[name=sociabilidade]').val(),
+            'active'            : $('input[name=active]').val(),
+            'cep'               : $('input[name=cep]').val(),
+            'endereco'          : $('input[name=endereco]').val(),
+            'numero'            : $('input[name=numero]').val(),
+            'complemento'       : $('input[name=complemento]').val(),
+            'bairro'            : $('input[name=bairro]').val(),
+            'uf'                : $('input[name=uf]').val(),
+            'cidade'            : $('input[name=cidade]').val(),
+            'tipo_tel'          : tipo_tel,
+            'numero_tel'        : numero_tel,
+            'contato_tel'       : contato_tel,
+            'setor_tel'         : setor_tel,
+        };
+  $("#contatosHolder").html("");
+  $.ajax({
+    type: "POST",
+    url: url,
+    data: data,
+    success: function( data ) {
+      $("#contatosHolder").html("");
+      var url = "{{url('lista/contatos/selecionar')}}";
+      var data = {
+                'busca'              : '',
+                '_token'            : $('input[name=_token]').val()
+            };
+      $.ajax({
+        type: "POST",
+        url: url,
+        data: data,
+        success: function( data ) {
+          $("#contatosHolder").html(data);
+        }
+      });
+    }
+  });
+}
+window.i = 0;
 function add() {
   var $clone = $($('#ToClone').html());
-  i = i + 1;
+  window.i = i + 1;
   $('#tipo', $clone).attr('name', 'tipo_tel['+i+']');
   $('#tipo', $clone).attr('onchange', 'selMask('+i+')');
   $('#tipo', $clone).attr('id', 'tipo'+i);
   $('#numero', $clone).attr('name', 'numero_tel['+i+']');
+  $('#numero', $clone).attr('onchange', 'numero_tel['+i+'] = $(this).val()')
   $('#numero', $clone).attr('id', 'numero'+i);
   $('#numeroText', $clone).attr('id', 'numeroText'+i);
   $('#contato', $clone).attr('name', 'contato_tel['+i+']');
@@ -437,7 +482,7 @@ function selMask(a){
       var x = "{{$combobox->value}}";
       $("#numero"+a).mask("{{$combobox->field}}");
       if ("{{$combobox->field}}"==""){
-        $("#numero"+a).unmask();
+          $("#numero"+a).unmask();
       }
       $("#numeroText"+a).text(x);
     }
@@ -491,7 +536,7 @@ function selectCep(){
         <div class="col-md-3">
           <div class="form-group">
             <label for="text" id="numeroText">Numero</label>
-            <input type="text" class="form-control" value="" name="numero_tipo" id="numero" placeholder="">
+            <input type="text" class="form-control" value="" name="numero_tipo" id="numero" onchange="numero_tel[0] = $(this).val()">
           </div>
         </div>
         <div class="col-md-3">
@@ -517,4 +562,3 @@ function selectCep(){
   </div>
 </span>
 </script>
-@endsection

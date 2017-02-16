@@ -28,6 +28,94 @@ class ContatosController extends BaseController
     return view('contatos.selecionar')
                 ->with('contatos', $contatos);
   }
+  public function selecionar_busca(request $request)
+  {
+    #return $request;
+    Log::info('Selecionar de contatos para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
+    $contatos = Contatos::query();
+    if (!empty($request->busca)){
+      $contatos = $contatos->orWhere('nome', 'like', '%' .  $request->busca . '%');
+      $contatos = $contatos->orWhere('sobrenome', 'like', '%' .  $request->busca . '%');
+      $contatos = $contatos->orWhere('endereco', 'like', '%' .  $request->busca . '%');
+      $contatos = $contatos->orWhere('cpf', 'like', '%' .  $request->busca . '%');
+      $contatos = $contatos->orWhere('cidade', 'like', '%' .  $request->busca . '%');
+      $contatos = $contatos->orWhere('uf', 'like', '%' .  $request->busca . '%');
+      $contatos = $contatos->orWhere('bairro', 'like', '%' .  $request->busca . '%');
+      $contatos = $contatos->orWhere('cep', 'like', '%' .  $request->busca . '%');
+    }
+    $contatos = $contatos->orderBy('nome', 'asc')->get();
+    return view('contatos.selecionarbusca')
+                ->with('contatos', $contatos);
+  }
+  public function selecionar_novo()
+  {
+    #return $request;
+    Log::info('Novo contatos em modal para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
+    $comboboxes = comboboxes::where('combobox_textable_type', 'App\Relacionamento')->get();
+    $comboboxes_telefones = comboboxes::where('combobox_textable_type', 'App\Telefones')->get();
+    $field_codigo = Configs::where('field', 'field_codigo')->first();
+
+    return view('contatos.selecionarnovo')->with('comboboxes', $comboboxes)
+                                ->with('comboboxes_telefones', $comboboxes_telefones)
+                                ->with('field_codigo', $field_codigo);
+  }
+  public function selecionar_salva(request $request)
+  {
+    #return $request;
+    Log::info('Saçvando contatos em modal para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
+    $this->validate($request, [
+        'nome' => 'required|max:50'
+    ]);
+    $contato = new Contatos;
+    $contato->nome = $request->nome;
+    $contato->cpf = $request->cpf;
+    $contato->rg = $request->rg;
+    $contato->sobrenome = $request->sobrenome;
+    $contato->endereco = $request->endereco;
+    $contato->numero = $request->numero;
+    $contato->complemento = $request->complemento;
+    $contato->bairro = $request->bairro;
+    $contato->uf = $request->uf;
+    $contato->cidade = $request->cidade;
+    $contato->cep = $request->cep;
+    $contato->sociabilidade = $request->sociabilidade;
+    $contato->tipo = $request->tipo;
+    $contato->obs = $request->obs;
+    $contato->cod_prefeitura = $request->cod_prefeitura;
+    $contato->codigo = $request->codigo;
+    $contato->nascimento = $request->nascimento;
+    if ($request->active){
+        $contato->active = "4";
+    } else {
+      $contato->active="1";
+    }
+    $contato->save();
+    foreach ($request->tipo_tel as $key => $tipo) {
+      $telefone = new Telefones;
+      $telefone->contatos_id = $contato->id;
+      $telefone->tipo = $request->tipo_tel[$key];
+      $telefone->numero = $request->numero_tel[$key];
+      $telefone->contato = $request->contato_tel[$key];
+      $telefone->setor = $request->setor_tel[$key];
+      $telefone->ramal = $request->ramal_tel[$key];
+      $telefone->save();
+    }
+    if ($request->is_funcionario!="1"){
+      $combobox = Comboboxes::where('text', $request->relacao)->first();
+      if ($combobox){
+        $data = [
+          $request->from_id =>
+          [
+            'from_text' => $combobox->text,
+            'to_id' => 1,
+            'to_text' => $combobox->value
+          ]
+        ];
+        $contato->from()->sync($data, false);
+      }
+    }
+    return response('', 200);
+  }
   public function show()
   {
     Log::info('Lista de contatos para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());

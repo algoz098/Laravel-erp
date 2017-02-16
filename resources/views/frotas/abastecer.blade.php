@@ -38,7 +38,7 @@
                       <div class="input-group">
                         <input type="hidden" class="form-control" id="porHidden" name="abastecido_por" value="{{isset($abastecimento) ? $abastecimento->por->id : ""}}">
                         <input type="text" class="form-control" id="por" value="{{isset($abastecimento) ? $abastecimento->por->nome : ""}}" disabled>
-                        <a onclick="window.activeTarget='por'" data-toggle="modal"  data-target="#modal" data-url="{{url('lista/contatos/selecionar')}}" class="input-group-addon btn btn-info"><i class="fa fa-gear"></i></a>
+                        <a onclick="window.activeTarget='por'; openModal('{{url('lista/contatos/selecionar')}}')" class="input-group-addon btn btn-info"><i class="fa fa-gear"></i></a>
                       </div>
                     </div>
                     <div class="form-group">
@@ -46,7 +46,7 @@
                       <div class="input-group">
                         <input type="hidden" class="form-control" id="emHidden" name="abastecido_em" value="{{isset($abastecimento) ? $abastecimento->em->id : ""}}">
                         <input type="text" class="form-control" id="em" disabled value="{{isset($abastecimento) ? $abastecimento->em->nome : ""}}">
-                        <a onclick="window.activeTarget='em'" data-toggle="modal"  data-target="#modal" data-url="{{url('lista/contatos/selecionar')}}" class="input-group-addon btn btn-info"><i class="fa fa-gear"></i></a>
+                        <a onclick="window.activeTarget='em'; openModal('{{url('lista/contatos/selecionar')}}')" class="input-group-addon btn btn-info"><i class="fa fa-gear"></i></a>
                       </div>
                     </div>
                   </div>
@@ -144,9 +144,6 @@
       </div>
     </div>
   </div>
-
-  <!-- Modal -->
-  <div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"></div>
 <script>
 
 $('#modal').on("hidden.bs.modal", function (e) {
