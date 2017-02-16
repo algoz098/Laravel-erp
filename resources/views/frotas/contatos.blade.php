@@ -51,7 +51,7 @@
                 </span>
               </div>
               <div class="col-md-1" >
-                <a class="label label-primary" class="label label-info" data-toggle="modal"  data-target="#modal" data-url="{{url('lista/contatos/')}}/{{$contato->id}}">
+                <a class="label label-primary" class="label label-info" onclick="openModal('{{url('lista/contatos/')}}/{{$contato->id}}')">
                   <i class="fa fa-user"></i>
                   {{$contato->nome}}
                 </a>

@@ -18,7 +18,7 @@
                     <a href="{{ url('lista/atendimentos') }}/id/delete" id="buttonDelete" class="btn btn-danger btn_xs">
                       <i class="fa fa-ban"></i>
                     </a>
-                    <a  class="btn btn-primary btn_xs"  id="buttonDetalhes" title="Detalhes"  data-toggle="modal" data-url=""  data-target="#modal" >
+                    <a  class="btn btn-primary btn_xs"  id="buttonDetalhes">
                       <i class="fa fa-file-text-o"></i>
                     </a>
                   </div>
@@ -107,7 +107,7 @@
                     </span>
                   </div>
                   <div class="col-md-2">
-                    <a data-toggle="modal" data-url="{{url('lista/contatos')}}/{{$atendimento->contatos->id}}"  data-target="#modal" class="label label-primary">
+                    <a onclick="openModal('{{url('lista/contatos')}}/{{$atendimento->contatos->id}}')" class="label label-primary">
                       <i class="fa fa-user"></i> {{{ $atendimento->contatos->tipo!="1" ? str_limit($atendimento->contatos->nome, 15) : $atendimento->contatos->nome." ".str_limit($atendimento->contatos->sobrenome, 15) }}}
                     </a>
                   </div>
@@ -170,16 +170,13 @@
         </div>
       </div>
     </div>
-
-    <!-- Modal -->
-    <div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"></div>
     <script language="javascript">
     var imageStatus = false;
       function selectRow(id){
         window.id_attach_form = id;
         $("#ids").val(id);
         $("#buttonDelete").attr('href', '{{ url('lista/atendimentos') }}/'+id+'/delete/');
-        $("#buttonDetalhes").attr('data-url', '{{ url('lista/atendimentos') }}/'+id);
+        $("#buttonDetalhes").attr('onclick', 'openModal("{{ url('lista/atendimentos') }}/'+id+'")');
       }
       function listaTop(){
         var css = $('#lista').css('margin-top');

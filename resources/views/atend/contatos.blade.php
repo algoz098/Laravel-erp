@@ -25,7 +25,7 @@ use Carbon\Carbon;
                   <div class="input-group">
                     <input type="hidden" class="form-control" id="contatosHidden" name="contatos_id">
                     <input type="text" class="form-control" id="contatos" disabled>
-                    <a onclick="window.activeTarget='contatos'" data-toggle="modal"  data-target="#modal" data-url="{{url('lista/contatos/selecionar')}}" class="input-group-addon btn btn-info"><i class="fa fa-gear"></i></a>
+                    <a onclick="window.activeTarget='contatos'; openModal('{{url('lista/contatos/selecionar')}}')" class="input-group-addon btn btn-info"><i class="fa fa-gear"></i></a>
                   </div>
                 </div>
                 <div class="form-group">
@@ -62,9 +62,6 @@ use Carbon\Carbon;
     $( function() {
       $( "#datepicker" ).datepicker({ dateFormat: 'yy-mm-dd' });
     } );
-    $('#modal').on("hidden.bs.modal", function (e) {
-      $('#'+activeTarget+'Hidden').val(window.contatos_id);
-      $('#'+activeTarget).val(window.contatos_nome);
-    });
+    
   </script>
 @endsection

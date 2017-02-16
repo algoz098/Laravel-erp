@@ -13,6 +13,7 @@
           {{ csrf_field() }}
           <input type="text" class="form-control" name="busca" id="busca" placeholder="Busca">
           <button type="button" class="btn btn-success" onclick="buscarContatos()"><i class="fa fa-search"></i> Buscar</button>
+          <button type="button" class="btn btn-success" onclick="novoContato()"><i class="fa fa-plus"></i></button>
         </div>
       </form>
       <div id="contatosHolder">
@@ -59,6 +60,17 @@ function buscarContatos(){
       $("#contatosHolder").html(data);
     }
   });
-
+}
+function novoContato(){
+  $("#contatosHolder").html("");
+  var url = "{{url('lista/contatos/selecionar/novo')}}";
+  console.log(url);
+  $.ajax({
+    type: "GET",
+    url: url,
+    success: function( data ) {
+      $("#contatosHolder").html(data);
+    }
+  });
 }
 </script>
