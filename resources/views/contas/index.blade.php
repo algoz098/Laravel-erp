@@ -39,7 +39,7 @@
                         data-placement="top"
                   >
                     {{ csrf_field() }}
-                    <input type="text" class="form-control" name="busca" id="busca" placeholder="Busca">
+                    <input type="text" class="form-control" name="contato" id="busca" placeholder="Busca">
                     <button type="submit" class="btn btn-success"><i class="fa fa-search"></i> Buscar</button>
                     <a class="btn btn-info"  title="Busca Avançada" data-toggle="collapse" data-target="#buscaAvançada" aria-expanded="" onclick="listaTop()">
                       <i class="fa fa-search-plus"></i>
@@ -79,19 +79,8 @@
                     <input type="text" class="form-control datepicker" name="data_ate" id="data_ate" placeholder="">
                   </div>
                 </div>
-                <div class="col-md-2">
-                  <div class="form-group">
-                    <label for="data_ate">Relação com a Matriz</label>
-                    <select class="form-control" id="relacao" name="relacao">
-                      <option value="" selected> - Escolha a relação -</option>
-                      @foreach($comboboxes as $key => $combo)
-                        <option value="{{$combo->text}}">{{$combo->text}}</option>
-                      @endforeach
-                    </select>
-                  </div>
-                </div>
                 <div class="col-md-4">
-                  <label><input type="checkbox" name="credito">Entrada</label>
+                  <label><input type="checkbox" name="credito">Credito</label>
                   <label><input type="checkbox" name="debito">Debito</label>
                   <label><input type="checkbox" name="vencer">A vencer</label>
                   <label><input type="checkbox" name="vencido">Vencidos</label>

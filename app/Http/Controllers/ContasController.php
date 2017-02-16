@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use Datetime;
 use Illuminate\Http\Request;
 use Auth;
 use Carbon\Carbon;
@@ -48,14 +48,17 @@ class ContasController  extends BaseController
   }
   public function search(Request $request){
     $contas = Contas::query();
-    if ($request->data_de and !$request->data_ate){
-      $contas = $contas->whereBetween('vencimento', [$request->data_de, Carbon::today()]);
+    if ($request->data_de){
+      $data_de = DateTime::createFromFormat('d-m-Y', $request->data_de);
+      $data_de = $data_de->format('Y-m-d');
+      if (!$request->data_ate){
+        $contas = $contas->whereDate('vencimento', '>=', $data_de);
+      }
     }
     if ($request->data_de and $request->data_ate){
-      $contas = $contas->whereBetween('vencimento', [$request->data_de, $request->data_ate]);
-    }
-    if ($request->relacao!=""){
-      $contas = $contas->orWhere('nome', $request->relacao);
+      $data_ate = DateTime::createFromFormat('d-m-Y', $request->data_ate);
+      $data_ate = $data_ate->format('Y-m-d');
+      $contas = $contas->whereBetween('vencimento', [$data_de, $data_ate]);
     }
     if ($request->debito){
       $contas = $contas->orWhere('tipo', '0');
@@ -100,7 +103,11 @@ class ContasController  extends BaseController
           $a++;
         }
     }
+    #return $contas->toSql();
     $contas = $contas->paginate(15);
+    $total_debito = Contas::where('tipo', '!=', '1')->where('estado', '1')->sum('valor');
+    $total_credito = Contas::where('tipo', '1')->where('estado', '1')->sum('valor');
+    $total_atual = $total_credito-$total_debito;
     $total= Contas::count();
     $comboboxes = comboboxes::where('combobox_textable_type', 'App\Contas')->get();
     Log::info('Vendo contas com busca "'.$request.'", para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
@@ -111,7 +118,13 @@ class ContasController  extends BaseController
       $deletados = 0;
     };
 
-    return view('contas.index')->with('contas', $contas)->with('deletados', $deletados)->with('total', $total)->with('comboboxes', $comboboxes);
+    return view('contas.index')->with('contas', $contas)
+                              ->with('deletados', $deletados)
+                              ->with('total', $total)
+                              ->with('total_debito', $total_debito)
+                              ->with('total_credito', $total_credito)
+                              ->with('total_atual', $total_atual)
+                              ->with('comboboxes', $comboboxes);
   }
 
   public function novo(){

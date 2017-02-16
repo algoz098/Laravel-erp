@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+use Datetime;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use DB;
@@ -139,29 +140,31 @@ class ContatosController extends BaseController
     #return $request->busca;
     Log::info('Busca de contatos usando -> "'.$request->busca.'", para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
     $contatos = Contatos::query();
+    $contatos = $contatos->orderBy('nome', 'asc');
+    if (!empty($request->busca)){
+      $contatos = $contatos->orWhere(function ($query) use ($request) {
+                                        $query->orWhere('nome', 'like', '%'.$request->busca.'%')
+                                              ->orWhere('sobrenome', 'like', '%' .  $request->busca . '%')
+                                              ->orWhere('endereco', 'like', '%' .  $request->busca . '%')
+                                              ->orWhere('cpf', 'like', '%' .  $request->busca . '%')
+                                              ->orWhere('cidade', 'like', '%' .  $request->busca . '%')
+                                              ->orWhere('uf', 'like', '%' .  $request->busca . '%')
+                                              ->orWhere('bairro', 'like', '%' .  $request->busca . '%')
+                                              ->orWhere('cep', 'like', '%' .  $request->busca . '%');
+                                      });
+
+    }
+    $data_de = DateTime::createFromFormat('d-m-Y', $request->data_de);
+    $data_de = $data_de->format('Y-m-d');
     if ($request->data_de and !$request->data_ate){
-      $contatos = $contatos->whereBetween('created_at', [$request->data_de, Carbon::today()]);
+      $contatos = $contatos->whereBetween('created_at', [$data_de, Carbon::today()]);
     }
     if ($request->data_de and $request->data_ate){
-      $contatos = $contatos->whereBetween('created_at', [$request->data_de, $request->data_ate]);
+      $data_ate = DateTime::createFromFormat('d-m-Y', $request->data_ate);
+      $data_ate = $data_ate->format('Y-m-d');
+      $contatos = $contatos->whereBetween('created_at', [$data_de, $data_ate]);
     }
-    if (!empty($request->relacao)){
-      $a = $request->relacao;
-      $contatos = $contatos->whereHas('from', function ($query) use ($a){
-        $query->where('from_text', 'like', '%'.$a.'%');
-      });
-    }
-    if (!empty($request->busca)){
-      $contatos = $contatos->orWhere('nome', 'like', '%' .  $request->busca . '%');
-      $contatos = $contatos->orWhere('sobrenome', 'like', '%' .  $request->busca . '%');
-      $contatos = $contatos->orWhere('endereco', 'like', '%' .  $request->busca . '%');
-      $contatos = $contatos->orWhere('cpf', 'like', '%' .  $request->busca . '%');
-      $contatos = $contatos->orWhere('cidade', 'like', '%' .  $request->busca . '%');
-      $contatos = $contatos->orWhere('uf', 'like', '%' .  $request->busca . '%');
-      $contatos = $contatos->orWhere('bairro', 'like', '%' .  $request->busca . '%');
-      $contatos = $contatos->orWhere('cep', 'like', '%' .  $request->busca . '%');
-    }
-    $contatos = $contatos->orderBy('nome', 'asc')->paginate(15);
+    $contatos = $contatos->paginate(15);
     if ((is_array(Auth::user()->perms) and Auth::user()->perms["admin"]==1) and $request->deletados){
         $deletados = Contatos::onlyTrashed()->get();
     } else {

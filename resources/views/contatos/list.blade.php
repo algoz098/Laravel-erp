@@ -71,16 +71,18 @@
               <div id="buscaAvançada" class="row collapse " aria-expanded="" style="background-color: #fff; z-index:1030;">
                 <div class="col-md-2">
                   <div class="form-group">
-                    <label for="data_de">Busca por data <span class="label label-info">de</span></label>
+                    <label for="data_de">Criado <span class="label label-info">de</span></label>
                     <input type="text" class="form-control datepicker" name="data_de" id="data_de" placeholder="">
                   </div>
                 </div>
                 <div class="col-md-2">
                   <div class="form-group">
-                    <label for="data_ate">Busca por data <span class="label label-info">ate</span></label>
+                    <label for="data_ate">Criado <span class="label label-info">ate</span></label>
                     <input type="text" class="form-control datepicker" name="data_ate" id="data_ate" placeholder="">
                   </div>
                 </div>
+                <!--
+                Conferir esta busca, é necessario regulaziar este tipo de relacionamento. Ainda sem uso.
                 <div class="col-md-2">
                   <div class="form-group">
                     <label for="data_ate">Relação com a Matriz</label>
@@ -95,6 +97,7 @@
                     </select>
                   </div>
                 </div>
+                -->
                 @if (isset(Auth::user()->perms["admin"]) and Auth::user()->perms["admin"]==1)
                   <div class="col-md-2 pull-right">
                     <input type="checkbox"name="deletados" id="deletados"   >
