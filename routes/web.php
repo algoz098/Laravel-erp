@@ -54,15 +54,12 @@ Route::get('lista/contas/{id}/delete', 'ContasController@delete')->middleware('a
 Route::get('lista/contas/{id}/pago', 'ContasController@pago')->middleware('auth');
 Route::get('novo/contas', 'ContasController@novo')->middleware('auth');
 Route::post('novo/contas/busca', 'ContasController@searchContatos')->middleware('auth');
-Route::post('novo/contas', 'ContasController@add')->middleware('auth');
-Route::get('novo/contas/{id}', 'ContasController@add_2')->middleware('auth');
-Route::post('novo/contas/{id}/parcelas', 'ContasController@add_3')->middleware('auth');
-Route::post('novo/contas/{id}/parcelas/{conta_id}', 'ContasController@add_4')->middleware('auth');
+Route::get('novo/contas/', 'ContasController@add_2')->middleware('auth');
+Route::post('novo/contas/parcelas', 'ContasController@add_3')->middleware('auth');
+Route::post('novo/contas/parcelas/{conta_id}', 'ContasController@add_4')->middleware('auth');
 
-Route::get('novo/consumos', 'ContasController@consumos_novo')->middleware('auth');
-Route::post('novo/consumos/busca', 'ContasController@consumos_contato_busca')->middleware('auth');
-Route::get('novo/consumos/{id}', 'ContasController@consumos_novo2')->middleware('auth');
-Route::post('novo/consumos/{id}/parcelas', 'ContasController@consumos_novo3')->middleware('auth');
+Route::get('novo/consumos/', 'ContasController@consumos_novo2')->middleware('auth');
+Route::post('novo/consumos/parcelas', 'ContasController@consumos_novo3')->middleware('auth');
 
 Route::get('/lista/atendimentos', 'AtendimentoController@index')->middleware('auth')->name('atendimentos');
 Route::get('/lista/atendimentos/{id}', 'AtendimentoController@detalhes')->middleware('auth');

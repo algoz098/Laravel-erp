@@ -10,11 +10,10 @@ use Carbon\Carbon;
           <i class="fa fa-usd fa-1x"></i> Nova provisão de contas
         </div>
         <div class="panel-body">
-          <form method="POST" action="{{ url('/novo/contas') }}/{{$contato->id}}/parcelas/{{$conta->id}}">
+          <form method="POST" action="{{ url('/novo/contas') }}/parcelas/{{$conta->id}}">
             <div class="row">
               <div class="col-md-4 text-right pull-right">
                 <a class="btn btn-warning" href="{{ url('lista/contas')}}" ><i class="fa fa-usd"></i> Voltar a Lista</a>
-                <a href="{{ url('/novo/contas') }}" class="btn btn-warning"><i class="fa fa-arrow-left"></i> Reselecionar cliente</a>
                 <button type="submit" class="btn btn-success"><i class="fa fa-check"></i> Salvar</a>
               </div>
             </div>

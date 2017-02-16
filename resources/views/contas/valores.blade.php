@@ -11,14 +11,13 @@ use Carbon\Carbon;
         </div>
         <div class="panel-body">
           @if (isset($is_consumos) and $is_consumos=="1")
-            <form method="POST" action="{{ url('/novo/consumos') }}/{{$contato->id}}/parcelas">
+            <form method="POST" action="{{ url('/novo/consumos') }}/parcelas">
           @else
-            <form method="POST" action="{{ url('/novo/contas') }}/{{$contato->id}}/parcelas">
+            <form method="POST" action="{{ url('/novo/contas') }}/parcelas">
           @endif
             <div class="row" id="secondNavbar">
               <div class="col-md-12 text-right pull-right">
                 <a class="btn btn-warning" href="{{ url('lista/contas')}}" ><i class="fa fa-usd"></i> Voltar a Lista</a>
-                <a href="{{ url('/novo/contas') }}" class="btn btn-warning"><i class="fa fa-arrow-left"></i> Reselecionar cliente</a>
                 <button type="submit" id="saveButton" class="btn btn-success"><i class="fa fa-check"></i> Salvar</a>
               </div>
             </div>
@@ -29,8 +28,12 @@ use Carbon\Carbon;
                     <div class="panel-heading">Informações basicas</div>
                     <div class="panel-body">
                       <div class="form-group">
-                        <label>Provisão para</label>
-                        <input type="text" class="form-control" id="contato" value="{{$contato->nome}}" disabled>
+                        <label for="por">Provisão para:</label>
+                        <div class="input-group">
+                          <input type="hidden" class="form-control" id="contatosHidden" name="contatos_id">
+                          <input type="text" class="form-control" id="contatos" disabled>
+                          <a onclick="window.activeTarget='contatos'; openModal('{{url('lista/contatos/selecionar')}}')" class="input-group-addon btn btn-info"><i class="fa fa-gear"></i></a>
+                        </div>
                       </div>
                       <div class="form-group">
                         <label>Tipo</label>

@@ -318,24 +318,6 @@
                 </div>
               @endif
             <span id="mais"></span>
-            @if (isset($is_funcionario))
-              @include('contatos.funcionarios.new')
-            @endif
-            <div class="row">
-              <div class="form-group">
-                <label for="obs">Obs:</label>
-                <textarea  name="obs">
-                  {!! $contato->obs or "" !!}
-                </textarea>
-              </div>
-            </div>
-            <div class="row text-right">
-              <div class="form-group">
-                <div class="col-md-12 col-sm-offset-2 col-sm-10">
-                  <button type="submit" class="btn btn-success">Salvar</button>
-                </div>
-              </div>
-            </div>
           </div>
         </div>
       </form>

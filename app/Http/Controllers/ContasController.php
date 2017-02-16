@@ -203,35 +203,31 @@ class ContasController  extends BaseController
     }
     return redirect()->action('ContasController@index');
   }
-  public function add_2(request $request, $id){
-    $contato = Contatos::find($id);
+  public function add_2(request $request){
     $comboboxes = comboboxes::where('combobox_textable_type', 'App\Contas')->get();
     $comboboxes2 = comboboxes::where('combobox_textable_type', 'App\Contas\Formas')->get();
     Log::info('Adicionar CONTA passo 2, para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
-    return view('contas.valores')->with('contato', $contato)->with('comboboxes', $comboboxes)->with('comboboxes2', $comboboxes2);
+    return view('contas.valores')->with('comboboxes', $comboboxes)->with('comboboxes2', $comboboxes2);
   }
-  public function consumos_novo2(request $request, $id){
-    $contato = Contatos::find($id);
+  public function consumos_novo2(){
     $comboboxes = comboboxes::where('combobox_textable_type', 'App\Consumos')->get();
     $comboboxes2 = comboboxes::where('combobox_textable_type', 'App\Contas\Formas')->get();
     $is_consumos = 1;
     Log::info('Adicionar CONSUMOS passo 2, para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
-    return view('contas.valores')->with('contato', $contato)
-                                 ->with('comboboxes', $comboboxes)
+    return view('contas.valores')->with('comboboxes', $comboboxes)
                                  ->with('comboboxes2', $comboboxes2)
                                  ->with('is_consumos', $is_consumos);
   }
 
-  public function add_3(request $request, $id){
+  public function add_3(request $request){
     $this->validate($request, [
         'tipo' => 'required',
         'forma' => 'required',
         'nome' => 'required|max:50',
         'cheio' => 'required|numeric',
     ]);
-    $contato = Contatos::find($id);
     $conta = new Contas;
-    $conta->contatos_id = $contato->id;
+    $conta->contatos_id = $request->contatos_id;
     $conta->nome = $request->nome;
     $conta->valor = $request->cheio;
     $date_temp = date_create($request->vencimento);
@@ -272,17 +268,19 @@ class ContasController  extends BaseController
         $i = $i + 1;
         $vencimentos[$i] = Carbon::today()->addMonths($i);
       }
+      $contato = Contatos::find($request->contatos_id);
+      #return $contato;
       return view('contas.parcelas')->with('contato', $contato)->with('conta', $conta)->with('vencimentos', $vencimentos)->with('parcela', $parcela);
     }
     return redirect()->action('ContasController@index');
   }
-  public function consumos_novo3(request $request, $id){
+  public function consumos_novo3(request $request){
     $this->validate($request, [
         'forma' => 'required',
         'nome' => 'required|max:50',
         'cheio' => 'required|numeric',
     ]);
-    $contato = Contatos::find($id);
+    $contato = Contatos::find($request->contatos_id);
     $conta = new Contas;
     $conta->contatos_id = $contato->id;
     $conta->nome = $request->nome;
@@ -340,7 +338,7 @@ class ContasController  extends BaseController
   }
 
 
-  public function add_4(request $request, $id, $conta_id){
+  public function add_4(request $request, $conta_id){
     $conta= Contas::find($conta_id);
     foreach ($request->parcela as $key => $parcela) {
       $parcela1 = new Contas;
