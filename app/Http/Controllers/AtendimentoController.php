@@ -34,7 +34,7 @@ class AtendimentoController  extends BaseController
     $comboboxes = comboboxes::where('combobox_textable_type', 'App\Atendimentos')->get();
     Log::info('Mostando atendimento -> "'.$atendimento.'", para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
 
-    return view('atend.show')->with('atendimento', $atendimento)->with('comboboxes', $comboboxes);
+    return view('atend.novo')->with('atendimento', $atendimento)->with('comboboxes', $comboboxes);
   }
 
   public function detalhes($id){
@@ -136,6 +136,7 @@ class AtendimentoController  extends BaseController
         'assunto' => 'required|max:50',
     ]);
     $atendimento = Atendimento::find($id);
+    
     $atendimento->assunto = $request->assunto;
     $atendimento->texto = $request->texto;
     $atendimento->save();

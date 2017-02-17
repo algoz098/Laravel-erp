@@ -102,3 +102,6 @@ body {
 .extra{
   width: 90%;
 }
+.sub-image-div{
+  overflow-y: auto  
+}

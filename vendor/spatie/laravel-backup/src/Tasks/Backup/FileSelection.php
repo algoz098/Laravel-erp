@@ -123,13 +123,9 @@ class FileSelection
      */
     protected function shouldExclude($path)
     {
-        foreach ($this->excludeFilesAndDirectories as $excludedPath) {
-            if (starts_with($path, $excludedPath)) {
-                return true;
-            }
-        }
-
-        return false;
+        return $this->excludeFilesAndDirectories->contains(function ($key, $excludedPath) use ($path) {
+            return starts_with($path, $excludedPath);
+        });
     }
 
     /**

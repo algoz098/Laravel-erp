@@ -46,12 +46,20 @@
           @endif
         </div>
         <div class="col-md-9">
-          <div class="form-group" id="contentDiv">
+          <div class="form-group sub-image-div" id="contentDiv">
             <label for="data" id="contentLabel">Descrição do atendimento</label>
-            <div id="contentHolder">{!!$atendimento->texto!!}</div>
+            <div class="panel panel-default">
+              <div class="panel-body">
+                <div id="contentHolder">{!!$atendimento->texto!!}</div>
+              </div>
+            </div>
           </div>
-          <span id="dataSpace"></span>
-          <object data="" id="object" width="100%" height="0" ></object>
+          <div class="panel panel-default" style="display:none" id="contentDiv2">
+            <div class="panel-body">
+              <span id="dataSpace"></span>
+              <object data="" id="object" width="100%" height="0" ></object>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -68,32 +76,36 @@
       <button type="submit" class="btn btn-primary" onclick="rotateUnclock()"><i class="fa fa-arrow-left"></i> Rotacionar</button>
       <button type="submit" class="btn btn-primary" onclick="rotateClock()"><i class="fa fa-arrow-right"></i> Rotacionar</button>
 
-      <button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
-      <a href="{{ url('novo/atendimentos') }}/{{$atendimento->id}}"><button type="submit" class="btn btn-primary">Editar</button></a>
+      <button type="button" class="btn btn-default" data-dismiss="modal"><span aria-hidden="true">×</span> Fechar</button>
+      <a href="{{ url('novo/atendimentos') }}/{{$atendimento->id}}"><button type="submit" class="btn btn-primary"><i class="fa fa-pencil"></i> Editar</button></a>
     </div>
   </div>
 </div>
 <script>
 var imageStatus = false;
+$('#contentDiv').height(height-50);
 function showDesc(){
   $('#contentDiv').show();
+  $('#contentDiv2').hide();
   $( "#dataSpace" ).html( "" );
   $('#object').attr("height", "0");
 };
 function attachForm(){
   $('#object').attr("height", "0");
   window.modalurl = "{{url('lista/atendimentos')}}/{{$atendimento->id}}"
+  $('#contentDiv2').show();
+  $( "#contentDiv").hide();
   $.get( "{{ url('/attach') }}/Atendimento/{{$atendimento->id}}", function( data ) {
-    $( "#contentDiv").hide();
     $( "#dataSpace" ).html( data );
   });
   var imageStatus = true;
 }
 function loadImage(id) {
   $( "#dataSpace" ).html( "" );
+  $('#contentDiv2').show();
   $( "#contentDiv").hide();
   $('#object').attr("data", "{{ url('/attach') }}/"+id+"/size/"+height);
-  $('#object').attr("height", height);
+  $('#object').attr("height", height-70);
   window.attachId = id;
   var imageStatus = true;
 };

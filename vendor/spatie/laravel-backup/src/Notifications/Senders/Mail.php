@@ -29,6 +29,7 @@ class Mail extends BaseSender
     public function send()
     {
         $this->mailer->raw($this->message, function (Message $message) {
+
             $message
                 ->subject($this->subject)
                 ->from($this->config['from'])

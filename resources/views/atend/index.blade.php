@@ -7,6 +7,9 @@
           <i class="fa fa-list fa-1x"></i> Lista de atendimentos realizados
         </div>
         <div class="panel-body">
+          @component('inc.alert')
+              This is the alert message here.
+          @endcomponent
           <form method="POST" action="{{ url('lista/atendimentos') }}/">
             <div id="secondNavbar" class="row">
               <div class="row">
@@ -18,7 +21,10 @@
                     <a href="{{ url('lista/atendimentos') }}/id/delete" id="buttonDelete" class="btn btn-danger btn_xs">
                       <i class="fa fa-ban"></i>
                     </a>
-                    <a  class="btn btn-primary btn_xs"  id="buttonDetalhes">
+                    <a href="{{ url('novo/atendimentos') }}/" id="buttonEdit" class="btn btn-info">
+                      <i class="fa fa-pencil"></i>
+                    </a>
+                    <a  class="btn btn-info"  id="buttonDetalhes">
                       <i class="fa fa-file-text-o"></i>
                     </a>
                   </div>
@@ -177,6 +183,7 @@
         $("#ids").val(id);
         $("#buttonDelete").attr('href', '{{ url('lista/atendimentos') }}/'+id+'/delete/');
         $("#buttonDetalhes").attr('onclick', 'openModal("{{ url('lista/atendimentos') }}/'+id+'")');
+        $("#buttonEdit").attr('href', '{{ url('novo/atendimentos') }}/'+id);
       }
       function listaTop(){
         var css = $('#lista').css('margin-top');
