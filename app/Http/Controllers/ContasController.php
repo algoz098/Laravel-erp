@@ -42,8 +42,9 @@ class ContasController  extends BaseController
 
   }
   public function attachs($id){
-    $attachs=Contas::find($id)->attachs;
-    return view('contas.attachs')->with('attachs', $attachs)->with('conta_id', $id);
+    $conta=Contas::find($id);
+    $contato_id = $conta->contatos->id;
+    return view('contas.attachs')->with('attachs', $conta->attachs)->with('conta_id', $id)->with('contato_id', $contato_id);
 
   }
   public function search(Request $request){

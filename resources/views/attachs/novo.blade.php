@@ -8,7 +8,7 @@
 <script>
 $(document).ready(function(){
   var extraObj = $("#fileuploader").uploadFile({
-    url:"{{url('attach/')}}/{{$modulo}}/{{$id}}",
+    url:"{{url('attach/')}}/{{$modulo}}/{{$id}}/{{$contatos_id}}",
     fileName:"file",
     extraHTML:function()
     {

@@ -10,62 +10,30 @@
           <form method="POST" action="{{ url('lista/contatos') }}/">
             <div id="secondNavbar" class="row">
               <div class="row">
-                <div class="col-md-3 text-left ajuda-popover"
-                      title="Opções"
-                      data-content="Deletar, editar/detalhes, telefones/emails, relacionamentos e anexos do contato"
-                      data-placement="top" >
-                  <div class=" form-inline col-md-10 text-right">
-                    <a id="buttonDelete" href="{{ url('lista/contatos') }}/delete/" class="btn btn-danger btn_xs " data-toggle="tooltip" title="Deletar">
-                      <i class="fa fa-ban" ></i>
-                    </a>
-                    <a id="buttonEdit" href="{{ url('novo/contatos') }}/" class="btn btn-primary btn_xs" data-toggle="tooltip" title="Editar">
-                      <i class="fa fa-pencil"></i>
-                    </a>
-                    <a id="buttonDetalhes" class="btn btn-primary btn_xs" >
-                      </i><i class="fa fa-file-text"></i>
-                    </a>
+                <div class="col-md-3 text-left pull-left">
+                  <div class=" form-inline col-md-9 text-right">
+                    @botaoDelete
+                    @botaoEditar
+                    @botaoDetalhes
                     <span id="buttonRelate" class="btn btn-primary btn_xs" title="Relacionamentos"  data-toggle="collapse" data-target="#relacionamentos" aria-expanded="">
                       <i class="fa fa-users"></i>
                     </span>
-                    <span id="buttonAttach" class="btn btn-warning btn_xs" title="Anexos">
-                      <i class="fa fa-paperclip"></i>
-                    </span>
+                    @botaoAnexos
                   </div>
                   <div class=" form-inline col-md-2 text-left">
-                    <input type="text" class="form-control" size="4" name="ids" id="ids" placeholder="Detalhes" disabled>
+                    @idSelecionado
                   </div>
                 </div>
                 <div class="col-md-6">
-                  <div class="form-group form-inline text-center ajuda-popover"
-                        title="Busca"
-                        data-content="Digite para buscar um contato"
-                        data-placement="top"
-                  >
+                  <div class="form-group form-inline text-center">
                     {{ csrf_field() }}
-                    <input type="text" class="form-control" name="busca" id="busca" placeholder="Busca">
-                    <button type="submit" class="btn btn-success"><i class="fa fa-search"></i> Buscar</button>
-                    <a class="btn btn-info"  title="Busca Avançada" data-toggle="collapse" data-target="#buscaAvançada" aria-expanded="" onclick="listaTop()">
-                      <i class="fa fa-search-plus"></i>
-                    </a>
+                    @buscaSimples
+                    @buscaExtraBotao
                   </div>
                 </div>
-                  <div class="col-md-2 pull-right ajuda-popover"
-                        title="Novo"
-                        data-content="Adicione um novo contato"
-                        data-placement="left">
-                    <div class="btn-group">
-                      <a href="{{ url('/novo/contatos') }}" class="btn btn-success">
-                        <i class="fa fa-plus fa-1x"></i> Novo
-                      </a>
-                      <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <span class="caret"></span>
-                        <span class="sr-only">Toggle Dropdown</span>
-                      </button>
-                      <ul class="dropdown-menu">
-                        <li><a href="{{ url('/novo/contatos') }}">Nova Entidade.</a></li>
-                        <li><a href="{{ url('/novo/funcionarios') }}">Novo Func.</a></li>
-                      </ul>
-                    </div>
+                  <div class="col-md-2 pull-right ">
+                    @botaoNovo(contatos*funcionarios*Nova Entidade*Novo Func.)
+
                   </div>
               </div>
               <div id="buscaAvançada" class="row collapse " aria-expanded="" style="background-color: #fff; z-index:1030;">
@@ -278,30 +246,23 @@
     </div>
   </div>
 
-  <!-- Modal -->
-  <div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"></div>
-
-  @if (isset($contato->attachs))
-    <script language="javascript">
-
-      function selectRow(id){
-        window.id_attach_form = id;
-        $("#ids").val(id);
-        $("#buttonDelete").attr('href', '{{ url('lista/contatos') }}/delete/'+id);
-        $("#buttonEdit").attr('href', '{{ url('novo/contatos') }}/'+id);
-        $("#buttonTel").attr('data-target', '#addTelefones'+id);
-        $("#buttonRelate").attr('data-target', '#relacionamentos'+id);
-        $("#buttonAttach").attr('onclick', "openModal('{{url('lista/contatos')}}/"+id+"/attachs')");
-        $("#buttonDetalhes").attr('onclick', "openModal('{{url('lista/contatos')}}/"+id+"')");
+  <script language="javascript">
+    function selectRow(id){
+      window.id_attach_form = id;
+      $("#ids").val(id);
+      $("#botaoDelete").attr('href', '{{ url('lista/contatos') }}/delete/'+id);
+      $("#botaoEditar").attr('href', '{{ url('novo/contatos') }}/'+id);
+      $("#buttonRelate").attr('data-target', '#relacionamentos'+id);
+      $("#botaoAnexos").attr('onclick', "openModal('{{url('lista/contatos')}}/"+id+"/attachs')");
+      $("#botaoDetalhes").attr('onclick', "openModal('{{url('lista/contatos')}}/"+id+"')");
+    }
+    function listaTop(){
+      var css = $('#lista').css('margin-top');
+      if(css == "75px"){
+        $('#lista').css('margin-top', '0px');
+      } else {
+        $('#lista').css('margin-top', '75px');
       }
-      function listaTop(){
-        var css = $('#lista').css('margin-top');
-        if(css == "75px"){
-          $('#lista').css('margin-top', '0px');
-        } else {
-          $('#lista').css('margin-top', '75px');
-        }
-      }
-    </script>
-  @endif
+    }
+  </script>
 @endsection

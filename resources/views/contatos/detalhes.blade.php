@@ -373,8 +373,8 @@
       </div>
     </div>
     <div class="modal-footer">
-      <button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
-      <a href="{{url('/novo/contatos/')}}/{{$contato->id}}" class="btn btn-primary"><i class="fa fa-pencil"></i> Editar</a>
+      @botaoFecharModal
+      @botaoEditarExtenso(novo/contatos*$contato->id)
     </div>
   </div>
 </div>

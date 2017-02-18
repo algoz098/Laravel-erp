@@ -7,51 +7,28 @@
           <i class="fa fa-list fa-1x"></i> Lista de atendimentos realizados
         </div>
         <div class="panel-body">
-          @component('inc.alert')
-              This is the alert message here.
-          @endcomponent
           <form method="POST" action="{{ url('lista/atendimentos') }}/">
             <div id="secondNavbar" class="row">
               <div class="row">
-                <div class="col-md-2 text-left ajuda-popover"
-                      title="Opções"
-                      data-content="Deletar, editar/detalhes, telefones/emails, relacionamentos e anexos do contato"
-                      data-placement="top" >
+                <div class="col-md-2 text-left pull-left" >
                   <div class=" form-inline col-md-10 text-right">
-                    <a href="{{ url('lista/atendimentos') }}/id/delete" id="buttonDelete" class="btn btn-danger btn_xs">
-                      <i class="fa fa-ban"></i>
-                    </a>
-                    <a href="{{ url('novo/atendimentos') }}/" id="buttonEdit" class="btn btn-info">
-                      <i class="fa fa-pencil"></i>
-                    </a>
-                    <a  class="btn btn-info"  id="buttonDetalhes">
-                      <i class="fa fa-file-text-o"></i>
-                    </a>
+                    @botaoDelete
+                    @botaoEditar
+                    @botaoDetalhes
                   </div>
-                  <div class=" form-inline col-md-2 text-left">
-                    <input type="text" class="form-control" size="4" name="ids" id="ids" placeholder="Detalhes" disabled>
+                  <div class=" form-inline col-md-1 text-left">
+                    @idSelecionado
                   </div>
                 </div>
-                <div class="col-md-6">
-                  <div class="form-group form-inline text-center ajuda-popover"
-                        title="Busca"
-                        data-content="Digite para buscar um contato"
-                        data-placement="top"
-                  >
+                <div class="col-md-8">
+                  <div class="form-group form-inline text-center">
                     {{ csrf_field() }}
-                    <input type="text" class="form-control" name="busca" id="busca" placeholder="Busca por entidade">
-                    <button type="submit" class="btn btn-success"><i class="fa fa-search"></i> Buscar</button>
-                    <a class="btn btn-info"  title="Busca Avançada" data-toggle="collapse" data-target="#buscaAvançada" aria-expanded="" onclick="listaTop()">
-                      <i class="fa fa-search-plus"></i>
-                    </a>
+                    @buscaSimples
+                    @buscaExtraBotao
                   </div>
                 </div>
-                  <div class="col-md-1 pull-right text-right ajuda-popover"
-                        title="Novo"
-                        data-content="Adicione um novo contato"
-                        data-placement="left">
-                    <a href="{{ url('/novo/atendimentos') }}" class="btn btn-success">
-                      <i class="fa fa-plus fa-1x"></i> Novo</a>
+                  <div class="col-md-1 pull-right text-right">
+                    @botaoNovo(atendimentos)
                   </div>
               </div>
               <div id="buscaAvançada" class="row collapse " aria-expanded="" style="background-color: #fff; z-index:1030;">
@@ -113,14 +90,12 @@
                     </span>
                   </div>
                   <div class="col-md-2">
-                    <a onclick="openModal('{{url('lista/contatos')}}/{{$atendimento->contatos->id}}')" class="label label-primary">
-                      <i class="fa fa-user"></i> {{{ $atendimento->contatos->tipo!="1" ? str_limit($atendimento->contatos->nome, 15) : $atendimento->contatos->nome." ".str_limit($atendimento->contatos->sobrenome, 15) }}}
-                    </a>
+                    @mostraContato($atendimento->contatos->id*str_limit($atendimento->contatos->nome, 15))
                   </div>
                   <div class="col-md-2 ajuda-popover" @if ($key==0) title="Detalhes" data-content="Assunto e descrição." data-placement="bottom" @endif >
                     {{$atendimento->assunto}}
                   </div>
-                  <div class="col-md-5">
+                  <div class="col-md-6">
                     {{ str_limit(strip_tags($atendimento->texto), 60)}}
                   </div>
                   <div class="col-md-1 pull-right">
@@ -181,9 +156,9 @@
       function selectRow(id){
         window.id_attach_form = id;
         $("#ids").val(id);
-        $("#buttonDelete").attr('href', '{{ url('lista/atendimentos') }}/'+id+'/delete/');
-        $("#buttonDetalhes").attr('onclick', 'openModal("{{ url('lista/atendimentos') }}/'+id+'")');
-        $("#buttonEdit").attr('href', '{{ url('novo/atendimentos') }}/'+id);
+        $("#botaoDelete").attr('href', '{{ url('lista/atendimentos') }}/'+id+'/delete/');
+        $("#botaoDetalhes").attr('onclick', 'openModal("{{ url('lista/atendimentos') }}/'+id+'")');
+        $("#botaoEditar").attr('href', '{{ url('novo/atendimentos') }}/'+id);
       }
       function listaTop(){
         var css = $('#lista').css('margin-top');

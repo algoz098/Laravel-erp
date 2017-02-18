@@ -23,8 +23,8 @@
           <div class="panel-body">
             <div class="row text-right" id="secondNavbar">
               <div class="col-sm-offset-2 col-sm-10">
-                <a class="btn btn-warning" href="{{ url('lista/contatos')}}" ><i class="fa fa-users"></i> Voltar a Lista</a>
-                <button type="submit" class="btn btn-success"><i class="fa fa-check"></i> Salvar</button>
+                @botaoLista(contatos*fa-users)
+                @botaoSalvar
               </div>
             </div>
             @if (!empty($contato->id))

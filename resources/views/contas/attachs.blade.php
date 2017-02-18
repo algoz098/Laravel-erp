@@ -64,7 +64,7 @@ function deleteImage(id){
 function attachForm(){
   $('#object').attr("height", "0");
   window.modalurl = "{{url('lista/contas/')}}/{{$conta_id}}/attachs"
-  $.get( "{{ url('/attach') }}/Contas/{{$conta_id}}", function( data ) {
+  $.get( "{{ url('/attach') }}/Contas/{{$conta_id}}/{{$contato_id}}", function( data ) {
     $( "#dataSpace" ).html( data );
   });
   var imageStatus = true;

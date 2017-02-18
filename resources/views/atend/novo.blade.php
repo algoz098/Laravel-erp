@@ -14,20 +14,17 @@ use Carbon\Carbon;
           <div class="panel-body">
             <div class="row" id="secondNavbar">
               <div class="col-md-3 text-right pull-right">
-                <a class="btn btn-warning" href="{{ url('lista/atendimentos')}}" ><i class="fa fa-list"></i> Voltar a Lista</a>
-                <button type="submit" class="btn btn-success" id="enviar" ><i class="fa fa-check"></i> Salvar</button>
+                @botaoLista(atendimentos*fa-list)
+                @botaoSalvar
               </div>
             </div>
             <div class="row">
               <div class="col-md-3">
-                <div class="form-group">
-                  <label for="por">Atendimento para:</label>
-                  <div class="input-group">
-                    <input type="hidden" class="form-control" id="contatosHidden" name="contatos_id" value="{{isset($atendimento) ? $atendimento->contatos->id : ""}}">
-                    <input type="text" class="form-control" id="contatos" disabled value="{{isset($atendimento) ? $atendimento->contatos->nome : ""}}">
-                    <a onclick="window.activeTarget='contatos'; openModal('{{url('lista/contatos/selecionar')}}')" class="input-group-addon btn btn-info"><i class="fa fa-gear"></i></a>
-                  </div>
-                </div>
+                @if(isset($atendimento))
+                  @selecionaContato(Atendimento para:*$atendimento->contatos->id*$atendimento->contatos->nome)
+                @else
+                  @selecionaContato(Atendimento para:)
+                @endif
                 <div class="form-group">
                   <label>Assunto</label>
                   <select class="form-control" name="assunto" id="assunto" >

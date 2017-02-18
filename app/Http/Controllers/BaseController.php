@@ -1,6 +1,7 @@
 <?php namespace App\Http\Controllers;
 
 use View;
+use ErpSnippets;
 use App\Erp_configs as Configs;
 
 use App\Attachments as Attachs;

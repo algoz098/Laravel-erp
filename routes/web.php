@@ -127,8 +127,6 @@ Route::post('novo/frotas/{id}/edit', 'FrotasController@salvar')->middleware('aut
 
 Route::get('lista/abastecimentos/{id}/delete', 'FrotasController@abastecer_delete')->middleware('auth');
 
-
-
 Route::get('attach/{id}', 'AttachmentsController@show')->middleware('auth');
 Route::get('attach/{id}/get', 'AttachmentsController@get')->middleware('auth');
 Route::get('attach/{id}/size/{height}', 'AttachmentsController@size')->middleware('auth');
@@ -137,8 +135,8 @@ Route::get('attach/{id}/rotate/clock', 'AttachmentsController@rotate_clock')->mi
 Route::get('attach/{id}/rotate/unclock', 'AttachmentsController@rotate_unclock')->middleware('auth');
 Route::get('attach/{id}/resize/{width}', 'AttachmentsController@resize')->middleware('auth');
 
-Route::get('attach/{modulo}/{id}', 'AttachmentsController@novo')->middleware('auth');
-Route::post('attach/{modulo}/{id}', 'AttachmentsController@salva')->middleware('auth');
+Route::get('attach/{modulo}/{id}/{contatos_id}', 'AttachmentsController@novo')->middleware('auth');
+Route::post('attach/{modulo}/{id}/{contatos_id}', 'AttachmentsController@salva')->middleware('auth');
 
 Route::get('/admin', 'AdminController@index')->name('admin')->middleware('auth')->middleware('admin');
 

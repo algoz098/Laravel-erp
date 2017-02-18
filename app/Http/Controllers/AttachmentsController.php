@@ -16,18 +16,16 @@ class AttachmentsController  extends BaseController
   public function __construct(){
      parent::__construct();
   }
-  public function novo($modulo, $id){
-    return view('attachs.novo')->with('modulo', $modulo)->with('id', $id);
+  public function novo($modulo, $id, $contatos_id){
+    return view('attachs.novo')->with('modulo', $modulo)->with('id', $id)->with('contatos_id', $contatos_id);
   }
-  public function salva($modulo, $id, request $request){
-    #return "ok";
-    #return $request->file;
+  public function salva($modulo, $id, $contatos_id, request $request){
     $attach = new Attachs;
     $attach->attachmentable_id = $id;
     $attach->attachmentable_type = "App\\".$modulo;
     $attach->name = $request->name;
     $attach->path = $request->file->store('public');
-    $attach->contatos_id = $id;
+    $attach->contatos_id = $contatos_id;
     $attach->save();
 
     $path = storage_path() . '/' .'app/'. $attach->path;
@@ -121,7 +119,7 @@ class AttachmentsController  extends BaseController
     if (!exif_imagetype($path)){
       $file = File::get($path);
       $type = File::mimeType($path);
-      
+
       $response = Response::make($file, 200);
       $response->header("Content-Type", $type);
 

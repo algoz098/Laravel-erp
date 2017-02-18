@@ -95,7 +95,7 @@ function attachForm(){
   window.modalurl = "{{url('lista/atendimentos')}}/{{$atendimento->id}}"
   $('#contentDiv2').show();
   $( "#contentDiv").hide();
-  $.get( "{{ url('/attach') }}/Atendimento/{{$atendimento->id}}", function( data ) {
+  $.get( "{{ url('/attach') }}/Atendimento/{{$atendimento->id}}/{{$atendimento->contatos->id}}", function( data ) {
     $( "#dataSpace" ).html( data );
   });
   var imageStatus = true;
