@@ -28,7 +28,7 @@ class AppServiceProvider extends ServiceProvider
             <div class=\"input-group\">
               <input type=\"text\" class=\"form-control\" name=\"busca\" id=\"busca\" size=\"40\" placeholder=\"Busca...\">
               <span class=\"input-group-btn\">
-                <button class=\"btn btn-info\" type=\"button\"><i class=\"fa fa-search\"></i></button>
+                <button class=\"btn btn-info\" type=\"submit\"><i class=\"fa fa-search\"></i></button>
               </span>
             </div>';?>";
       });
@@ -122,6 +122,31 @@ class AppServiceProvider extends ServiceProvider
                   <input type=\"hidden\" class=\"form-control\" id=\"contatosHidden\" name=\"contatos_id\" value=\"\">
                   <input type=\"text\" class=\"form-control\" id=\"contatos\" disabled value=\"\">
                   <a onclick=\"window.activeTarget=&#39;contatos&#39;&#59; openModal(&#39;'.URL::to('lista/contatos/selecionar').'&#39;)\" class=\"input-group-addon btn btn-info\"><i class=\"fa fa-gear\"></i></a>
+                </div>
+              </div>
+            '?>";
+          }
+      });
+      Blade::directive('selecionaFilial', function ($a) {
+        if (strpos($a, '*')){
+          list($id, $nome) = explode('*', $a);
+          return "<?php echo '
+            <div class=\"form-group\">
+              <label for=\"por\">Filial</label>
+              <div class=\"input-group\">
+                <input type=\"hidden\" class=\"form-control\" id=\"contatosHidden\" name=\"filial\" value=\"'.$id.'\">
+                <input type=\"text\" class=\"form-control\" id=\"contatos\" disabled value=\"'.$nome.'\">
+                <a onclick=\"window.activeTarget=&#39;contatos&#39;&#59; openModal(&#39;'.URL::to('lista/filiais/selecionar').'&#39;)\" class=\"input-group-addon btn btn-info\"><i class=\"fa fa-gear\"></i></a>
+              </div>
+            </div>'?>";
+          } else {
+            return "<?php echo '
+              <div class=\"form-group\">
+                <label for=\"por\">Filial:</label>
+                <div class=\"input-group\">
+                  <input type=\"hidden\" class=\"form-control\" id=\"contatosHidden\" name=\"contatos_id\" value=\"\">
+                  <input type=\"text\" class=\"form-control\" id=\"contatos\" disabled value=\"\">
+                  <a onclick=\"window.activeTarget=&#39;contatos&#39;&#59; openModal(&#39;'.URL::to('lista/filiais/selecionar').'&#39;)\" class=\"input-group-addon btn btn-info\"><i class=\"fa fa-gear\"></i></a>
                 </div>
               </div>
             '?>";

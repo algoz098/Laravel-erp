@@ -18,8 +18,8 @@
             <li class="pushy-link "><a class="{{{ Request::path()=='novo/atendimentos' ? "active" : "" }}}" href="{{ url('/novo/atendimentos') }}"><i class="fa fa-list"></i> Atendimento</a></li>
           @endif
           @if ($modulo_contas=="1")
-            <li class="pushy-link "><a class="{{{ Request::path()=='novo/contas' ? "active" : "" }}}" href="{{ url('/novo/contas') }}"><i class="fa fa-usd"></i> Plano de Caixa</a></li>
-            <li class="pushy-link "><a class="{{{ Request::path()=='novo/consumos' ? "active" : "" }}}" href="{{ url('/novo/consumos') }}"><i class="fa fa-arrow-right"></i><i class="fa fa-usd"></i> Conta de Consumo</a></li>
+            <li class="pushy-link "><a class="{{{ Request::path()=='novo/contas' ? "active" : "" }}}" href="{{ url('/novo/contas') }}"><i class="fa fa-usd"></i> Plano bancario</a></li>
+            <li class="pushy-link "><a class="{{{ Request::path()=='novo/consumos' ? "active" : "" }}}" href="{{ url('/novo/consumos') }}"><i class="fa fa-arrow-right"></i><i class="fa fa-usd"></i> Cosumo bancario</a></li>
           @endif
           @if ($modulo_estoques=="1")
             <li class="pushy-link "><a class="{{{ Request::path()=='novo/estoque' ? "active" : "" }}}" href="{{ url('/novo/estoque') }}"><i class="fa fa-bell"></i> Novo produto</a></li>
@@ -46,7 +46,7 @@
             <li class="pushy-link"><a class="{{{ Request::path()=='lista/atendimentos' ? "active" : "" }}}" href="{{ url('/lista/atendimentos') }}"><i class="fa fa-list"></i> Atendimento</a></li>
           @endif
           @if ($modulo_contas=="1")
-            <li class="pushy-link"><a class="{{{ Request::path()=='lista/contas' ? "active" : "" }}}" href="{{ url('/lista/contas') }}"><i class="fa fa-usd"></i> Plano de Caixa</a></li>
+            <li class="pushy-link"><a class="{{{ Request::path()=='lista/contas' ? "active" : "" }}}" href="{{ url('/lista/contas') }}"><i class="fa fa-usd"></i> Historico bancario</a></li>
           @endif
           @if ($modulo_estoques=="1")
             <li class="pushy-link"><a class="{{{ Request::path()=='lista/estoque' ? "active" : "" }}}" href="{{ url('/lista/estoque') }}"><i class="fa fa-bell"></i> Estoque</a></li>

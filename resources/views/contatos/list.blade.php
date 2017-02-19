@@ -110,18 +110,7 @@
                   @endif
                   <i class="fa fa-signal level{{$contato->sociabilidade}}"></i>
                 </div>
-                <div class="col-md-4 ajuda-popover"
-                    @if ($key==0)
-                      title="Sociabilidade"
-                      data-content="
-                                    <i class='fa fa-user level1'></i> = Informações de Contato defasadas<br><i class='fa fa-user level4'></i> = Informações de Contato confiaveis<br>
-                                    Facilidade de interação: <i class='fa fa-signal level1'></i> <i class='fa fa-signal level2'></i> <i class='fa fa-signal level3'></i> <i class='fa fa-signal level4'></i> <i class='fa fa-signal level5'></i> <br>
-                                    E nome ou razão social do contato.
-                      "
-                      data-placement="bottom"
-                      data-html="true"
-                    @endif
-                  >
+                <div class="col-md-4">
                   {{ $contato->nome }}
                   @if ($contato->tipo=="1"){{ $contato->sobrenome }}@endif
                 </div>
@@ -250,11 +239,15 @@
     function selectRow(id){
       window.id_attach_form = id;
       $("#ids").val(id);
-      $("#botaoDelete").attr('href', '{{ url('lista/contatos') }}/delete/'+id);
       $("#botaoEditar").attr('href', '{{ url('novo/contatos') }}/'+id);
       $("#buttonRelate").attr('data-target', '#relacionamentos'+id);
       $("#botaoAnexos").attr('onclick', "openModal('{{url('lista/contatos')}}/"+id+"/attachs')");
       $("#botaoDetalhes").attr('onclick', "openModal('{{url('lista/contatos')}}/"+id+"')");
+      $("#botaoDelete").attr('href', '{{ url('lista/contatos') }}/delete/'+id);
+      if (id=="1") {
+        $("#botaoDelete").attr('disabled', true);
+
+      }
     }
     function listaTop(){
       var css = $('#lista').css('margin-top');

@@ -10,27 +10,14 @@
     <div class="panel panel-default">
       <div class="panel-heading">Informações Basicas</div>
       <div class="panel-body">
-        <div class="form-group">
-          <label for="filial">Filial</label>
-          <select class="form-control" id="filial" name="filial">
-            @if (!isset($contato))
-              <option value="" selected>- Escolha -</option>
-            @endif
-              <option value="1">Matriz</option>
-            @foreach($filiais as $b => $filial)
-              @if (isset($contato))
-                @if ($contato->user->trabalho_id==$filial->id)
-                  <option value="{{$filial->id}}" selected>{{$filial->nome}}</option>
-                @endif
-              @else
-                <option value="{{$filial->id}}">{{$filial->nome}}</option>
-              @endif
-            @endforeach
-          </select>
-        </div>
+        @if (!isset($contato->funcionario))
+          @selecionaFilial
+        @else
+          @selecionaFilial($contato->user->trabalho_id*$contato->user->trabalho->nome)
+        @endif
         <div class="form-group">
           <label for="uf">Cargo</label>
-          <input type="text" class="form-control" value="{{ $contato->funcionario->cargo or "" }}" name="cargo" id="cargo" placeholder="Cargo">
+          <input type="text" class="form-control" value="{{ $contato->funcionario->cargo or "" }}" name="cargo" id="cargo">
         </div>
         <div class="form-group">
           <label for="uf">Data de Admissão</label>
@@ -101,12 +88,12 @@
             <div class="col-md-8">
               <div class="input-group">
                 <span class="input-group-addon" id="basic-addon1">R$</span>
-                <input type="text" class="form-control real-mask" value="{{ $contato->funcionario->peri or "" }}" name="peri" id="peri">
+                <input type="text" class="form-control real-mask" value="{{ $contato->funcionario->peri or "" }}" name="peri" id="peri" disabled>
               </div>
             </div>
             <div class="col-md-4">
               <div class="input-group">
-                <input type="text" class="form-control integer" value="{{ $contato->funcionario->peri_percentual or "" }}" name="peri_percentual" id="peri_percentual">
+                <input type="text" class="form-control integer" value="{{ $contato->funcionario->peri_percentual or "" }}" name="peri_percentual" id="peri_percentual" onchange="calcPeri()">
                 <span class="input-group-addon" id="basic-addon1">%</span>
               </div>
             </div>
@@ -138,11 +125,11 @@
         </div>
         <div class="form-group">
           <label for="uf">Usuario</label>
-          <input type="text" class="form-control" value="{{ $contato->user->user or "" }}" name="user" id="user" >
+          <input type="text" class="form-control" value="{{ $contato->user->user or "" }}" name="user" id="user3322" >
         </div>
         <div class="form-group">
           <label for="uf">Senha</label>
-          <input type="password" class="form-control" value="" name="password" id="password" >
+          <input type="password" class="form-control" value="" name="password" id="password3322" >
         </div>
       </div>
     </div>
@@ -155,31 +142,31 @@
       <div class="panel-body">
         <div class="form-group">
           <label for="uf">Numero da Cart. Trabalho</label>
-          <input type="text" class="form-control" value="{{ $contato->funcionario->cart_trab_num or "" }}" name="cart_trab_num" id="cart_trab_num" placeholder="Carteira de Trabalho">
+          <input type="text" class="form-control" value="{{ $contato->funcionario->cart_trab_num or "" }}" name="cart_trab_num" id="cart_trab_num">
         </div>
         <div class="form-group">
           <label for="uf">Serie da Cart. Trabalho</label>
-          <input type="text" class="form-control" value="{{ $contato->funcionario->cart_trab_serie or "" }}" name="cart_trab_serie" id="cart_trab_serie" placeholder="Carteira de Trabalho">
+          <input type="text" class="form-control" value="{{ $contato->funcionario->cart_trab_serie or "" }}" name="cart_trab_serie" id="cart_trab_serie">
         </div>
         <div class="form-group">
           <label for="uf">Numero do PIS</label>
-          <input type="text" class="form-control" value="{{ $contato->funcionario->pis or "" }}" name="pis" id="pis" placeholder="PIS">
+          <input type="text" class="form-control" value="{{ $contato->funcionario->pis or "" }}" name="pis" id="pis">
         </div>
         <div class="form-group">
           <label for="uf">Banco do PIS</label>
-          <input type="text" class="form-control" value="{{ $contato->funcionario->pis_banco or "" }}" name="pis_banco" id="pis_banco" placeholder="PIS">
+          <input type="text" class="form-control" value="{{ $contato->funcionario->pis_banco or "" }}" name="pis_banco" id="pis_banco">
         </div>
         <div class="row">
           <div class="col-md-8">
             <div class="form-group">
               <label for="uf">INSS</label>
-              <input type="text" class="form-control" value="{{ $contato->funcionario->inss or "" }}" name="inss" id="inss" placeholder="INSS">
+              <input type="text" class="form-control" value="{{ $contato->funcionario->inss or "" }}" name="inss" id="inss" disabled>
             </div>
           </div>
           <div class="col-md-4">
             <div class="form-group">
               <label for="uf">Perc.</label>
-              <input type="text" class="form-control" value="{{ $contato->funcionario->sal_inss or "" }}" name="sal_inss" id="sal_inss" placeholder="Salario">
+              <input type="text" class="form-control" value="{{ $contato->funcionario->sal_inss or "" }}" name="sal_inss" id="sal_inss" onchange="calcInss()">
             </div>
           </div>
         </div>
@@ -192,15 +179,15 @@
       <div class="panel-body">
         <div class="form-group">
           <label for="uf">Numero da CNH</label>
-          <input type="text" class="form-control" value="{{ $contato->funcionario->cnh or "" }}" name="cnh" id="cnh" placeholder="CNH">
+          <input type="text" class="form-control" value="{{ $contato->funcionario->cnh or "" }}" name="cnh" id="cnh">
         </div>
         <div class="form-group">
           <label for="uf">Categoria da CNH</label>
-          <input type="text" class="form-control" value="{{ $contato->funcionario->cnh_cat or "" }}" name="cnh_cat" id="cnh_cat" placeholder="CNH">
+          <input type="text" class="form-control" value="{{ $contato->funcionario->cnh_cat or "" }}" name="cnh_cat" id="cnh_cat">
         </div>
         <div class="form-group has-error">
           <label class="control-label" >Vencimento da CNH</label>
-          <input type="text" class="form-control datepicker" value="{{ $contato->funcionario->cnh_venc or "" }}" name="cnh_venc" id="cnh_venc" placeholder="CNH">
+          <input type="text" class="form-control " value="{{ $contato->funcionario->cnh_venc or "" }}" name="cnh_venc" id="cnh_venc">
         </div>
       </div>
     </div>
@@ -211,23 +198,23 @@
       <div class="panel-body">
         <div class="form-group">
           <label for="uf">Numero de Eleitor</label>
-          <input type="text" class="form-control" value="{{ $contato->funcionario->eleitor or "" }}" name="eleitor" id="eleitor" placeholder="Carteira de Trabalho">
+          <input type="text" class="form-control" value="{{ $contato->funcionario->eleitor or "" }}" name="eleitor" id="eleitor">
         </div>
         <div class="form-group">
           <label for="uf">Sessão de Eleitor</label>
-          <input type="text" class="form-control" value="{{ $contato->funcionario->eleitor_sessao or "" }}" name="eleitor_sessao" id="eleitor_sessao" placeholder="Carteira de Trabalho">
+          <input type="text" class="form-control" value="{{ $contato->funcionario->eleitor_sessao or "" }}" name="eleitor_sessao" id="eleitor_sessao">
         </div>
         <div class="form-group">
           <label for="uf">Zona de Eleitor</label>
-          <input type="text" class="form-control" value="{{ $contato->funcionario->eleitor_zona or "" }}" name="eleitor_zona" id="eleitor_zona" placeholder="Carteira de Trabalho">
+          <input type="text" class="form-control" value="{{ $contato->funcionario->eleitor_zona or "" }}" name="eleitor_zona" id="eleitor_zona">
         </div>
         <div class="form-group">
           <label for="uf">Data de Exp de Eleitor</label>
-          <input type="text" class="form-control datepicker" value="{{ $contato->funcionario->eleitor_exp or "" }}" name="eleitor_exp" id="eleitor_exp" placeholder="Carteira de Trabalho">
+          <input type="text" class="form-control" value="{{ $contato->funcionario->eleitor_exp or "" }}" name="eleitor_exp" id="eleitor_exp">
         </div>
         <div class="form-group">
           <label for="uf">Numero de Reservista</label>
-          <input type="text" class="form-control" value="{{ $contato->funcionario->reservista or "" }}" name="reservista" id="reservista" placeholder="Reservista">
+          <input type="text" class="form-control" value="{{ $contato->funcionario->reservista or "" }}" name="reservista" id="reservista">
         </div>
       </div>
     </div>
@@ -238,19 +225,19 @@
       <div class="panel-body">
         <div class="form-group">
           <label for="uf">RG</label>
-          <input type="text" class="form-control rg" value="{{ $contato->rg or "" }}" id="rg2" placeholder="RG" disabled>
+          <input type="text" class="form-control rg" value="{{ $contato->rg or "" }}" id="rg2" disabled>
         </div>
         <div class="form-group">
           <label for="uf">Data de Exp. do RG</label>
-          <input type="text" class="form-control datepicker" value="{{ $contato->funcionario->rg_exp or "" }}" name="rg_exp" id="rg_exp" placeholder="RG">
+          <input type="text" class="form-control datepicker" value="{{ $contato->funcionario->rg_exp or "" }}" name="rg_exp" id="rg_exp">
         </div>
         <div class="form-group">
           <label for="uf">Nome da Mãe</label>
-          <input type="text" class="form-control" value="{{ $contato->funcionario->rg_mae or "" }}" name="rg_mae" id="rg_mae" placeholder="RG">
+          <input type="text" class="form-control" value="{{ $contato->funcionario->rg_mae or "" }}" name="rg_mae" id="rg_mae">
         </div>
         <div class="form-group">
           <label for="uf">Nome do Pai</label>
-          <input type="text" class="form-control" value="{{ $contato->funcionario->rg_pai or "" }}" name="rg_pai" id="rg_pai" placeholder="RG">
+          <input type="text" class="form-control" value="{{ $contato->funcionario->rg_pai or "" }}" name="rg_pai" id="rg_pai">
         </div>
       </div>
     </div>
@@ -267,4 +254,15 @@ function calcVT() {
   var a = (parseFloat($('#sal').val())*parseFloat($('#vt_percentual').val()))/100;
   $('#vt').val(a);
 }
+function calcInss() {
+  var a = (parseFloat($('#sal').val())*parseFloat($('#sal_inss').val()))/100;
+  $('#inss').val(a);
+}
+function calcPeri() {
+  var a = (parseFloat($('#sal').val())*parseFloat($('#peri_percentual').val()))/100;
+  $('#peri').val(a);
+}
+$('#cnh_venc').mask('99-99-9999')
+$('#eleitor_exp').mask('99-99-9999')
+
 </script>

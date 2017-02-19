@@ -7,7 +7,7 @@ use Carbon\Carbon;
     <div class="col-md-12">
       <div class="panel panel-default">
         <div class="panel-heading ">
-          <i class="fa fa-usd fa-1x"></i> Nova provisão de contas
+          <i class="fa fa-usd fa-1x"></i> Novo istorico bancario
         </div>
         <div class="panel-body">
           <form method="POST" action="{{ url('/novo/contas') }}/parcelas/{{$conta->id}}">

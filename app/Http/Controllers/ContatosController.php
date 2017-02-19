@@ -29,6 +29,20 @@ class ContatosController extends BaseController
     return view('contatos.selecionar')
                 ->with('contatos', $contatos);
   }
+  public function selecionar_filial()
+  {
+    Log::info('Selecionar de filais para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
+    $a ="Filial";
+    $apenas_filial = TRUE;
+    $contatos = contatos::orderBy('nome', 'asc')->whereHas('from', function ($query) use ($a){
+                      $query->where('from_text', 'like', '%'.$a.'%');
+                    })->paginate(15);
+    $matriz = contatos::find(1);
+    return view('contatos.selecionar')
+                ->with('contatos', $contatos)
+                ->with('matriz', $matriz)
+                ->with('apenas_filial', $apenas_filial);
+  }
   public function selecionar_busca(request $request)
   {
     #return $request;
@@ -44,9 +58,17 @@ class ContatosController extends BaseController
       $contatos = $contatos->orWhere('bairro', 'like', '%' .  $request->busca . '%');
       $contatos = $contatos->orWhere('cep', 'like', '%' .  $request->busca . '%');
     }
+    if (isset($request->apenas_filial)){
+      $apenas_filial = TRUE;
+      $a = "Filial";
+      $contato = $contatos->whereHas('from', function ($query) use ($a){
+                        $query->where('from_text', 'like', '%'.$a.'%');
+                      })->paginate(15);
+    }
     $contatos = $contatos->orderBy('nome', 'asc')->get();
     return view('contatos.selecionarbusca')
-                ->with('contatos', $contatos);
+                ->with('contatos', $contatos)
+                ->with('apenas_filial', $apenas_filial);
   }
   public function selecionar_novo()
   {
@@ -154,8 +176,10 @@ class ContatosController extends BaseController
                                       });
 
     }
-    $data_de = DateTime::createFromFormat('d-m-Y', $request->data_de);
-    $data_de = $data_de->format('Y-m-d');
+    if ($request->data_de){
+      $data_de = DateTime::createFromFormat('d-m-Y', $request->data_de);
+      $data_de = $data_de->format('Y-m-d');
+    }
     if ($request->data_de and !$request->data_ate){
       $contatos = $contatos->whereBetween('created_at', [$data_de, Carbon::today()]);
     }
@@ -254,6 +278,19 @@ class ContatosController extends BaseController
       $telefone->ramal = $request->ramal_tel[$key];
       $telefone->save();
     }
+    if ($request->tipo=="0"){
+      if ($request->tipo_filial=="1"){
+        $data = [
+          $request->from_id =>
+          [
+            'from_text' => 'Filial',
+            'to_id' => 1,
+            'to_text' => 'Matriz'
+          ]
+        ];
+        $contato->from()->sync($data, true);
+      }
+    }
     if ($request->is_funcionario!="1"){
       $combobox = Comboboxes::where('text', $request->relacao)->first();
       if ($combobox){
@@ -294,7 +331,7 @@ class ContatosController extends BaseController
       $func->eleitor_exp = $request->eleitor_exp;
       $func->pis = $request->pis;
       $func->pis_banco = $request->pis_banco;
-      $func->inss = $request->inss;
+      $func->inss = $request->sal*$request->sal_inss;
       $func->rg_exp = $request->rg_exp;
       $func->rg_pai = $request->rg_pai;
       $func->rg_mae = $request->rg_mae;
@@ -307,7 +344,7 @@ class ContatosController extends BaseController
       $func->vt_percentual = $request->vt_percentual;
       $func->va = $request->va;
       $func->vr = $request->vr;
-      $func->peri = $request->peri;
+      $func->peri = $request->sal*$request->peri_percentual;
       $func->peri_percentual = $request->peri_percentual;
       $func->save();
       $user = new User;
@@ -334,6 +371,13 @@ class ContatosController extends BaseController
     $comboboxes = comboboxes::where('combobox_textable_type', 'App\Relacionamento')->get();
     $comboboxes_telefones = comboboxes::where('combobox_textable_type', 'App\Telefones')->get();
     $field_codigo = Configs::where('field', 'field_codigo')->first();
+    $a = "Filial";
+    $is_filial = Contatos::whereHas('from', function ($query) use ($a){
+                      $query->where('from_text', 'like', '%'.$a.'%')->where('to_id', '1');
+                    })->find($id);
+    if ($is_filial==""){
+      $is_filial=FALSE;
+    }
     if($contato->funcionario){
       $is_funcionario = 1;
       $a = "Filial";
@@ -345,14 +389,16 @@ class ContatosController extends BaseController
                                  ->with('comboboxes_telefones', $comboboxes_telefones)
                                  ->with('field_codigo', $field_codigo)
                                  ->with('is_funcionario', $is_funcionario)
-                                 ->with('filiais', $filiais);
+                                 ->with('filiais', $filiais)
+                                 ->with('is_filial', $is_filial);
     }
     Log::info('Detalhes de contato -> "'.$contato.'", para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
 
     return view('contatos.new')->with('contato', $contato)
                                ->with('comboboxes', $comboboxes)
                                ->with('field_codigo', $field_codigo)
-                               ->with('comboboxes_telefones', $comboboxes_telefones);
+                               ->with('comboboxes_telefones', $comboboxes_telefones)
+                               ->with('is_filial', $is_filial);
   }
 
   public function update( Request $request, $id )
@@ -387,6 +433,21 @@ class ContatosController extends BaseController
       $contato->active="1";
     }
     $contato->save();
+    if ($contato->tipo=="0"){
+      if ($request->tipo_filial=="1"){
+        $data = [
+          $request->from_id =>
+          [
+            'from_text' => 'Filial',
+            'to_id' => 1,
+            'to_text' => 'Matriz'
+          ]
+        ];
+        $contato->from()->sync($data, true);
+      } else {
+        $contato->from()->detach();
+      }
+    }
     if ($request->id_tel){
       foreach ($request->tipo_id as $a => $tipo_id) {
         $telefone = Telefones::find($request->id_tel[$a]);
@@ -426,14 +487,14 @@ class ContatosController extends BaseController
     } else {
       // CASO FOR CADASTRO DE FUNCIONARIO
       $data = [
-        $request->filial =>
+        $request->contatos_id =>
         [
           'from_text' => "Funcionario",
           'to_id' => 1,
           'to_text' => "Trabalho"
         ]
       ];
-      $contato->from()->sync($data, false);
+      $contato->from()->sync($data, true);
       $func = Funcionarios::where('contatos_id', $id)->first();
       $func->contatos_id = $contato->id;
       $func->cargo = $request->cargo;
@@ -614,14 +675,15 @@ class ContatosController extends BaseController
     return redirect()->action('ContatosController@show');
   }
   public function delete($id){
-    $contato = Contatos::withTrashed()->find($id);
-
-    if ($contato->trashed()) {
-      $contato->restore();
-      Log::info('Restaurando contato -> "'.$contato.'", para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
-    } else {
-      Log::info('Deletando contato -> "'.$contato.'", para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
-      $contato->delete();
+    if ($id!=1){
+      $contato = Contatos::withTrashed()->find($id);
+      if ($contato->trashed()) {
+        $contato->restore();
+        Log::info('Restaurando contato -> "'.$contato.'", para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
+      } else {
+        Log::info('Deletando contato -> "'.$contato.'", para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
+        $contato->delete();
+      }
     }
     return redirect()->action('ContatosController@show');
   }

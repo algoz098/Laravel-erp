@@ -4,14 +4,14 @@
       <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
       <h4 class="modal-title" id="">
         <i class="fa fa-user"></i>
-        Detalhes
+        Detalhes&nbsp
+        <span class="">ID: {{$contato->id}}</span>
       </h4>
     </div>
     <div class="modal-body">
       <div class="row">
         <div class="col-md-12" style="margin-bottom:15px;">
-          <span class="h1" >
-            <span class="label label-info">ID: {{$contato->id}}</span>
+          <span class="h2" >
             @if(is_null($contato->active))
               <i class="fa fa-user level1"></i>
             @else
@@ -19,7 +19,7 @@
             @endif
             <i class="fa fa-signal level{{$contato->sociabilidade}}"></i>
             @if ($contato->funcionario)
-              Funcionario de:
+              Funcionario:
               <span class="label label-success">
                 <i class="fa fa-user"></i> {{$contato->user->trabalho->nome}}
               </span>
@@ -42,9 +42,16 @@
       </div>
       @if ($contato->funcionario)
         <div class="row">
+          <div class="col-md-12">
+            <strong>Cargo:</strong> {{$contato->funcionario->cargo}}
+          </div>
+        </div>
+      @endif
+      @if ($contato->funcionario)
+        <div class="row">
           <div class="col-md-4">
-            Data adm.: <span class="label label-info">{{$contato->funcionario->data_adm}}</span>
-            Data dem.: <span class="label label-danger">{{$contato->funcionario->data_dem}}</span>
+            Data adm.: <span class="">{{$contato->funcionario->data_adm}}</span>
+            Data dem.: <span class="">{{$contato->funcionario->data_dem}}</span>
           </div>
         </div>
       @endif
@@ -57,7 +64,7 @@
                 <strong>Razão Social:</strong>
               </div>
               <div class="col-md-5">
-                <span class="label label-info">{{$contato->nome}}</span>
+                <span class="">{{$contato->nome}}</span>
               </div>
             </div>
           @endif
@@ -66,7 +73,7 @@
               <strong>{{{$contato->tipo=="0" ? "CNPJ" : "CPF"}}}:</strong>
             </div>
             <div class="col-md-5">
-              <span class="label label-info">{{$contato->cpf}}</span>
+              <span class="">{{$contato->cpf}}</span>
             </div>
           </div>
           <div class="row">
@@ -74,7 +81,7 @@
               <strong>{{{$contato->tipo=="0" ? "I.E." : "RG"}}}:</strong>
             </div>
             <div class="col-md-5">
-              <span class="label label-info">{{$contato->rg}}</span>
+              <span class="">{{$contato->rg}}</span>
             </div>
           </div>
           <div class="row">
@@ -82,15 +89,15 @@
               <strong>Ins. Pref.:</strong>
             </div>
             <div class="col-md-5">
-              <span class="label label-info">{{$contato->cod_prefeitura}}</span>
+              <span class="">{{$contato->cod_prefeitura}}</span>
             </div>
           </div>
         </div>
         <div class="col-md-6">
           <strong>Endereço</strong><br>
           {{$contato->endereco}} {{$contato->numero}} {{$contato->complemento}}<br>
-          {{$contato->bairro}} - {{$contato->cidade}}, {{$contato->uf}}<br>
-          {{$contato->cep}}
+          {{$contato->bairro}}<br>
+          {{$contato->cep}} - {{$contato->cidade}}, {{$contato->uf}}
         </div>
       </div>
       <hr>
@@ -99,7 +106,7 @@
           <strong>Telefone e E-Mails</strong><br>
           @foreach($contato->telefones as $key => $telefone)
             <a href="{{ url('lista/contatos') }}/{{$contato->id}}/telefones/{{ $telefone->id }}/delete" class="btn btn-danger btn-xs"><i class="fa fa-ban"></i></a>
-            <span class="label label-info">{{ $telefone->tipo or "" }}</span> {{ $telefone->numero or "" }} <br>
+            <span class=""><strong>{{ $telefone->tipo or "" }}</strong></span> {{ $telefone->numero or "" }} <br>
           @endforeach
         </div>
         <div class="col-md-6">
@@ -120,18 +127,10 @@
           <div class="col-md-3">
             <div class="row">
               <div class="col-md-7">
-                <strong>Cargo:</strong>
-              </div>
-              <div class="col-md-5">
-                <span class="label label-info">{{$contato->funcionario->cargo}}</span>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-md-7">
                 <strong>N. CNH:</strong>
               </div>
               <div class="col-md-5">
-              <span class="label label-info">{{$contato->funcionario->cnh}}</span>
+              <span class="">{{$contato->funcionario->cnh}}</span>
               </div>
             </div>
             <div class="row">
@@ -139,7 +138,7 @@
                 <strong>Cat. CNH:</strong>
               </div>
               <div class="col-md-5">
-                <span class="label label-info">{{$contato->funcionario->cnh_cat}}</span>
+                <span class="">{{$contato->funcionario->cnh_cat}}</span>
               </div>
             </div>
             <div class="row">
@@ -147,7 +146,7 @@
                 <strong>Venc. CNH:</strong>
               </div>
               <div class="col-md-5">
-                <span class="label label-danger">{{$contato->funcionario->cnh_venc}}</span>
+                <span class="">{{$contato->funcionario->cnh_venc}}</span>
               </div>
             </div>
             <div class="row">
@@ -155,7 +154,7 @@
                 <strong>Cart. Trab.:</strong>
               </div>
               <div class="col-md-5">
-                <span class="label label-info">{{$contato->funcionario->cart_trab_num}}</span>
+                <span class="">{{$contato->funcionario->cart_trab_num}}</span>
               </div>
             </div>
             <div class="row">
@@ -163,7 +162,7 @@
                 <strong>Cart. Trab. Serie:</strong>
               </div>
               <div class="col-md-5">
-                <span class="label label-info">{{$contato->funcionario->cart_trab_serie}}</span>
+                <span class="">{{$contato->funcionario->cart_trab_serie}}</span>
               </div>
             </div>
           </div>
@@ -173,7 +172,7 @@
                 <strong>N. Eleitor:</strong>
               </div>
               <div class="col-md-5">
-                <span class="label label-info">{{$contato->funcionario->eleitor}}</span>
+                <span class="">{{$contato->funcionario->eleitor}}</span>
               </div>
             </div>
             <div class="row">
@@ -181,7 +180,7 @@
                 <strong>Sessão de Eleitor:</strong>
               </div>
               <div class="col-md-5">
-                <span class="label label-danger">{{$contato->funcionario->eleitor_sessao}}</span>
+                <span class="">{{$contato->funcionario->eleitor_sessao}}</span>
               </div>
             </div>
             <div class="row">
@@ -189,7 +188,7 @@
                 <strong>Zona de Eleitor:</strong>
               </div>
               <div class="col-md-5">
-                <span class="label label-info">{{$contato->funcionario->eleitor_zona}}</span>
+                <span class="">{{$contato->funcionario->eleitor_zona}}</span>
               </div>
             </div>
             <div class="row">
@@ -197,7 +196,7 @@
                 <strong>Data de Exp. de Eleitor:</strong>
               </div>
               <div class="col-md-5">
-                <span class="label label-info">{{$contato->funcionario->eleitor_exp}}</span>
+                <span class="">{{$contato->funcionario->eleitor_exp}}</span>
               </div>
             </div>
             <div class="row">
@@ -205,23 +204,23 @@
                 <strong>N. do RG:</strong>
               </div>
               <div class="col-md-5">
-                <span class="label label-info">{{$contato->funcionario->rg}}</span>
+                <span class="">{{$contato->funcionario->rg}}</span>
               </div>
             </div>
             <div class="row">
               <div class="col-md-7">
-                <strong>Nome do Pai (no RG):</strong>
+                <strong>Nome do Pai:</strong>
               </div>
               <div class="col-md-5">
-                <span class="label label-info">{{$contato->funcionario->rg_pai}}</span>
+                <span class="">{{$contato->funcionario->rg_pai}}</span>
               </div>
             </div>
             <div class="row">
               <div class="col-md-7">
-                <strong>Nome da Mãe (no RG):</strong>
+                <strong>Nome da Mãe:</strong>
               </div>
               <div class="col-md-5">
-                <span class="label label-info">{{$contato->funcionario->rg_mae}}</span>
+                <span class="">{{$contato->funcionario->rg_mae}}</span>
               </div>
             </div>
 
@@ -232,7 +231,7 @@
                 <strong>N. do PIS:</strong>
               </div>
               <div class="col-md-5">
-                <span class="label label-info">{{$contato->funcionario->pis}}</span>
+                <span class="">{{$contato->funcionario->pis}}</span>
               </div>
             </div>
             <div class="row">
@@ -240,7 +239,7 @@
                 <strong>Banco do PIS:</strong>
               </div>
               <div class="col-md-5">
-                <span class="label label-info">{{$contato->funcionario->pis_banco}}</span>
+                <span class="">{{$contato->funcionario->pis_banco}}</span>
               </div>
             </div>
             <div class="row">
@@ -248,7 +247,7 @@
                 <strong>N. do INSS:</strong>
               </div>
               <div class="col-md-5">
-                <span class="label label-info">{{$contato->funcionario->inss}}</span>
+                <span class="">{{$contato->funcionario->inss}}</span>
               </div>
             </div>
             <div class="row">
@@ -256,7 +255,7 @@
                 <strong>N. de reservista:</strong>
               </div>
               <div class="col-md-5">
-                <span class="label label-info">{{$contato->funcionario->reservista}}</span>
+                <span class="">{{$contato->funcionario->reservista}}</span>
               </div>
             </div>
           </div>
@@ -269,7 +268,7 @@
                 <strong>Salario:</strong>
               </div>
               <div class="col-md-5">
-                <span class="label label-info">R$ {{$contato->funcionario->sal}}</span>
+                <span class="">R$ {{$contato->funcionario->sal}}</span>
               </div>
             </div>
             <div class="row">
@@ -277,7 +276,7 @@
                 <strong>Salario real:</strong>
               </div>
               <div class="col-md-5">
-                <span class="label label-info">R$ {{$contato->funcionario->sal_real}}</span>
+                <span class="">R$ {{$contato->funcionario->sal_real}}</span>
               </div>
             </div>
             <div class="row">
@@ -285,7 +284,7 @@
                 <strong>V. Transp.:</strong>
               </div>
               <div class="col-md-5">
-                <span class="label label-info">R$ {{$contato->funcionario->vt}}</span>
+                <span class="">R$ {{$contato->funcionario->vt}}</span>
               </div>
             </div>
             <div class="row">
@@ -293,7 +292,7 @@
                 <strong>Percentual do VT:</strong>
               </div>
               <div class="col-md-5">
-                <span class="label label-info">{{$contato->funcionario->vt_percentual}} %</span>
+                <span class="">{{$contato->funcionario->vt_percentual}} %</span>
               </div>
             </div>
             <div class="row">
@@ -301,7 +300,7 @@
                 <strong>V. Alim.:</strong>
               </div>
               <div class="col-md-5">
-                <span class="label label-info">R$ {{$contato->funcionario->va}}</span>
+                <span class="">R$ {{$contato->funcionario->va}}</span>
               </div>
             </div>
             <div class="row">
@@ -309,7 +308,7 @@
                 <strong>V. Refei.:</strong>
               </div>
               <div class="col-md-5">
-                <span class="label label-info">R$ {{$contato->funcionario->vr}}</span>
+                <span class="">R$ {{$contato->funcionario->vr}}</span>
               </div>
             </div>
             <div class="row">
@@ -317,7 +316,7 @@
                 <strong>INSS:</strong>
               </div>
               <div class="col-md-5">
-                <span class="label label-info">R$ {{$contato->funcionario->inss}}</span>
+                <span class="">R$ {{$contato->funcionario->inss}}</span>
               </div>
             </div>
           </div>
@@ -327,7 +326,7 @@
                 <strong>Usuario:</strong>
               </div>
               <div class="col-md-5">
-                <span class="label label-info">{{$contato->user->email}}</span>
+                <span class="">{{$contato->user->email}}</span>
               </div>
             </div>
             <div class="row">
@@ -335,7 +334,7 @@
                 <strong>Senha:</strong>
               </div>
               <div class="col-md-5">
-                <span class="label label-warning">***</span>
+                <span class="">***</span>
               </div>
             </div>
             <div class="row">
@@ -343,7 +342,7 @@
                 <strong>Estado:</strong>
               </div>
               <div class="col-md-5">
-                <span class="label label-info">{{{$contato->user->ativo=="1" ? "Ativo" : "Inativo"}}}</span>
+                <span class="">{{{$contato->user->ativo=="1" ? "Ativo" : "Inativo"}}}</span>
               </div>
             </div>
           </div>

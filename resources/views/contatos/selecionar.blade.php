@@ -24,15 +24,84 @@
                 ID: {{$contato->id}}
               </span>
             </div>
-            <div class="col-md-11">
-              {{$contato->nome}}
+            <div class="col-md-2">
+              {{$contato->cpf}}
+            </div>
+            @if ($contato->tipo!="0")
+
+              <div class="col-md-7">
+                {{$contato->nome}} {{$contato->sobrenome}}
+              </div>
+            @else
+              <div class="col-md-4">
+                {{str_limit($contato->nome, 40)}}
+              </div>
+              <div class="col-md-3">
+                {{$contato->sobrenome}}
+              </div>
+            @endif
+            <div class="col-md-2">
+              @if ($contato->id=="1")<span class="label label-danger">Matriz</span>
+              @else
+                @foreach($contato->from as $key => $from)
+                  @if ($from->id=="1")
+                    <span class="label label-warning">{{$from->pivot->from_text}}</span>
+                  @else
+                    <span class="label label-default">N/C</span>
+                  @endif
+                @endforeach
+              @endif
+              @if ($contato->from=="[]" and $contato->id!=1)
+                <span class="label label-default">N/C</span>
+              @endif
             </div>
           </div>
         @endforeach
+        @if (isset($matriz))
+          @php $contato = $matriz; @endphp
+          <div class="row list-contacts" onclick="retornarEsta({{$contato->id}}, '{{$contato->nome}}')">
+            <div class="col-md-1">
+              <span class="label label-info">
+                ID: {{$contato->id}}
+              </span>
+            </div>
+            <div class="col-md-2">
+              {{$contato->cpf}}
+            </div>
+            @if ($contato->tipo!="0")
+
+              <div class="col-md-7">
+                {{$contato->nome}} {{$contato->sobrenome}}
+              </div>
+            @else
+              <div class="col-md-4">
+                {{str_limit($contato->nome, 40)}}
+              </div>
+              <div class="col-md-3">
+                {{$contato->sobrenome}}
+              </div>
+            @endif
+            <div class="col-md-2">
+              @if ($contato->id=="1")<span class="label label-danger">Matriz</span>
+              @else
+                @foreach($contato->from as $key => $from)
+                  @if ($from->id=="1")
+                    <span class="label label-warning">{{$from->pivot->from_text}}</span>
+                  @else
+                    <span class="label label-default">N/C</span>
+                  @endif
+                @endforeach
+              @endif
+              @if ($contato->from=="[]" and $contato->id!=1)
+                <span class="label label-default">N/C</span>
+              @endif
+            </div>
+          </div>
+        @endif
       </div>
     </div>
     <div class="modal-footer">
-      <button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
+      @botaoFecharModal
 
     </div>
   </div>
@@ -45,12 +114,20 @@ function retornarEsta(id, nome) {
 };
 function buscarContatos(){
   $("#contatosHolder").html("");
-  var url = "{{url('lista/contatos/selecionar')}}";
-  var data = {
-            'busca'              : $('input[name=busca]').val(),
-            '_token'            : $('input[name=_token]').val()
-
-        };
+  @if (isset($apenas_filial))
+    var url = "{{url('lista/filiais/selecionar')}}";
+    var data = {
+              'busca'              : $('input[name=busca]').val(),
+              '_token'             : $('input[name=_token]').val(),
+              'apenas_filial'      : 'TRUE'
+          };
+  @else
+    var url = "{{url('lista/contatos/selecionar')}}";
+    var data = {
+              'busca'              : $('input[name=busca]').val(),
+              '_token'            : $('input[name=_token]').val()
+          };
+  @endif
 
   $.ajax({
     type: "POST",

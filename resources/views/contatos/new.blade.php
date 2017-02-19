@@ -129,6 +129,23 @@
                       <label for="actived">Ativo</label><br>
                       <input type="checkbox" name="active" id="active" value="1" checked>Dados Validos
                     </div>
+                    <div class="form-group" id="tipo_filialFormGroup" style="display:none;">
+                      <label for="sociabilidade">é Filial?</label>
+                      <select class="form-control" id="tipo_filial" name="tipo_filial">
+                        @if (isset($contato))
+                          @if ($is_filial!=FALSE)
+                            <option value="1" selected>Sim</option>
+                            <option>Não</option>
+                          @else
+                            <option value="1">Sim</option>
+                            <option selected>Não</option>
+                          @endif
+                        @else
+                          <option value="" selected>Não</option>
+                          <option value="1" >Sim</option>
+                        @endif
+                      </select>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -373,6 +390,7 @@
       $("#rg").mask("**.***.***-*?*");
       $("#cod_prefeituraHolder").text("Insc. de Autonomo");
       $("#cod_prefeitura").attr("placeholder", "Insc. de Autonomo");
+      $("#tipo_filialFormGroup").hide();
     }
     if (b=="0"){
       $("label[for='rg']").text("Inscrição Estadual");
@@ -388,6 +406,7 @@
       $("#rg").mask("999.999.999.999");
       $("#cod_prefeituraHolder").text("Insc. da Prefeitura");
       $("#cod_prefeitura").attr("placeholder", "Insc. da Prefeitura");
+      $("#tipo_filialFormGroup").show();
     }
    }
 

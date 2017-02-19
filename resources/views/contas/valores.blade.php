@@ -7,7 +7,7 @@ use Carbon\Carbon;
     <div class="col-md-12">
       <div class="panel panel-default">
         <div class="panel-heading ">
-          <i class="fa fa-usd fa-1x"></i> Nova provisão de contas
+          <i class="fa fa-usd fa-1x"></i> Novo historico bancario
         </div>
         <div class="panel-body">
           @if (isset($is_consumos) and $is_consumos=="1")

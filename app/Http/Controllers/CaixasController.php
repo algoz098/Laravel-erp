@@ -20,7 +20,7 @@ class CaixasController  extends BaseController
   public function __construct(){
      parent::__construct();
   }
-  
+
     public function index(){
       Log::info('Vendo movimentação de caixa da filial -> "'.Auth::user()->trabalho_id.'", para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
       $estado_caixa = new CaixasLib;
@@ -108,7 +108,7 @@ class CaixasController  extends BaseController
     public function new_do(request $request ){
       if(isset($request->caixa_id)){
         $caixa = Caixas::find($request->caixa_id);
-        if($caixa->estado==1){
+        if(isset($caixa->estado) and $caixa->estado==1){
           $messages = "Este caixa ja foi fechado!";
           return redirect()->action('CaixasController@new_a')->withErrors($messages);
         }
