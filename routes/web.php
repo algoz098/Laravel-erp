@@ -77,11 +77,12 @@ Route::post('novo/atendimentos/{id}', 'AtendimentoController@edit')->middleware(
 
 Route::get('lista/estoque', 'EstoqueController@index')->middleware('auth');
 Route::post('lista/estoque', 'EstoqueController@search')->middleware('auth');
+Route::get('lista/estoque/{id}', 'EstoqueController@detalhes')->middleware('auth');
 Route::get('lista/estoque/{id}/delete', 'EstoqueController@delete')->middleware('auth');
 Route::get('lista/estoque/{id}/up', 'EstoqueController@up')->middleware('auth');
 Route::get('lista/estoque/{id}/down', 'EstoqueController@down')->middleware('auth');
-Route::get('lista/estoque/{id}/editar', 'EstoqueController@edit')->middleware('auth');
-Route::post('lista/estoque/{id}/editar', 'EstoqueController@edit_save')->middleware('auth');
+Route::get('novo/estoque/{id}', 'EstoqueController@edit')->middleware('auth');
+Route::post('novo/estoque/{id}', 'EstoqueController@edit_save')->middleware('auth');
 Route::get('novo/estoque', 'EstoqueController@novo')->middleware('auth');
 Route::post('novo/estoque', 'EstoqueController@save')->middleware('auth');
 Route::post('novo/estoque/busca', 'EstoqueController@searchContatos')->middleware('auth');

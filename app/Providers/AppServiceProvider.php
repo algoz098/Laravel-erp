@@ -134,7 +134,7 @@ class AppServiceProvider extends ServiceProvider
             <div class=\"form-group\">
               <label for=\"por\">Filial</label>
               <div class=\"input-group\">
-                <input type=\"hidden\" class=\"form-control\" id=\"contatosHidden\" name=\"filial\" value=\"'.$id.'\">
+                <input type=\"hidden\" class=\"form-control\" id=\"contatosHidden\" name=\"contatos_id\" value=\"'.$id.'\">
                 <input type=\"text\" class=\"form-control\" id=\"contatos\" disabled value=\"'.$nome.'\">
                 <a onclick=\"window.activeTarget=&#39;contatos&#39;&#59; openModal(&#39;'.URL::to('lista/filiais/selecionar').'&#39;)\" class=\"input-group-addon btn btn-info\"><i class=\"fa fa-gear\"></i></a>
               </div>

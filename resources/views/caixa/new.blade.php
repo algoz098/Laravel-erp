@@ -4,7 +4,7 @@
     <div class="col-md-12">
       <div class="panel panel-default">
         <div class="panel-heading ">
-          <i class="fa fa-money fa-1x"></i> Nova movimentação
+          <i class="fa fa-money fa-1x"></i> Nova movimentação da filial : <span class="label label-info">{{ Auth::user()->trabalho->nome }}</span>
         </div>
         <form method="POST" action="{{ url('/novo/caixa') }}">
           <div class="panel-body">
@@ -17,19 +17,15 @@
               </div>
             </div>
             <div class="row">
+              @if (isset($caixa))
               <div class="col-md-3">
                 <div class="form-group">
-                  @if (isset($caixa))
                     <label for="contato">Caixa numero:</label>
                     <input type="text" class="form-control" value="{{$caixa->id}} (na {{$caixa->filial->nome}})" id="id" disabled>
                     <input type="hidden" class="form-control" name="caixa" value="{{$caixa->id}}" id="id" disabled>
-
-                  @else
-                    <label for="contato">Movimentação da Filial:</label>
-                    <input type="text" class="form-control" value="{{ Auth::user()->trabalho->nome }}" id="id" disabled>
-                  @endif
                 </div>
               </div>
+            @endif
               <div class="col-md-3">
                 <div class="form-group">
                   <label for="tipo">Tipo de movimentação:</label>

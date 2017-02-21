@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Contatos as Contatos;
 use App\Estoque as Estoque;
 use Carbon\Carbon;
+use App\Estoque_campos as Campos;
 use Log;
 use Auth;
 
@@ -14,7 +15,7 @@ class EstoqueController  extends BaseController
   public function __construct(){
      parent::__construct();
   }
-  
+
   public function index()
   {
     Log::info('Vendo estoque, para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
@@ -32,7 +33,13 @@ class EstoqueController  extends BaseController
   {
     $contatos = Contatos::paginate(15);
     Log::info('Criando novo estoque, para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
-    return view('estoque.contatos')->with('contatos', $contatos);
+    return view('estoque.novo')->with('contatos', $contatos);
+  }
+  public function detalhes($id)
+  {
+    $estoque = estoque::Find($id);
+    Log::info('Criando novo estoque, para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
+    return view('estoque.detalhes')->with('estoque', $estoque);
   }
 
   public function save(request $request)
@@ -40,18 +47,25 @@ class EstoqueController  extends BaseController
     $this->validate($request, [
         'contatos_id' => 'required',
         'nome' => 'required|max:50',
-        'quantidade' => 'required|numeric',
-        'valor_custo' => 'required|numeric',
-        'barras' => 'required|max:30',
     ]);
     $estoque = new Estoque;
     $estoque->contatos_id = $request->contatos_id;
     $estoque->nome = $request->nome;
+    $estoque->tipo = $request->tipo;
     $estoque->descricao = $request->descricao;
     $estoque->quantidade = $request->quantidade;
+    $estoque->unidade = $request->unidade;
     $estoque->valor_custo = $request->valor_custo;
     $estoque->barras = $request->barras;
     $estoque->save();
+    foreach ($request->campo_nome as $key => $value) {
+      $campo = new Campos;
+      $campo->estoque_id = $estoque->id;
+      $campo->tipo = $request->tipo;
+      $campo->nome = $request->campo_nome[$key];
+      $campo->valor = $request->campo_valor[$key];
+      $campo->save();
+    }
     Log::info('Salvando estoque -> "'.$estoque.'", para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
 
     return redirect()->action('EstoqueController@index');
@@ -62,22 +76,40 @@ class EstoqueController  extends BaseController
     $estoque = Estoque::find($id);
     Log::info('Editar estoque -> "'.$estoque.'", para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
 
-    return view('estoque.edit')->with('estoque', $estoque);
+    return view('estoque.novo')->with('estoque', $estoque);
   }
   public function edit_save(request $request, $id)
   {
     $this->validate($request, [
-        'nome' => 'required|max:50',
-        'quantidade' => 'required|numeric',
-        'valor_custo' => 'required|numeric',
-        'barras' => 'required|max:30',
+      'contatos_id' => 'required',
+      'nome' => 'required|max:50'
     ]);
     $estoque = Estoque::find($id);
+    $estoque->contatos_id = $request->contatos_id;
+
     $estoque->nome = $request->nome;
     $estoque->descricao = $request->descricao;
     $estoque->quantidade = $request->quantidade;
     $estoque->valor_custo = $request->valor_custo;
     $estoque->barras = $request->barras;
+
+    foreach ($request->campo_nome_edit as $key => $value) {
+      $campo = Campos::find($request->campo_id_edit[$key]);
+      $campo->tipo = $request->tipo;
+      $campo->nome = $request->campo_nome_edit[$key];
+      $campo->valor = $request->campo_valor_edit[$key];
+      $campo->save();
+    }
+    if(isset($request->campo_nome)){
+      foreach ($request->campo_nome as $key => $value) {
+        $campo = new Campos;
+        $campo->estoque_id = $estoque->id;
+        $campo->tipo = $request->tipo;
+        $campo->nome = $request->campo_nome[$key];
+        $campo->valor = $request->campo_valor[$key];
+        $campo->save();
+      }
+    }
     $estoque->save();
     Log::info('Salvando estoque -> "'.$estoque.'", para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
     return redirect()->action('EstoqueController@index');
