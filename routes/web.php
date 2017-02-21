@@ -111,8 +111,7 @@ Route::post('lista/tickets/{id}/andamento', 'TicketsController@andamento_salvar'
 Route::get('novo/tickets/', 'TicketsController@novo')->middleware('auth');
 Route::get('novo/tickets/{id}/edit', 'TicketsController@editar')->middleware('auth');
 Route::post('novo/tickets/{id}/edit', 'TicketsController@editar_salvar')->middleware('auth');
-Route::get('novo/tickets/{id}', 'TicketsController@novo_2')->middleware('auth');
-Route::post('novo/tickets/{id}', 'TicketsController@salvar')->middleware('auth');
+Route::post('novo/tickets/', 'TicketsController@salvar')->middleware('auth');
 
 Route::get('lista/frotas', 'FrotasController@index')->middleware('auth');
 Route::get('lista/frotas/{id}', 'FrotasController@detalhes')->middleware('auth');
