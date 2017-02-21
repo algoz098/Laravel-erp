@@ -11,18 +11,18 @@
             <div class="col-md-3">
               <div class="row">
                 <div class="col-md-8">
-                  <a href="" class="btn btn-danger" id="buttonDelete"><i class="fa fa-ban"></i></a>
-                  <a href="" class="btn btn-info" id="buttonEdit"><i class="fa fa-gear"></i></a>
-                  <button class="btn btn-info" id="buttonDetalhes" data-toggle="modal" data-url=""  data-target="#modal"><i class="fa fa-file-text"></i></button>
+                  @botaoDelete
+                  @botaoEditar
+                  @botaoDetalhes
                   <a href="" class="btn btn-info" id="buttonAndamento"><i class="fa fa-file-text-o"></i></a>
                 </div>
                 <div class="col-md-3">
-                  <input type="text" class="form-control" size="4" name="ids" id="ids" disabled>
+                  @idSelecionado
                 </div>
               </div>
             </div>
             <div class="col-md-1 pull-right text-right">
-              <a href="{{url('/novo/tickets')}}" class="btn btn-success"><i class="fa fa-plus"></i> Novo</a>
+              @botaoNovo(tickets)
             </div>
           </div>
           <div class="row">
@@ -51,10 +51,7 @@
                   </span>
                 </div>
                 <div class="col-md-2">
-                  <a data-toggle="modal" data-url="{{url('lista/contatos')}}/{{$ticket->contato->id}}"  data-target="#modal" class="label label-primary">
-                    <i class="fa fa-user"></i>
-                    {{$ticket->contato->nome}}
-                  </a>
+                  @mostraContato($ticket->contato->id*$ticket->contato->nome)
                 </div>
                 <div class="col-md-3">
                   {{$ticket->status}}
@@ -74,17 +71,15 @@
       </div>
     </div>
   </div>
-  <!-- Modal -->
-  <div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"></div>
   <script language="javascript">
   var imageStatus = false;
     function selectRow(id){
       window.id_attach_form = id;
       $("#ids").val(id);
-      $("#buttonDelete").attr('href', '{{ url('lista/tickets') }}/'+id+'/delete/');
+      $("#botaoDelete").attr('href', '{{ url('lista/tickets') }}/'+id+'/delete/');
       $("#buttonAndamento").attr('href', '{{ url('lista/tickets') }}/'+id+'/andamento/');
-      $("#buttonEdit").attr('href', '{{ url('novo/tickets') }}/'+id+'/edit/');
-      $("#buttonDetalhes").attr('data-url', '{{ url('lista/tickets') }}/'+id);
+      $("#botaoEditar").attr('href', '{{ url('novo/tickets') }}/'+id+'/edit/');
+      $("#botaoDetalhes").attr('onclick', 'openModal("{{ url('lista/tickets') }}/'+id+'")');
     }
   </script>
 

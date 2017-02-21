@@ -69,7 +69,7 @@
         <div class="col-md-12">
           <div class="form-group">
             <label for="Solucao">Solução:</label>
-            <div>{{$ticket->solucao}}</div>
+            <div>{!!$ticket->solucao!!}</div>
           </div>
         </div>
       </div>

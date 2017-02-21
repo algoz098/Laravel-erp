@@ -1,47 +1,61 @@
 @extends('main')
 @section('content')
   <div class="panel panel-default">
-    <div class="panel-heading"><i class="fa fa-book"></i> Novo Ticket</div>
-    <div class="panel-body">
-      <div class="row" id="secondNavbar">
-        <div class="col-md-2">
-          <div class="row">
-            <div class="col-md-3">
-              <a href="" class="btn btn-info" id="buttonNovo"><i class="fa fa-gear"></i></a>
-            </div>
-            <div class="col-md-4">
-              <input type="text" class="form-control" size="4" name="ids" id="ids" disabled>
-            </div>
+    <div class="panel-heading"><i class="fa fa-book"></i> Adicionar Ticket</div>
+    @if(isset($ticket))
+      <form method="POST" action="{{url('novo/tickets')}}/{{$ticket->id}}/edit">
+    @else
+      <form method="POST" action="{{url('novo/tickets')}}">
+    @endif
+      {{csrf_field()}}
+      <div class="panel-body">
+        <div class="row" id="secondNavbar">
+          <div class="col-md-4 pull-right text-right">
+            @botaoLista(tickets*fa-book)
+            @botaoSalvar
           </div>
         </div>
-        <div class="col-md-3 pull-right text-right">
-          <a href="{{url('lista/tickets')}}" class="btn btn-warning"><i class="fa fa-book"></i> Voltar a lista</a>
+        <div class="row">
+          <div class="col-md-3">
+            <div class="panel panel-default">
+              <div class="panel-body">
+                @if (isset($ticket))
+                  @selecionaContato(Contato:*$ticket->contato->id*$ticket->contato->nome)
+                @else
+                  @selecionaContato(Contato:)
+                @endif
+                <div class="form-group">
+                  <label for="Status">Estado:</label>
+                  <select class="form-control" name="status" id="status" >
+                    @if (isset($ticket))
+                      <option value="{{$ticket->status}}" selected>{{$ticket->status}} (Atual)</option>
+                    @else
+                      <option selected>Aberto</option>
+                    @endif
+                    <option value="Aberto">Aberto</option>
+                    <option value="Respondido">Respondido</option>
+                    <option value="Em processo">Em processo</option>
+                    <option value="Atendido">Atendido</option>
+                    <option value="Concluido">Concluido</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-9">
+            <div class="panel panel-default">
+              <div class="panel-body">
+                <div class="form-group">
+                  <label for="Descricao">Descrição:</label>
+                  <textarea  name="descricao">
+                    {{isset($ticket->descricao)?$ticket->descricao:""}}
+                  </textarea>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
-      @foreach ($contatos as $key => $contato)
-        <div class="row list-contacts" onclick="selectRow({{$contato->id}})">
-          <div class="col-md-2">
-            <span class="label label-info">
-              id: {{$contato->id}}
-            </span>
-          </div>
-          <div class="col-md-4">
-            {{$contato->nome}}
-          </div>
-        </div>
-      @endforeach
-      <div class="row">
-        <div class="col-md-10 text-center">
-          {{$contatos->links()}}
-        </div>
-      </div>
-    </div>
+    </form>
   </div>
-  <script language="javascript">
-    function selectRow(id){
-      window.id_attach_form= id;
-      $("#ids").val(id);
-      $("#buttonNovo").attr('href', '{{url("novo/tickets")}}/'+id);
-    }
-  </script>
 @endsection

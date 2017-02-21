@@ -1,3 +1,6 @@
+<?php
+  use Carbon\Carbon;
+?>
 @extends('main')
 @section('content')
   <form method="POST" action="{{url('lista/tickets')}}/{{$ticket->id}}/andamento">
@@ -10,33 +13,44 @@
           </div>
           <div class="panel-body">
             <div class="row" id="secondNavbar">
-              <div class="col-md-1 pull-right text-right">
-                  <button type="submit" class="btn btn-success">
-                    <i class="fa fa-check"></i> Salvar
-                  </button>
+              <div class="col-md-4 pull-right text-right">
+                @botaoLista(tickets*fa-book)
+                @botaoSalvar
               </div>
             </div>
             <div class="row">
               <div class="col-md-3">
                 <div class="form-group">
-                  <label for="contato">Contato:</label>
+                  <label for="Contato">Contato:</label>
                   <input type="text" value="{{$ticket->contato->nome}}" disabled class="form-control" id="contato">
                 </div>
                 <div class="form-group">
-                  <label for="Titulo">Ticket:</label>
+                  <label for="Ticket">Ticket:</label>
                   <input type="text" value="{{str_limit(strip_tags($ticket->descricao),45)}}" disabled class="form-control" id="ticket">
                 </div>
               </div>
               <div class="col-md-3">
                 <div class="form-group">
-                  <label for="contato">Data:</label>
-                  <input type="text" value="" class="form-control datepicker" id="data" name="data" >
+                  <label for="Data">Data:</label>
+                  <input type="text" class="form-control" name="data" value="{{Carbon::now()}}" id="datepicker">
                 </div>
                 <div class="form-group">
-                  <label for="contato">Titulo:</label>
+                  <label for="Titulo">Titulo:</label>
                   <input type="text" value="" class="form-control" id="titulo" name="titulo" >
                 </div>
               </div>
+                <div class="col-md-3">
+                  <div class="form-group">
+                    <label for="Estado">Estado:</label>
+                    <select class="form-control" name="estado" id="estado">
+                      <option selected>Em andamento</option>
+                      <option value="Resolvido">Resolvido</option>
+                      <option value="Em Andamento">Em Andamento</option>
+                      <option value="Respondido">Respondido</option>
+                      <option value="Aberto">Aberto</option>
+                    </select>
+                  </div>
+                </div>
             </div>
             <div class="row">
               <div class="col-md-10">
