@@ -57,6 +57,7 @@ class ContatosController extends BaseController
       $contatos = $contatos->orWhere('uf', 'like', '%' .  $request->busca . '%');
       $contatos = $contatos->orWhere('bairro', 'like', '%' .  $request->busca . '%');
       $contatos = $contatos->orWhere('cep', 'like', '%' .  $request->busca . '%');
+      $apenas_filial = FALSE;
     }
     if (isset($request->apenas_filial)){
       $apenas_filial = TRUE;
@@ -78,7 +79,7 @@ class ContatosController extends BaseController
     $comboboxes_telefones = comboboxes::where('combobox_textable_type', 'App\Telefones')->get();
     $field_codigo = Configs::where('field', 'field_codigo')->first();
 
-    return view('contatos.selecionarnovo')->with('comboboxes', $comboboxes)
+    return view('contatos.parte_novo')->with('comboboxes', $comboboxes)
                                 ->with('comboboxes_telefones', $comboboxes_telefones)
                                 ->with('field_codigo', $field_codigo);
   }

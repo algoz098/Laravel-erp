@@ -32,6 +32,16 @@ class AppServiceProvider extends ServiceProvider
               </span>
             </div>';?>";
       });
+      Blade::directive('buscaModal', function ($a) {
+        return "<?php echo '
+            <div class=\"input-group\">
+              <input type=\"text\" class=\"form-control\" name=\"busca\" id=\"busca\" size=\"40\" placeholder=\"Busca...\">
+              <span class=\"input-group-btn\">
+                <button class=\"btn btn-info\" type=\"button\" onclick=\"$a\"><i class=\"fa fa-search\"></i></button>
+              </span>
+            </div>';?>";
+      });
+      
       Blade::directive('buscaExtraBotao', function () {
         return "<?php echo '
             <a class=\"btn btn-info\"  title=\"Busca Avançada\" data-toggle=\"collapse\" data-target=\"#buscaAvançada\" aria-expanded=\"\" onclick=\"listaTop()\">

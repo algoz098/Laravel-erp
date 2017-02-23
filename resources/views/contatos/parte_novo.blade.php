@@ -1,17 +1,4 @@
-  <div class="row">
-    <div class="col-md-12">
-        <div class="form-group">
-        {{ csrf_field() }}
-        <input type="hidden" name="id" value="{{$contato->id or "" }}">
-        <div class="panel panel-default">
-          <div class="panel-heading"><i class="fa fa-users fa-1x"></i> Adicionar entidade</div>
-          <div class="panel-body">
-            <div class="row text-right" id="secondNavbar">
-              <div class="col-sm-offset-2 col-sm-10">
-                <a class="btn btn-warning" href="{{ url('lista/contatos')}}" ><i class="fa fa-users"></i> Voltar a Lista</a>
-                <button onclick="enviarContato()" class="btn btn-success"><i class="fa fa-check"></i> Salvar</button>
-              </div>
-            </div>
+
             @if (!empty($contato->id))
               <div class="row">
                 <div class="col-md-4">
@@ -114,6 +101,23 @@
                       <label for="actived">Ativo</label><br>
                       <input type="checkbox" name="active" id="active" value="1" checked>Dados Validos
                     </div>
+                    <div class="form-group" id="tipo_filialFormGroup" style="display:none;">
+                      <label for="sociabilidade">é Filial?</label>
+                      <select class="form-control" id="tipo_filial" name="tipo_filial">
+                        @if (isset($contato))
+                          @if ($is_filial!=FALSE)
+                            <option value="1" selected>Sim</option>
+                            <option>Não</option>
+                          @else
+                            <option value="1">Sim</option>
+                            <option selected>Não</option>
+                          @endif
+                        @else
+                          <option value="" selected>Não</option>
+                          <option value="1" >Sim</option>
+                        @endif
+                      </select>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -175,25 +179,25 @@
                 </div>
               </div>
             </div>
-            @if (isset($contato) and $contato->telefones!="[]")
-              <div class="panel panel-default">
-                <div class="panel-heading">Telefones</div>
-                <div class="panel-body">
-                    <div class="col-md-3 pull-right text-right">
-                      <div class="col-md-6 pull-right text-right" id="controleTel">
-                        <div class="panel panel-default">
-                          <div class="panel-body">
-                            <a class="btn btn-danger" onclick="remove()">
-                              <i class="fa fa-minus"></i>
-                            </a>
-                            <a class="btn btn-success" onclick="add()">
-                              <i class="fa fa-plus"></i>
-                            </a>
-                          </div>
-                          <div class="panel-heading">Controle</div>
+            <div class="panel panel-default">
+              <div class="panel-heading">Telefones</div>
+              <div class="panel-body">
+                  <div class="col-md-3 pull-right text-right">
+                    <div class="col-md-8 pull-right text-right" id="controleTel">
+                      <div class="panel panel-default">
+                        <div class="panel-body">
+                          <a class="btn btn-danger" onclick="remove()">
+                            <i class="fa fa-minus"></i>
+                          </a>
+                          <a class="btn btn-success" onclick="add()">
+                            <i class="fa fa-plus"></i>
+                          </a>
                         </div>
+                        <div class="panel-heading">Controle</div>
                       </div>
                     </div>
+                  </div>
+                  @if (isset($contato) and $contato->telefones!="[]")
                     @foreach($contato->telefones as $key => $telefone)
                       <div class="col-md-9" id="telDiv{{$telefone->id}}">
                         <div class="panel panel-default">
@@ -246,85 +250,34 @@
                         </div>
                       </div>
                     @endforeach
-                    <span id="mais"></span>
+                  @endif
+
+                  <span id="mais"></span>
+              </div>
+            </div>
+
+            @if (isset($is_funcionario))
+              @include('contatos.funcionarios.new')
+            @endif
+            @if(Request::url()=== 'url("novo/contatos")')
+              <div class="row">
+                <div class="form-group">
+                  <label for="obs">Obs:</label>
+                  <textarea  name="obs">
+                    {!! $contato->obs or "" !!}
+                  </textarea>
                 </div>
               </div>
-              @else
-                <div class="panel panel-default">
-                  <div class="panel-heading">Telefones</div>
-                  <div class="panel-body">
-                    <div class="row">
-                      <div class="col-md-2 pull-right text-right">
-                        <div class="panel panel-default">
-                          <div class="panel-body">
-                            <a class="btn btn-danger" onclick="remove()">
-                              <i class="fa fa-minus"></i>
-                            </a>
-                            <a class="btn btn-success" onclick="add()">
-                              <i class="fa fa-plus"></i>
-                            </a>
-                          </div>
-                          <div class="panel-heading">Controle</div>
-                        </div>
-                      </div>
-                      <div class="col-md-9">
-                        <div class="panel panel-default">
-                          <div class="panel-body">
-                            <div class="row">
-                              <div class="col-md-2">
-                                <div class="form-group">
-                                  <label for="text">Tipo</label>
-                                  <select class="form-control" id="tipo0" name="tipo_tel[0]" onchange="selMask(0)">
-                                    <option value="" selected>- Escolha -</option>
-                                    @foreach($comboboxes_telefones as $key => $combobox)
-                                      <option value="{{$combobox->text}}">{{$combobox->text}}</option>
-                                    @endforeach
-                                  </select>
-                                </div>
-                              </div>
-                              <div class="col-md-3">
-                                <div class="form-group">
-                                  <label for="text" id="numeroText0">Numero</label>
-                                  <input type="text" class="form-control" value="" name="numero_tel[0]" id="numero0" placeholder="" onchange="numero_tel[0] = $(this).val()">
-                                </div>
-                              </div>
-                              <div class="col-md-3">
-                                <div class="form-group">
-                                  <label for="text">Contato</label>
-                                  <input type="text" class="form-control" value="" name="contato_tel[0]" id="contato0" placeholder="">
-                                </div>
-                              </div>
-                              <div class="col-md-2">
-                                <div class="form-group">
-                                  <label for="text">Depto/Setor</label>
-                                  <input type="text" class="form-control" value="" name="setor_tel[0]" id="setor0" placeholder="">
-                                </div>
-                              </div>
-                              <div class="col-md-2">
-                                <div class="form-group">
-                                  <label for="text">Ramal</label>
-                                  <input type="text" class="form-control" value="" name="ramal_tel[0]" id="ramal0" placeholder="">
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="row">
-                      <span id="mais"></span>
-                    </div>
-                  </div>
+            @endif
+            <div class="row text-right">
+              <div class="form-group">
+                <div class="col-md-12 col-sm-offset-2 col-sm-10">
+                  <button type="submit" class="btn btn-success">Salvar</button>
                 </div>
-              @endif
-            <span id="mais"></span>
-          </div>
-        </div>
-      </form>
-    </div>
-  </div>
+              </div>
+            </div>
+
   <script language="javascript">
-  var numero_tel = new Array;
   function tipoChange() {
     var b = $("#tipo").val();
     if (b=="1"){
@@ -341,6 +294,7 @@
       $("#rg").mask("**.***.***-*?*");
       $("#cod_prefeituraHolder").text("Insc. de Autonomo");
       $("#cod_prefeitura").attr("placeholder", "Insc. de Autonomo");
+      $("#tipo_filialFormGroup").hide();
     }
     if (b=="0"){
       $("label[for='rg']").text("Inscrição Estadual");
@@ -356,6 +310,7 @@
       $("#rg").mask("999.999.999.999");
       $("#cod_prefeituraHolder").text("Insc. da Prefeitura");
       $("#cod_prefeitura").attr("placeholder", "Insc. da Prefeitura");
+      $("#tipo_filialFormGroup").show();
     }
    }
 
@@ -371,77 +326,17 @@
    $(document).ready(tipoChange());
 </script>
 <script language="javascript">
-function enviarContato(){
-  var a = 0;
-  var tipo_tel = new Array;
-  var numero_tel = new Array;
-  var contato_tel = new Array;
-  var setor_tel = new Array;
-  while (a <= i){
-    tipo_tel[a] = $('#tipo'+a).val();
-    numero_tel[a] = $('#numero'+a).val();
-    contato_tel[a] = $('#contato'+a).val();
-    setor_tel[a] = $('#setor'+a).val();
-    a++;
-  }
-  var tipo = new Array;
-  var url = "{{url('lista/contatos/selecionar/novo')}}";
-  var data = {
-            '_token'            : $('input[name=_token]').val(),
-            'tipo'              : $('input[name=tipo]').val(),
-            'nome'              : $('input[name=nome]').val(),
-            'sobrenome'         : $('input[name=sobrenome]').val(),
-            'codigo'            : $('input[name=codigo]').val(),
-            'cpf'               : $('input[name=cpf]').val(),
-            'rg'                : $('input[name=rg]').val(),
-            'cod_prefeitura'    : $('input[name=cod_prefeitura]').val(),
-            'nascimento'        : $('input[name=nascimento]').val(),
-            'sociabilidade'     : $('input[name=sociabilidade]').val(),
-            'active'            : $('input[name=active]').val(),
-            'cep'               : $('input[name=cep]').val(),
-            'endereco'          : $('input[name=endereco]').val(),
-            'numero'            : $('input[name=numero]').val(),
-            'complemento'       : $('input[name=complemento]').val(),
-            'bairro'            : $('input[name=bairro]').val(),
-            'uf'                : $('input[name=uf]').val(),
-            'cidade'            : $('input[name=cidade]').val(),
-            'tipo_tel'          : tipo_tel,
-            'numero_tel'        : numero_tel,
-            'contato_tel'       : contato_tel,
-            'setor_tel'         : setor_tel,
-        };
-  $("#contatosHolder").html("");
-  $.ajax({
-    type: "POST",
-    url: url,
-    data: data,
-    success: function( data ) {
-      $("#contatosHolder").html("");
-      var url = "{{url('lista/contatos/selecionar')}}";
-      var data = {
-                'busca'              : '',
-                '_token'            : $('input[name=_token]').val()
-            };
-      $.ajax({
-        type: "POST",
-        url: url,
-        data: data,
-        success: function( data ) {
-          $("#contatosHolder").html(data);
-        }
-      });
-    }
-  });
-}
 window.i = 0;
+$(document).ready(function (){
+  add();
+});
 function add() {
   var $clone = $($('#ToClone').html());
-  window.i = i + 1;
+  i = i + 1;
   $('#tipo', $clone).attr('name', 'tipo_tel['+i+']');
   $('#tipo', $clone).attr('onchange', 'selMask('+i+')');
   $('#tipo', $clone).attr('id', 'tipo'+i);
   $('#numero', $clone).attr('name', 'numero_tel['+i+']');
-  $('#numero', $clone).attr('onchange', 'numero_tel['+i+'] = $(this).val()')
   $('#numero', $clone).attr('id', 'numero'+i);
   $('#numeroText', $clone).attr('id', 'numeroText'+i);
   $('#contato', $clone).attr('name', 'contato_tel['+i+']');
@@ -464,7 +359,7 @@ function selMask(a){
       var x = "{{$combobox->value}}";
       $("#numero"+a).mask("{{$combobox->field}}");
       if ("{{$combobox->field}}"==""){
-          $("#numero"+a).unmask();
+        $("#numero"+a).unmask();
       }
       $("#numeroText"+a).text(x);
     }
@@ -518,7 +413,7 @@ function selectCep(){
         <div class="col-md-3">
           <div class="form-group">
             <label for="text" id="numeroText">Numero</label>
-            <input type="text" class="form-control" value="" name="numero_tipo" id="numero" onchange="numero_tel[0] = $(this).val()">
+            <input type="text" class="form-control" value="" name="numero_tipo" id="numero" placeholder="">
           </div>
         </div>
         <div class="col-md-3">

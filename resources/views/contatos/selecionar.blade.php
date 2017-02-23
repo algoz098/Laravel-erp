@@ -8,14 +8,11 @@
       </h4>
     </div>
     <div class="modal-body">
-      <form method="POST">
         <div class="form-group form-inline text-center">
           {{ csrf_field() }}
-          <input type="text" class="form-control" name="busca" id="busca" placeholder="Busca">
-          <button type="button" class="btn btn-success" onclick="buscarContatos()"><i class="fa fa-search"></i> Buscar</button>
+          @buscaModal(buscarContatos())
           <button type="button" class="btn btn-success" onclick="novoContato()"><i class="fa fa-plus"></i></button>
         </div>
-      </form>
       <div id="contatosHolder">
         @foreach ($contatos as $key => $contato)
           <div class="row list-contacts" onclick="retornarEsta({{$contato->id}}, '{{$contato->nome}}')">
