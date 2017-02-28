@@ -10,8 +10,8 @@
           </div>
           <div class="panel-body">
             <div class="row" id="secondNavbar">
-              <div class="col-md-1 pull-right text-right">
-                @botaoNovo(estoque)
+              <div class="col-md-2 pull-right text-right">
+                @botaoNovo(estoque*produto*Estoque*Produto)
               </div>
               <div class="col-md-3">
                 <div class="row">
@@ -55,7 +55,7 @@
                     <span class="label label-info">ID: {{$estoque->id}} </span>
                   </div>
                   <div class="col-md-2">
-                    {{$estoque->nome}}
+                    {{$estoque->produto->nome}}
                   </div>
                   <div class="col-md-1">
                     <span class="label label-warning">R$ {{ number_format($estoque->valor_custo, 2) }}</span>
@@ -82,7 +82,7 @@
                 </div>
               </div>
             @endif
-            @if($deletados!==0)
+          @if($deletados!=0)
               <h3>Deletados</h3>
               @foreach($deletados as $key => $estoque)
                 <div class="row list-contacts">

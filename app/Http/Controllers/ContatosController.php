@@ -11,6 +11,7 @@ use App\Contatos as Contatos;
 use App\Telefones as Telefones;
 use App\Attachments as Attachs;
 use App\Funcionarios as Funcionarios;
+use App\Enderecos as Enderecos;
 use App\Erp_configs as Configs;
 use App\User as User;
 use App\Combobox_texts as Comboboxes;
@@ -48,6 +49,7 @@ class ContatosController extends BaseController
     #return $request;
     Log::info('Selecionar de contatos para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
     $contatos = Contatos::query();
+    $apenas_filial = FALSE;
     if (!empty($request->busca)){
       $contatos = $contatos->orWhere('nome', 'like', '%' .  $request->busca . '%');
       $contatos = $contatos->orWhere('sobrenome', 'like', '%' .  $request->busca . '%');
@@ -57,7 +59,6 @@ class ContatosController extends BaseController
       $contatos = $contatos->orWhere('uf', 'like', '%' .  $request->busca . '%');
       $contatos = $contatos->orWhere('bairro', 'like', '%' .  $request->busca . '%');
       $contatos = $contatos->orWhere('cep', 'like', '%' .  $request->busca . '%');
-      $apenas_filial = FALSE;
     }
     if (isset($request->apenas_filial)){
       $apenas_filial = TRUE;
@@ -208,7 +209,8 @@ class ContatosController extends BaseController
 
   public function detalhes($id){
     $contato = contatos::find($id);
-    return view('contatos.detalhes')->with('contato', $contato);
+    $comboboxes_telefones = comboboxes::where('combobox_textable_type', 'App\Telefones')->get();
+    return view('contatos.detalhes')->with('contato', $contato)->with('comboboxes_telefones', $comboboxes_telefones);
   }
 
   public function funcionarios_novo()
@@ -250,13 +252,6 @@ class ContatosController extends BaseController
     $contato->cpf = $request->cpf;
     $contato->rg = $request->rg;
     $contato->sobrenome = $request->sobrenome;
-    $contato->endereco = $request->endereco;
-    $contato->numero = $request->numero;
-    $contato->complemento = $request->complemento;
-    $contato->bairro = $request->bairro;
-    $contato->uf = $request->uf;
-    $contato->cidade = $request->cidade;
-    $contato->cep = $request->cep;
     $contato->sociabilidade = $request->sociabilidade;
     $contato->tipo = $request->tipo;
     $contato->obs = $request->obs;
@@ -269,15 +264,32 @@ class ContatosController extends BaseController
       $contato->active="1";
     }
     $contato->save();
-    foreach ($request->tipo_tel as $key => $tipo) {
-      $telefone = new Telefones;
-      $telefone->contatos_id = $contato->id;
-      $telefone->tipo = $request->tipo_tel[$key];
-      $telefone->numero = $request->numero_tel[$key];
-      $telefone->contato = $request->contato_tel[$key];
-      $telefone->setor = $request->setor_tel[$key];
-      $telefone->ramal = $request->ramal_tel[$key];
-      $telefone->save();
+    if (isset($request->cep[0]) and $request->cep[0]!=""){
+      foreach ($request->cep as $key => $cep) {
+        $endereco = new Enderecos;
+        $endereco->tipo = $request->tipo[$key];
+        $endereco->cep = $request->cep[$key];
+        $endereco->endereco = $request->endereco[$key];
+        $endereco->numero = $request->numero[$key];
+        $endereco->complemento = $request->complemento[$key];
+        $endereco->bairro = $request->bairro[$key];
+        $endereco->cidade = $request->cidade[$key];
+        $endereco->uf = $request->uf[$key];
+        $endereco->contatos_id = $contato->id;
+        $endereco->save();
+      }
+    }
+    if (isset($request->tipo_tel)){
+      foreach ($request->tipo_tel as $key => $tipo) {
+        $telefone = new Telefones;
+        $telefone->contatos_id = $contato->id;
+        $telefone->tipo = $request->tipo_tel[$key];
+        $telefone->numero = $request->numero_tel[$key];
+        $telefone->contato = $request->contato_tel[$key];
+        $telefone->setor = $request->setor_tel[$key];
+        $telefone->ramal = $request->ramal_tel[$key];
+        $telefone->save();
+      }
     }
     if ($request->tipo=="0"){
       if ($request->tipo_filial=="1"){
@@ -332,7 +344,7 @@ class ContatosController extends BaseController
       $func->eleitor_exp = $request->eleitor_exp;
       $func->pis = $request->pis;
       $func->pis_banco = $request->pis_banco;
-      $func->inss = $request->sal*$request->sal_inss;
+      $func->inss = $request->sal_real*($request->sal_inss/100);
       $func->rg_exp = $request->rg_exp;
       $func->rg_pai = $request->rg_pai;
       $func->rg_mae = $request->rg_mae;
@@ -341,11 +353,11 @@ class ContatosController extends BaseController
       $func->sal = $request->sal;
       $func->sal_real = $request->sal_real;
       $func->sal_inss = $request->sal_inss;
-      $func->vt = $request->vt;
+      $func->vt = $request->sal_real*($request->vt_percentual/100);
       $func->vt_percentual = $request->vt_percentual;
       $func->va = $request->va;
       $func->vr = $request->vr;
-      $func->peri = $request->sal*$request->peri_percentual;
+      $func->peri = $request->sal_real*($request->peri_percentual/100);
       $func->peri_percentual = $request->peri_percentual;
       $func->save();
       $user = new User;
@@ -415,13 +427,6 @@ class ContatosController extends BaseController
     $contato->cpf = $request->cpf;
     $contato->rg = $request->rg;
     $contato->sobrenome = $request->sobrenome;
-    $contato->endereco = $request->endereco;
-    $contato->numero = $request->numero;
-    $contato->complemento = $request->complemento;
-    $contato->bairro = $request->bairro;
-    $contato->uf = $request->uf;
-    $contato->cidade = $request->cidade;
-    $contato->cep = $request->cep;
     $contato->sociabilidade = $request->sociabilidade;
     $contato->tipo = $request->tipo;
     $contato->codigo = $request->codigo;
@@ -434,6 +439,37 @@ class ContatosController extends BaseController
       $contato->active="1";
     }
     $contato->save();
+    if (isset($request->cep_edit)) {
+      foreach ($request->cep_edit as $key => $cep) {
+        $endereco =  Enderecos::find($request->endereco_id[$key]);
+        $endereco->tipo = $request->endereco_tipo_edit[$key];
+        $endereco->cep = $request->cep_edit[$key];
+        $endereco->endereco = $request->endereco_edit[$key];
+        $endereco->numero = $request->numero_edit[$key];
+        $endereco->complemento = $request->complemento_edit[$key];
+        $endereco->bairro = $request->bairro_edit[$key];
+        $endereco->cidade = $request->cidade_edit[$key];
+        $endereco->uf = $request->uf_edit[$key];
+        $endereco->contatos_id = $contato->id;
+        $endereco->save();
+      }
+
+    }
+    if (isset($request->cep)){
+      foreach ($request->cep as $key => $cep) {
+        $endereco = new Enderecos;
+        $endereco->tipo = $request->endereco_tipo[$key];
+        $endereco->cep = $request->cep[$key];
+        $endereco->endereco = $request->endereco[$key];
+        $endereco->numero = $request->numero_endereco[$key];
+        $endereco->complemento = $request->complemento[$key];
+        $endereco->bairro = $request->bairro[$key];
+        $endereco->cidade = $request->cidade[$key];
+        $endereco->uf = $request->uf[$key];
+        $endereco->contatos_id = $contato->id;
+        $endereco->save();
+      }
+    }
     if ($contato->tipo=="0"){
       if ($request->tipo_filial=="1"){
         $data = [
@@ -512,7 +548,7 @@ class ContatosController extends BaseController
       $func->eleitor_exp = $request->eleitor_exp;
       $func->pis = $request->pis;
       $func->pis_banco = $request->pis_banco;
-      $func->inss = $request->inss;
+      $func->inss = $request->sal_real*($request->sal_inss/100);
       $func->rg_exp = $request->rg_exp;
       $func->rg_pai = $request->rg_pai;
       $func->rg_mae = $request->rg_mae;
@@ -521,17 +557,17 @@ class ContatosController extends BaseController
       $func->sal = $request->sal;
       $func->sal_real = $request->sal_real;
       $func->sal_inss = $request->sal_inss;
-      $func->vt = $request->vt;
+      $func->vt = $request->sal_real*($request->vt_percentual/100);
       $func->vt_percentual = $request->vt_percentual;
       $func->va = $request->va;
       $func->vr = $request->vr;
-      $func->peri = $request->peri;
+      $func->peri = $request->sal_real*($request->peri_percentual/100);
       $func->peri_percentual = $request->peri_percentual;
       $func->save();
       $contato->user->email = $request->user;
       $contato->user->password = bcrypt($request->password);
       $contato->user->ativo = $request->ativo;
-      $contato->user->trabalho_id = $request->filial;
+      $contato->user->trabalho_id = $request->contatos_id;
       $contato->user->contatos_id = $contato->id;
       $contato->user->perms="{}";
       $contato->user->save();
@@ -609,6 +645,17 @@ class ContatosController extends BaseController
     Log::info('Deletando telefone para contato(id'.$id.') refente -> "'.$telefone.'", para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
 
     $telefone->delete();
+
+    return redirect()->action('ContatosController@show');
+  }
+
+  public function enderecos_delete( $id, $id_endereco )
+  {
+    $endereco = Enderecos::find($id_endereco);
+
+    Log::info('Deletando endereco para contato(id'.$id.'), para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
+
+    $endereco->delete();
 
     return redirect()->action('ContatosController@show');
   }

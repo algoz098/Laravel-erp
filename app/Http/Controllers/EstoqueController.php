@@ -7,9 +7,9 @@ use App\Contatos as Contatos;
 use App\Estoque as Estoque;
 use Carbon\Carbon;
 use App\Estoque_campos as Campos;
+use App\Produtos as Produtos;
 use Log;
 use Auth;
-
 class EstoqueController  extends BaseController
 {
   public function __construct(){
@@ -35,6 +35,7 @@ class EstoqueController  extends BaseController
     Log::info('Criando novo estoque, para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
     return view('estoque.novo')->with('contatos', $contatos);
   }
+
   public function detalhes($id)
   {
     $estoque = estoque::Find($id);
@@ -46,26 +47,14 @@ class EstoqueController  extends BaseController
   {
     $this->validate($request, [
         'contatos_id' => 'required',
-        'nome' => 'required|max:50',
+        'produtos_id' => 'required|max:50',
+        'quantidade' => 'required',
     ]);
     $estoque = new Estoque;
     $estoque->contatos_id = $request->contatos_id;
-    $estoque->nome = $request->nome;
-    $estoque->tipo = $request->tipo;
-    $estoque->descricao = $request->descricao;
+    $estoque->produtos_id = $request->produtos_id;
     $estoque->quantidade = $request->quantidade;
-    $estoque->unidade = $request->unidade;
-    $estoque->valor_custo = $request->valor_custo;
-    $estoque->barras = $request->barras;
     $estoque->save();
-    foreach ($request->campo_nome as $key => $value) {
-      $campo = new Campos;
-      $campo->estoque_id = $estoque->id;
-      $campo->tipo = $request->tipo;
-      $campo->nome = $request->campo_nome[$key];
-      $campo->valor = $request->campo_valor[$key];
-      $campo->save();
-    }
     Log::info('Salvando estoque -> "'.$estoque.'", para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
 
     return redirect()->action('EstoqueController@index');
@@ -81,35 +70,15 @@ class EstoqueController  extends BaseController
   public function edit_save(request $request, $id)
   {
     $this->validate($request, [
-      'contatos_id' => 'required',
-      'nome' => 'required|max:50'
+        'contatos_id' => 'required',
+        'produtos_id' => 'required|max:50',
+        'quantidade' => 'required',
     ]);
     $estoque = Estoque::find($id);
     $estoque->contatos_id = $request->contatos_id;
-
-    $estoque->nome = $request->nome;
-    $estoque->descricao = $request->descricao;
+    $estoque->produtos_id = $request->produtos_id;
     $estoque->quantidade = $request->quantidade;
-    $estoque->valor_custo = $request->valor_custo;
-    $estoque->barras = $request->barras;
 
-    foreach ($request->campo_nome_edit as $key => $value) {
-      $campo = Campos::find($request->campo_id_edit[$key]);
-      $campo->tipo = $request->tipo;
-      $campo->nome = $request->campo_nome_edit[$key];
-      $campo->valor = $request->campo_valor_edit[$key];
-      $campo->save();
-    }
-    if(isset($request->campo_nome)){
-      foreach ($request->campo_nome as $key => $value) {
-        $campo = new Campos;
-        $campo->estoque_id = $estoque->id;
-        $campo->tipo = $request->tipo;
-        $campo->nome = $request->campo_nome[$key];
-        $campo->valor = $request->campo_valor[$key];
-        $campo->save();
-      }
-    }
     $estoque->save();
     Log::info('Salvando estoque -> "'.$estoque.'", para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
     return redirect()->action('EstoqueController@index');
@@ -156,26 +125,6 @@ class EstoqueController  extends BaseController
     return view('estoque.index')->with('estoques', $estoques)->with('deletados', $deletados);
   }
 
-  public function searchContatos( Request $request)
-  {
-    if (!empty($request->busca)){
-      $contatos = Contatos::where('nome', 'like', '%' .  $request->busca . '%')
-                            ->orWhere('sobrenome', 'like', '%' .  $request->busca . '%')
-                            ->orWhere('endereco', 'like', '%' .  $request->busca . '%')
-                            ->orWhere('cpf', 'like', '%' .  $request->busca . '%')
-                            ->orWhere('cidade', 'like', '%' .  $request->busca . '%')
-                            ->orWhere('uf', 'like', '%' .  $request->busca . '%')
-                            ->orWhere('bairro', 'like', '%' .  $request->busca . '%')
-                            ->orWhere('cep', 'like', '%' .  $request->busca . '%')
-                            ->paginate(15);
-    } else {
-      $contatos = Contatos::paginate(15);
-    }
-    Log::info('Criando estoque com busca -> "'.$request->busca.'", para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
-
-    return view('estoque.contatos')->with('contatos', $contatos);
-  }
-
   public function delete($id)
   {
     $estoque = Estoque::withTrashed()->find($id);
@@ -189,18 +138,200 @@ class EstoqueController  extends BaseController
     return redirect()->action('EstoqueController@index');
   }
 
-  public function up($id){
-    $estoque = Estoque::find($id);
-    $estoque->quantidade = $estoque->quantidade+1;
-    $estoque->save();
-    Log::info('Somando 1 ao estoque -> "'.$estoque.'", para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
+
+  public function produto_novo()
+  {
+    Log::info('Criando novo produto, para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
+    return view('estoque.produto.novo');
+  }
+  public function produto_editar($id)
+  {
+    Log::info('Criando novo produto, para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
+    $produto = produtos::find($id);
+    return view('estoque.produto.novo')->with('produto', $produto);
+  }
+  public function produto_salva(request $request)
+  {
+    Log::info('Salvando novo produto, para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
+    $produto = new Produtos;
+    if (Produtos::where('barras', $request->barras)->first()){
+      return redirect()->back();
+    }
+    if ($request->barras=="" or !isset($request->barras)){
+      $i = 0;
+      while ($i < 1) {
+        $barras = rand(10000000, 99999999);
+        $produto_achado = Produtos::where('barras', $barras)->first();
+        if ($produto_achado==""){
+          $i++;
+        }
+      }
+    } else {
+      $barras = $request->barras;
+    }
+    $produto->barras = $barras;
+    $produto->grupo = $request->grupo;
+    $produto->tipo = $request->tipo;
+    $produto->nome = $request->nome;
+    $produto->unidade = $request->unidade;
+    $produto->custo = $request->custo;
+    $produto->save();
+    if(isset($request->campo_nome_edit)){
+      foreach ($request->campo_nome_edit as $key => $value) {
+        $campo = Campos::find($request->campo_id_edit[$key]);
+        $campo->tipo = $request->tipo;
+        $campo->nome = $request->campo_nome_edit[$key];
+        $campo->valor = $request->campo_valor_edit[$key];
+        $campo->save();
+      }
+    }
+    if(isset($request->campo_nome)){
+      foreach ($request->campo_nome as $key => $value) {
+        $campo = new Campos;
+        $campo->estoque_id = $produto->id;
+        $campo->tipo = $request->tipo;
+        $campo->nome = $request->campo_nome[$key];
+        $campo->valor = $request->campo_valor[$key];
+        $campo->save();
+      }
+    }
+
     return redirect()->action('EstoqueController@index');
   }
-  public function down($id){
-    $estoque = Estoque::find($id);
-    $estoque->quantidade = $estoque->quantidade-1;
-    $estoque->save();
-    Log::info('Removendo 1 ao estoque -> "'.$estoque.'", para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
+  public function produto_atualiza($id, request $request)
+  {
+    Log::info('Atualizando novo produto, para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
+    $produto = Produtos::find($id);
+    if (Produtos::where('barras', $request->barras)->first() and $produto->barras!=$request->barras){
+      return redirect()->back();
+    }
+    if ($request->barras=="" or !isset($request->barras)){
+      $i = 0;
+      while ($i < 1) {
+        $barras = rand(10000000, 99999999);
+        $produto_achado = Produtos::where('barras', $barras)->first();
+        if ($produto_achado==""){
+          $i++;
+        }
+      }
+    } else {
+      $barras = $request->barras;
+    }
+    $produto->barras = $barras;
+    $produto->grupo = $request->grupo;
+    $produto->tipo = $request->tipo;
+    $produto->nome = $request->nome;
+    $produto->unidade = $request->unidade;
+    $produto->custo = $request->custo;
+    $produto->save();
+    if(isset($request->campo_nome_edit)){
+      foreach ($request->campo_nome_edit as $key => $value) {
+        $campo = Campos::find($request->campo_id_edit[$key]);
+        $campo->tipo = $request->tipo;
+        $campo->nome = $request->campo_nome_edit[$key];
+        $campo->valor = $request->campo_valor_edit[$key];
+        $campo->save();
+      }
+    }
+    if(isset($request->campo_nome)){
+      foreach ($request->campo_nome as $key => $value) {
+        $campo = new Campos;
+        $campo->estoque_id = $produto->id;
+        $campo->tipo = $request->tipo;
+        $campo->nome = $request->campo_nome[$key];
+        $campo->valor = $request->campo_valor[$key];
+        $campo->save();
+      }
+    }
+
     return redirect()->action('EstoqueController@index');
+  }
+  public function produto_selecionar()
+  {
+    Log::info('Selecionar produto, para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
+    $produtos = Produtos::OrderBy('barras', 'asc')->paginate(15);
+    return view('estoque.produto.selecionar')->with('produtos', $produtos);
+  }
+
+  public function produto_selecionar_busca(request $request)
+  {
+    Log::info('Busca de modal produto, para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
+    $produtos = Produtos::query();
+    if (!empty($request->busca)){
+      $produtos = $produtos->orWhere('nome', 'like', '%' .  $request->busca . '%');
+      $produtos = $produtos->orWhere('barras', 'like', '%' .  $request->busca . '%');
+      $produtos = $produtos->orWhere('id', 'like', '%' .  $request->busca . '%');
+    }
+
+    $produtos = $produtos->orderBy('nome', 'asc')->get();
+    return view('estoque.produto.selecionarbusca')
+                ->with('produtos', $produtos);
+  }
+
+  public function produto_selecionar_novo()
+  {
+    Log::info('Modal novo produto, para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
+    return view('estoque.produto.parte_novo');
+  }
+  public function produto_selecionar_salvar(request $request)
+  {
+    Log::info('Modal novo produto, para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
+    Log::info('Salvando novo produto, para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
+    $produto = new Produtos;
+    if (Produtos::where('barras', $request->barras)->first()){
+      return redirect()->back();
+    }
+    if ($request->barras=="" or !isset($request->barras)){
+      $i = 0;
+      while ($i < 1) {
+        $barras = rand(10000000, 99999999);
+        $produto_achado = Produtos::where('barras', $barras)->first();
+        if ($produto_achado==""){
+          $i++;
+        }
+      }
+    } else {
+      $barras = $request->barras;
+    }
+    $produto->barras = $barras;
+    $produto->grupo = $request->grupo;
+    $produto->tipo = $request->tipo;
+    $produto->nome = $request->nome;
+    $produto->unidade = $request->unidade;
+    $produto->custo = $request->custo;
+    $produto->save();
+    if(isset($request->campo_nome_edit)){
+      foreach ($request->campo_nome_edit as $key => $value) {
+        $campo = Campos::find($request->campo_id_edit[$key]);
+        $campo->tipo = $request->tipo;
+        $campo->nome = $request->campo_nome_edit[$key];
+        $campo->valor = $request->campo_valor_edit[$key];
+        $campo->save();
+      }
+    }
+    if(isset($request->campo_nome)){
+      foreach ($request->campo_nome as $key => $value) {
+        $campo = new Campos;
+        $campo->estoque_id = $produto->id;
+        $campo->tipo = $request->tipo;
+        $campo->nome = $request->campo_nome[$key];
+        $campo->valor = $request->campo_valor[$key];
+        $campo->save();
+      }
+    }
+
+  }
+  public function gerar_barras()
+  {
+    Log::info('gerar codigo de barras, para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
+    $i=0;
+    while ($i < 1) {
+      $barras = rand(10000000, 99999999);
+      $produto = Produtos::where('barras', $barras)->first();
+      if ($produto==""){
+        $i++;
+      }
+    }
+    return $barras;
   }
 }

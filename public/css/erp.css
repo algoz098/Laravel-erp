@@ -12,9 +12,6 @@ nav > ul > li > ul > li{
 .pushy-submenu-closed{
   height: 40px;
 }
-.active{
-  color: #2196f3!important;
-}
 .pushy-left{
     transform: translate3d(-400px,0,0); /* Updated the values */
     /* Don't forget the vendor prefixes */
@@ -47,7 +44,7 @@ body {
   padding: 0px;
   text-transform: uppercase;
 }
-#secondNavbar{
+#secondNavbar, #thirdNavbar{
   background-color: #fff;
   height: 65px;
   padding-top: 15px;
@@ -103,5 +100,5 @@ body {
   width: 90%;
 }
 .sub-image-div{
-  overflow-y: auto  
+  overflow-y: auto
 }

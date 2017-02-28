@@ -65,15 +65,6 @@ use Carbon\Carbon;
                     <div class="panel-heading">Pagamento e valores</div>
                     <div class="panel-body">
                       <div class="form-group">
-                        <label>Formas de pagamento</label>
-                        <select class="form-control" id="forma" name="forma">
-                          <option value="" selected>- Escolha - </option>
-                          @foreach($comboboxes2 as $key => $combobox)
-                            <option value="{{$combobox->value}}">{{$combobox->text}}</option>
-                          @endforeach
-                        </select>
-                      </div>
-                      <div class="form-group">
                         <label for="cheio">Vencimento</label>
                         <input string="numeric" class="form-control datepicker" id="vencimento" name="vencimento" value="{{Carbon::Now()}}">
                       </div>
@@ -84,13 +75,6 @@ use Carbon\Carbon;
                           <input type="text" class="form-control real-mask" name="cheio" id="cheio" placeholder="Valor">
                         </div>
                       </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-md-3">
-                  <div class="panel panel-default">
-                    <div class="panel-heading">Desconto e detalhes</div>
-                    <div class="panel-body">
                       <div class="form-group">
                         <label for="cheio">Desconto</label>
                         <div class="input-group">
@@ -98,6 +82,13 @@ use Carbon\Carbon;
                           <input type="text" class="form-control real-mask" name="desconto" id="desconto" placeholder="Valor">
                         </div>
                       </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-3">
+                  <div class="panel panel-default">
+                    <div class="panel-heading">Desconto e detalhes</div>
+                    <div class="panel-body">
                       <div class="form-group">
                         <label for="parcelas">Qtd de parcelas</label>
                         <input type="numeric" class="form-control integer-mask" id="parcelas" name="parcelas" placeholder="Numero" onchange="parcelaChange()">
@@ -110,13 +101,28 @@ use Carbon\Carbon;
                   </div>
                 </div>
                 <div class="col-md-3">
-                  <div class="form-group">
-                    <label>Estado</label>
-                    <select class="form-control" id="estado" name="estado">
-                      <option value="">- Escolha -</option>
-                      <option value="0">Pago</option>
-                      <option value="1">A pagar</option>
-                    </select>
+                  <div class="panel panel-default">
+                    <div class="panel-heading">
+                      <div class="panel-title">Estado e formas</div>
+                    </div>
+                    <div class="panel-body">
+                      <div class="form-group">
+                        <label>Formas de pagamento</label>
+                        <select class="form-control" id="forma" name="forma">
+                          <option value="" selected>- Escolha - </option>
+                          @foreach($comboboxes2 as $key => $combobox)
+                            <option value="{{$combobox->value}}">{{$combobox->text}}</option>
+                          @endforeach
+                        </select>
+                      </div>
+                      <div class="form-group">
+                        <label>Estado</label>
+                        <select class="form-control" id="estado" name="estado">
+                          <option value="0">Pago</option>
+                          <option value="1" selected>A pagar</option>
+                        </select>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>

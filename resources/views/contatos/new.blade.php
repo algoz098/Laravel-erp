@@ -21,8 +21,14 @@
         <div class="panel panel-default">
           <div class="panel-heading"><i class="fa fa-users fa-1x"></i> Adicionar entidade</div>
           <div class="panel-body">
-            <div class="row text-right" id="secondNavbar">
-              <div class="col-sm-offset-2 col-sm-10">
+            <div class="row" id="secondNavbar">
+              @if (!empty($contato->id))
+                <div class="col-md-9 pull-left text-left">
+                  <span class="label label-info" style="font-size:16px;">ID: {{$contato->id}}</span>
+                  <span style="font-size:18px;">{{{$contato->tipo==1  ? $contato->sobrenome : $contato->nome}}}</span>
+                </div>
+              @endif
+              <div class="col-md-3 pull-right text-right">
                 @botaoLista(contatos*fa-users)
                 @botaoSalvar
               </div>

@@ -28,6 +28,7 @@ class CreateContatosTable extends Migration
             $table->string('cep')->nullable();
             $table->string('sociabilidade')->nullable();
             $table->string('active')->nullable();
+            $table->text('obs')->nullable();
             $table->string('deleted')->nullable();
             $table->timestamps();
         });

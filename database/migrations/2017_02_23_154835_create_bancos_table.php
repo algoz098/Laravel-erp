@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateEstoqueCamposTable extends Migration
+class CreateBancosTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,16 @@ class CreateEstoqueCamposTable extends Migration
      */
     public function up()
     {
-        Schema::create('estoque_campos', function (Blueprint $table) {
+        Schema::create('bancos', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('estoque_id');
+            $table->integer('contatos_id');
+            $table->string('banco');
+            $table->string('agencia');
             $table->string('tipo');
-            $table->string('nome');
-            $table->string('valor');
+            $table->string('cc');
+            $table->string('cc_dig');
+            $table->string('comp');
+            $table->double('valor');
             $table->timestamps();
             $table->softDeletes();
         });
@@ -31,6 +35,6 @@ class CreateEstoqueCamposTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('estoque_campos');
+        Schema::dropIfExists('bancos');
     }
 }

@@ -9,61 +9,30 @@
         </div>
         <div class="panel-body">
           <form method="POST" action="{{ url('/lista/contas') }}/">
+            {{ csrf_field() }}
             <div id="secondNavbar" class="row">
               <div class="row">
                 <div class="col-md-3 text-left" >
-                  <div class=" form-inline col-md-10 text-right">
-                    <a href="{{ url('lista/contas') }}/id/delete"  id="buttonDelete" title="Apagar" class="btn btn-danger">
-                      <i class="fa fa-ban"></i>
-                    </a>
-                    <a class="btn btn-info"  id="buttonDetalhes" title="Detalhes" >
-                      <i class="fa fa-file-text-o"></i>
-                    </a>
-                    <span id="buttonAttach" class="btn btn-warning btn_xs" title="Anexos">
-                      <i class="fa fa-paperclip"></i>
-                    </span>
-
+                  <div class=" form-inline col-md-8 text-right">
+                    @botaoDelete
+                    @botaoDetalhes
+                    @botaoAnexos
                     <a href="{{ url('/lista/contas') }}/id/pago"  id="buttonPagar" title="Creditar" class="btn btn-success">
                       <i class="fa fa-check"></i>
                     </a>
-
                   </div>
                   <div class=" form-inline col-md-2 text-left">
-                    <input type="text" class="form-control" size="4" name="ids" id="ids" placeholder="Detalhes" disabled>
+                    @idSelecionado
                   </div>
                 </div>
                 <div class="col-md-6">
-                  <div class="form-group form-inline text-center ajuda-popover"
-                        title="Busca"
-                        data-content="Digite para buscar um contato"
-                        data-placement="top"
-                  >
-                    {{ csrf_field() }}
-                    <input type="text" class="form-control" name="contato" id="busca" placeholder="Busca">
-                    <button type="submit" class="btn btn-success"><i class="fa fa-search"></i> Buscar</button>
-                    <a class="btn btn-info"  title="Busca Avançada" data-toggle="collapse" data-target="#buscaAvançada" aria-expanded="" onclick="listaTop()">
-                      <i class="fa fa-search-plus"></i>
-                    </a>
+                  <div class="form-group form-inline text-center">
+                    @buscaSimples
+                    @buscaExtraBotao
                   </div>
                 </div>
-                <div class="col-md-2 pull-right ajuda-popover"
-                      title="Novo"
-                      data-content="Adicione uma nova conta"
-                      data-placement="left">
-
-                  <div class="btn-group">
-                    <a href="{{ url('/novo/contas') }}" class="btn btn-success">
-                      <i class="fa fa-plus fa-1x"></i> Novo
-                    </a>
-                    <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                      <span class="caret"></span>
-                      <span class="sr-only">Toggle Dropdown</span>
-                    </button>
-                    <ul class="dropdown-menu">
-                      <li><a href="{{ url('/novo/consumos') }}">Novo Consumo</a></li>
-                      <li><a href="{{ url('/novo/contas') }}">Nova Conta</a></li>
-                    </ul>
-                  </div>
+                <div class="col-md-2 pull-right">
+                  @botaoNovo(contas*consumos*Nova Consumo*Nova Conta)
                 </div>
               </div>
               <div id="buscaAvançada" class="row collapse " aria-expanded="" style="background-color: #fff; z-index:1030;">
@@ -212,6 +181,24 @@
               {{ $contas->links() }}
             </div>
           </div>
+          <hr>
+          @foreach (auth::user()->trabalho->bancos as $key => $banco)
+            <div class="row list-contacts">
+              <div class="col-md-1">
+                id: {{$banco->id}}
+              </div>
+              <div class="col-md-2">
+                {{$banco->banco}}
+              </div>
+              <div class="col-md-2">
+                Em conta: R$ {{$banco->valor}}
+              </div>
+              <div class="col-md-3">
+                @mostraContato($banco->contato->id*str_limit($banco->contato->nome, 15))
+
+              </div>
+            </div>
+          @endforeach
           @if($deletados!==0)
             <h3>Deletados</h3>
             @foreach($deletados as $key => $conta)
@@ -262,11 +249,10 @@
 <script>
   function selectRow(id){
     $("#ids").val(id);
-    $("#buttonDelete").attr('href', '{{ url('lista/contas') }}/'+id+'/delete/');
-    $("#buttonEdit").attr('href', '{{ url('novo/contas') }}/'+id);
+    $("#botaoDelete").attr('href', '{{ url('lista/contas') }}/'+id+'/delete/');
+    $("#botaoDetalhes").attr('onclick', 'openModal("{{url('lista/contas')}}/'+id+'")');
+    $("#botaoAnexos").attr('onclick', 'openModal("{{url('lista/contas')}}/'+id+'/attachs")');
     $("#buttonPagar").attr('href', '{{ url('/lista/contas') }}/'+id+'/pago');
-    $("#buttonDetalhes").attr('onclick', 'openModal("{{url('lista/contas')}}/'+id+'")');
-    $("#buttonAttach").attr('onclick', 'openModal("{{url('lista/contas')}}/'+id+'/attachs")');
   }
   function listaTop(){
     var css = $('#lista').css('margin-top');

@@ -13,7 +13,9 @@ use App\Attachments;
 use App\Caixas;
 use App\Vendas;
 use App\Funcionarios;
+use App\Bancos;
 use App\Frotas;
+use App\Enderecos;
 
 class Contatos extends Model
 {
@@ -86,5 +88,13 @@ class Contatos extends Model
     public function frotas()
     {
         return $this->hasMany('App\Frotas');
+    }
+    public function bancos()
+    {
+        return $this->hasMany('App\Bancos');
+    }
+    public function enderecos()
+    {
+        return $this->hasMany('App\Enderecos');
     }
 }

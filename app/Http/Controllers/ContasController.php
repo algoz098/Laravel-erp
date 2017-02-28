@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Auth;
 use Carbon\Carbon;
 use App\Contas as Contas;
+use App\Bancos as Bancos;
 use App\Contatos as Contatos;
 use App\Contas_consumos as consumos;
 use App\Combobox_texts as Comboboxes;
@@ -18,6 +19,25 @@ class ContasController  extends BaseController
      parent::__construct();
   }
 
+  public function banco_novo(){
+    Log::info('Criando conta em banco, para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
+    return view('contas.bancos.novo');
+  }
+  public function banco_salva(request $request){
+    Log::info('Salvando conta em banco, para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
+    $banco = new Bancos;
+    $banco->contatos_id = $request->contatos_id;
+    $banco->banco = $request->banco;
+    $banco->cc = $request->cc;
+    $banco->cc_dig = $request->cc_dig;
+    $banco->tipo = $request->tipo;
+    $banco->agencia = $request->agencia;
+    $banco->comp = $request->comp;
+    $banco->valor = $request->valor;
+    $banco->save();
+    return redirect()->action('ContasController@index');
+
+  }
   public function index(){
     Log::info('Vendo contas, para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
     $contas = Contas::paginate(15);
@@ -193,6 +213,9 @@ class ContasController  extends BaseController
   }
 
   public function pago($id){
+
+    return view('contas.pagar');
+
     $conta = Contas::find($id);
     if ($conta->estado==1) {
       $conta->estado = '0';
@@ -236,7 +259,7 @@ class ContasController  extends BaseController
   public function add_3(request $request){
     $this->validate($request, [
         'tipo' => 'required',
-        'forma' => 'required',
+        'contatos_id' => 'required',
         'nome' => 'required|max:50',
         'cheio' => 'required|numeric',
     ]);
@@ -290,7 +313,7 @@ class ContasController  extends BaseController
   }
   public function consumos_novo3(request $request){
     $this->validate($request, [
-        'forma' => 'required',
+        'contatos_id' => 'required',
         'nome' => 'required|max:50',
         'cheio' => 'required|numeric',
     ]);

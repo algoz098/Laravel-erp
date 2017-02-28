@@ -54,7 +54,7 @@
               <label for="uf">Vale Transporte</label>
               <div class="input-group">
                 <span class="input-group-addon" id="basic-addon1">R$</span>
-                <input type="text" class="form-control real-mask" value="{{ $contato->funcionario->vt or "" }}" name="vt" id="vt" disabled>
+                <input type="text" class="form-control real-mask" value="{{ number_format($contato->funcionario->vt, 2) or "" }}" name="vt" id="vt" disabled>
               </div>
             </div>
           </div>
@@ -88,7 +88,7 @@
             <div class="col-md-8">
               <div class="input-group">
                 <span class="input-group-addon" id="basic-addon1">R$</span>
-                <input type="text" class="form-control real-mask" value="{{ $contato->funcionario->peri or "" }}" name="peri" id="peri" disabled>
+                <input type="text" class="form-control real-mask" value="{{ number_format($contato->funcionario->peri, 2) or "" }}" name="peri" id="peri" disabled>
               </div>
             </div>
             <div class="col-md-4">
@@ -160,7 +160,7 @@
           <div class="col-md-8">
             <div class="form-group">
               <label for="uf">INSS</label>
-              <input type="text" class="form-control" value="{{ $contato->funcionario->inss or "" }}" name="inss" id="inss" disabled>
+              <input type="text" class="form-control" value="{{ number_format($contato->funcionario->inss, 2) or "" }}" name="inss" id="inss" disabled>
             </div>
           </div>
           <div class="col-md-4">
@@ -251,15 +251,15 @@ $(document).ready(function(){
   });
 });
 function calcVT() {
-  var a = (parseFloat($('#sal').val())*parseFloat($('#vt_percentual').val()))/100;
+  var a = (parseFloat($('#sal_real').val())*parseFloat($('#vt_percentual').val()))/100;
   $('#vt').val(a);
 }
 function calcInss() {
-  var a = (parseFloat($('#sal').val())*parseFloat($('#sal_inss').val()))/100;
+  var a = (parseFloat($('#sal_real').val())*parseFloat($('#sal_inss').val()))/100;
   $('#inss').val(a);
 }
 function calcPeri() {
-  var a = (parseFloat($('#sal').val())*parseFloat($('#peri_percentual').val()))/100;
+  var a = (parseFloat($('#sal_real').val())*parseFloat($('#peri_percentual').val()))/100;
   $('#peri').val(a);
 }
 $('#cnh_venc').mask('99-99-9999')

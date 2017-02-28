@@ -3,7 +3,7 @@
     <div class="modal-header">
       <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
       <h4 class="modal-title" id="addTelefonesLabel">
-        Detalhes: <span class="label label-info">{{$estoque->nome}}</span>
+        Detalhes: <span class="label label-info">{{$estoque->produto->nome}}</span>
       </h4>
     </div>
     <div class="modal-body">
@@ -37,16 +37,17 @@
                 {{str_limit($estoque->contato->nome, 10)}}
               </div>
               <div class="col-md-1">
-                <strong>Tipo:</strong>
+                <strong>G/T:</strong>
               </div>
               <div class="col-md-2">
-                {{$estoque->tipo}}
+                {{$estoque->produto->grupo}}/
+                {{$estoque->produto->tipo}}
               </div>
               <div class="col-md-1">
                 <strong>Custo:</strong>
               </div>
               <div class="col-md-2">
-                R$ {{ number_format($estoque->valor_custo, 2) }}
+                R$ {{ number_format($estoque->produto->custo, 2) }}
               </div>
             </div>
             <div class="row">
@@ -54,25 +55,28 @@
                 <strong>Cod. barras:</strong>
               </div>
               <div class="col-md-2">
-                {{$estoque->barras}}
+                <a href="{{url('novo/produto/')}}/{{$estoque->produto->id}}" class="label label-primary">
+                  <i class="fa fa-pencil"></i>
+                  {{$estoque->produto->barras}}
+                </a>
               </div>
               <div class="col-md-1">
                 <strong>Nome:</strong>
               </div>
               <div class="col-md-2">
-                {{$estoque->nome}}
+                {{$estoque->produto->nome}}
               </div>
               <div class="col-md-1">
                 <strong>Qtd:</strong>
               </div>
               <div class="col-md-2">
-                {{$estoque->quantidade}} {{$estoque->unidade}}
+                {{$estoque->quantidade}} {{$estoque->produto->unidade}}
               </div>
             </div>
             <hr>
             <div class="row">
               <div class="col-md-12">
-                @foreach ($estoque->campos as $key => $campo)
+                @foreach ($estoque->produto->campos as $key => $campo)
                   <div class="row list-contacts">
                     <div class="col-md-1">
                       {{$campo->id}}
@@ -112,7 +116,7 @@
     </div>
     <div class="modal-footer">
       @botaoFecharModal
-      @botaoEditarExtenso(estoque*$estoque->id)
+      @botaoEditarExtenso(novo/estoque*$estoque->id)
 
       <div class="col-md-2 pull-right">
         <div class="input-group">

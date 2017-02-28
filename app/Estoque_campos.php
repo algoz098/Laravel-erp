@@ -3,11 +3,11 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
-
+use App\Produtos;
 class Estoque_campos extends Model
 {
-  public function estoque()
+  public function produto()
   {
-      return $this->belongsTo('App\Estoque', 'estoque_id');
+      return $this->belongsTo('App\Produtos', 'estoque_id');
   }
 }

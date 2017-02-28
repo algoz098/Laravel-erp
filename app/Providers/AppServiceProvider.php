@@ -19,6 +19,9 @@ class AppServiceProvider extends ServiceProvider
       Blade::directive('botaoSalvar', function () {
         return "<?php echo '<button type=\"submit\"  class=\"btn btn-success\"><i class=\"fa fa-check\"></i> Salvar</button>'; ?>";
       });
+      Blade::directive('botaoSalvarModal', function () {
+        return "<?php echo '<button type=\"button\" onclick=\"enviarModal()\"  class=\"btn btn-success\"><i class=\"fa fa-check\"></i> Salvar</button>'; ?>";
+      });
       Blade::directive('botaoLista', function ($a) {
         list($url, $icone) = explode('*', $a);
         return "<?php echo '<a class=\"btn btn-warning\" href=\"'.URL::to('lista\\$url').'\" ><i class=\"fa $icone\"></i> Voltar a Lista</a>'; ?>";
@@ -41,7 +44,7 @@ class AppServiceProvider extends ServiceProvider
               </span>
             </div>';?>";
       });
-      
+
       Blade::directive('buscaExtraBotao', function () {
         return "<?php echo '
             <a class=\"btn btn-info\"  title=\"Busca Avançada\" data-toggle=\"collapse\" data-target=\"#buscaAvançada\" aria-expanded=\"\" onclick=\"listaTop()\">
@@ -162,6 +165,31 @@ class AppServiceProvider extends ServiceProvider
             '?>";
           }
       });
+      Blade::directive('selecionaProduto', function ($a) {
+        if (strpos($a, '*')){
+          list($id, $nome) = explode('*', $a);
+          return "<?php echo '
+            <div class=\"form-group\">
+              <label for=\"por\">Escolhe produto:</label>
+              <div class=\"input-group\">
+                <input type=\"hidden\" class=\"form-control\" id=\"produtosHidden\" name=\"produtos_id\" value=\"'.$id.'\">
+                <input type=\"text\" class=\"form-control\" id=\"produtos\" disabled value=\"'.$nome.'\">
+                <a onclick=\"window.activeTarget=&#39;produtos&#39;&#59; openModal(&#39;'.URL::to('lista/produtos/selecionar').'&#39;)\" class=\"input-group-addon btn btn-info\"><i class=\"fa fa-gear\"></i></a>
+              </div>
+            </div>'?>";
+          } else {
+            return "<?php echo '
+              <div class=\"form-group\">
+                <label for=\"por\">Escolher produto:</label>
+                <div class=\"input-group\">
+                  <input type=\"hidden\" class=\"form-control\" id=\"produtosHidden\" name=\"produtos_id\" value=\"\">
+                  <input type=\"text\" class=\"form-control\" id=\"produtos\" disabled value=\"\">
+                  <a onclick=\"window.activeTarget=&#39;produtos&#39;&#59; openModal(&#39;'.URL::to('lista/produtos/selecionar').'&#39;)\" class=\"input-group-addon btn btn-info\"><i class=\"fa fa-gear\"></i></a>
+                </div>
+              </div>
+            '?>";
+          }
+      });
       Blade::directive('botaoEditarExtenso', function ($a) {
         list($caminho, $id) = explode('*', $a);
         return "<?php echo '
@@ -177,6 +205,49 @@ class AppServiceProvider extends ServiceProvider
         '?>";
       });
 
+      //
+      // Para formularios
+      //
+      Blade::directive('campoTexto', function ($a){
+        list($label, $name, $value) = explode('*', $a);
+        if ($value==""){
+          return "<?php echo '
+            <div class=\"form-group\">
+              <label>$label</label>
+              <input type=\"text\" class=\"form-control\" id=\"$name\" name=\"$name\"  value=\"\">
+            </div>
+          ';?>";
+        }
+        return "<?php echo '
+          <div class=\"form-group\">
+            <label>$label</label>
+            <input type=\"text\" class=\"form-control\" id=\"$name\" name=\"$name\"  value=\"'.$value.'\">
+          </div>
+        ';?>";
+      });
+      Blade::directive('campoDinheiro', function ($a){
+        list($label, $name, $value) = explode('*', $a);
+        if ($value==""){
+          return "<?php echo '
+            <div class=\"form-group\">
+              <label>".$label."</label>
+              <div class=\"input-group\">
+                <span class=\"input-group-addon\" id=\"campoDinheiroAddon\">R$</span>
+                <input type=\"text\" class=\"form-control\" aria-describedby=\"campoDinheiroAddon\" id=\"".$name."\" name=\"".$name."\" value=\"\" >
+              </div>
+            </div>
+          '?>";
+        }
+        return "<?php echo '
+          <div class=\"form-group\">
+            <label>".$label."</label>
+            <div class=\"input-group\">
+              <span class=\"input-group-addon\" id=\"campoDinheiroAddon\">R$</span>
+              <input type=\"text\" class=\"form-control\" aria-describedby=\"campoDinheiroAddon\" id=\"".$name."\" name=\"".$name."\" value=\"'.$value.'\">
+            </div>
+          </div>
+        '?>";
+      });
     }
 
     /**

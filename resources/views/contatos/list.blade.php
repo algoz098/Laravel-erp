@@ -11,7 +11,7 @@
             <div id="secondNavbar" class="row">
               <div class="row">
                 <div class="col-md-3 text-left pull-left">
-                  <div class=" form-inline col-md-9 text-right">
+                  <div class=" form-inline col-md-10 text-right">
                     @botaoDelete
                     @botaoEditar
                     @botaoDetalhes
