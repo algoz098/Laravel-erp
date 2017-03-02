@@ -329,10 +329,10 @@ class ComposerStaticIniteb7ed518eae24fc4a2b91da7f84bfb6b
     );
 
     public static $classMap = array (
+        'AddBancosidContasTable' => __DIR__ . '/../..' . '/database/migrations/2017_03_02_102117_add_bancosid_contas_table.php',
         'AddBirthContatosTable' => __DIR__ . '/../..' . '/database/migrations/2017_01_19_142606_add_birth_contatos_table.php',
         'AddCamposEstoqueTable' => __DIR__ . '/../..' . '/database/migrations/2017_02_20_220412_add_campos_estoque_table.php',
         'AddEstadoAndamentosTable' => __DIR__ . '/../..' . '/database/migrations/2017_02_15_004131_add_estado_andamentos_table.php',
-        'AddObsContasTable' => __DIR__ . '/../..' . '/database/migrations/2016_12_22_123047_add_obs_contas_table.php',
         'AddSoftdeleteContasTable' => __DIR__ . '/../..' . '/database/migrations/2016_12_13_113159_add_softdelete_contas_table.php',
         'AddSoftdeleteContatosTable' => __DIR__ . '/../..' . '/database/migrations/2016_12_11_212739_add_softdelete_contatos_table.php',
         'AddSoftdeleteEstoqueTable' => __DIR__ . '/../..' . '/database/migrations/2016_12_13_155054_add_softdelete_estoque_table.php',

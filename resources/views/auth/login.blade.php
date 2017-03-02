@@ -10,7 +10,7 @@
                     <form class="form-horizontal" role="form" method="POST" action="{{ url('/login') }}">
                         {{ csrf_field() }}
                         <div class="row text-center" style="margin-bottom: 15px">
-                          <img src="{{ asset('img_destaque.jpeg') }}" class="img-circle" height="200">
+                          <img src="{{url('admin/config/img_destaque')}}" class="img-circle" height="200">
                         </div>
                         <div class="form-group">
                             <label for="email" class="col-md-4 control-label">Usuario</label>

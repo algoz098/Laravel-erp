@@ -3,7 +3,7 @@
     Web GS - ERP
   </div>
   <div class="row text-center" style="margin-bottom: 15px; margin-top:15px;">
-    <img src="{{$imagem_destaque}}" class="img-circle" height="200">
+    <img src="{{url('admin/config/img_destaque')}}" class="img-circle" height="200">
   </div>
   <ul class="menu" >
     <li class="pushy-submenu {{{ Request::path()=='/' ? "active" : "" }}}">
@@ -27,6 +27,7 @@
           @if ($modulo_caixas=="1")
             <li class="pushy-link "><a class="{{{ Request::path()=='novo/caixa' ? "active" : "" }}}" href="{{ url('/novo/caixa') }}"><i class="fa fa-money"></i> Movimento de Caixa</a></li>
           @endif
+          <li class="pushy-link "><a class="{{{ Request::path()=='novo/bancos' ? "active" : "" }}}" href="{{ url('/novo/bancos') }}"><i class="fa fa-bank"></i> Conta Bancaria</a></li>
           @if ($modulo_vendas=="1")
             <li class="pushy-link "><a class="{{{ Request::path()=='novo/vendas' ? "active" : "" }}}" href="{{ url('/novo/vendas') }}"><i class="fa fa-shopping-cart"></i> Vendas</a></li>
           @endif

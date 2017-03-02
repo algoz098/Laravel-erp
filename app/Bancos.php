@@ -14,4 +14,8 @@ class Bancos extends Model
   {
       return $this->belongsTo('App\Contatos', 'contatos_id');
   }
+  public function contas()
+  {
+    return $this->hasMany('App\Contas', 'bancos_id');
+  }
 }

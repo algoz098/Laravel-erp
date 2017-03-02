@@ -6,10 +6,10 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
+    'AddBancosidContasTable' => $baseDir . '/database/migrations/2017_03_02_102117_add_bancosid_contas_table.php',
     'AddBirthContatosTable' => $baseDir . '/database/migrations/2017_01_19_142606_add_birth_contatos_table.php',
     'AddCamposEstoqueTable' => $baseDir . '/database/migrations/2017_02_20_220412_add_campos_estoque_table.php',
     'AddEstadoAndamentosTable' => $baseDir . '/database/migrations/2017_02_15_004131_add_estado_andamentos_table.php',
-    'AddObsContasTable' => $baseDir . '/database/migrations/2016_12_22_123047_add_obs_contas_table.php',
     'AddSoftdeleteContasTable' => $baseDir . '/database/migrations/2016_12_13_113159_add_softdelete_contas_table.php',
     'AddSoftdeleteContatosTable' => $baseDir . '/database/migrations/2016_12_11_212739_add_softdelete_contatos_table.php',
     'AddSoftdeleteEstoqueTable' => $baseDir . '/database/migrations/2016_12_13_155054_add_softdelete_estoque_table.php',

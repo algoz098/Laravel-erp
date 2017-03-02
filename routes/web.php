@@ -64,8 +64,13 @@ Route::post('novo/contas/parcelas/{conta_id}', 'ContasController@add_4')->middle
 Route::get('novo/consumos/', 'ContasController@consumos_novo2')->middleware('auth');
 Route::post('novo/consumos/parcelas', 'ContasController@consumos_novo3')->middleware('auth');
 
-Route::get('novo/bancos/', 'ContasController@banco_novo')->middleware('auth');
-Route::post('novo/bancos/', 'ContasController@banco_salva')->middleware('auth');
+Route::get('lista/bancos/', 'BancosController@index')->middleware('auth');
+Route::get('lista/bancos/{id}', 'BancosController@detalhes')->middleware('auth');
+Route::get('lista/bancos/{id}/delete', 'BancosController@delete')->middleware('auth');
+Route::get('novo/bancos/', 'BancosController@novo')->middleware('auth');
+Route::get('novo/bancos/{id}', 'BancosController@editar')->middleware('auth');
+Route::post('novo/bancos/', 'BancosController@salva')->middleware('auth');
+Route::post('novo/bancos/{id}', 'BancosController@atualiza')->middleware('auth');
 
 
 Route::get('/lista/atendimentos', 'AtendimentoController@index')->middleware('auth')->name('atendimentos');
@@ -155,6 +160,8 @@ Route::get('attach/{id}/resize/{width}', 'AttachmentsController@resize')->middle
 
 Route::get('attach/{modulo}/{id}/{contatos_id}', 'AttachmentsController@novo')->middleware('auth');
 Route::post('attach/{modulo}/{id}/{contatos_id}', 'AttachmentsController@salva')->middleware('auth');
+
+Route::get('/admin/config/img_destaque', 'AdminController@img_destaque'); // Rota espcial nao colocar middleware de proteção
 
 Route::get('/admin', 'AdminController@index')->name('admin')->middleware('auth')->middleware('admin');
 

@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Erp_configs as Configs;
+use View;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 
 class LoginController extends Controller
@@ -35,6 +37,16 @@ class LoginController extends Controller
     public function __construct()
     {
         $this->middleware('guest', ['except' => 'logout']);
+
+
+        $imagem_destaque = Configs::where('field', 'img_destaque')->pluck('options')->first();
+        if ($imagem_destaque!=""){
+          $imagem_destaque = url('attach').'/'.$imagem_destaque;
+        }
+        if ($imagem_destaque==""){
+          $imagem_destaque = asset('img_destaque.jpeg');
+        }
+        View::share ( 'imagem_destaque', $imagem_destaque );
     }
 
     public function authenticate()

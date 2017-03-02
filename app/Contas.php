@@ -38,4 +38,8 @@ class Contas extends Model
   {
       return $this->belongsTo('App\Contas', 'referente');
   }
+  public function banco()
+  {
+      return $this->belongsTo('App\Bancos', 'banco_id');
+  }
 }

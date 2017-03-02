@@ -9,6 +9,7 @@ use App\Attachments as Attachs;
 use App\Users_permissions as Roles;
 use App\Erp_configs as Configs;
 use App\Combobox_texts as Comboboxes;
+use Response;
 use File;
 use Storage;
 use ZipArchive;
@@ -24,6 +25,27 @@ class AdminController  extends BaseController
      parent::__construct();
   }
 
+  public function img_destaque(){
+    $imagem_destaque = Configs::where('field', 'img_destaque')->pluck('options')->first();
+    $attach = Attachs::find($imagem_destaque);
+
+    if ($imagem_destaque!=""){
+      $path = storage_path() . '/' .'app/'. $attach->path;
+    }
+    if ($imagem_destaque==""){
+      $path = public_path('img_destaque.jpeg');
+    }
+
+    if(!File::exists($path)) abort(404);
+
+    $file = File::get($path);
+    $type = File::mimeType($path);
+
+    $response = Response::make($file, 200);
+    $response->header("Content-Type", $type);
+
+    return $response;
+  }
   public function index(){
 
     Log::info('!!!ADMIN!!! Mostrando index, para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
