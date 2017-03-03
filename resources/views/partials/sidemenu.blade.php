@@ -55,6 +55,7 @@
           @if ($modulo_caixas=="1")
             <li class="pushy-link"><a class="{{{ Request::path()=='lista/caixa' ? "active" : "" }}}" href="{{ url('/lista/caixa') }}"><i class="fa fa-money"></i> Movimentações e Caixas</a></li>
           @endif
+          <li class="pushy-link"><a class="{{{ Request::path()=='lista/bancos' ? "active" : "" }}}" href="{{ url('/lista/bancos') }}"><i class="fa fa-bancos"></i> Contas em bancos</a></li>
           @if ($modulo_vendas=="1")
             <li class="pushy-link"><a class="{{{ Request::path()=='lista/vendas' ? "active" : "" }}}" href="{{ url('/lista/vendas') }}"><i class="fa fa-shopping-cart"></i> Vendas</a></li>
           @endif

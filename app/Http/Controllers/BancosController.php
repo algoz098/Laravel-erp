@@ -22,6 +22,29 @@ class BancosController  extends BaseController
 
     return view('bancos.index')->with('bancos', $bancos);
   }
+
+  public function selecionar(){
+    Log::info('Selecionar bancos, para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
+    $bancos = Bancos::paginate(15);
+
+    return view('bancos.selecionar')->with('bancos', $bancos);
+  }
+  public function selecionar_busca(request $request){
+    Log::info('Selecionar  busca bancos, para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
+    $bancos = bancos::query();
+    if (!empty($request->busca)){
+      $bancos = $bancos->orWhere('banco', 'like', '%' .  $request->busca . '%');
+      $bancos = $bancos->orWhere('valor', 'like', '%' .  $request->busca . '%');
+      $bancos = $bancos->orWhere('tipo', 'like', '%' .  $request->busca . '%');
+      $bancos = $bancos->orWhere('agencia', 'like', '%' .  $request->busca . '%');
+      $bancos = $bancos->orWhere('cc', 'like', '%' .  $request->busca . '%');
+      $bancos = $bancos->orWhere('cc_dig', 'like', '%' .  $request->busca . '%');
+      $bancos = $bancos->orWhere('comp', 'like', '%' .  $request->busca . '%');
+    }
+    $bancos = Bancos::paginate(15);
+
+    return view('bancos.selecionar_parte')->with('bancos', $bancos);
+  }
   public function detalhes($id){
     Log::info('Detalhes de banco, para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
     $banco = Bancos::find($id);

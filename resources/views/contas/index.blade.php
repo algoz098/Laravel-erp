@@ -181,24 +181,6 @@
               {{ $contas->links() }}
             </div>
           </div>
-          <hr>
-          @foreach (auth::user()->trabalho->bancos as $key => $banco)
-            <div class="row list-contacts">
-              <div class="col-md-1">
-                id: {{$banco->id}}
-              </div>
-              <div class="col-md-2">
-                {{$banco->banco}}
-              </div>
-              <div class="col-md-2">
-                Em conta: R$ {{$banco->valor}}
-              </div>
-              <div class="col-md-3">
-                @mostraContato($banco->contato->id*str_limit($banco->contato->nome, 15))
-
-              </div>
-            </div>
-          @endforeach
           @if($deletados!==0)
             <h3>Deletados</h3>
             @foreach($deletados as $key => $conta)

@@ -54,7 +54,8 @@ Route::post('lista/contas', 'ContasController@search')->middleware('auth');
 Route::get('lista/contas/{id}', 'ContasController@detalhes')->middleware('auth');
 Route::get('lista/contas/{id}/attachs', 'ContasController@attachs')->middleware('auth');
 Route::get('lista/contas/{id}/delete', 'ContasController@delete')->middleware('auth');
-Route::get('lista/contas/{id}/pago', 'ContasController@pago')->middleware('auth');
+Route::get('lista/contas/{id}/pago', 'ContasController@pagar')->middleware('auth');
+Route::post('lista/contas/{id}/pago', 'ContasController@pago')->middleware('auth');
 Route::get('novo/contas', 'ContasController@novo')->middleware('auth');
 Route::post('novo/contas/busca', 'ContasController@searchContatos')->middleware('auth');
 Route::get('novo/contas/', 'ContasController@add_2')->middleware('auth');
@@ -65,6 +66,8 @@ Route::get('novo/consumos/', 'ContasController@consumos_novo2')->middleware('aut
 Route::post('novo/consumos/parcelas', 'ContasController@consumos_novo3')->middleware('auth');
 
 Route::get('lista/bancos/', 'BancosController@index')->middleware('auth');
+Route::get('lista/bancos/selecionar', 'BancosController@selecionar')->middleware('auth');
+Route::post('lista/bancos/selecionar', 'BancosController@selecionar_busca')->middleware('auth');
 Route::get('lista/bancos/{id}', 'BancosController@detalhes')->middleware('auth');
 Route::get('lista/bancos/{id}/delete', 'BancosController@delete')->middleware('auth');
 Route::get('novo/bancos/', 'BancosController@novo')->middleware('auth');

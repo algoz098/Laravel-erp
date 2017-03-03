@@ -100,31 +100,7 @@ use Carbon\Carbon;
                     </div>
                   </div>
                 </div>
-                <div class="col-md-3">
-                  <div class="panel panel-default">
-                    <div class="panel-heading">
-                      <div class="panel-title">Estado e formas</div>
-                    </div>
-                    <div class="panel-body">
-                      <div class="form-group">
-                        <label>Formas de pagamento</label>
-                        <select class="form-control" id="forma" name="forma">
-                          <option value="" selected>- Escolha - </option>
-                          @foreach($comboboxes2 as $key => $combobox)
-                            <option value="{{$combobox->value}}">{{$combobox->text}}</option>
-                          @endforeach
-                        </select>
-                      </div>
-                      <div class="form-group">
-                        <label>Estado</label>
-                        <select class="form-control" id="estado" name="estado">
-                          <option value="0">Pago</option>
-                          <option value="1" selected>A pagar</option>
-                        </select>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+                  
               </div>
               @if (isset($is_consumos) and $is_consumos=="1")
                 @include('contas.consumos.valores')

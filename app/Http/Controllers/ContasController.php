@@ -19,25 +19,6 @@ class ContasController  extends BaseController
      parent::__construct();
   }
 
-  public function banco_novo(){
-    Log::info('Criando conta em banco, para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
-    return view('contas.bancos.novo');
-  }
-  public function banco_salva(request $request){
-    Log::info('Salvando conta em banco, para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
-    $banco = new Bancos;
-    $banco->contatos_id = $request->contatos_id;
-    $banco->banco = $request->banco;
-    $banco->cc = $request->cc;
-    $banco->cc_dig = $request->cc_dig;
-    $banco->tipo = $request->tipo;
-    $banco->agencia = $request->agencia;
-    $banco->comp = $request->comp;
-    $banco->valor = $request->valor;
-    $banco->save();
-    return redirect()->action('ContasController@index');
-
-  }
   public function index(){
     Log::info('Vendo contas, para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
     $contas = Contas::paginate(15);
@@ -212,22 +193,49 @@ class ContasController  extends BaseController
                                   ->with("is_consumos", $is_consumos);
   }
 
-  public function pago($id){
-
-    return view('contas.pagar');
-
+  public function pagar($id){
     $conta = Contas::find($id);
-    if ($conta->estado==1) {
-      $conta->estado = '0';
-      Log::info('Mudando conta para NÃO paga -> "'.$conta.'", para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
-    } elseif ($conta->estado == 0) {
-      $conta->estado = '1';
-      Log::info('Mudando conta para paga -> "'.$conta.'", para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
+    return view('contas.pagar')->with('conta', $conta);
+  }
+  public function pago($id, request $request){
+    $conta = Contas::find($id);
+    $conta->bancos_id = $request->bancos_id;
+    $conta->estado = '1';
+    $banco = Bancos::find($request->bancos_id);
+    $valor= 0;
+    $parcela_nao_paga = FALSE;
+    $parcela_paga = FALSE;
+
+    foreach ($conta->parcelas as $key => $parcela) {
+      if($parcela->estado=='0' ){
+        $parcela_nao_paga = TRUE;
+        $valor = $parcela->valor;
+        $parcela->estado =='1';
+        $parcela->save();
+      } else {
+        $parcela_paga = TRUE;
+      }
     }
+    if ($parcela_paga and $parcela_nao_paga) {
+      if ($conta->tipo == "1"){
+        $banco->valor = $banco->valor+$valor;
+      } else {
+        $banco->valor = $banco->valor-$valor;
+      }
+    } elseif ($parcela_paga and !$parcela_nao_paga) {
+      # Todas as parcelas pagas, apenas validando
+    } else {
+      if ($conta->tipo == "1"){
+        $banco->valor = $banco->valor+$request->valor;
+      } else {
+        $banco->valor = $banco->valor-$request->valor;
+      }
+    }
+
+    $banco->save();
     $conta->save();
     return redirect()->action('ContasController@index');
   }
-
   public function delete($id){
     $conta = Contas::withTrashed()->find($id);
 
@@ -377,6 +385,8 @@ class ContasController  extends BaseController
 
   public function add_4(request $request, $conta_id){
     $conta= Contas::find($conta_id);
+    $conta->valor = "0";
+    $conta->save();
     foreach ($request->parcela as $key => $parcela) {
       $parcela1 = new Contas;
       $parcela1->contatos_id = $conta->contatos_id;
