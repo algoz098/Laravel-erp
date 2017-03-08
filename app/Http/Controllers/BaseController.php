@@ -1,6 +1,7 @@
 <?php namespace App\Http\Controllers;
 
 use View;
+use Auth;
 use ErpSnippets;
 use App\Erp_configs as Configs;
 

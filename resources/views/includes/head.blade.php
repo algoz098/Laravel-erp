@@ -26,3 +26,4 @@
 <script src="{{ asset('js/jquery.uploadfile.min.js') }}"></script>
 <script src="{{ asset('js/raphael-min.js') }}"></script>
 <script src="{{ asset('js/morris.min.js') }}"></script>
+<script src="{{ asset('js/jquery.toaster.js') }}"></script>

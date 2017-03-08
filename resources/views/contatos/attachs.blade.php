@@ -9,12 +9,12 @@
     </div>
     <div class="modal-body">
       <div class="row">
-        <div class="col-md-3 pull-right text-center">
+        <div class="col-md-3 pull-right text-center" id="anexoColuna">
           <a class="btn btn-success" onclick="attachForm()">
             Adicionar anexo
           </a>
           <hr>
-          @foreach($attachs as $key => $attach)
+          @foreach($contato->attachsToo as $key => $attach)
             <div class="row list-contacts" id="attachRow{{$attach->id}}">
               {{$attach->name}}
               <span class="label label-info" onClick="loadImage({{$attach->id}})"  >Ver</span>
@@ -48,6 +48,9 @@
 
 <script>
 var imageStatus = false;
+
+$('#anexoColuna').height(height);
+
 function loadImage(id) {
   $( "#dataSpace" ).html( "" );
   $('#object').attr("data", "{{ url('/attach') }}/"+id+"/size/"+height);

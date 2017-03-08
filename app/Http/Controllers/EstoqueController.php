@@ -46,12 +46,12 @@ class EstoqueController  extends BaseController
   public function save(request $request)
   {
     $this->validate($request, [
-        'contatos_id' => 'required',
+        'filiais_id' => 'required',
         'produtos_id' => 'required|max:50',
         'quantidade' => 'required',
     ]);
     $estoque = new Estoque;
-    $estoque->contatos_id = $request->contatos_id;
+    $estoque->contatos_id = $request->filiais_id;
     $estoque->produtos_id = $request->produtos_id;
     $estoque->quantidade = $request->quantidade;
     $estoque->save();

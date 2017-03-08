@@ -10,120 +10,6 @@
 </ul>
 <!-- Tab panes -->
 <div class="tab-content">
-  <div role="tabpanel" class="tab-pane fade in active" id="documentos"><br>
-    <div class="col-md-3">
-      <div class="panel panel-default">
-        <div class="panel-heading">Sobre</div>
-        <div class="panel-body">
-          <div class="form-group">
-            <label for="text">Tipo de Entidade</label>
-            @if (!isset($is_funcionario))
-              @if (!empty($contato) and $contato->id===1)
-                <select class="form-control" id="tipo" disabled>
-                  <option value="0" selected>PJ - Pessoa Juridica</option>
-                </select>
-              @elseif(!empty($contato) and $contato->tipo=="1")
-                <select class="form-control" name="tipo" id="tipo" >
-                  <option value=""> - Escolha uma opção - </option>
-                  <option value="0" >PJ - Pessoa Juridica</option>
-                  <option value="1" selected>PF - Pessoa Fisica</option>
-                </select>
-              @elseif(!empty($contato) and $contato->tipo=="0")
-                <select class="form-control" name="tipo" id="tipo" >
-                  <option value=""> - Escolha uma opção - </option>
-                  <option value="0" selected>PJ - Pessoa Juridica</option>
-                  <option value="1" >PF - Pessoa Fisica</option>
-                </select>
-              @else
-                <select class="form-control" id="tipo" name="tipo" onchange="tipoChange(this)">
-                  <option value="" selected> - Escolha uma opção - </option>
-                  <option value="0" >PJ - Pessoa Juridica</option>
-                  <option value="1" >PF - Pessoa Fisica</option>
-                </select>
-              @endif
-            @else
-              <select class="form-control" id="tipo" name="tipo" onchange="tipoChange(this)" disabled>
-                <option value="1" selected>PF - Pessoa Fisica</option>
-              </select>
-            @endif
-          </div>
-          <div class="form-group">
-            <label for="nome">Nome ou Razão Social</label>
-            <input type="text" class="form-control" value="{{ $contato->nome or "" }}" name="nome" id="nome" placeholder="Razão Social/Nome">
-          </div>
-          <div class="form-group">
-            <label for="sobrenome">Nome Fantasia/Sobrenome</label>
-            <input type="text" class="form-control" value="{{ $contato->sobrenome or "" }}" name="sobrenome" id="sobrenome" placeholder="Nome Fantasia/Sobrenome">
-          </div>
-          @if ($field_codigo->value=="1")
-            <div class="form-group">
-              <label for="codigo">Codigo</label>
-              <input type="text" class="form-control" value="{{ $contato->codigo or "" }}" name="codigo" id="codigo" placeholder="Codigo">
-            </div>
-          @endif
-        </div>
-      </div>
-    </div>
-    <div class="col-md-3">
-      <div class="panel panel-default">
-        <div class="panel-heading">Documentos</div>
-        <div class="panel-body">
-          <div class="form-group">
-            <label for="cpf">CNPJ ou CPF</label>
-            <input type="text" class="form-control" value="{{ $contato->cpf or "" }}" name="cpf" id="cpf" placeholder="CNPJ\CPF">
-          </div>
-          <div class="form-group">
-            <label for="rg">Inscrição Estadual ou RG</label>
-            <input type="text" class="form-control rg" value="{{ $contato->rg or "" }}" name="rg" id="rg" placeholder="I.E.\RG">
-          </div>
-          <div class="form-group">
-            <label for="cod_prefeitura" id="cod_prefeituraHolder">Inscrição da Prefeitura</label>
-            <input type="text" class="form-control" value="{{ $contato->cod_prefeitura or "" }}" name="cod_prefeitura" id="cod_prefeitura" placeholder="Codigo da prefeitura">
-          </div>
-          <div class="form-group" id="nascimentoHolder">
-            <label for="codigo">Data de Nascimento</label>
-            <input type="text" class="form-control datepicker" value="{{ $contato->nascimento or "" }}" name="nascimento" id="nascimento" >
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="col-md-3 pull-right">
-      <div class="panel panel-default">
-        <div class="panel-heading">Interno</div>
-        <div class="panel-body">
-          <div class="form-group">
-            <label for="sociabilidade">Sociabilidade</label><br>
-            <input type="radio" name="sociabilidade" id="sociabilidade" value="1" @if (!empty($contato->sociabilidade)){{{$contato->sociabilidade==1 ? "checked" : ""}}}@endif > <i class="fa fa-signal level1"></i>
-            <input type="radio" name="sociabilidade" id="sociabilidade" value="2" @if (!empty($contato->sociabilidade)){{{$contato->sociabilidade==2 ? "checked" : ""}}}@endif><i class="fa fa-signal level2"></i>
-            <input type="radio" name="sociabilidade" id="sociabilidade" value="3" @if (!empty($contato->sociabilidade)){{{$contato->sociabilidade==3 ? "checked" : ""}}}@endif><i class="fa fa-signal level3"></i>
-            <input type="radio" name="sociabilidade" id="sociabilidade" value="4" @if (!empty($contato->sociabilidade)){{{$contato->sociabilidade==4 ? "checked" : ""}}}@endif><i class="fa fa-signal level4"></i>
-            <input type="radio" name="sociabilidade" id="sociabilidade" value="5" @if (!empty($contato->sociabilidade)){{{$contato->sociabilidade==5 ? "checked" : ""}}}@endif><i class="fa fa-signal level5"></i>
-          </div>
-          <div class="form-group">
-            <label for="actived">Ativo</label><br>
-            <input type="checkbox" name="active" id="active" value="1" checked>Dados Validos
-          </div>
-          <div class="form-group" id="tipo_filialFormGroup" style="display:none;">
-            <label for="sociabilidade">é Filial?</label>
-            <select class="form-control" id="tipo_filial" name="tipo_filial">
-              @if (isset($contato))
-                @if ($is_filial!=FALSE)
-                  <option value="1" selected>Sim</option>
-                  <option>Não</option>
-                @else
-                  <option value="1">Sim</option>
-                  <option selected>Não</option>
-                @endif
-              @else
-                <option value="" selected>Não</option>
-                <option value="1" >Sim</option>
-              @endif
-            </select>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
   @if (isset($is_funcionario))
     <div role="tabpanel" class="tab-pane fade" id="funcionario"><br>
         @include('contatos.funcionarios.new')
@@ -317,34 +203,141 @@
     </div>
   </div>
   <div role="tabpanel" class="tab-pane fade" id="anexos"><br>
-    <div class="col-md-3 pull-right">
-      <div class="panel panel-danger">
-        <div class="panel-heading">
-          <h3 class="panel-title">Atenção!</h3>
-        </div>
-        <div class="panel-body">
+    <div class="row">
+
+      <div class="col-md-3 pull-right">
+        <div class="panel panel-danger">
+          <div class="panel-heading">
+            <h3 class="panel-title">Atenção!</h3>
+          </div>
+          <div class="panel-body">
             Anexos colocados aqui seram ADICIONADOS e <strong>NÃO</strong> editados!
+          </div>
         </div>
       </div>
+      <div class="col-md-9">
+
+      </div>
     </div>
-    <div class="col-md-9">
+  </div>
+  <div role="tabpanel" class="tab-pane fade in active" id="documentos"><br>
+    <div class="row">
+      <div class="col-md-3">
+        <div class="panel panel-default">
+          <div class="panel-heading">Sobre</div>
+          <div class="panel-body">
+            <div class="form-group">
+              <label for="text">Tipo de Entidade</label>
+              @if (!isset($is_funcionario))
+                @if (!empty($contato) and $contato->id===1)
+                  <select class="form-control" id="tipo" disabled>
+                    <option value="0" selected>PJ - Pessoa Juridica</option>
+                  </select>
+                @elseif(!empty($contato) and $contato->tipo=="1")
+                  <select class="form-control" name="tipo" id="tipo" >
+                    <option value=""> - Escolha uma opção - </option>
+                    <option value="0" >PJ - Pessoa Juridica</option>
+                    <option value="1" selected>PF - Pessoa Fisica</option>
+                  </select>
+                @elseif(!empty($contato) and $contato->tipo=="0")
+                  <select class="form-control" name="tipo" id="tipo" >
+                    <option value=""> - Escolha uma opção - </option>
+                    <option value="0" selected>PJ - Pessoa Juridica</option>
+                    <option value="1" >PF - Pessoa Fisica</option>
+                  </select>
+                @else
+                  <select class="form-control" id="tipo" name="tipo" onchange="tipoChange(this)">
+                    <option value="" selected> - Escolha uma opção - </option>
+                    <option value="0" >PJ - Pessoa Juridica</option>
+                    <option value="1" >PF - Pessoa Fisica</option>
+                  </select>
+                @endif
+              @else
+                <select class="form-control" id="tipo" name="tipo" onchange="tipoChange(this)" disabled>
+                  <option value="1" selected>PF - Pessoa Fisica</option>
+                </select>
+              @endif
+            </div>
+            <div class="form-group">
+              <label for="nome">Nome ou Razão Social</label>
+              <input type="text" class="form-control" value="{{ $contato->nome or "" }}" name="nome" id="nome" placeholder="Razão Social/Nome">
+            </div>
+            <div class="form-group">
+              <label for="sobrenome">Nome Fantasia/Sobrenome</label>
+              <input type="text" class="form-control" value="{{ $contato->sobrenome or "" }}" name="sobrenome" id="sobrenome" placeholder="Nome Fantasia/Sobrenome">
+            </div>
+            @if ($field_codigo->value=="1")
+              <div class="form-group">
+                <label for="codigo">Codigo</label>
+                <input type="text" class="form-control" value="{{ $contato->codigo or "" }}" name="codigo" id="codigo" placeholder="Codigo">
+              </div>
+            @endif
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="panel panel-default">
+          <div class="panel-heading">Documentos</div>
+          <div class="panel-body">
+            <div class="form-group">
+              <label for="cpf">CNPJ ou CPF</label>
+              <input type="text" class="form-control" value="{{ $contato->cpf or "" }}" name="cpf" id="cpf" placeholder="CNPJ\CPF">
+            </div>
+            <div class="form-group">
+              <label for="rg">Inscrição Estadual ou RG</label>
+              <input type="text" class="form-control rg" value="{{ $contato->rg or "" }}" name="rg" id="rg" placeholder="I.E.\RG">
+            </div>
+            <div class="form-group">
+              <label for="cod_prefeitura" id="cod_prefeituraHolder">Inscrição da Prefeitura</label>
+              <input type="text" class="form-control" value="{{ $contato->cod_prefeitura or "" }}" name="cod_prefeitura" id="cod_prefeitura" placeholder="Codigo da prefeitura">
+            </div>
+            <div class="form-group" id="nascimentoHolder">
+              <label for="codigo">Data de Nascimento</label>
+              <input type="text" class="form-control datepicker" value="{{ $contato->nascimento or "" }}" name="nascimento" id="nascimento" >
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3 pull-right">
+        <div class="panel panel-default">
+          <div class="panel-heading">Interno</div>
+          <div class="panel-body">
+            <div class="form-group">
+              <label for="sociabilidade">Sociabilidade</label><br>
+              <input type="radio" name="sociabilidade" id="sociabilidade" value="1" @if (!empty($contato->sociabilidade)){{{$contato->sociabilidade==1 ? "checked" : ""}}}@endif > <i class="fa fa-signal level1"></i>
+                <input type="radio" name="sociabilidade" id="sociabilidade" value="2" @if (!empty($contato->sociabilidade)){{{$contato->sociabilidade==2 ? "checked" : ""}}}@endif><i class="fa fa-signal level2"></i>
+                  <input type="radio" name="sociabilidade" id="sociabilidade" value="3" @if (!empty($contato->sociabilidade)){{{$contato->sociabilidade==3 ? "checked" : ""}}}@endif><i class="fa fa-signal level3"></i>
+                    <input type="radio" name="sociabilidade" id="sociabilidade" value="4" @if (!empty($contato->sociabilidade)){{{$contato->sociabilidade==4 ? "checked" : ""}}}@endif><i class="fa fa-signal level4"></i>
+                      <input type="radio" name="sociabilidade" id="sociabilidade" value="5" @if (!empty($contato->sociabilidade)){{{$contato->sociabilidade==5 ? "checked" : ""}}}@endif><i class="fa fa-signal level5"></i>
+                      </div>
+                      <div class="form-group">
+                        <label for="actived">Ativo</label><br>
+                        <input type="checkbox" name="active" id="active" value="1" checked>Dados Validos
+                      </div>
+                      <div class="form-group" id="tipo_filialFormGroup" style="display:none;">
+                        <label for="sociabilidade">é Filial?</label>
+                        <select class="form-control" id="tipo_filial" name="tipo_filial">
+                          @if (isset($contato))
+                            @if ($is_filial!=FALSE)
+                              <option value="1" selected>Sim</option>
+                              <option>Não</option>
+                            @else
+                              <option value="1">Sim</option>
+                              <option selected>Não</option>
+                            @endif
+                          @else
+                            <option value="" selected>Não</option>
+                            <option value="1" >Sim</option>
+                          @endif
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                </div>
 
     </div>
   </div>
 </div>
-
-
-            @if(Request::url()=== 'url("novo/contatos")')
-              <div class="row">
-                <div class="form-group">
-                  <label for="obs">Obs:</label>
-                  <textarea  name="obs">
-                    {!! $contato->obs or "" !!}
-                  </textarea>
-                </div>
-              </div>
-            @endif
-
   <script language="javascript">
   function tipoChange() {
     var b = $("#tipo").val();
@@ -452,7 +445,6 @@ function remove() {
   }
 }
 function removeEndereco() {
-  console.log(i_endereco)
   if (i_endereco<0){}else {
     $('#linha_endereco'+i_endereco).remove();
     if(i_endereco>0){
@@ -544,6 +536,90 @@ function selectCep_edit(a){
   });
 }
 
+function enviarContato(){
+  var a = 0;
+  var tipo_tel = new Array;
+  var numero_tel = new Array;
+  var contato_tel = new Array;
+  var setor_tel = new Array;
+  while (a <= i){
+    tipo_tel[a] = $('#tipo'+a).val();
+    numero_tel[a] = $('#numero'+a).val();
+    contato_tel[a] = $('#contato'+a).val();
+    setor_tel[a] = $('#setor'+a).val();
+    a++;
+  }
+  var b = 0;
+  var tipo_end = new Array;
+  var cep_end = new Array;
+  var end_end = new Array;
+  var numero_end = new Array;
+  var complemento_end = new Array;
+  var bairro_end = new Array;
+  var cidade_end = new Array;
+  var uf_end = new Array;
+  while (b <= i_endereco){
+    tipo_end[b] = $('#endereco_tipo'+b).val();
+    cep_end[b] = $('#cep'+b).val();
+    end_end[b] = $('#endereco'+b).val();
+    numero_end[b] = $('#numero_endereco'+b).val();
+    complemento_end[b] = $('#complemento'+b).val();
+    bairro_end[b] = $('#bairro'+b).val();
+    cidade_end[b] = $('#cidade'+b).val();
+    b++;
+  }
+  var url = "{{url('lista/contatos/selecionar/novo')}}";
+  var data = {
+            '_token'            : $('input[name=_token]').val(),
+            'tipo'              : $('#tipo').val(),
+            'tipo_filial'       : $('#tipo_filial').val(),
+            'nome'              : $('input[name=nome]').val(),
+            'sobrenome'         : $('input[name=sobrenome]').val(),
+            'codigo'            : $('input[name=codigo]').val(),
+            'cpf'               : $('input[name=cpf]').val(),
+            'rg'                : $('input[name=rg]').val(),
+            'cod_prefeitura'    : $('input[name=cod_prefeitura]').val(),
+            'nascimento'        : $('input[name=nascimento]').val(),
+            'sociabilidade'     : $('input[name=sociabilidade]').val(),
+            'active'            : $('input[name=active]').val(),
+            'tipo_tel'          : tipo_tel,
+            'numero_tel'        : numero_tel,
+            'contato_tel'       : contato_tel,
+            'setor_tel'         : setor_tel,
+            'tipo_end'          : tipo_end,
+            'cep_end'           : cep_end,
+            'end_end'           : end_end,
+            'numero_end'        : numero_end,
+            'complemento_end'   : complemento_end,
+            'bairro_end'        : bairro_end,
+            'cidade_end'        : cidade_end,
+            'uf_end'            : uf_end,
+        };
+        console.log(data);
+  //$("#contatosHolder").html("");
+  $.ajax({
+    type: "POST",
+    url: url,
+    data: data,
+    success: function( data ) {
+      $("#contatosHolder").html("");
+      var url = "{{url('lista/contatos/selecionar')}}";
+      var data = {
+                'busca'              : '',
+                '_token'            : $('input[name=_token]').val()
+            };
+      $.ajax({
+        type: "POST",
+        url: url,
+        data: data,
+        success: function( data ) {
+          $("#contatosHolder").html(data);
+          $("#botaoSalvar").hide();
+        }
+      });
+    }
+  });
+}
 </script>
 
 <script id="ToClone" type="text/template">

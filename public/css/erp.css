@@ -44,6 +44,11 @@ body {
   padding: 0px;
   text-transform: uppercase;
 }
+.limitar-string {
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space: nowrap;
+}
 #secondNavbar, #thirdNavbar{
   background-color: #fff;
   height: 65px;
@@ -56,6 +61,10 @@ body {
 }
 .list-contacts{
   border-top: 2px dashed #ececec;
+
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space: nowrap;
 }
 .list-contacts:hover{
   background-color: #ececec;
@@ -100,5 +109,12 @@ body {
   width: 90%;
 }
 .sub-image-div{
-  overflow-y: auto
+  overflow-y: auto;
+}
+#lista {
+  font-weight: bold;
+}
+#anexoColuna {
+  overflow-y: scroll;
+  white-space: nowrap;
 }

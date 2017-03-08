@@ -2,9 +2,14 @@
 
 namespace App\Providers;
 
+use App\Contatos;
+use App\Atendimento;
+use App\Observers\ContatosObserver;
+use App\Observers\AtendimentosObserver;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Blade;
 
+Use Auth;
 use App\Erp_configs as Configs;
 
 class AppServiceProvider extends ServiceProvider
@@ -16,6 +21,39 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+      Contatos::observe(ContatosObserver::class);
+      Atendimento::observe(AtendimentosObserver::class);
+
+      Blade::directive('botaoSimNao', function ($a) {
+        list($nome, $subnome, $valor) = explode('*', $a);
+        if ($valor==1){
+          return "<?php echo '
+          <div class=\"btn-group\" data-toggle=\"buttons\">
+            <label class=\"btn btn-success btn-xs active\">
+              <input type=\"radio\" name=\"$nome&#91;$subnome&#93;\" value=\"1\" id=\"$nome.$subnome.Sim\" autocomplete=\"off\" checked> Sim
+            </label>
+            <label class=\"btn btn-danger btn-xs \">
+              <input type=\"radio\" name=\"$nome&#91;$subnome&#93;\" value=\"0\" id=\"$nome.$subnome\" autocomplete=\"off\"> Não
+            </label>
+          </div>
+          '; ?>";
+        } else {
+          return "<?php echo '
+          <div class=\"btn-group\" data-toggle=\"buttons\">
+            <label class=\"btn btn-success btn-xs \">
+              <input type=\"radio\" name=\"$nome&#91;$subnome&#93;\" value=\"1\" id=\"$nome.$subnome.Sim\" autocomplete=\"off\" > Sim
+            </label>
+            <label class=\"btn btn-danger btn-xs active\">
+              <input type=\"radio\" name=\"$nome&#91;$subnome&#93;\" value=\"0\" id=\"$nome.$subnome\" autocomplete=\"off\" checked> Não
+            </label>
+          </div>
+          '; ?>";
+        }
+
+      });
+
+
+
       Blade::directive('botaoSalvar', function () {
         return "<?php echo '<button type=\"submit\"  class=\"btn btn-success\"><i class=\"fa fa-check\"></i> Salvar</button>'; ?>";
       });
@@ -29,16 +67,16 @@ class AppServiceProvider extends ServiceProvider
       Blade::directive('buscaSimples', function () {
         return "<?php echo '
             <div class=\"input-group\">
-              <input type=\"text\" class=\"form-control\" name=\"busca\" id=\"busca\" size=\"40\" placeholder=\"Busca...\">
+              <input type=\"text\" class=\"form-control\" name=\"busca\" id=\"busca\"   data-toggle=\"tooltip\" title=\"Busca\" size=\"40\" placeholder=\"Busca...\">
               <span class=\"input-group-btn\">
-                <button class=\"btn btn-info\" type=\"submit\"><i class=\"fa fa-search\"></i></button>
+                <button   data-toggle=\"tooltip\" title=\"Efetuar busca\" class=\"btn btn-info\" type=\"submit\"><i class=\"fa fa-search\"></i></button>
               </span>
             </div>';?>";
       });
       Blade::directive('buscaModal', function ($a) {
         return "<?php echo '
             <div class=\"input-group\">
-              <input type=\"text\" class=\"form-control\" name=\"busca\" id=\"busca\" size=\"40\" placeholder=\"Busca...\">
+              <input type=\"text\" class=\"form-control\" name=\"busca\" id=\"busca_modal\" size=\"40\" placeholder=\"Busca...\">
               <span class=\"input-group-btn\">
                 <button class=\"btn btn-info\" type=\"button\" onclick=\"$a\"><i class=\"fa fa-search\"></i></button>
               </span>
@@ -47,7 +85,7 @@ class AppServiceProvider extends ServiceProvider
 
       Blade::directive('buscaExtraBotao', function () {
         return "<?php echo '
-            <a class=\"btn btn-info\"  title=\"Busca Avançada\" data-toggle=\"collapse\" data-target=\"#buscaAvançada\" aria-expanded=\"\" onclick=\"listaTop()\">
+            <a class=\"btn btn-info\"   data-toggle=\"tooltip\" title=\"Mostrar busca avançada\" title=\"Busca Avançada\" data-toggle=\"collapse\" data-target=\"#buscaAvançada\" aria-expanded=\"\" onclick=\"listaTop()\">
               <i class=\"fa fa-search-plus\"></i>
             </a>'?>";
       });
@@ -59,24 +97,24 @@ class AppServiceProvider extends ServiceProvider
       });
       Blade::directive('botaoEditar', function () {
         return "<?php echo '
-            <a id=\"botaoEditar\" href=\"\" class=\"btn btn-info btn_xs\" data-toggle=\"tooltip\" title=\"Editar\">
+            <a id=\"botaoEditar\" href=\"\" class=\"btn btn-info \" data-toggle=\"tooltip\" title=\"Editar\">
               <i class=\"fa fa-pencil\"></i>
             </a>'?>";
       });
       Blade::directive('botaoDetalhes', function () {
         return "<?php echo '
-            <a id=\"botaoDetalhes\" class=\"btn btn-info btn_xs\" >
+            <a id=\"botaoDetalhes\" class=\"btn btn-info \" data-toggle=\"tooltip\" title=\"Detalhes\">
               </i><i class=\"fa fa-file-text\"></i>
             </a>'?>";
       });
       Blade::directive('botaoAnexos', function () {
         return "<?php echo '
-            <span id=\"botaoAnexos\" class=\"btn btn-warning btn_xs\" title=\"Anexos\">
+            <span id=\"botaoAnexos\" class=\"btn btn-warning \"  data-toggle=\"tooltip\" title=\"Anexos\">
               <i class=\"fa fa-paperclip\"></i>
             </span>'?>";
       });
       Blade::directive('idSelecionado', function () {
-        return "<?php echo '<input type=\"text\" class=\"form-control\" size=\"2\" name=\"ids\" id=\"ids\" placeholder=\"\" disabled>'?>";
+        return "<?php echo '<input type=\"text\" class=\"form-control\" size=\"2\" name=\"ids\" id=\"ids\"   data-toggle=\"tooltip\" title=\"ID Selecionado\" placeholder=\"\" disabled>'?>";
       });
       Blade::directive('botaoNovo', function ($a) {
         if (strpos($a, '*')){
@@ -147,9 +185,9 @@ class AppServiceProvider extends ServiceProvider
             <div class=\"form-group\">
               <label for=\"por\">Filial</label>
               <div class=\"input-group\">
-                <input type=\"hidden\" class=\"form-control\" id=\"contatosHidden\" name=\"contatos_id\" value=\"'.$id.'\">
-                <input type=\"text\" class=\"form-control\" id=\"contatos\" disabled value=\"'.$nome.'\">
-                <a onclick=\"window.activeTarget=&#39;contatos&#39;&#59; openModal(&#39;'.URL::to('lista/filiais/selecionar').'&#39;)\" class=\"input-group-addon btn btn-info\"><i class=\"fa fa-gear\"></i></a>
+                <input type=\"hidden\" class=\"form-control\" id=\"filiaisHidden\" name=\"filiais_id\" value=\"'.$id.'\">
+                <input type=\"text\" class=\"form-control\" id=\"filiais\" disabled value=\"'.$nome.'\">
+                <a onclick=\"window.activeTarget=&#39;filiais&#39;&#59; openModal(&#39;'.URL::to('lista/filiais/selecionar').'&#39;)\" class=\"input-group-addon btn btn-info\"><i class=\"fa fa-gear\"></i></a>
               </div>
             </div>'?>";
           } else {
@@ -157,9 +195,9 @@ class AppServiceProvider extends ServiceProvider
               <div class=\"form-group\">
                 <label for=\"por\">Filial:</label>
                 <div class=\"input-group\">
-                  <input type=\"hidden\" class=\"form-control\" id=\"contatosHidden\" name=\"contatos_id\" value=\"\">
-                  <input type=\"text\" class=\"form-control\" id=\"contatos\" disabled value=\"\">
-                  <a onclick=\"window.activeTarget=&#39;contatos&#39;&#59; openModal(&#39;'.URL::to('lista/filiais/selecionar').'&#39;)\" class=\"input-group-addon btn btn-info\"><i class=\"fa fa-gear\"></i></a>
+                  <input type=\"hidden\" class=\"form-control\" id=\"filiaisHidden\" name=\"filiais_id\" value=\"\">
+                  <input type=\"text\" class=\"form-control\" id=\"filiais\" disabled value=\"\">
+                  <a onclick=\"window.activeTarget=&#39;filiais&#39;&#59; openModal(&#39;'.URL::to('lista/filiais/selecionar').'&#39;)\" class=\"input-group-addon btn btn-info\"><i class=\"fa fa-gear\"></i></a>
                 </div>
               </div>
             '?>";
@@ -272,6 +310,21 @@ class AppServiceProvider extends ServiceProvider
             </div>
           </div>
         '?>";
+      });
+
+      // Menu lateral
+      Blade::directive('sidemenuItem', function ($a) {
+        list($tipo, $modulo, $icone, $label) = explode('*', $a);
+        return "<?php
+          if (!isset(Auth::user()->perms[\"$modulo\"][\"leitura\"]) or Auth::user()->perms[\"$modulo\"][\"leitura\"]!=1){}else{
+            echo '
+              <li class=\"pushy-link \">
+                <a class=\"\" href=\"'.URL::to('$tipo\\$modulo').'\">
+                  <i class=\"fa $icone\"></i> $label
+                </a>
+              </li>
+          ';}
+        ?>";
       });
     }
 

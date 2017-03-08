@@ -83,7 +83,11 @@
                 @mostraContato($banco->contato->id*$banco->contato->sobrenome)
               </div>
               <div class="col-md-1 ">
-                {{$banco->banco}}
+                @if (isset($banco->banco->id))
+                  @mostraContato($banco->banco->id*$banco->banco->sobrenome)
+                @else
+                  N/C
+                @endif
               </div>
 
               <div class="col-md-2">

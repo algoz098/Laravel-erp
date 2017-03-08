@@ -15,7 +15,7 @@
         </div>
       <div id="contatosHolder">
         @foreach ($produtos as $key => $produto)
-          <div class="row list-contacts" onclick="retornarEsta({{$produto->id}}, '{{$produto->nome}}')">
+          <div class="row list-contacts" onclick="retornarEsta({{$produto->id}}, '{{str_replace("'", " ", $produto->nome)}}')">
             <div class="col-md-1">
               <span class="label label-info">
                 ID: {{$produto->id}}

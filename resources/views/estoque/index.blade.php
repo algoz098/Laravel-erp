@@ -82,25 +82,6 @@
                 </div>
               </div>
             @endif
-          @if($deletados!=0)
-              <h3>Deletados</h3>
-              @foreach($deletados as $key => $estoque)
-                <div class="row list-contacts">
-                  <div class="col-md-3">
-                    <a href="{{ url('lista/estoque') }}/{{$estoque->id}}/delete"  title="Apagar" class="btn btn-danger">
-                      <i class="fa fa-ban"></i>
-                    </a>
-                    <a class="btn btn-info"  title="Detalhes"  data-toggle="modal" data-target="#detalhes{{$estoque->id}}" aria-expanded="">
-                      <i class="fa fa-file-text-o"></i>
-                    </a>
-                  </div>
-                  <div class="col-md-3">
-                    {{$estoque->nome}}
-                    <span class="label label-warning">R$ {{ number_format($estoque->valor_custo, 2) }}</label>
-                  </div>
-                </div>
-              @endforeach
-            @endif
           </div>
         </div>
       </div>

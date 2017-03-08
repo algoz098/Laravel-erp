@@ -40,6 +40,11 @@ class Contas extends Model
   }
   public function banco()
   {
-      return $this->belongsTo('App\Bancos', 'banco_id');
+      return $this->belongsTo('App\Bancos', 'bancos_id');
   }
+  public function usuario()
+  {
+      return $this->belongsTo('App\Contatos', 'usuarios_id');
+  }
+
 }

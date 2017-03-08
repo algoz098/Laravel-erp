@@ -17,7 +17,7 @@
             <div class="col-md-6">
               <div class="alert alert-warning" role="alert">
                 <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <strong>Erro</strong>
+                <strong>Erros: </strong>
                       @foreach( $errors->all() as $message )
                         <div class="row">{{ $message }}</div>
                       @endforeach

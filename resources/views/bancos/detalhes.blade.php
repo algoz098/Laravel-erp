@@ -36,7 +36,7 @@
              <strong>Banco:</strong>
            </div>
            <div class="col-md-4">
-             {{$banco->banco}}
+             {{$banco->banco->sobrenome}}
            </div>
            <div class="col-md-2">
              <strong>Conta corrente</strong>

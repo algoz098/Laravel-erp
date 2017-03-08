@@ -338,6 +338,7 @@ class ComposerStaticIniteb7ed518eae24fc4a2b91da7f84bfb6b
         'AddSoftdeleteEstoqueTable' => __DIR__ . '/../..' . '/database/migrations/2016_12_13_155054_add_softdelete_estoque_table.php',
         'AddTrabalhoUsersTable' => __DIR__ . '/../..' . '/database/migrations/2016_12_23_001639_add_trabalho_users_table.php',
         'CodigoprefeituraContatosTable' => __DIR__ . '/../..' . '/database/migrations/2017_01_14_131933_codigoprefeitura_contatos_table.php',
+        'ColumnPermsToTextUserTable' => __DIR__ . '/../..' . '/database/migrations/2017_03_07_223633_column_perms_to_text_user_table.php',
         'ComptabilidadeEstoquePodutosTable' => __DIR__ . '/../..' . '/database/migrations/2017_02_24_092509_comptabilidade_estoque_podutos_table.php',
         'ContatosAddTipoTable' => __DIR__ . '/../..' . '/database/migrations/2016_12_01_221934_contatos_add_tipo_table.php',
         'ContatosTableSeeder' => __DIR__ . '/../..' . '/database/seeds/ContatosTableSeeder.php',
@@ -831,6 +832,8 @@ class ComposerStaticIniteb7ed518eae24fc4a2b91da7f84bfb6b
         'PHP_Token_XOR_EQUAL' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
         'PHP_Token_YIELD' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
         'PHP_Token_YIELD_FROM' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
+        'RelateBancosContatosTable' => __DIR__ . '/../..' . '/database/migrations/2017_03_07_093300_relate_bancos_contatos_table.php',
+        'RelateBancosContatosTable2' => __DIR__ . '/../..' . '/database/migrations/2017_03_07_094642_relate_bancos_contatos_table2.php',
         'SebastianBergmann\\CodeCoverage\\CodeCoverage' => __DIR__ . '/..' . '/phpunit/php-code-coverage/src/CodeCoverage.php',
         'SebastianBergmann\\CodeCoverage\\CoveredCodeNotExecutedException' => __DIR__ . '/..' . '/phpunit/php-code-coverage/src/Exception/CoveredCodeNotExecutedException.php',
         'SebastianBergmann\\CodeCoverage\\Driver\\Driver' => __DIR__ . '/..' . '/phpunit/php-code-coverage/src/Driver/Driver.php',
@@ -913,6 +916,7 @@ class ComposerStaticIniteb7ed518eae24fc4a2b91da7f84bfb6b
         'SoftdeletesAtendimentosTable' => __DIR__ . '/../..' . '/database/migrations/2017_01_12_124249_softdeletes_atendimentos_table.php',
         'TestCase' => __DIR__ . '/../..' . '/tests/TestCase.php',
         'Text_Template' => __DIR__ . '/..' . '/phpunit/php-text-template/src/Template.php',
+        'UserContasRelate' => __DIR__ . '/../..' . '/database/migrations/2017_03_05_171417_user_contas_relate.php',
     );
 
     public static function getInitializer(ClassLoader $loader)

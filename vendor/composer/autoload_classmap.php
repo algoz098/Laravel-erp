@@ -15,6 +15,7 @@ return array(
     'AddSoftdeleteEstoqueTable' => $baseDir . '/database/migrations/2016_12_13_155054_add_softdelete_estoque_table.php',
     'AddTrabalhoUsersTable' => $baseDir . '/database/migrations/2016_12_23_001639_add_trabalho_users_table.php',
     'CodigoprefeituraContatosTable' => $baseDir . '/database/migrations/2017_01_14_131933_codigoprefeitura_contatos_table.php',
+    'ColumnPermsToTextUserTable' => $baseDir . '/database/migrations/2017_03_07_223633_column_perms_to_text_user_table.php',
     'ComptabilidadeEstoquePodutosTable' => $baseDir . '/database/migrations/2017_02_24_092509_comptabilidade_estoque_podutos_table.php',
     'ContatosAddTipoTable' => $baseDir . '/database/migrations/2016_12_01_221934_contatos_add_tipo_table.php',
     'ContatosTableSeeder' => $baseDir . '/database/seeds/ContatosTableSeeder.php',
@@ -508,6 +509,8 @@ return array(
     'PHP_Token_XOR_EQUAL' => $vendorDir . '/phpunit/php-token-stream/src/Token.php',
     'PHP_Token_YIELD' => $vendorDir . '/phpunit/php-token-stream/src/Token.php',
     'PHP_Token_YIELD_FROM' => $vendorDir . '/phpunit/php-token-stream/src/Token.php',
+    'RelateBancosContatosTable' => $baseDir . '/database/migrations/2017_03_07_093300_relate_bancos_contatos_table.php',
+    'RelateBancosContatosTable2' => $baseDir . '/database/migrations/2017_03_07_094642_relate_bancos_contatos_table2.php',
     'SebastianBergmann\\CodeCoverage\\CodeCoverage' => $vendorDir . '/phpunit/php-code-coverage/src/CodeCoverage.php',
     'SebastianBergmann\\CodeCoverage\\CoveredCodeNotExecutedException' => $vendorDir . '/phpunit/php-code-coverage/src/Exception/CoveredCodeNotExecutedException.php',
     'SebastianBergmann\\CodeCoverage\\Driver\\Driver' => $vendorDir . '/phpunit/php-code-coverage/src/Driver/Driver.php',
@@ -590,4 +593,5 @@ return array(
     'SoftdeletesAtendimentosTable' => $baseDir . '/database/migrations/2017_01_12_124249_softdeletes_atendimentos_table.php',
     'TestCase' => $baseDir . '/tests/TestCase.php',
     'Text_Template' => $vendorDir . '/phpunit/php-text-template/src/Template.php',
+    'UserContasRelate' => $baseDir . '/database/migrations/2017_03_05_171417_user_contas_relate.php',
 );

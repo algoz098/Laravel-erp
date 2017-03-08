@@ -243,7 +243,7 @@ class AdminController  extends BaseController
 
     public function access($id){
       $contato = Contatos::find($id);
-
+      return view('admin.access')->with('contato', $contato);
       $perms = $contato->user->perms;
       if (!isset($contato->user->perms["admin"])){
         $perms = array("admin" => "0");
@@ -266,17 +266,46 @@ class AdminController  extends BaseController
 
     public function access_post(Request $request, $id){
       $contato = Contatos::find($id);
-      if ($contato->user->perms["admin"]==1){
-        $contato->user->perms["admin"]=0;
-        Log::info('!!!ADMIN!!! Removendo admin do usuario -> "'.$contato.'", para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
-      } else{
-        $contato->user->perms["admin"]=1;
-        Log::info('!!!ADMIN!!! Dando admin ao usuario -> "'.$contato.'", para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
-      }
-      #$contato->user->perms = $request->role;
+      $a['admin'] = $request->admin;
+
+      $a['contatos']['leitura'] = $request->contatos['leitura'];
+      $a['contatos']['adicao'] = $request->contatos['adicao'];
+      $a['contatos']['edicao'] = $request->contatos['edicao'];
+
+      $a['tickets']['leitura'] = $request->tickets['leitura'];
+      $a['tickets']['adicao'] = $request->tickets['adicao'];
+      $a['tickets']['edicao'] = $request->tickets['edicao'];
+
+      $a['atendimentos']['leitura'] = $request->atendimentos['leitura'];
+      $a['atendimentos']['adicao'] = $request->atendimentos['adicao'];
+      $a['atendimentos']['edicao'] = $request->atendimentos['edicao'];
+
+      $a['contas']['leitura'] = $request->contas['leitura'];
+      $a['contas']['adicao'] = $request->contas['adicao'];
+      $a['contas']['edicao'] = $request->contas['edicao'];
+
+      $a['vendas']['leitura'] = $request->vendas['leitura'];
+      $a['vendas']['adicao'] = $request->vendas['adicao'];
+      $a['vendas']['edicao'] = $request->vendas['edicao'];
+
+
+      $a['caixas']['leitura'] = $request->caixas['leitura'];
+      $a['caixas']['adicao'] = $request->caixas['adicao'];
+      $a['caixas']['edicao'] = $request->caixas['edicao'];
+
+
+      $a['estoques']['leitura'] = $request->estoques['leitura'];
+      $a['estoques']['adicao'] = $request->estoques['adicao'];
+      $a['estoques']['edicao'] = $request->estoques['edicao'];
+
+      $a['frotas']['leitura'] = $request->frotas['leitura'];
+      $a['frotas']['adicao'] = $request->frotas['adicao'];
+      $a['frotas']['edicao'] = $request->frotas['edicao'];
+
+
+      $contato->user->perms = json_decode(json_encode($a), true);
       $contato->user->save();
-      $contatos = contatos::all();
-      return view('admin.index')->with('contatos', $contatos);
+      return redirect()->action('AdminController@index');
 
     }
     public function access_delete($id, $id_access){

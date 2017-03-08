@@ -98,13 +98,13 @@
                   </div>
                 </div>
                 <div class="row">
-                  @if ($contato->tipo=="0")
-                  <div class="col-md-12">
+                  @if ($contato->tipo=="0" || $contato->id=="1")
+                  <div class="limitar-string col-md-12">
                     <strong>Nome Fantasia</strong><br>
                     <span style="font-size:30px">{{$contato->sobrenome}}</span>
                   </div>
                   @else
-                    <div class="col-md-12">
+                    <div class="limitar-string col-md-12">
                       <strong>Nome: </strong><br>
                       <span style="font-size: 30px">{{$contato->nome}}&nbsp{{$contato->sobrenome}}</span>
                     </div>
@@ -128,7 +128,7 @@
                 <hr>
                 <div class="row">
                   <div class="col-md-12">
-                    @if ($contato->tipo=="0")
+                    @if ($contato->tipo=="0" or $contato->id=="1")
                       <div class="row">
                         <div class="col-md-2">
                           <strong>Razão Social:</strong>
@@ -140,7 +140,7 @@
                     @endif
                     <div class="row">
                       <div class="col-md-2">
-                        <strong>{{{$contato->tipo=="0" ? "CNPJ" : "CPF"}}}:</strong>
+                        <strong>{{{$contato->tipo=="0" || $contato->id=="1"  ? "CNPJ" : "CPF"}}}:</strong>
                       </div>
                       <div class="col-md-5">
                         <span class="">{{$contato->cpf}}</span>
@@ -148,7 +148,7 @@
                     </div>
                     <div class="row">
                       <div class="col-md-2">
-                        <strong>{{{$contato->tipo=="0" ? "I.E." : "RG"}}}:</strong>
+                        <strong>{{{$contato->tipo=="0" || $contato->id=="1" ? "I.E." : "RG"}}}:</strong>
                       </div>
                       <div class="col-md-5">
                         <span class="">{{$contato->rg}}</span>
@@ -454,4 +454,5 @@ function deleteEndereco(id){
      $( "#telefone"+id ).remove();
    });
  };
+
 </script>

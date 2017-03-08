@@ -12,10 +12,14 @@ class Bancos extends Model
 
   public function contato()
   {
-      return $this->belongsTo('App\Contatos', 'contatos_id');
+      return $this->belongsTo('App\Contatos', 'filial_id');
   }
   public function contas()
   {
     return $this->hasMany('App\Contas', 'bancos_id');
+  }
+  public function banco()
+  {
+    return $this->belongsTo('App\Contatos', 'contatos_id');
   }
 }

@@ -33,7 +33,6 @@ class BancosController  extends BaseController
     Log::info('Selecionar  busca bancos, para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
     $bancos = bancos::query();
     if (!empty($request->busca)){
-      $bancos = $bancos->orWhere('banco', 'like', '%' .  $request->busca . '%');
       $bancos = $bancos->orWhere('valor', 'like', '%' .  $request->busca . '%');
       $bancos = $bancos->orWhere('tipo', 'like', '%' .  $request->busca . '%');
       $bancos = $bancos->orWhere('agencia', 'like', '%' .  $request->busca . '%');
@@ -64,7 +63,7 @@ class BancosController  extends BaseController
     Log::info('Salvando conta em banco, para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
     $banco = new Bancos;
     $banco->contatos_id = $request->contatos_id;
-    $banco->banco = $request->banco;
+    $banco->filial_id = $request->filiais_id;
     $banco->cc = $request->cc;
     $banco->cc_dig = $request->cc_dig;
     $banco->tipo = $request->tipo;
@@ -78,7 +77,7 @@ class BancosController  extends BaseController
     Log::info('Salvando conta em banco, para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
     $banco = bancos::find($id);
     $banco->contatos_id = $request->contatos_id;
-    $banco->banco = $request->banco;
+    $banco->filial_id = $request->filiais_id;
     $banco->cc = $request->cc;
     $banco->cc_dig = $request->cc_dig;
     $banco->tipo = $request->tipo;

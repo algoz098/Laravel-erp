@@ -110,14 +110,14 @@
                   @endif
                   <i class="fa fa-signal level{{$contato->sociabilidade}}"></i>
                 </div>
-                <div class="col-md-4">
+                <div class="limitar-string col-md-4">
                   {{ $contato->nome }}
                   @if ($contato->tipo=="1"){{ $contato->sobrenome }}@endif
                 </div>
-                <div class="col-md-3">
+                <div class="limitar-string col-md-3">
                    @if ($contato->tipo!="1"){{ $contato->sobrenome }}@endif
                 </div>
-                <div class="col-md-2">
+                <div class="limitar-string col-md-2">
                   @if ($contato->id=="1")<span class="label label-danger">Matriz</span>
                   @else
                     @foreach($contato->from as $key => $from)
@@ -132,15 +132,7 @@
                     <span class="label label-default">N/C</span>
                   @endif
                 </div>
-                <div class="col-md-1 pull-right ajuda-popover"
-                    @if ($key==0)
-                      title="Outras informações"
-                      data-content="
-                                    Informações extras: relação para com a matriz, telefones, endereço, data de cadastro.
-                      "
-                      data-placement="bottom"
-                    @endif
-                  >
+                <div class="col-md-1 pull-right">
 
                   <span class="label label-primary">{{date('d/m/Y', strtotime($contato->created_at))}}</label>
                 </div>

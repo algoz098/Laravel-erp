@@ -38,14 +38,6 @@
           jQuery('.menu-secondary-wrap').css('position','static');
       }
   });
-  // $(document).ready(function(){
-  //   $('#mostrarAjuda').on('click', function(){
-  //       $(".ajuda-popover").popover('toggle');
-  //   });
-  //   $(".ajuda-popover").on('hidden.bs.popover', function(){
-  //      //$(".ajuda-popover").popover("destroy");
-  //  });
-  // });
 
   $(function() {
     $( ".datepicker" ).datepicker({
@@ -92,9 +84,20 @@
       url: url,
       success: function( data ) {
         $( "#modal" ).html( data );
+      },
+      error: function(xhr, status, error) {
+        $("#modal").modal('hide');
+
       }
     });
   };
+  $( document ).ajaxError(function( event, jqxhr, settings, thrownError ) {
+    var a = jQuery.parseJSON( jqxhr.responseText );
+    for (var contador = 0, len = a.length; contador < len; contador++) {
+      var title = "@lang('messages.erro')";
+      $.toaster({ message : a[contador], title : title, priority : 'danger' , settings : {'timeout' : 3000,}});
+    }
+  });
   $('#modal').on("hidden.bs.modal", function (e) {
     if (typeof activeTarget != 'undefined'){
       $('#'+activeTarget+'Hidden').val(window.contatos_id);

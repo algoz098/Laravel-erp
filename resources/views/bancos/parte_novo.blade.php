@@ -5,14 +5,14 @@
         {{ csrf_field() }}
         @if (isset($banco))
           @selecionaFilial($banco->contatos_id*$banco->contato->sobrenome)
-          @campoTexto(Banco*banco*$banco->banco)
+          @selecionaContato(Banco*$banco->banco->id*$banco->banco->sobrenome)
         @else
           @selecionaFilial
-          @campoTexto(Banco*banco*)
+          @selecionaContato(Banco)
         @endif
         <div class="form-group">
           <label>Tipo</label>
-          <select class="form-control" id="tipo" name="tipo" >
+          <select class="form-control" id="tipo_banco" name="tipo" >
             @if (isset($banco))
               <option value="{{$banco->tipo}}" selected>{{$banco->tipo}} (atual)</option>
               <option value="Conta corrente" >Conta corrente</option>

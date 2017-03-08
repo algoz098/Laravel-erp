@@ -25,16 +25,16 @@ class ContasController  extends BaseController
     $deletados = 0;
     $total_debito = Contas::where('tipo', '!=', '1')->where('estado', '1')->sum('valor');
     $total_credito = Contas::where('tipo', '1')->where('estado', '1')->sum('valor');
-    $total_atual = $total_credito-$total_debito;
-    $total= Contas::count();
+    $total_apagar = Contas::where('tipo', '!=', '1')->where('estado', '0')->sum('valor');
+    $total_areceber = Contas::where('tipo', '1')->where('estado', '0')->sum('valor');
     $comboboxes = comboboxes::where('combobox_textable_type', 'App\Contas')->get();
 
     return view('contas.index')->with('contas', $contas)
                                 ->with('deletados', $deletados)
-                                ->with('total', $total)
                                 ->with('total_debito', $total_debito)
                                 ->with('total_credito', $total_credito)
-                                ->with('total_atual', $total_atual)
+                                ->with('total_apagar', $total_apagar)
+                                ->with('total_areceber', $total_areceber)
                                 ->with('comboboxes', $comboboxes);
   }
   public function detalhes($id){
@@ -109,8 +109,8 @@ class ContasController  extends BaseController
     $contas = $contas->paginate(15);
     $total_debito = Contas::where('tipo', '!=', '1')->where('estado', '1')->sum('valor');
     $total_credito = Contas::where('tipo', '1')->where('estado', '1')->sum('valor');
-    $total_atual = $total_credito-$total_debito;
-    $total= Contas::count();
+    $total_apagar = Contas::where('tipo', '!=', '1')->where('estado', '0')->sum('valor');
+    $total_areceber = Contas::where('tipo', '1')->where('estado', '0')->sum('valor');
     $comboboxes = comboboxes::where('combobox_textable_type', 'App\Contas')->get();
     Log::info('Vendo contas com busca "'.$request.'", para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
 
@@ -125,7 +125,8 @@ class ContasController  extends BaseController
                               ->with('total', $total)
                               ->with('total_debito', $total_debito)
                               ->with('total_credito', $total_credito)
-                              ->with('total_atual', $total_atual)
+                              ->with('total_apagar', $total_apagar)
+                              ->with('total_areceber', $total_areceber)
                               ->with('comboboxes', $comboboxes);
   }
 
@@ -205,7 +206,6 @@ class ContasController  extends BaseController
     $valor= 0;
     $parcela_nao_paga = FALSE;
     $parcela_paga = FALSE;
-
     foreach ($conta->parcelas as $key => $parcela) {
       if($parcela->estado=='0' ){
         $parcela_nao_paga = TRUE;
@@ -280,6 +280,7 @@ class ContasController  extends BaseController
     $conta->descricao = $request->descricao;
     $conta->tipo = $request->tipo;
     $conta->dm = $request->dm;
+    $conta->usuarios_id = Auth::user()->contato->id;
     $conta->estado = $request->estado;
     if (!$request->desconto){
       $conta->desconto = "0";
@@ -328,6 +329,7 @@ class ContasController  extends BaseController
     $contato = Contatos::find($request->contatos_id);
     $conta = new Contas;
     $conta->contatos_id = $contato->id;
+    $conta->usuarios_id = Auth::user()->contato->id;
     $conta->nome = $request->nome;
     $conta->valor = $request->cheio;
     $date_temp = date_create($request->vencimento);
@@ -394,6 +396,7 @@ class ContasController  extends BaseController
       $parcela1->valor = $parcela;
       $parcela1->vencimento = $request->vencimento[$key];
       $parcela1->descricao = "";
+      $parcela1->usuarios_id = Auth::user()->contato->id;
       $parcela1->tipo = $conta->tipo;
       $conta->dm = $conta->dm;
       $parcela1->estado = "0";

@@ -99,17 +99,30 @@
     </div>
     <div class="modal-footer">
       @botaoFecharModal
-
+      <button type="button" class="btn btn-success" style="display: none;" id="botaoSalvar" onclick="enviarContato()">
+        <i class="fa fa-check"></i> Salvar
+      </button>
     </div>
   </div>
 </div>
 <script>
+$(function(){
+    $('#busca_modal').focus();
+    $(document).keypress(function(e) {
+        if(e.which == 13) {
+            buscarContatos();
+        }
+    });
+});
+
 function retornarEsta(id, nome) {
   window.contatos_id = id;
   window.contatos_nome = nome;
  $('#modal').modal('toggle');
 };
+
 function buscarContatos(){
+  $("botaoSalvar").hide();
   $("#contatosHolder").html("");
   @if (isset($apenas_filial))
     var url = "{{url('lista/filiais/selecionar')}}";
@@ -144,6 +157,19 @@ function novoContato(){
     url: url,
     success: function( data ) {
       $("#contatosHolder").html(data);
+      $("#botaoSalvar").show();
+      tinymce.init({
+        selector: 'textarea',
+        height: 200,
+        menubar: false,
+        plugins: [
+          'advlist autolink lists link charmap print preview anchor',
+          'searchreplace visualblocks code fullscreen',
+          'insertdatetime table contextmenu paste code'
+        ],
+        toolbar: 'undo redo | insert | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image',
+
+      });
     }
   });
 }

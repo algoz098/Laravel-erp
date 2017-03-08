@@ -5,6 +5,7 @@ namespace App;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Auth;
 use App\Telefones;
 use App\Atendimento;
 use App\Contas;
@@ -89,9 +90,9 @@ class Contatos extends Model
     {
         return $this->hasMany('App\Frotas');
     }
-    public function bancos()
+    public function conta_bancaria()
     {
-        return $this->hasMany('App\Bancos');
+        return $this->hasMany('App\Bancos', 'filial_id');
     }
     public function enderecos()
     {

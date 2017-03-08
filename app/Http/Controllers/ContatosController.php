@@ -21,11 +21,15 @@ use Carbon\Carbon;
 class ContatosController extends BaseController
 {
   public function __construct(){
-     parent::__construct();
+
+    parent::__construct();
   }
   public function selecionar()
   {
     Log::info('Selecionar de contatos para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
+    if (!isset(Auth::user()->perms["contatos"]["leitura"]) or Auth::user()->perms["contatos"]["leitura"]!=1){
+      return response()->json([__('messages.perms.leitura')], 403);
+    }
     $contatos = contatos::orderBy('nome', 'asc')->paginate(15);
     return view('contatos.selecionar')
                 ->with('contatos', $contatos);
@@ -33,6 +37,9 @@ class ContatosController extends BaseController
   public function selecionar_filial()
   {
     Log::info('Selecionar de filais para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
+    if (!isset(Auth::user()->perms["contatos"]["leitura"]) or Auth::user()->perms["contatos"]["leitura"]!=1){
+      return response()->json([__('messages.perms.leitura')], 403);
+    }
     $a ="Filial";
     $apenas_filial = TRUE;
     $contatos = contatos::orderBy('nome', 'asc')->whereHas('from', function ($query) use ($a){
@@ -48,6 +55,9 @@ class ContatosController extends BaseController
   {
     #return $request;
     Log::info('Selecionar de contatos para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
+    if (!isset(Auth::user()->perms["contatos"]["leitura"]) or Auth::user()->perms["contatos"]["leitura"]!=1){
+      return response()->json([__('messages.perms.leitura')], 403);
+    }
     $contatos = Contatos::query();
     $apenas_filial = FALSE;
     if (!empty($request->busca)){
@@ -74,8 +84,10 @@ class ContatosController extends BaseController
   }
   public function selecionar_novo()
   {
-    #return $request;
     Log::info('Novo contatos em modal para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
+    if (!isset(Auth::user()->perms["contatos"]["leitura"]) or Auth::user()->perms["contatos"]["leitura"]!=1){
+      return response()->json([__('messages.perms.leitura')], 403);
+    }
     $comboboxes = comboboxes::where('combobox_textable_type', 'App\Relacionamento')->get();
     $comboboxes_telefones = comboboxes::where('combobox_textable_type', 'App\Telefones')->get();
     $field_codigo = Configs::where('field', 'field_codigo')->first();
@@ -86,8 +98,10 @@ class ContatosController extends BaseController
   }
   public function selecionar_salva(request $request)
   {
-    #return $request;
     Log::info('Saçvando contatos em modal para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
+    if (!isset(Auth::user()->perms["contatos"]["adicao"]) or Auth::user()->perms["contatos"]["adicao"]!=1){
+      return response()->json([__('messages.perms.adicao')], 403);
+    }
     $this->validate($request, [
         'nome' => 'required|max:50'
     ]);
@@ -115,15 +129,45 @@ class ContatosController extends BaseController
       $contato->active="1";
     }
     $contato->save();
-    foreach ($request->tipo_tel as $key => $tipo) {
-      $telefone = new Telefones;
-      $telefone->contatos_id = $contato->id;
-      $telefone->tipo = $request->tipo_tel[$key];
-      $telefone->numero = $request->numero_tel[$key];
-      $telefone->contato = $request->contato_tel[$key];
-      $telefone->setor = $request->setor_tel[$key];
-      $telefone->ramal = $request->ramal_tel[$key];
-      $telefone->save();
+    if ($request->tipo=="0"){
+      if ($request->tipo_filial=="1"){
+        $data = [
+          $request->from_id =>
+          [
+            'from_text' => 'Filial',
+            'to_id' => 1,
+            'to_text' => 'Matriz'
+          ]
+        ];
+        $contato->from()->sync($data, true);
+      }
+    }
+    if (isset($request->tipo_tel[0])){
+      foreach ($request->tipo_tel as $key => $tipo) {
+        $telefone = new Telefones;
+        $telefone->contatos_id = $contato->id;
+        $telefone->tipo = $request->tipo_tel[$key];
+        $telefone->numero = $request->numero_tel[$key];
+        $telefone->contato = $request->contato_tel[$key];
+        $telefone->setor = $request->setor_tel[$key];
+        $telefone->ramal = $request->ramal_tel[$key];
+        $telefone->save();
+      }
+    }
+    if (isset($request->cep_end [0])){
+      foreach ($request->cep_end as $key => $cep) {
+        $endereco = new Enderecos;
+        $endereco->tipo = $request->tipo_end[$key];
+        $endereco->cep = $request->cep_end[$key];
+        $endereco->endereco = $request->end_end[$key];
+        $endereco->numero = $request->numero_end[$key];
+        $endereco->complemento = $request->complemento_end[$key];
+        $endereco->bairro = $request->bairro_end[$key];
+        $endereco->cidade = $request->cidade_end[$key];
+        $endereco->uf = $request->uf_end[$key];
+        $endereco->contatos_id = $contato->id;
+        $endereco->save();
+      }
     }
     if ($request->is_funcionario!="1"){
       $combobox = Comboboxes::where('text', $request->relacao)->first();
@@ -144,6 +188,10 @@ class ContatosController extends BaseController
   public function show()
   {
     Log::info('Lista de contatos para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
+    if (!isset(Auth::user()->perms["contatos"]["leitura"]) or Auth::user()->perms["contatos"]["leitura"]!=1){
+      return redirect()->action('HomeController@index')
+                       ->withErrors([__('messages.perms.leitura')]);
+    }
     $contatos = contatos::orderBy('nome', 'asc')->paginate(15);
     $total= contatos::count();
     $empresas = contatos::where('tipo', '0')->count();
@@ -161,7 +209,11 @@ class ContatosController extends BaseController
 
   public function search( Request $request)
   {
-    #return $request->busca;
+
+    if (!isset(Auth::user()->perms["contatos"]["leitura"]) or Auth::user()->perms["contatos"]["leitura"]!=1){
+      return redirect()->action('HomeController@index')
+                       ->withErrors([__('messages.perms.leitura')]);
+    }
     Log::info('Busca de contatos usando -> "'.$request->busca.'", para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
     $contatos = Contatos::query();
     $contatos = $contatos->orderBy('nome', 'asc');
@@ -208,6 +260,9 @@ class ContatosController extends BaseController
   }
 
   public function detalhes($id){
+    if (!isset(Auth::user()->perms["contatos"]["leitura"]) or Auth::user()->perms["contatos"]["leitura"]!=1){
+      return response()->json([__('messages.perms.leitura')], 403);
+    }
     $contato = contatos::find($id);
     $comboboxes_telefones = comboboxes::where('combobox_textable_type', 'App\Telefones')->get();
     return view('contatos.detalhes')->with('contato', $contato)->with('comboboxes_telefones', $comboboxes_telefones);
@@ -216,6 +271,9 @@ class ContatosController extends BaseController
   public function funcionarios_novo()
   {
     Log::info('Criando novo contato, para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
+    if (!isset(Auth::user()->perms["contatos"]["adicao"]) or Auth::user()->perms["contatos"]["adicao"]!=1){
+      return response()->json([__('messages.perms.adicao')], 403);
+    }
     $comboboxes = comboboxes::where('combobox_textable_type', 'App\Relacionamento')->get();
     $comboboxes_telefones = comboboxes::where('combobox_textable_type', 'App\Telefones')->get();
     $a = "Filial";
@@ -234,6 +292,9 @@ class ContatosController extends BaseController
   public function showNovo()
   {
     Log::info('Criando novo contato, para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
+    if (!isset(Auth::user()->perms["contatos"]["adicao"]) or Auth::user()->perms["contatos"]["adicao"]!=1){
+      return back()->withErrors([__('messages.perms.adicao')]);
+    }
     $comboboxes = comboboxes::where('combobox_textable_type', 'App\Relacionamento')->get();
     $comboboxes_telefones = comboboxes::where('combobox_textable_type', 'App\Telefones')->get();
     $field_codigo = Configs::where('field', 'field_codigo')->first();
@@ -244,6 +305,9 @@ class ContatosController extends BaseController
 
   public function novo( Request $request )
   {
+    if (!isset(Auth::user()->perms["contatos"]["adicao"]) or Auth::user()->perms["contatos"]["adicao"]!=1){
+      return back()->withErrors([__('messages.perms.adicao')]);
+    }
     $this->validate($request, [
         'nome' => 'required|max:50'
     ]);
@@ -370,7 +434,7 @@ class ContatosController extends BaseController
         $user->trabalho_id = 1;
       }
       $user->contatos_id = $contato->id;
-      $user->perms="{}";
+      $user->perms='{"contatos":{"leitura":"1","adicao":"1","edicao":"0"}';
       $user->save();
     }
 
@@ -380,6 +444,9 @@ class ContatosController extends BaseController
   }
   public function showId( $id )
   {
+    if (!isset(Auth::user()->perms["contatos"]["edicao"]) or Auth::user()->perms["contatos"]["edicao"]!=1){
+      return back()->withErrors([__('messages.perms.edicao')]);
+    }
     $contato = contatos::find($id);
     $comboboxes = comboboxes::where('combobox_textable_type', 'App\Relacionamento')->get();
     $comboboxes_telefones = comboboxes::where('combobox_textable_type', 'App\Telefones')->get();
@@ -416,6 +483,9 @@ class ContatosController extends BaseController
 
   public function update( Request $request, $id )
   {
+    if (!isset(Auth::user()->perms["contatos"]["edicao"]) or Auth::user()->perms["contatos"]["edicao"]!=1){
+      return back()->withErrors([__('messages.perms.edicao')]);
+    }
     $this->validate($request, [
         'nome' => 'required|max:50',
     ]);
@@ -569,7 +639,6 @@ class ContatosController extends BaseController
       $contato->user->ativo = $request->ativo;
       $contato->user->trabalho_id = $request->contatos_id;
       $contato->user->contatos_id = $contato->id;
-      $contato->user->perms="{}";
       $contato->user->save();
     }
 
@@ -592,54 +661,11 @@ class ContatosController extends BaseController
 
     return redirect()->action('ContatosController@show');
   }
-
-  /*
-  public function telefones_get( $id, $id_telefone )
-  {
-    Log::info('Editar telefone de contato id:'.$id.' telefone id "'.$id_telefone.'", para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
-
-    $telefone = Telefones::find($id_telefone);
-    $comboboxes = comboboxes::where('combobox_textable_type', 'App\Telefones')->get();
-    return view('contatos.phone')->with('telefone', $telefone)->with("comboboxes", $comboboxes);
-  }
-
-  public function telefones_post( Request $request, $id, $id_telefone )
-  {
-    $telefone = Telefones::find($id_telefone);
-    $telefone->numero = $request->numero;
-    $telefone->tipo = $request->tipo;
-    $telefone->update();
-
-    Log::info('Salvar telefone de contato(id:'.$id.') resultando -> "'.$telefone.'", para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
-
-    return redirect()->action('ContatosController@show');
-  }
-
-  public function telefones( $id )
-  {
-    $comboboxes = comboboxes::where('combobox_textable_type', 'App\Telefones')->get();
-    #return $comboboxes;
-    $contato = Contatos::find($id);
-    Log::info('Criando novo telefone para contato-> "'.$contato.'", para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
-    return view('contatos.newphone')->with('contato', $contato)->with('comboboxes', $comboboxes);
-  }
-  public function telefones_new( Request $request, $id )
-  {
-
-    foreach ($request->tipo as $key => $tipo) {
-      $telefone = new Telefones;
-      $telefone->contatos_id = $id;
-      $telefone->tipo = $request->tipo[$key];
-      $telefone->numero = $request->numero[$key];
-      $telefone->save();
-    }
-    Log::info('Salvo telefone para contato(id'.$id.') resultando em-> "'.$telefone.'", para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
-
-    return redirect()->action('ContatosController@show');
-  }
-  */
   public function telefones_delete( $id, $id_telefone )
   {
+    if (!isset(Auth::user()->perms["contatos"]["edicao"]) or Auth::user()->perms["contatos"]["edicao"]!=1){
+      return response()->json([__('messages.perms.edicao')], 403);
+    }
     $telefone = Telefones::find($id_telefone);
 
     Log::info('Deletando telefone para contato(id'.$id.') refente -> "'.$telefone.'", para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
@@ -651,12 +677,13 @@ class ContatosController extends BaseController
 
   public function enderecos_delete( $id, $id_endereco )
   {
+    if (!isset(Auth::user()->perms["contatos"]["edicao"]) or Auth::user()->perms["contatos"]["edicao"]!=1){
+      return response()->json([__('messages.perms.edicao')], 403);
+    }
+
     $endereco = Enderecos::find($id_endereco);
-
     Log::info('Deletando endereco para contato(id'.$id.'), para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
-
     $endereco->delete();
-
     return redirect()->action('ContatosController@show');
   }
 
@@ -736,8 +763,11 @@ class ContatosController extends BaseController
     return redirect()->action('ContatosController@show');
   }
   public function attachs_detalhes($id){
-    $attachs = Contatos::find($id)->attachs;
-    return view('contatos.attachs')->with('attachs', $attachs)->with('contato_id', $id);
+    if (!isset(Auth::user()->perms["contatos"]["leitura"]) or Auth::user()->perms["contatos"]["leitura"]!=1){
+      return response()->json([__('messages.perms.leitura')], 403);
+    }
+    $contato = Contatos::find($id);
+    return view('contatos.attachs')->with('contato', $contato)->with('contato_id', $id);
 
   }
   public function attach(request $request, $id){
@@ -751,13 +781,6 @@ class ContatosController extends BaseController
 
     $path = storage_path() . '/' .'app/'. $attach->path;
     $file = Image::make($path);
-    /*if ($file->width() > 1100){
-      $file->resize("1100", null, function ($constraint) {
-          $constraint->aspectRatio();
-          $constraint->upsize();
-      });
-      $file->save();
-    }*/
     Log::info('Anexando arquivo para contato -> "'.$id.'", anexo -> "'.$attach.'", para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
     return redirect()->action('ContatosController@show');
   }

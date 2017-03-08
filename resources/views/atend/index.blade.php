@@ -84,7 +84,7 @@
           @if (!empty($atendimentos))
             @foreach($atendimentos as $key => $atendimento)
                 <div class="row list-contacts" onclick="selectRow({{$atendimento->id}})">
-                  <div class="col-md-1 text-left ajuda-popover" @if ($key==0) title="Criação e contato" data-content="Data do atendimento, e contato atendido." data-placement="bottom" @endif >
+                  <div class="limitar-string col-md-1 text-left ajuda-popover" @if ($key==0) title="Criação e contato" data-content="Data do atendimento, e contato atendido." data-placement="bottom" @endif >
                     <span class="label label-info">
                       ID: {{$atendimento->id}}
                     </span>
@@ -92,7 +92,7 @@
                   <div class="col-md-2">
                     @mostraContato($atendimento->contatos->id*str_limit($atendimento->contatos->nome, 15))
                   </div>
-                  <div class="col-md-2 ajuda-popover" @if ($key==0) title="Detalhes" data-content="Assunto e descrição." data-placement="bottom" @endif >
+                  <div class="col-md-2">
                     {{$atendimento->assunto}}
                   </div>
                   <div class="col-md-6">
