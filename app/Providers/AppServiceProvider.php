@@ -4,8 +4,20 @@ namespace App\Providers;
 
 use App\Contatos;
 use App\Atendimento;
+use App\Bancos;
+use App\Caixas;
+use App\Estoque;
+use App\Frotas;
+use App\Vendas;
+use App\Contas;
 use App\Observers\ContatosObserver;
 use App\Observers\AtendimentosObserver;
+use App\Observers\BancosObserver;
+use App\Observers\CaixasObserver;
+use App\Observers\EstoqueObserver;
+use App\Observers\FrotasObserver;
+use App\Observers\VendasObserver;
+use App\Observers\ContasObserver;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Blade;
 
@@ -23,6 +35,12 @@ class AppServiceProvider extends ServiceProvider
     {
       Contatos::observe(ContatosObserver::class);
       Atendimento::observe(AtendimentosObserver::class);
+      Bancos::observe(BancosObserver::class);
+      Caixas::observe(CaixasObserver::class);
+      Estoque::observe(EstoqueObserver::class);
+      Frotas::observe(FrotasObserver::class);
+      Vendas::observe(VendasObserver::class);
+      Contas::observe(ContasObserver::class);
 
       Blade::directive('botaoSimNao', function ($a) {
         list($nome, $subnome, $valor) = explode('*', $a);
@@ -310,6 +328,16 @@ class AppServiceProvider extends ServiceProvider
             </div>
           </div>
         '?>";
+      });
+
+      Blade::directive('ifPerms', function ($a) {
+        list($modulo, $nivel) = explode('*', $a);
+        return "<?php
+          if (!isset(Auth::user()->perms[\"$modulo\"][\"$nivel\"]) or Auth::user()->perms[\"$modulo\"][\"$nivel\"]!=1){}else{
+        ?>";
+      });
+      Blade::directive('endPerms', function () {
+        return "<?php } ?>";
       });
 
       // Menu lateral

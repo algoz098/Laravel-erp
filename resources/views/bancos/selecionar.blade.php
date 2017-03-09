@@ -11,7 +11,9 @@
         <div class="form-group form-inline text-center">
           {{ csrf_field() }}
           @buscaModal(buscarBancos())
-          <a href="{{url('novo/bancos/')}}"class="btn btn-success"><i class="fa fa-plus"></i></a>
+          @ifPerms(bancos*adicao)
+            <a href="{{url('novo/bancos/')}}"class="btn btn-success"><i class="fa fa-plus"></i></a>
+          @endPerms
         </div>
       <div id="contatosHolder">
 
@@ -19,7 +21,6 @@
     </div>
     <div class="modal-footer">
       @botaoFecharModal
-
     </div>
   </div>
 </div>

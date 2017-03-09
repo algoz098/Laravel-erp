@@ -12,14 +12,19 @@
             {{ csrf_field() }}
             <div id="secondNavbar" class="row">
               <div class="row">
-                <div class="col-md-3 text-left" >
-                  <div class=" form-inline col-md-8 text-right">
-                    @botaoDelete
+                <div class="col-md-4 text-left" >
+                  <div class=" form-inline col-md-7 text-right">
+                    @ifPerms(contas*edicao)
+                      @botaoDelete
+                      @botaoEditar
+                    @endPerms
                     @botaoDetalhes
                     @botaoAnexos
-                    <a href="{{ url('/lista/contas') }}/id/pago"  id="buttonPagar" title="Creditar" class="btn btn-success">
-                      <i class="fa fa-check"></i>
-                    </a>
+                    @ifPerms(contas*edicao)
+                      <a href="{{ url('/lista/contas') }}/id/pago"  id="buttonPagar" title="Creditar" class="btn btn-success">
+                        <i class="fa fa-check"></i>
+                      </a>
+                    @endPerms
                   </div>
                   <div class=" form-inline col-md-2 text-left">
                     @idSelecionado
@@ -32,7 +37,9 @@
                   </div>
                 </div>
                 <div class="col-md-2 pull-right">
-                  @botaoNovo(consumos*contas*Nova Consumo*Nova Conta)
+                  @ifPerms(contas*adicao)
+                    @botaoNovo(contas*consumos*Nova conta*Novo consumo)
+                  @endPerms
                 </div>
               </div>
               <div id="buscaAvançada" class="row collapse " aria-expanded="" style="background-color: #fff; z-index:1030;">
@@ -203,6 +210,7 @@
   function selectRow(id){
     $("#ids").val(id);
     $("#botaoDelete").attr('href', '{{ url('lista/contas') }}/'+id+'/delete/');
+    $("#botaoEditar").attr('href', '{{ url('novo/contas') }}/'+id);
     $("#botaoDetalhes").attr('onclick', 'openModal("{{url('lista/contas')}}/'+id+'")');
     $("#botaoAnexos").attr('onclick', 'openModal("{{url('lista/contas')}}/'+id+'/attachs")');
     $("#buttonPagar").attr('href', '{{ url('/lista/contas') }}/'+id+'/pago');

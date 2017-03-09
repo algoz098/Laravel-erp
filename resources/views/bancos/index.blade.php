@@ -14,9 +14,11 @@
               <div class="row">
                 <div class="col-md-3 text-left" >
                   <div class=" form-inline col-md-8 text-right">
-                    @botaoDelete
+                    @ifPerms(bancos*edicao)
+                      @botaoDelete
+                      @botaoEditar
+                    @endPerms
                     @botaoDetalhes
-                    @botaoEditar
                   </div>
                   <div class=" form-inline col-md-2 text-left">
                     @idSelecionado
@@ -29,7 +31,9 @@
                   </div>
                 </div>
                 <div class="col-md-2 pull-right">
-                  @botaoNovo(bancos)
+                  @ifPerms(bancos*adicao)
+                    @botaoNovo(bancos)
+                  @endPerms
                 </div>
               </div>
               <div id="buscaAvançada" class="row collapse " aria-expanded="" style="background-color: #fff; z-index:1030;">

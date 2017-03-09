@@ -19,6 +19,10 @@ class EstoqueController  extends BaseController
   public function index()
   {
     Log::info('Vendo estoque, para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
+    if (!isset(Auth::user()->perms["estoques"]["leitura"]) or Auth::user()->perms["estoques"]["leitura"]!=1){
+      return redirect()->action('HomeController@index')
+                       ->withErrors([__('messages.perms.leitura')]);
+    }
     $estoques = Estoque::paginate(30);
     $total= Estoque::count();
     if (is_array(Auth::user()->perms) and Auth::user()->perms["admin"]==1){
@@ -31,6 +35,10 @@ class EstoqueController  extends BaseController
 
   public function novo()
   {
+    if (!isset(Auth::user()->perms["estoques"]["adicao"]) or Auth::user()->perms["estoques"]["adicao"]!=1){
+      return redirect()->action('HomeController@index')
+                       ->withErrors([__('messages.perms.adicao')]);
+    }
     $contatos = Contatos::paginate(15);
     Log::info('Criando novo estoque, para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
     return view('estoque.novo')->with('contatos', $contatos);
@@ -38,6 +46,9 @@ class EstoqueController  extends BaseController
 
   public function detalhes($id)
   {
+    if (!isset(Auth::user()->perms["estoques"]["leitura"]) or Auth::user()->perms["estoques"]["leitura"]!=1){
+      return response()->json([__('messages.perms.leitura')], 403);
+    }
     $estoque = estoque::Find($id);
     Log::info('Criando novo estoque, para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
     return view('estoque.detalhes')->with('estoque', $estoque);
@@ -45,6 +56,10 @@ class EstoqueController  extends BaseController
 
   public function save(request $request)
   {
+    if (!isset(Auth::user()->perms["estoques"]["adicao"]) or Auth::user()->perms["estoques"]["adicao"]!=1){
+      return redirect()->action('HomeController@index')
+                       ->withErrors([__('messages.perms.adicao')]);
+    }
     $this->validate($request, [
         'filiais_id' => 'required',
         'produtos_id' => 'required|max:50',
@@ -62,13 +77,22 @@ class EstoqueController  extends BaseController
 
   public function edit($id)
   {
+    if (!isset(Auth::user()->perms["estoques"]["edicao"]) or Auth::user()->perms["estoques"]["edicao"]!=1){
+      return redirect()->action('HomeController@index')
+                       ->withErrors([__('messages.perms.edicao')]);
+    }
     $estoque = Estoque::find($id);
+
     Log::info('Editar estoque -> "'.$estoque.'", para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
 
     return view('estoque.novo')->with('estoque', $estoque);
   }
   public function edit_save(request $request, $id)
   {
+    if (!isset(Auth::user()->perms["estoques"]["edicao"]) or Auth::user()->perms["estoques"]["edicao"]!=1){
+      return redirect()->action('HomeController@index')
+                       ->withErrors([__('messages.perms.edicao')]);
+    }
     $this->validate($request, [
         'contatos_id' => 'required',
         'produtos_id' => 'required|max:50',
@@ -86,6 +110,10 @@ class EstoqueController  extends BaseController
 
   public function search( Request $request)
   {
+    if (!isset(Auth::user()->perms["estoques"]["leitura"]) or Auth::user()->perms["estoques"]["leitura"]!=1){
+      return redirect()->action('HomeController@index')
+                       ->withErrors([__('messages.perms.leitura')]);
+    }
     $estoques = Estoque::query();
     if ($request->estocado){
       $estoques = $estoques->orWhere('quantidade', '>', '0');
@@ -127,6 +155,10 @@ class EstoqueController  extends BaseController
 
   public function delete($id)
   {
+    if (!isset(Auth::user()->perms["estoques"]["edicao"]) or Auth::user()->perms["estoques"]["edicao"]!=1){
+      return redirect()->action('HomeController@index')
+                       ->withErrors([__('messages.perms.edicao')]);
+    }
     $estoque = Estoque::withTrashed()->find($id);
     if ($estoque->trashed()){
       Log::info('Restaurando estoque -> "'.$estoque.'", para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
@@ -141,17 +173,29 @@ class EstoqueController  extends BaseController
 
   public function produto_novo()
   {
+    if (!isset(Auth::user()->perms["estoques"]["adicao"]) or Auth::user()->perms["estoques"]["adicao"]!=1){
+      return redirect()->action('HomeController@index')
+                       ->withErrors([__('messages.perms.adicao')]);
+    }
     Log::info('Criando novo produto, para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
     return view('estoque.produto.novo');
   }
   public function produto_editar($id)
   {
+    if (!isset(Auth::user()->perms["estoques"]["edicao"]) or Auth::user()->perms["estoques"]["edicao"]!=1){
+      return redirect()->action('HomeController@index')
+                       ->withErrors([__('messages.perms.edicao')]);
+    }
     Log::info('Criando novo produto, para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
     $produto = produtos::find($id);
     return view('estoque.produto.novo')->with('produto', $produto);
   }
   public function produto_salva(request $request)
   {
+    if (!isset(Auth::user()->perms["estoques"]["adicao"]) or Auth::user()->perms["estoques"]["adicao"]!=1){
+      return redirect()->action('HomeController@index')
+                       ->withErrors([__('messages.perms.adicao')]);
+    }
     Log::info('Salvando novo produto, para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
     $produto = new Produtos;
     if (Produtos::where('barras', $request->barras)->first()){
@@ -201,6 +245,10 @@ class EstoqueController  extends BaseController
   public function produto_atualiza($id, request $request)
   {
     Log::info('Atualizando novo produto, para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
+    if (!isset(Auth::user()->perms["estoques"]["edicao"]) or Auth::user()->perms["estoques"]["edicao"]!=1){
+      return redirect()->action('HomeController@index')
+                       ->withErrors([__('messages.perms.edicao')]);
+    }
     $produto = Produtos::find($id);
     if (Produtos::where('barras', $request->barras)->first() and $produto->barras!=$request->barras){
       return redirect()->back();
@@ -248,6 +296,10 @@ class EstoqueController  extends BaseController
   }
   public function produto_selecionar()
   {
+    if (!isset(Auth::user()->perms["estoques"]["leitura"]) or Auth::user()->perms["estoques"]["leitura"]!=1){
+      return redirect()->action('HomeController@index')
+                       ->withErrors([__('messages.perms.leitura')]);
+    }
     Log::info('Selecionar produto, para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
     $produtos = Produtos::OrderBy('barras', 'asc')->paginate(15);
     return view('estoque.produto.selecionar')->with('produtos', $produtos);
@@ -255,6 +307,10 @@ class EstoqueController  extends BaseController
 
   public function produto_selecionar_busca(request $request)
   {
+    if (!isset(Auth::user()->perms["estoques"]["leitura"]) or Auth::user()->perms["estoques"]["leitura"]!=1){
+      return redirect()->action('HomeController@index')
+                       ->withErrors([__('messages.perms.leitura')]);
+    }
     Log::info('Busca de modal produto, para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
     $produtos = Produtos::query();
     if (!empty($request->busca)){
@@ -270,11 +326,19 @@ class EstoqueController  extends BaseController
 
   public function produto_selecionar_novo()
   {
+    if (!isset(Auth::user()->perms["estoques"]["adicao"]) or Auth::user()->perms["estoques"]["adicao"]!=1){
+      return redirect()->action('HomeController@index')
+                       ->withErrors([__('messages.perms.adicao')]);
+    }
     Log::info('Modal novo produto, para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
     return view('estoque.produto.parte_novo');
   }
   public function produto_selecionar_salvar(request $request)
   {
+    if (!isset(Auth::user()->perms["estoques"]["adicao"]) or Auth::user()->perms["estoques"]["adicao"]!=1){
+      return redirect()->action('HomeController@index')
+                       ->withErrors([__('messages.perms.adicao')]);
+    }
     Log::info('Modal novo produto, para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
     Log::info('Salvando novo produto, para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
     $produto = new Produtos;
@@ -323,6 +387,10 @@ class EstoqueController  extends BaseController
   }
   public function gerar_barras()
   {
+    if (!isset(Auth::user()->perms["estoques"]["leitura"]) or Auth::user()->perms["estoques"]["leitura"]!=1){
+      return redirect()->action('HomeController@index')
+                       ->withErrors([__('messages.perms.leitura')]);
+    }
     Log::info('gerar codigo de barras, para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
     $i=0;
     while ($i < 1) {

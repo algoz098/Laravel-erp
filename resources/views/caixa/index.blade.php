@@ -18,15 +18,17 @@ use Carbon\Carbon;
                       data-content="Deletar, editar/detalhes, telefones/emails, relacionamentos e anexos do contato"
                       data-placement="top" >
                   <div class=" form-inline col-md-6 text-right">
-                    <a disabled id="buttonDelete" href="" class="btn btn-danger btn_xs " data-toggle="tooltip" title="Deletar">
-                      <i class="fa fa-ban" ></i>
-                    </a>
-                    <a href="" id="buttonClose" class="btn btn-info">
-                      <i class="fa fa-check"></i>
-                    </a>
-                    <a href="" id="buttonAdd" class="btn btn-success">
-                      <i class="fa fa-plus"></i>
-                    </a>
+                    @ifPerms(caixas*edicao)
+                      <a disabled id="buttonDelete" href="" class="btn btn-danger btn_xs " data-toggle="tooltip" title="Deletar">
+                        <i class="fa fa-ban" ></i>
+                      </a>
+                      <a href="" id="buttonClose" class="btn btn-info">
+                        <i class="fa fa-check"></i>
+                      </a>
+                      <a href="" id="buttonAdd" class="btn btn-success">
+                        <i class="fa fa-plus"></i>
+                      </a>
+                    @endPerms
                   </div>
                   <div class=" form-inline col-md-4 text-left">
                     <input type="text" class="form-control" size="4" name="ids" id="ids" placeholder="Detalhes" disabled>
@@ -71,9 +73,11 @@ use Carbon\Carbon;
                         title="Novo"
                         data-content="Adicione um novo contato"
                         data-placement="left">
-                        <a href="{{url('/novo/caixa')}}" id="buttonNovo" class="btn btn-success ajuda-popover" >
-                          <i class="fa fa-plus"></i> Abrir
-                        </a>
+                        @ifPerms(caixas*adicao)
+                          <a href="{{url('/novo/caixa')}}" id="buttonNovo" class="btn btn-success ajuda-popover" >
+                            <i class="fa fa-plus"></i> Abrir
+                          </a>
+                        @endPerms
                   </div>
               </div>
               <div id="buscaAvançada" class="row collapse " aria-expanded="" style="background-color: #fff; z-index:1030;">

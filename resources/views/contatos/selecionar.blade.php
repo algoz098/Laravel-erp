@@ -11,7 +11,9 @@
         <div class="form-group form-inline text-center">
           {{ csrf_field() }}
           @buscaModal(buscarContatos())
-          <button type="button" class="btn btn-success" onclick="novoContato()"><i class="fa fa-plus"></i></button>
+          @ifPerms(contatos*adicao)
+            <button type="button" class="btn btn-success" onclick="novoContato()"><i class="fa fa-plus"></i></button>
+          @endPerms
         </div>
       <div id="contatosHolder">
         @foreach ($contatos as $key => $contato)

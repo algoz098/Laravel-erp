@@ -5,22 +5,22 @@
       <div class="panel-body">
         <div class="form-group">
           <label id="codigoText">Codigo</label>
-          <input class="form-control" id="codigo" name="codigo">
+          <input class="form-control" id="codigo" name="codigo" value="{{{isset($conta) ? $conta->consumo->codigo : ""}}}">
         </div>
         <div class="form-group">
           <label id="mesText">Mes/Ano</label>
-          <input class="form-control datepicker_mes_ano" id="mes" name="mes">
+          <input class="form-control datepicker_mes_ano" id="mes" name="mes" value="{{{isset($conta) ? $conta->mes : ""}}}">
         </div>
         <div class="form-group">
           <label id="consumoText">Consumo</label>
           <div class="input-group">
-            <input class="form-control" id="consumo" name="consumo">
+            <input class="form-control" id="consumo" name="consumo" value="{{{isset($conta) ? $conta->consumo->consumo : ""}}}">
             <span class="input-group-addon" id="consumoAddon"></span>
           </div>
         </div>
         <div class="form-group" id="catGroup">
           <label id="catText">Cat</label>
-          <select class="form-control" id="cat" name="cat">
+          <select class="form-control" id="cat" name="cat" >
             <option value="">- Escolha -</option>
           </select>
         </div>
@@ -34,28 +34,28 @@
         <div class="form-group" id="valor_anteriorGroup">
           <label id="valor_anteriorText">valor_anterior</label>
           <div class="input-group">
-            <input class="form-control" id="valor_anterior" name="valor_anterior">
+            <input class="form-control" id="valor_anterior" name="valor_anterior" value="{{{isset($conta) ? $conta->consumo->valor_anterior : ""}}}">
             <span class="input-group-addon" id="valor_anteriorAddon"></span>
           </div>
         </div>
         <div class="form-group" id="valor_atualGroup">
           <label id="valor_atualText">valor_atual</label>
           <div class="input-group">
-            <input class="form-control" id="valor_atual" name="valor_atual">
+            <input class="form-control" id="valor_atual" name="valor_atual" value="{{{isset($conta) ? $conta->consumo->valor_atual : ""}}}">
             <span class="input-group-addon" id="valor_atualAddon"></span>
           </div>
         </div>
         <div class="form-group">
           <label id="sub_item1Text">sub_item1</label>
           <div class="input-group">
-            <input class="form-control" id="sub_item1" name="sub_item1">
+            <input class="form-control" id="sub_item1" name="sub_item1" value="{{{isset($conta) ? $conta->consumo->sub_item1 : ""}}}">
             <span class="input-group-addon" id="sub_item1Addon"></span>
           </div>
         </div>
         <div class="form-group" id="sub_item2Group">
           <label id="sub_item2Text">sub_item2</label>
           <div class="input-group">
-            <input class="form-control" id="sub_item2" name="sub_item2">
+            <input class="form-control" id="sub_item2" name="sub_item2" value="{{{isset($conta) ? $conta->consumo->sub_item2 : ""}}}">
             <span class="input-group-addon" id="sub_item2Addon"></span>
           </div>
         </div>
@@ -77,7 +77,24 @@
             <input type="text" class="form-control real-mask" name="disc_valor[0]" id="disc_valor" onchange="totalValor(this.value)">
           </div>
         </div>
-        <span id="mais"></span>
+        <span id="mais">
+          @if (isset($conta))
+            @foreach ($conta->discs as $key => $disc)
+              <hr>
+              <div class="form-group">
+                <label for="text">Titulo</label>
+                <input type="numeric" class="form-control" id="disc_text_edit{{$key}}" name="disc_text_edit[{{$key}}]" placeholder="Titulo da discriminação" value="{{$disc->text}}">
+              </div>
+              <div class="form-group">
+                <label for="text">Valor</label>
+                <div class="input-group">
+                  <span class="input-group-addon" id="basic-addon1">R$</span>
+                  <input type="text" class="form-control real-mask" name="disc_valor_edit[{{$key}}]" id="disc_valor_edit{{$key}}" placeholder="valor da discriminação" value="{{$disc->value}}" onchange="totalValor(this.value)">
+                </div>
+              </div>
+            @endforeach
+          @endif
+        </span>
       </div>
     </div>
   </div>

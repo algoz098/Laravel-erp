@@ -23,6 +23,10 @@ class CaixasController  extends BaseController
 
     public function index(){
       Log::info('Vendo movimentação de caixa da filial -> "'.Auth::user()->trabalho_id.'", para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
+      if (!isset(Auth::user()->perms["caixas"]["leitura"]) or Auth::user()->perms["caixas"]["leitura"]!=1){
+        return redirect()->action('HomeController@index')
+                         ->withErrors([__('messages.perms.leitura')]);
+      }
       $estado_caixa = new CaixasLib;
       $caixas = Caixas::where('filial_id', Auth::user()->trabalho_id)
                       ->where('estado', '0')
@@ -56,6 +60,10 @@ class CaixasController  extends BaseController
     }
 
     public function search(request $request){
+      if (!isset(Auth::user()->perms["caixas"]["leitura"]) or Auth::user()->perms["caixas"]["leitura"]!=1){
+        return redirect()->action('HomeController@index')
+                         ->withErrors([__('messages.perms.leitura')]);
+      }
       $caixas = caixas::query();
       if ($request->data!=""){
         $caixas = $caixas->whereDate('created_at', $request->data.' 00:00:00');
@@ -106,6 +114,10 @@ class CaixasController  extends BaseController
     }
 
     public function new_do(request $request ){
+      if (!isset(Auth::user()->perms["caixas"]["adicao"]) or Auth::user()->perms["caixas"]["adicao"]!=1){
+        return redirect()->action('HomeController@index')
+                         ->withErrors([__('messages.perms.adicao')]);
+      }
       if(isset($request->caixa_id)){
         $caixa = Caixas::find($request->caixa_id);
         if(isset($caixa->estado) and $caixa->estado==1){
@@ -177,17 +189,29 @@ class CaixasController  extends BaseController
     }
     public function new_a(){
       Log::info('Criando movimentação de caixa da filial -> "'.Auth::user()->trabalho_id.'", para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
+      if (!isset(Auth::user()->perms["caixas"]["adicao"]) or Auth::user()->perms["caixas"]["adicao"]!=1){
+        return redirect()->action('HomeController@index')
+                         ->withErrors([__('messages.perms.adicao')]);
+      }
       $comboboxes = comboboxes::where('combobox_textable_type', 'App\Contas')->get();
       return view('caixa.new')->with('comboboxes', $comboboxes);
     }
     public function movimentacao_novo($id ){
       Log::info('Criando movimentação de caixa da filial -> "'.Auth::user()->trabalho_id.'", para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
+      if (!isset(Auth::user()->perms["caixas"]["adicao"]) or Auth::user()->perms["caixas"]["adicao"]!=1){
+        return redirect()->action('HomeController@index')
+                         ->withErrors([__('messages.perms.adicao')]);
+      }
       $comboboxes = comboboxes::where('combobox_textable_type', 'App\Contas')->get();
       $caixa = Caixas::find($id);
       return view('caixa.new')->with('comboboxes', $comboboxes)->with('caixa', $caixa);
     }
 
     public function fechar(){
+      if (!isset(Auth::user()->perms["caixas"]["adicao"]) or Auth::user()->perms["caixas"]["adicao"]!=1){
+        return redirect()->action('HomeController@index')
+                         ->withErrors([__('messages.perms.adicao')]);
+      }
       $caixas = Caixas::where("estado", 0)->paginate(15);
       foreach ($caixas as $key => $caixa) {
         $caixa->att = 0;
@@ -201,6 +225,10 @@ class CaixasController  extends BaseController
     }
 
     public function pendencias($id){
+      if (!isset(Auth::user()->perms["caixas"]["adicao"]) or Auth::user()->perms["caixas"]["adicao"]!=1){
+        return redirect()->action('HomeController@index')
+                         ->withErrors([__('messages.perms.adicao')]);
+      }
       $caixa = Caixas::find($id);
       foreach ($caixa->movs as $key => $mov) {
         if ($mov->estado=="0"){
@@ -214,6 +242,10 @@ class CaixasController  extends BaseController
     }
 
     public function prestacao(request $request, $id, $mov_id){
+      if (!isset(Auth::user()->perms["caixas"]["edicao"]) or Auth::user()->perms["caixas"]["edicao"]!=1){
+        return redirect()->action('HomeController@index')
+                         ->withErrors([__('messages.perms.edicao')]);
+      }
       $prestacao = new Prestacao;
       $prestacao->valor = $request->recebido;
       $prestacao->justificativa = $request->justificativa;
@@ -231,6 +263,10 @@ class CaixasController  extends BaseController
       return redirect()->action('CaixasController@pendencias', ['id' => $id]);
     }
     public function concluir($id){
+      if (!isset(Auth::user()->perms["caixas"]["edicao"]) or Auth::user()->perms["caixas"]["edicao"]!=1){
+        return redirect()->action('HomeController@index')
+                         ->withErrors([__('messages.perms.edicao')]);
+      }
       $caixa = Caixas::find($id);
       foreach ($caixa->movs as $key => $mov) {
         if ($mov->estado=="0"){
@@ -243,6 +279,10 @@ class CaixasController  extends BaseController
     }
 
     public function delete($id){
+      if (!isset(Auth::user()->perms["caixas"]["edicao"]) or Auth::user()->perms["caixas"]["edicao"]!=1){
+        return redirect()->action('HomeController@index')
+                         ->withErrors([__('messages.perms.edicao')]);
+      }
       $movimentacao = Caixas::withTrashed()->find($id);
       if ($movimentacao->trashed()) {
         Log::info('Restaurando movimentação de caixa -> "'.$movimentacao.'" da filial -> "'.Auth::user()->trabalho_id.'", para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());

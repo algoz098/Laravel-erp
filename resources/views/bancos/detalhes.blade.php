@@ -87,7 +87,9 @@
     </div>
     <div class="modal-footer">
       @botaoFecharModal
-      @botaoEditarExtenso(novo/bancos*$banco->id)
+      @ifPerms(bancos*edicao)
+        @botaoEditarExtenso(novo/bancos*$banco->id)
+      @endPerms
     </div>
   </div>
 </div>

@@ -116,7 +116,9 @@
     </div>
     <div class="modal-footer">
       @botaoFecharModal
-      @botaoEditarExtenso(novo/estoque*$estoque->id)
+      @ifPerms(estoques*adicao)
+        @botaoEditarExtenso(novo/estoque*$estoque->id)
+      @endPerms
 
       <div class="col-md-2 pull-right">
         <div class="input-group">

@@ -12,58 +12,78 @@
     <li class="pushy-submenu ">
         <a href="#" class="{{{ Request::is('novo*') ? "active" : ""}}}"><i class="fa fa-file-text fa-lg"></i> Cadastros</a>
         <ul class="menu" >
-          <li class="pushy-link "><a class="{{{ Request::path()=='novo/contatos' ? "active" : "" }}}" href="{{ url('novo/contatos') }}"><i class="fa fa-user"></i> Entidade</a></li>
-          <li class="pushy-link "><a class="{{{ Request::path()=='novo/funcionarios' ? "active" : "" }}}" href="{{ url('novo/funcionarios') }}"><i class="fa fa-user-plus"></i> Funcionario</a></li>
+          @ifPerms(contatos*adicao)
+            @sidemenuItem(novo*contatos*fa-user*Entidade)
+            @sidemenuItem(novo*funcionario*fa-user-plus*Funcionario)
+          @endPerms
           @if (isset($modulo_atendimentos) and $modulo_atendimentos=="1")
-            @sidemenuItem(novo*atendimentos*fa-list*Atendimentos)
+            @ifPerms(atendimentos*adicao)
+              @sidemenuItem(novo*atendimentos*fa-list*Atendimentos)
+            @endPerms
           @endif
           @if (isset($modulo_contas) and $modulo_contas=="1")
-            @sidemenuItem(novo*contas*fa-usd*Plano bancario)
-            @sidemenuItem(novo*contas*fa-arrow-right*Cosumo bancario)
+            @ifPerms(contas*adicao)
+              @sidemenuItem(novo*contas*fa-usd*Plano bancario)
+              @sidemenuItem(novo*contas*fa-arrow-right*Cosumo bancario)
+            @endPerms
           @endif
           @if (isset($modulo_estoques) and $modulo_estoques=="1")
-            @sidemenuItem(novo*estoque*fa-bell*Novo produto)
+            @ifPerms(estoque*adicao)
+              @sidemenuItem(novo*estoque*fa-bell*Novo produto)
+            @endPerms
           @endif
           @if (isset($modulo_caixas) and $modulo_caixas=="1")
-            @sidemenuItem(novo*caixa*fa-money*Movimento de caixa)
+            @ifPerms(caixas*adicao)
+              @sidemenuItem(novo*caixa*fa-money*Movimento de caixa)
+            @endPerms
           @endif
-          @sidemenuItem(novo*bancos*fa-bank*Conta bancaria)
+          @if (isset($modulo_bancos) and $modulo_bancos=="1")
+            @ifPerms(bancos*adicao)
+              @sidemenuItem(novo*bancos*fa-bank*Conta bancaria)
+            @endPerms
+          @endif
           @if (isset($modulo_vendas) and $modulo_vendas=="1")
-            @sidemenuItem(novo*vendas*fa-shopping-cart*Vendas)
+            @ifPerms(vendas*adicao)
+              @sidemenuItem(novo*vendas*fa-shopping-cart*Vendas)
+            @endPerms
           @endif
           @if (isset($modulo_frotas) and $modulo_frotas=="1")
-            @sidemenuItem(novo*frotas*fa-car*Adicionar veiculo)
+            @ifPerms(frotas*adicao)
+              @sidemenuItem(novo*frotas*fa-car*Adicionar veiculo)
+            @endPerms
           @endif
           @if (isset($modulo_tickets) and $modulo_tickets=="1")
-            @sidemenuItem(novo*tickets*fa-book*Tickets)
+            @ifPerms(novo*adicao)
+              @sidemenuItem(novo*tickets*fa-book*Tickets)
+            @endPerms
           @endif
         </ul class="menu" >
     </li>
     <li class="pushy-submenu ">
         <a href="#" class="{{{ Request::is('lista*') ? "active" : ""}}}"><i class="fa fa-list fa-lg"></i> Listas</a>
         <ul class="menu" >
-          <li class="pushy-link"><a class="{{{ Request::path()=='lista/contatos' ? "active" : "" }}}" href="{{ url('/lista/contatos') }}"><i class="fa fa-user"></i> Entidades</a></li>
+          @sidemenuItem(lista*contatos*fa-user*Entidades)
           @if (isset($modulo_atendimentos) and $modulo_atendimentos=="1")
-            <li class="pushy-link"><a class="{{{ Request::path()=='lista/atendimentos' ? "active" : "" }}}" href="{{ url('/lista/atendimentos') }}"><i class="fa fa-list"></i> Atendimento</a></li>
+            @sidemenuItem(lista*atendimentos*fa-list*Atendimento)
           @endif
           @if (isset($modulo_contas) and $modulo_contas=="1")
-            <li class="pushy-link"><a class="{{{ Request::path()=='lista/contas' ? "active" : "" }}}" href="{{ url('/lista/contas') }}"><i class="fa fa-usd"></i> Historico bancario</a></li>
+            @sidemenuItem(lista*contas*fa-usd*Historico bancario)
           @endif
           @if (isset($modulo_estoques) and $modulo_estoques=="1")
-            <li class="pushy-link"><a class="{{{ Request::path()=='lista/estoque' ? "active" : "" }}}" href="{{ url('/lista/estoque') }}"><i class="fa fa-bell"></i> Estoque</a></li>
+            @sidemenuItem(lista*estoque*fa-bell*Estoque)
           @endif
           @if (isset($modulo_caixas) and $modulo_caixas=="1")
-            <li class="pushy-link"><a class="{{{ Request::path()=='lista/caixa' ? "active" : "" }}}" href="{{ url('/lista/caixa') }}"><i class="fa fa-money"></i> Movimentações e Caixas</a></li>
+            @sidemenuItem(lista*caixas*fa-money*Movimentações de caixas)
           @endif
-          <li class="pushy-link"><a class="{{{ Request::path()=='lista/bancos' ? "active" : "" }}}" href="{{ url('/lista/bancos') }}"><i class="fa fa-bank"></i> Contas em bancos</a></li>
+          @sidemenuItem(lista*bancos*fa-bank*Contas em bancos)
           @if (isset($modulo_vendas) and $modulo_vendas=="1")
-            <li class="pushy-link"><a class="{{{ Request::path()=='lista/vendas' ? "active" : "" }}}" href="{{ url('/lista/vendas') }}"><i class="fa fa-shopping-cart"></i> Vendas</a></li>
+            @sidemenuItem(lista*vendas*fa-shopping-cart*Vendas)
           @endif
           @if (isset($modulo_frotas) and $modulo_frotas=="1")
-            <li class="pushy-link"><a class="{{{ Request::path()=='lista/frotas' ? "active" : "" }}}" href="{{ url('/lista/frotas') }}"><i class="fa fa-car"></i> Frotas</a></li>
+            @sidemenuItem(lista*frotas*fa-car*Frotas)
           @endif
           @if (isset($modulo_tickets) and $modulo_tickets=="1")
-            <li class="pushy-link"><a class="{{{ Request::path()=='lista/tickets' ? "active" : "" }}}" href="{{ url('/lista/tickets') }}"><i class="fa fa-book"></i> Tickets</a></li>
+            @sidemenuItem(lista*tickets*fa-book*Tickets)
           @endif
         </ul class="menu" >
     </li>

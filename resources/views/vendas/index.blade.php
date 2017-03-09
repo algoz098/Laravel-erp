@@ -11,7 +11,9 @@
                 title="Novo"
                 data-content="Adicione uma nova conta"
                 data-placement="top">
-            <a href="{{ url('/novo/vendas') }}" class="btn btn-success"><i class="fa fa-plus"></i> Novo</a>
+            @ifPerms(vendas*adicao)
+              <a href="{{ url('/novo/vendas') }}" class="btn btn-success"><i class="fa fa-plus"></i> Novo</a>
+            @endPerms
           </div>
           <div class="row">
             <div class="col-md-12  ">

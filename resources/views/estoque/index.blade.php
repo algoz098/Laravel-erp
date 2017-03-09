@@ -11,14 +11,18 @@
           <div class="panel-body">
             <div class="row" id="secondNavbar">
               <div class="col-md-2 pull-right text-right">
-                @botaoNovo(estoque*produto*Estoque*Produto)
+                @ifPerms(estoques*adicao)
+                  @botaoNovo(estoque*produto*Estoque*Produto)
+                @endPerms
               </div>
               <div class="col-md-3">
                 <div class="row">
                   <div class="col-md-6 text-right">
-                    @botaoDelete
+                    @ifPerms(estoques*edicao)
+                      @botaoDelete
+                      @botaoEditar
+                    @endPerms
                     @botaoDetalhes
-                    @botaoEditar
                   </div>
                   <div class="col-md-3 text-left">
                     @idSelecionado

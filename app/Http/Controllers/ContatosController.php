@@ -331,7 +331,7 @@ class ContatosController extends BaseController
     if (isset($request->cep[0]) and $request->cep[0]!=""){
       foreach ($request->cep as $key => $cep) {
         $endereco = new Enderecos;
-        $endereco->tipo = $request->tipo[$key];
+        $endereco->tipo = $request->endereco_tipo[$key];
         $endereco->cep = $request->cep[$key];
         $endereco->endereco = $request->endereco[$key];
         $endereco->numero = $request->numero[$key];
@@ -429,7 +429,7 @@ class ContatosController extends BaseController
       $user->password = bcrypt($request->password);
       $user->ativo = $request->ativo;
       if ($request->filial!=""){
-        $user->trabalho_id = $request->filial;
+        $user->trabalho_id = $request->filiais_id;
       } else {
         $user->trabalho_id = 1;
       }
@@ -637,7 +637,7 @@ class ContatosController extends BaseController
       $contato->user->email = $request->user;
       $contato->user->password = bcrypt($request->password);
       $contato->user->ativo = $request->ativo;
-      $contato->user->trabalho_id = $request->contatos_id;
+      $contato->user->trabalho_id = $request->filiais_id;
       $contato->user->contatos_id = $contato->id;
       $contato->user->save();
     }

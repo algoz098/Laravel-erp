@@ -4,7 +4,7 @@
     <div class="modal-header">
       <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
       <h4 class="modal-title" id="addTelefonesLabel">
-        Detalhes da conta:
+        Detalhes da movimentação bancaria:
       </h4>
     </div>
     <div class="modal-body">
@@ -106,16 +106,21 @@
                       @if ($conta->discs!='[]')
                         <div class="row">
                           <div class="col-md-12 text-center h3">
-                            Discriminação de cobrança
+                            Descrição da conta
                           </div>
                         </div>
                         @foreach($conta->discs as $key => $disc)
                           <div class="row list-contacts">
+                            <div class="col-md-1">
+                              <span class="label label-info">
+                                ID: {{$disc->id}}
+                              </span>
+                            </div>
                             <div class="col-md-6 text-right">
-                              <span class=" "><strong>{{$disc->nome}}</strong></span>
+                              {{$disc->nome}}
                             </div>
                             <div class="col-md-2 text-left">
-                              <span class="">R$ {{$disc->valor}}</span>
+                              R$ {{ $disc->valor}}
                             </div>
                           </div>
                         @endforeach
@@ -261,7 +266,7 @@
                   <strong>Banco:</strong>
                 </div>
                 <div class="col-md-8">
-                  {{$conta->banco->banco}}
+                  {{$conta->banco->banco->sobrenome}}
                 </div>
               </div>
               <div class="row">
@@ -298,97 +303,41 @@
           </div>
       @endif
 
-
-      @if ($conta->tipo=="2" and isset($conta->consumo))
-        <hr>
-
-      @endif
-      @if (empty($conta->parcelas[0]) and $conta->referencia)
-        <div class="row">
-          <div class="col-md-12 text-center h3">
-            Parcelas
-          </div>
-        </div>
-        @foreach($conta->referencia->parcelas as $key => $parcela)
-            <div class="row list-contacts">
-              <div class="col-md-2 text-right">
-                @if ($parcela->referencia->id===$parcela->id)
-                  <span class="label label-default">
-                    Referencia
-                  </span>
-                @else
-                  <span class="label label-default">
-                    Parcela
-                  </span>
-                @endif
-              </div>
-              <div class="col-md-10">
-                {{$parcela->nome}}
-                <span class="label label-warning">
-                  R$ {{ number_format($parcela->valor, 2) }}
-                </span> |
-                @if (strtotime($parcela->vencimento)>strtotime(Carbon::now()))
-                  <span class="label label-warning">
-                @else
-                  <span class="label label-danger">
-                @endif
-                  {{date('d/m/Y', strtotime($parcela->vencimento))}}
-                </span> -
-                @if ($parcela->estado==0 AND $parcela->tipo==0)
-                  <span class="label label-danger">A pagar</span>
-                @elseif ($parcela->estado==0 AND $conta->tipo==1)
-                  <span class="label label-danger">A receber</span>
-                @elseif ($parcela->estado==1 AND $parcela->tipo==0)
-                  <span class="label label-success">Pago</span>
-                @elseif ($parcela->estado==1 AND $parcela->tipo==1)
-                  <span class="label label-success">Recebido</span>
-                @endif
-              </div>
-            </div>
-        @endforeach
-      @endif
       <div class="row">
-        <div class="col-md-6">
-          @if (count($conta->parcelas)>1)
-            <hr>
+        <div class="col-md-12">
+          @if (count($conta->referencia->parcelas)>1)
             <div class="row">
-              <div class="col-md-10">
-                @foreach($conta->parcelas as $key => $parcela)
-                  <div class="row list-contacts">
-                    <div class="col-md-2 text-right">
-                      @if ($parcela->referencia->id===$parcela->id)
-                        <span class="label label-default">
-                          Referencia
+              <div class="col-md-12">
+                @foreach($conta->referencia->parcelas as $key => $parcela)
+                    <div class="row list-contacts">
+                      <div class="col-md-2 limitar-string">
+                        Parcela {{$key+1}}/{{count($conta->referencia->parcelas)}}
+                      </div>
+                      <div class="col-md-1 limitar-string">
+                        @if (strtotime($parcela->vencimento)>strtotime(Carbon::now()))
+                          <span class="label label-warning">
+                        @else
+                          <span class="label label-danger">
+                        @endif
+                          {{date('d/m/Y', strtotime($parcela->vencimento))}}
                         </span>
-                      @else
-                        <span class="label label-default">
-                          Parcela
-                        </span>
-                      @endif
-                    </div>
-                    <div class="col-md-10">
-                      {{$parcela->nome}}
-                      <span class="label label-warning">
+                      </div>
+                      <div class="col-md-2">
                         R$ {{ number_format($parcela->valor, 2) }}
-                      </span> |
-                      @if (strtotime($parcela->vencimento)>strtotime(Carbon::now()))
-                        <span class="label label-warning">
-                      @else
-                        <span class="label label-danger">
-                      @endif
-                        {{date('d/m/Y', strtotime($parcela->vencimento))}}
-                      </span> -
-                      @if ($parcela->estado==0 AND $parcela->tipo==0)
-                        <span class="label label-danger">A pagar</span>
-                      @elseif ($parcela->estado==0 AND $conta->tipo==1)
-                        <span class="label label-danger">A receber</span>
-                      @elseif ($parcela->estado==1 AND $parcela->tipo==0)
-                        <span class="label label-success">Pago</span>
-                      @elseif ($parcela->estado==1 AND $parcela->tipo==1)
-                        <span class="label label-success">Recebido</span>
-                      @endif
+                      </div>
+
+                      <div class="col-md-2">
+                        @if ($parcela->estado==0 AND $parcela->tipo==0)
+                          <span class="label label-danger">A pagar</span>
+                        @elseif ($parcela->estado==0 AND $conta->tipo==1)
+                          <span class="label label-danger">A receber</span>
+                        @elseif ($parcela->estado==1 AND $parcela->tipo==0)
+                          <span class="label label-success">Pago</span>
+                        @elseif ($parcela->estado==1 AND $parcela->tipo==1)
+                          <span class="label label-success">Recebido</span>
+                        @endif
+                      </div>
                     </div>
-                  </div>
                 @endforeach
               </div>
             </div>
@@ -398,6 +347,9 @@
     </div>
     <div class="modal-footer">
       @botaoFecharModal
+      @ifPerms(contas*edicao)
+        @botaoEditarExtenso(novo/contas*$contas->id)
+      @endPerms
       <!--<a href="{{ url('/novo/contas/editar') }}/{{$conta->id}}"><button type="submit" class="btn btn-primary">Editar</button></a>-->
     </div>
   </div>

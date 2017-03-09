@@ -18,6 +18,10 @@ class BancosController  extends BaseController
 
   public function index(){
     Log::info('Vendo bancos, para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
+    if (!isset(Auth::user()->perms["bancos"]["leitura"]) or Auth::user()->perms["bancos"]["leitura"]!=1){
+      return redirect()->action('HomeController@index')
+                       ->withErrors([__('messages.perms.leitura')]);
+    }
     $bancos = Bancos::paginate(15);
 
     return view('bancos.index')->with('bancos', $bancos);
@@ -25,12 +29,18 @@ class BancosController  extends BaseController
 
   public function selecionar(){
     Log::info('Selecionar bancos, para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
+    if (!isset(Auth::user()->perms["bancos"]["leitura"]) or Auth::user()->perms["bancos"]["leitura"]!=1){
+      return response()->json([__('messages.perms.leitura')], 403);
+    }
     $bancos = Bancos::paginate(15);
 
     return view('bancos.selecionar')->with('bancos', $bancos);
   }
   public function selecionar_busca(request $request){
     Log::info('Selecionar  busca bancos, para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
+    if (!isset(Auth::user()->perms["bancos"]["leitura"]) or Auth::user()->perms["bancos"]["leitura"]!=1){
+      return response()->json([__('messages.perms.leitura')], 403);
+    }
     $bancos = bancos::query();
     if (!empty($request->busca)){
       $bancos = $bancos->orWhere('valor', 'like', '%' .  $request->busca . '%');
@@ -45,6 +55,9 @@ class BancosController  extends BaseController
     return view('bancos.selecionar_parte')->with('bancos', $bancos);
   }
   public function detalhes($id){
+    if (!isset(Auth::user()->perms["bancos"]["leitura"]) or Auth::user()->perms["bancos"]["leitura"]!=1){
+      return response()->json([__('messages.perms.leitura')], 403);
+    }
     Log::info('Detalhes de banco, para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
     $banco = Bancos::find($id);
 
@@ -52,15 +65,27 @@ class BancosController  extends BaseController
   }
   public function novo(){
     Log::info('Criando conta em banco, para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
+    if (!isset(Auth::user()->perms["bancos"]["adicao"]) or Auth::user()->perms["bancos"]["adicao"]!=1){
+      return redirect()->action('HomeController@index')
+                       ->withErrors([__('messages.perms.adicao')]);
+    }
     return view('bancos.novo');
   }
   public function editar($id){
     Log::info('Editando conta em banco, para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
+    if (!isset(Auth::user()->perms["bancos"]["edicao"]) or Auth::user()->perms["bancos"]["edicao"]!=1){
+      return redirect()->action('HomeController@index')
+                       ->withErrors([__('messages.perms.edicao')]);
+    }
     $banco = bancos::find($id);
     return view('bancos.novo')->with("banco", $banco);
   }
   public function salva(request $request){
     Log::info('Salvando conta em banco, para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
+    if (!isset(Auth::user()->perms["bancos"]["edicao"]) or Auth::user()->perms["bancos"]["edicao"]!=1){
+      return redirect()->action('HomeController@index')
+                       ->withErrors([__('messages.perms.edicao')]);
+    }
     $banco = new Bancos;
     $banco->contatos_id = $request->contatos_id;
     $banco->filial_id = $request->filiais_id;
@@ -75,6 +100,10 @@ class BancosController  extends BaseController
   }
   public function atualiza($id, request $request){
     Log::info('Salvando conta em banco, para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
+    if (!isset(Auth::user()->perms["bancos"]["edicao"]) or Auth::user()->perms["bancos"]["edicao"]!=1){
+      return redirect()->action('HomeController@index')
+                       ->withErrors([__('messages.perms.edicao')]);
+    }
     $banco = bancos::find($id);
     $banco->contatos_id = $request->contatos_id;
     $banco->filial_id = $request->filiais_id;
@@ -90,6 +119,10 @@ class BancosController  extends BaseController
   }
   public function delete($id){
     Log::info('Salvando conta em banco, para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
+    if (!isset(Auth::user()->perms["bancos"]["edicao"]) or Auth::user()->perms["bancos"]["edicao"]!=1){
+      return redirect()->action('HomeController@index')
+                       ->withErrors([__('messages.perms.edicao')]);
+    }
     $banco = Bancos::withTrashed()->find($id);
     if ($banco->trashed()) {
       $banco->restore();

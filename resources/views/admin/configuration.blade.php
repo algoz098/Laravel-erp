@@ -18,9 +18,7 @@
               <li role="presentation" class="active"><a href="#modulos" aria-controls="modulos" role="tab" data-toggle="tab">Modulos</a></li>
               <li role="presentation"><a href="#geral" aria-controls="geral" role="tab" data-toggle="tab">Geral</a></li>
               <li role="presentation"><a href="#contatos" aria-controls="contatos" role="tab" data-toggle="tab">Contatos</a></li>
-
             </ul>
-
             <!-- Tab panes -->
             <div class="tab-content">
               <div role="tabpanel" class="tab-pane fade" id="geral"><br>
@@ -85,6 +83,14 @@
                           <select class="form-control" id="sel1" name="{{$modulo_contas->field}}">
                             <option value="0" {{{$modulo_contas->value=="0"? "selected" : ""}}}>Desativado</option>
                             <option value="1" {{{$modulo_contas->value=="1"? "selected" : ""}}}>Ativado</option>
+                          </select>
+                        </div>
+
+                        <div class="form-group">
+                          <label for="sel1">{{$modulo_bancos->text}}</label>
+                          <select class="form-control" id="sel1" name="{{$modulo_bancos->field}}">
+                            <option value="0" {{{$modulo_bancos->value=="0"? "selected" : ""}}}>Desativado</option>
+                            <option value="1" {{{$modulo_bancos->value=="1"? "selected" : ""}}}>Ativado</option>
                           </select>
                         </div>
                         <div class="form-group">

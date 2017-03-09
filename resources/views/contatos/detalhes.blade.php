@@ -51,7 +51,9 @@
                           @foreach($contato->telefones as $key2 => $telefone)
                             @if ($telefone->tipo==$comboboxes->text)
                               <span id="telefone{{$telefone->id}}">
-                                <a onclick="deleteTelefone({{$telefone->id}})" class="btn btn-danger btn-xs"><i class="fa fa-ban"></i></a>
+                                @ifPerms(contatos*edicao)
+                                  <a onclick="deleteTelefone({{$telefone->id}})" class="btn btn-danger btn-xs"><i class="fa fa-ban"></i></a>
+                                @endPerms
                                 <span class="">{{$telefone->contato}}, {{$telefone->setor}}</strong></span> {{ $telefone->numero or "" }}<br>
                               </span>
                             @endif
@@ -174,9 +176,11 @@
                     <div class="col-md-6">
                       <div class="panel panel-default" id="endereco{{$endereco->id}}">
                         <div class="panel-body">
-                          <a onclick="deleteEndereco({{$endereco->id}})" class="btn btn-danger btn-xs">
-                            <i class="fa fa-ban"></i>
-                          </a>
+                          @ifPerms(contatos*edicao)
+                            <a onclick="deleteEndereco({{$endereco->id}})" class="btn btn-danger btn-xs">
+                              <i class="fa fa-ban"></i>
+                            </a>
+                          @endPerms
                           <strong>{{$endereco->tipo}}</strong><br>
                           {{$endereco->endereco}} {{$endereco->numero}} {{$endereco->complemento}}<br>
                           {{$endereco->bairro}}<br>
@@ -437,7 +441,9 @@
     </div>
     <div class="modal-footer">
       @botaoFecharModal
-      @botaoEditarExtenso(novo/contatos*$contato->id)
+      @ifPerms(contatos*edicao)
+        @botaoEditarExtenso(novo/contatos*$contato->id)
+      @endPerms
     </div>
   </div>
 </div>

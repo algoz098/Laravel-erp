@@ -94,6 +94,15 @@ class AdminController  extends BaseController
       $modulo_contas->options = '';
       $modulo_contas->save();
     }
+    $modulo_bancos = Configs::where('field', "modulo_bancos")->first();
+    if (!isset($modulo_bancos)) {
+      $modulo_bancos = new Configs;
+      $modulo_bancos->field = "modulo_bancos";
+      $modulo_bancos->text = 'Modulo "Bancos"';
+      $modulo_bancos->value = '1';
+      $modulo_bancos->options = '';
+      $modulo_bancos->save();
+    }
     $modulo_tickets = Configs::where('field', "modulo_tickets")->first();
     if (!isset($modulo_tickets)) {
       $modulo_tickets = new Configs;
@@ -155,6 +164,7 @@ class AdminController  extends BaseController
                                       ->with('modulo_vendas', $modulo_vendas)
                                       ->with('modulo_estoques', $modulo_estoques)
                                       ->with('modulo_frotas', $modulo_frotas)
+                                      ->with('modulo_bancos', $modulo_bancos)
                                       ->with('matriz', $matriz);
   }
   public function configuration_save(request $request){
@@ -283,6 +293,10 @@ class AdminController  extends BaseController
       $a['contas']['leitura'] = $request->contas['leitura'];
       $a['contas']['adicao'] = $request->contas['adicao'];
       $a['contas']['edicao'] = $request->contas['edicao'];
+
+      $a['bancos']['leitura'] = $request->bancos['leitura'];
+      $a['bancos']['adicao'] = $request->bancos['adicao'];
+      $a['bancos']['edicao'] = $request->bancos['edicao'];
 
       $a['vendas']['leitura'] = $request->vendas['leitura'];
       $a['vendas']['adicao'] = $request->vendas['adicao'];

@@ -21,6 +21,10 @@ class ContasController  extends BaseController
 
   public function index(){
     Log::info('Vendo contas, para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
+    if (!isset(Auth::user()->perms["contas"]["leitura"]) or Auth::user()->perms["contas"]["leitura"]!=1){
+      return redirect()->action('HomeController@index')
+                       ->withErrors([__('messages.perms.leitura')]);
+    }
     $contas = Contas::paginate(15);
     $deletados = 0;
     $total_debito = Contas::where('tipo', '!=', '1')->where('estado', '1')->sum('valor');
@@ -38,6 +42,9 @@ class ContasController  extends BaseController
                                 ->with('comboboxes', $comboboxes);
   }
   public function detalhes($id){
+    if (!isset(Auth::user()->perms["bancos"]["leitura"]) or Auth::user()->perms["bancos"]["leitura"]!=1){
+      return response()->json([__('messages.perms.leitura')], 403);
+    }
     $conta=Contas::find($id);
     return view('contas.detalhes')->with('conta', $conta);
 
@@ -49,6 +56,10 @@ class ContasController  extends BaseController
 
   }
   public function search(Request $request){
+    if (!isset(Auth::user()->perms["contas"]["leitura"]) or Auth::user()->perms["contas"]["leitura"]!=1){
+      return redirect()->action('HomeController@index')
+                       ->withErrors([__('messages.perms.leitura')]);
+    }
     $contas = Contas::query();
     if ($request->data_de){
       $data_de = DateTime::createFromFormat('d-m-Y', $request->data_de);
@@ -132,73 +143,37 @@ class ContasController  extends BaseController
 
   public function novo(){
     Log::info('Adicionando contas, para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
+    if (!isset(Auth::user()->perms["contas"]["adicao"]) or Auth::user()->perms["contas"]["adicao"]!=1){
+      return redirect()->action('HomeController@index')
+                       ->withErrors([__('messages.perms.adicao')]);
+    }
     $contatos = Contatos::paginate(15);
     return view('contas.contatos')->with('contatos', $contatos);
   }
   public function consumos_novo(){
     Log::info('Adicionando consumo, para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
+    if (!isset(Auth::user()->perms["contas"]["adicao"]) or Auth::user()->perms["contas"]["adicao"]!=1){
+      return redirect()->action('HomeController@index')
+                       ->withErrors([__('messages.perms.adicao')]);
+    }
     $contatos = Contatos::paginate(15);
     $is_consumos = 1;
     return view('contas.contatos')->with('contatos', $contatos)->with('is_consumos', $is_consumos);
   }
 
-
-  public function searchContatos( Request $request)
-  {
-    if (!empty($request->busca)){
-      $contatos = Contatos::where('nome', 'like', '%' .  $request->busca . '%')
-                            ->orWhere('sobrenome', 'like', '%' .  $request->busca . '%')
-                            ->orWhere('endereco', 'like', '%' .  $request->busca . '%')
-                            ->orWhere('cpf', 'like', '%' .  $request->busca . '%')
-                            ->orWhere('cidade', 'like', '%' .  $request->busca . '%')
-                            ->orWhere('uf', 'like', '%' .  $request->busca . '%')
-                            ->orWhere('bairro', 'like', '%' .  $request->busca . '%')
-                            ->orWhere('cep', 'like', '%' .  $request->busca . '%')
-                            ->paginate(15);
-    } else {
-      $contatos = Contatos::paginate(15);
-    }
-    Log::info('Adicionando contas com busca -> "'.$request->busca.'", para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
-    if (is_array(Auth::user()->perms) and Auth::user()->perms["admin"]==1){
-        $deletados = Contas::onlyTrashed()->get();
-    } else {
-      $deletados = 0;
-    }
-    return view('contas.contatos')->with('contatos', $contatos)->with('deletados', $deletados);
-  }
-
-  public function consumos_contato_busca( Request $request)
-  {
-    if (!empty($request->busca)){
-      $contatos = Contatos::where('nome', 'like', '%' .  $request->busca . '%')
-                            ->orWhere('sobrenome', 'like', '%' .  $request->busca . '%')
-                            ->orWhere('endereco', 'like', '%' .  $request->busca . '%')
-                            ->orWhere('cpf', 'like', '%' .  $request->busca . '%')
-                            ->orWhere('cidade', 'like', '%' .  $request->busca . '%')
-                            ->orWhere('uf', 'like', '%' .  $request->busca . '%')
-                            ->orWhere('bairro', 'like', '%' .  $request->busca . '%')
-                            ->orWhere('cep', 'like', '%' .  $request->busca . '%')
-                            ->paginate(15);
-    } else {
-      $contatos = Contatos::paginate(15);
-    }
-    Log::info('Adicionando contas com busca -> "'.$request->busca.'", para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
-    if (is_array(Auth::user()->perms) and Auth::user()->perms["admin"]==1){
-        $deletados = Contas::onlyTrashed()->get();
-    } else {
-      $deletados = 0;
-    }
-    $is_consumos="1";
-    return view('contas.contatos')->with('contatos', $contatos)
-                                  ->with('deletados', $deletados)
-                                  ->with("is_consumos", $is_consumos);
-  }
-
   public function pagar($id){
+    if (!isset(Auth::user()->perms["contas"]["edicao"]) or Auth::user()->perms["contas"]["edicao"]!=1){
+      return redirect()->action('HomeController@index')
+                       ->withErrors([__('messages.perms.edicao')]);
+    }
     $conta = Contas::find($id);
     return view('contas.pagar')->with('conta', $conta);
   }
   public function pago($id, request $request){
+    if (!isset(Auth::user()->perms["contas"]["edicao"]) or Auth::user()->perms["contas"]["edicao"]!=1){
+      return redirect()->action('HomeController@index')
+                       ->withErrors([__('messages.perms.edicao')]);
+    }
     $conta = Contas::find($id);
     $conta->bancos_id = $request->bancos_id;
     $conta->estado = '1';
@@ -237,6 +212,10 @@ class ContasController  extends BaseController
     return redirect()->action('ContasController@index');
   }
   public function delete($id){
+    if (!isset(Auth::user()->perms["contas"]["edicao"]) or Auth::user()->perms["contas"]["edicao"]!=1){
+      return redirect()->action('HomeController@index')
+                       ->withErrors([__('messages.perms.edicao')]);
+    }
     $conta = Contas::withTrashed()->find($id);
 
     if ($conta->trashed()) {
@@ -249,12 +228,20 @@ class ContasController  extends BaseController
     return redirect()->action('ContasController@index');
   }
   public function add_2(request $request){
+    if (!isset(Auth::user()->perms["contas"]["adicao"]) or Auth::user()->perms["contas"]["adicao"]!=1){
+      return redirect()->action('HomeController@index')
+                       ->withErrors([__('messages.perms.adicao')]);
+    }
     $comboboxes = comboboxes::where('combobox_textable_type', 'App\Contas')->get();
     $comboboxes2 = comboboxes::where('combobox_textable_type', 'App\Contas\Formas')->get();
     Log::info('Adicionar CONTA passo 2, para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
     return view('contas.valores')->with('comboboxes', $comboboxes)->with('comboboxes2', $comboboxes2);
   }
   public function consumos_novo2(){
+    if (!isset(Auth::user()->perms["contas"]["adicao"]) or Auth::user()->perms["contas"]["adicao"]!=1){
+      return redirect()->action('HomeController@index')
+                       ->withErrors([__('messages.perms.adicao')]);
+    }
     $comboboxes = comboboxes::where('combobox_textable_type', 'App\Consumos')->get();
     $comboboxes2 = comboboxes::where('combobox_textable_type', 'App\Contas\Formas')->get();
     $is_consumos = 1;
@@ -263,8 +250,105 @@ class ContasController  extends BaseController
                                  ->with('comboboxes2', $comboboxes2)
                                  ->with('is_consumos', $is_consumos);
   }
+  public function editar($id){
+    if (!isset(Auth::user()->perms["contas"]["edicao"]) or Auth::user()->perms["contas"]["edicao"]!=1){
+      return redirect()->action('HomeController@index')
+                       ->withErrors([__('messages.perms.edicao')]);
+    }
+    $conta = Contas::find($id);
+    $comboboxes = comboboxes::where('combobox_textable_type', 'App\Consumos')->get();
+    $comboboxes2 = comboboxes::where('combobox_textable_type', 'App\Contas\Formas')->get();
+    if ($conta->tipo==2){
+      $is_consumos = 1;
+    } else {
+      $is_consumos = 0;
+    }
+    Log::info('Adicionar CONSUMOS passo 2, para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
+    return view('contas.valores')->with('comboboxes', $comboboxes)
+                                 ->with('conta', $conta)
+                                 ->with('comboboxes2', $comboboxes2)
+                                 ->with('is_consumos', $is_consumos);
+  }
+
+  public function atualiza( $id, request $request){
+    if (!isset(Auth::user()->perms["contas"]["edicao"]) or Auth::user()->perms["contas"]["edicao"]!=1){
+      return redirect()->action('HomeController@index')
+                       ->withErrors([__('messages.perms.edicao')]);
+    }
+    $this->validate($request, [
+        'contatos_id' => 'required',
+        'nome' => 'required|max:50',
+        'cheio' => 'required|numeric',
+    ]);
+    $conta = Contas::find($id);
+    $conta->contatos_id = $request->contatos_id;
+    $conta->nome = $request->nome;
+    $conta->valor = $request->cheio;
+    $date_temp = date_create($request->vencimento);
+    $conta->vencimento = $date_temp;
+    $conta->descricao = $request->descricao;
+    $conta->tipo = $request->tipo;
+    $conta->dm = $request->dm;
+    $conta->usuarios_id = Auth::user()->contato->id;
+    $conta->estado = $request->estado;
+    if (!$request->desconto){
+      $conta->desconto = "0";
+    } else {
+      $conta->desconto = $request->desconto;
+    }
+    $conta->pagamento = $request->forma;
+    $conta->save();
+    $conta->referente = $conta->id;
+    if ($request->estado!="0" and $request->estado!="1"){
+      $conta->estado="0";
+    }
+    $conta->save();
+    if ($request->tipo=="2"){
+      foreach ($request->disc_text as $key => $text) {
+        $disc = new Discs;
+        $disc->contas_id = $conta->id;
+        $disc->nome = $request->disc_text[$key];
+        $disc->valor = $request->disc_valor[$key];
+        $disc->save();
+      }
+      foreach ($request->disc_text_edit as $key2 => $text2) {
+        $disc = new Discs;
+        $disc->contas_id = $conta->id;
+        $disc->nome = $request->disc_text_edit[$key2];
+        $disc->valor = $request->disc_valor_edit[$key2];
+        $disc->save();
+      }
+    }
+    Log::info('Adicionar CONTA passo 3, para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
+    if ($request->parcelas>0){
+      $conta->valor = $request->cheio - $request->valor_entrada;
+      if ($request->valor_entrada<="0"){
+        $conta->estado = "1";
+      }
+      $conta->save();
+      $valor_restante = $request->cheio - $request->valor_entrada;
+      $i = 0;
+
+      $parcela = $valor_restante/$request->parcelas;
+      while ($i < $request->parcelas) {
+        $i = $i + 1;
+        $vencimentos[$i] = Carbon::today()->addMonths($i);
+      }
+      $contato = Contatos::find($request->contatos_id);
+      #return $contato;
+      return view('contas.parcelas')->with('contato', $contato)
+                                    ->with('conta', $conta)
+                                    ->with('vencimentos', $vencimentos)
+                                    ->with('parcela', $parcela);
+    }
+    return redirect()->action('ContasController@index');
+  }
 
   public function add_3(request $request){
+    if (!isset(Auth::user()->perms["contas"]["edicao"]) or Auth::user()->perms["contas"]["edicao"]!=1){
+      return redirect()->action('HomeController@index')
+                       ->withErrors([__('messages.perms.edicao')]);
+    }
     $this->validate($request, [
         'tipo' => 'required',
         'contatos_id' => 'required',
@@ -305,22 +389,33 @@ class ContasController  extends BaseController
     }
     Log::info('Adicionar CONTA passo 3, para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
     if ($request->parcelas>0){
-      $i = 0;
-      if (!empty($conta->desconto)){
-        $parcela = ($conta->valor - $conta->desconto)/$request->parcelas;
+      $conta->valor = $request->cheio - $request->valor_entrada;
+      if ($request->valor_entrada<="0"){
+        $conta->estado = "1";
       }
-      $parcela = $conta->valor/$request->parcelas;
+      $conta->save();
+      $valor_restante = $request->cheio - $request->valor_entrada;
+      $i = 0;
+
+      $parcela = $valor_restante/$request->parcelas;
       while ($i < $request->parcelas) {
         $i = $i + 1;
         $vencimentos[$i] = Carbon::today()->addMonths($i);
       }
       $contato = Contatos::find($request->contatos_id);
       #return $contato;
-      return view('contas.parcelas')->with('contato', $contato)->with('conta', $conta)->with('vencimentos', $vencimentos)->with('parcela', $parcela);
+      return view('contas.parcelas')->with('contato', $contato)
+                                    ->with('conta', $conta)
+                                    ->with('vencimentos', $vencimentos)
+                                    ->with('parcela', $parcela);
     }
     return redirect()->action('ContasController@index');
   }
   public function consumos_novo3(request $request){
+    if (!isset(Auth::user()->perms["contas"]["adicao"]) or Auth::user()->perms["contas"]["adicao"]!=1){
+      return redirect()->action('HomeController@index')
+                       ->withErrors([__('messages.perms.adicao')]);
+    }
     $this->validate($request, [
         'contatos_id' => 'required',
         'nome' => 'required|max:50',
@@ -370,11 +465,15 @@ class ContasController  extends BaseController
     }
     Log::info('Adicionar CONSUMO passo 3, para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
     if ($request->parcelas>0){
-      $i = 0;
-      if (!empty($conta->desconto)){
-        $parcela = ($conta->valor - $conta->desconto)/$request->parcelas;
+      $conta->valor = $request->cheio - $request->valor_entrada;
+      if ($request->valor_entrada<="0"){
+        $conta->estado = "1";
       }
-      $parcela = $conta->valor/$request->parcelas;
+      $conta->save();
+      $valor_restante = $request->cheio - $request->valor_entrada;
+      $i = 0;
+
+      $parcela = $valor_restante/$request->parcelas;
       while ($i < $request->parcelas) {
         $i = $i + 1;
         $vencimentos[$i] = Carbon::today()->addMonths($i);
@@ -386,6 +485,10 @@ class ContasController  extends BaseController
 
 
   public function add_4(request $request, $conta_id){
+    if (!isset(Auth::user()->perms["contas"]["adicao"]) or Auth::user()->perms["contas"]["adicao"]!=1){
+      return redirect()->action('HomeController@index')
+                       ->withErrors([__('messages.perms.adicao')]);
+    }
     $conta= Contas::find($conta_id);
     $conta->valor = "0";
     $conta->save();

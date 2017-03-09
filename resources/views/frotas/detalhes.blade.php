@@ -117,7 +117,9 @@
       <button type="submit" class="btn btn-primary" onclick="rotateClock()"><i class="fa fa-arrow-right"></i> Rotacionar</button>
 
       <button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
-      <a href="{{ url('novo/frota') }}/{{$frota->id}}/edit"><button type="submit" class="btn btn-primary">Editar</button></a>
+      @ifPerms(frotas*edicao)
+        <a href="{{ url('novo/frota') }}/{{$frota->id}}/edit"><button type="submit" class="btn btn-primary">Editar</button></a>
+      @endPerms
     </div>
   </div>
 </div>

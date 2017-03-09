@@ -12,17 +12,19 @@
               <div class="row">
                 <div class="col-md-3 text-left" >
                   <div class=" form-inline col-md-10 text-right">
-                    <a href="{{ url('lista/contas') }}/id/delete"  id="buttonDelete" title="Apagar" class="btn btn-danger">
-                      <i class="fa fa-ban"></i>
-                    </a>
-                    <a class="btn btn-info"  id="buttonEdit" title="Editar" >
-                      <i class="fa fa-pencil"></i>
-                    </a>
+                    @ifPerms(frotas*edicao)
+                      <a href="{{ url('lista/contas') }}/id/delete"  id="buttonDelete" title="Apagar" class="btn btn-danger">
+                        <i class="fa fa-ban"></i>
+                      </a>
+                      <a class="btn btn-info"  id="buttonEdit" title="Editar" >
+                        <i class="fa fa-pencil"></i>
+                      </a>
+                      <a class="btn btn-info"  id="buttonAbastecer" title="Abastecer" href="">
+                        <i class="fa fa-tint"></i>
+                      </a>
+                    @endPerms
                     <a class="btn btn-info"  id="buttonDetalhes" title="Detalhes">
                       <i class="fa fa-file-text-o"></i>
-                    </a>
-                    <a class="btn btn-info"  id="buttonAbastecer" title="Abastecer" href="">
-                      <i class="fa fa-tint"></i>
                     </a>
                   </div>
                   <div class=" form-inline col-md-2 text-left">
@@ -44,10 +46,12 @@
                   </div>
                 </div>
                   <div class="col-md-1 pull-right text-right ajuda-popover">
-                    <a href="{{ url('/novo/frotas') }}" class="btn btn-success">
-                      <i class="fa fa-plus fa-1x"></i>
-                      Novo
-                    </a>
+                    @ifPerms(frotas*adicao)
+                      <a href="{{ url('/novo/frotas') }}" class="btn btn-success">
+                        <i class="fa fa-plus fa-1x"></i>
+                        Novo
+                      </a>
+                    @endPerms
                   </div>
               </div>
               <div id="buscaAvançada" class="row collapse " aria-expanded="" style="background-color: #fff; z-index:1030;">

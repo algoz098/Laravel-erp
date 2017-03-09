@@ -22,6 +22,10 @@ class AtendimentoController  extends BaseController
 
   public function index(){
     Log::info('Mostando atendimentos, para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
+    if (!isset(Auth::user()->perms["atendimentos"]["leitura"]) or Auth::user()->perms["atendimentos"]["leitura"]!=1){
+      return redirect()->action('HomeController@index')
+                       ->withErrors([__('messages.perms.leitura')]);
+    }
     $atendimentos = Atendimento::orderBy('created_at', 'desc')->paginate(15);
     $deletados = "0";
     $total= Atendimento::count();
@@ -30,6 +34,10 @@ class AtendimentoController  extends BaseController
   }
 
   public function show($id){
+    if (!isset(Auth::user()->perms["atendimentos"]["edicao"]) or Auth::user()->perms["atendimentos"]["edicao"]!=1){
+      return redirect()->action('HomeController@index')
+                       ->withErrors([__('messages.perms.edicao')]);
+    }
     $atendimento = Atendimento::find($id);
     $comboboxes = comboboxes::where('combobox_textable_type', 'App\Atendimentos')->get();
     Log::info('Mostando atendimento -> "'.$atendimento.'", para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
@@ -38,6 +46,8 @@ class AtendimentoController  extends BaseController
   }
 
   public function detalhes($id){
+
+    
     $atendimento = Atendimento::find($id);
     Log::info('Mostando detalhes atendimento -> "'.$atendimento.'", para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
 
@@ -45,6 +55,10 @@ class AtendimentoController  extends BaseController
   }
 
   public function new_a(){
+    if (!isset(Auth::user()->perms["atendimentos"]["adicao"]) or Auth::user()->perms["atendimentos"]["adicao"]!=1){
+      return redirect()->action('HomeController@index')
+                       ->withErrors([__('messages.perms.adicao')]);
+    }
     Log::info('Criando novo atendimento, selecionando contato, para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
     $contatos = Contatos::paginate(15);
     $comboboxes = comboboxes::where('combobox_textable_type', 'App\Atendimentos')->get();
@@ -52,6 +66,10 @@ class AtendimentoController  extends BaseController
   }
 
   public function add(Request $request){
+    if (!isset(Auth::user()->perms["atendimentos"]["adicao"]) or Auth::user()->perms["atendimentos"]["adicao"]!=1){
+      return redirect()->action('HomeController@index')
+                       ->withErrors([__('messages.perms.adicao')]);
+    }
     $this->validate($request, [
         'assunto' => 'required|max:50',
         'contatos_id' => 'required',
@@ -69,6 +87,10 @@ class AtendimentoController  extends BaseController
   }
 
   public function delete($id){
+    if (!isset(Auth::user()->perms["atendimentos"]["edicao"]) or Auth::user()->perms["atendimentos"]["edicao"]!=1){
+      return redirect()->action('HomeController@index')
+                       ->withErrors([__('messages.perms.edicao')]);
+    }
     $atendimento = Atendimento::withTrashed()->find($id);
     Log::info('Deletando atendimento -> "'.$atendimento.'", para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
     if ($atendimento->trashed()) {
@@ -82,7 +104,10 @@ class AtendimentoController  extends BaseController
 
   public function search( Request $request)
   {
-    #return $request;
+    if (!isset(Auth::user()->perms["atendimentos"]["leitura"]) or Auth::user()->perms["atendimentos"]["leitura"]!=1){
+      return redirect()->action('HomeController@index')
+                       ->withErrors([__('messages.perms.leitura')]);
+    }
     $atendimentos = atendimento::query();
     if ($request->busca!=""){
       $contatos = Contatos::where('nome', 'like', '%' .  $request->busca . '%')
@@ -124,19 +149,24 @@ class AtendimentoController  extends BaseController
     return view('atend.index')->with('atendimentos', $atendimentos)->with('total', $total)->with('comboboxes', $comboboxes)->with('deletados', $deletados);
   }
 
+/*
   public function novo($id){
     $contato = Contatos::find($id);
 
     Log::info('Criando novo atendimento para contato -> "'.$contato.'", para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
     return view('atend.index')->with('contato', $contato);
   }
-
+*/
   public function edit(request $request, $id){
+    if (!isset(Auth::user()->perms["atendimentos"]["edicao"]) or Auth::user()->perms["atendimentos"]["edicao"]!=1){
+      return redirect()->action('HomeController@index')
+                       ->withErrors([__('messages.perms.edicao')]);
+    }
     $this->validate($request, [
         'assunto' => 'required|max:50',
     ]);
     $atendimento = Atendimento::find($id);
-    
+
     $atendimento->assunto = $request->assunto;
     $atendimento->texto = $request->texto;
     $atendimento->save();
@@ -145,6 +175,7 @@ class AtendimentoController  extends BaseController
     return redirect()->action('AtendimentoController@index');
   }
   public function attach(request $request, $id){
+
     $atendimento = Atendimento::find($id);
     $attach = new Attachs;
     $attach->attachmentable_id = $id;

@@ -18,6 +18,10 @@ class FrotasController extends BaseController
 
   public function index()
   {
+    if (!isset(Auth::user()->perms["frotas"]["leitura"]) or Auth::user()->perms["frotas"]["leitura"]!=1){
+      return redirect()->action('HomeController@index')
+                       ->withErrors([__('messages.perms.leitura')]);
+    }
     Log::info('Lista de Frota para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
     $frotas = Frotas::all();
     $deletados = 0;
@@ -28,6 +32,9 @@ class FrotasController extends BaseController
   public function detalhes($id)
   {
     Log::info('Detalhes de Frota para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
+    if (!isset(Auth::user()->perms["frotas"]["leitura"]) or Auth::user()->perms["frotas"]["leitura"]!=1){
+      return response()->json([__('messages.perms.leitura')], 403);
+    }
     $frota = frotas::find($id);
     return view('frotas.detalhes')
                 ->with('frota', $frota);
@@ -37,18 +44,30 @@ class FrotasController extends BaseController
   public function novo()
   {
     Log::info('Novo Frota para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
+    if (!isset(Auth::user()->perms["frotas"]["adicao"]) or Auth::user()->perms["frotas"]["adicao"]!=1){
+      return redirect()->action('HomeController@index')
+                       ->withErrors([__('messages.perms.adicao')]);
+    }
     $contatos = Contatos::orderBy('nome', 'asc')->paginate(15);
     return view('frotas.contatos')
                 ->with('contatos', $contatos);
   }
   public function novo_2($id){
     Log::info('Novo Frota com ID: '.$id.' para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
+    if (!isset(Auth::user()->perms["frotas"]["adicao"]) or Auth::user()->perms["frotas"]["adicao"]!=1){
+      return redirect()->action('HomeController@index')
+                       ->withErrors([__('messages.perms.adicao')]);
+    }
     $contato = Contatos::find($id);
     return view('frotas.novo')
                 ->with('contato', $contato);
   }
   public function criar($id, request $request){
     Log::info('Criar nova  Frota com ID: '.$id.' para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
+    if (!isset(Auth::user()->perms["frotas"]["adicao"]) or Auth::user()->perms["frotas"]["adicao"]!=1){
+      return redirect()->action('HomeController@index')
+                       ->withErrors([__('messages.perms.adicao')]);
+    }
     $contato = Contatos::find($id);
     $frota = new Frotas;
     $frota->contatos_id = $contato->id;
@@ -65,6 +84,10 @@ class FrotasController extends BaseController
   }
   public function delete($id){
     Log::info('Deletar Frota com ID: '.$id.' para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
+    if (!isset(Auth::user()->perms["frotas"]["edicao"]) or Auth::user()->perms["frotas"]["edicao"]!=1){
+      return redirect()->action('HomeController@index')
+                       ->withErrors([__('messages.perms.edicao')]);
+    }
     $frota = frotas::withTrashed()->find($id);
 
     if ($frota->trashed()) {
@@ -77,12 +100,20 @@ class FrotasController extends BaseController
   }
   public function abastecer($id){
     Log::info('Mostrando abastecimento de Frota com ID: '.$id.' para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
+    if (!isset(Auth::user()->perms["frotas"]["edicao"]) or Auth::user()->perms["frotas"]["edicao"]!=1){
+      return redirect()->action('HomeController@index')
+                       ->withErrors([__('messages.perms.edicao')]);
+    }
     $frota = frotas::find($id);
     return view('frotas.abastecer')
                 ->with('frota', $frota);
   }
   public function abastecer_editar($id, $id_abastecimento){
     Log::info('Mostrando abastecimento de Frota com ID: '.$id.' para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
+    if (!isset(Auth::user()->perms["frotas"]["edicao"]) or Auth::user()->perms["frotas"]["edicao"]!=1){
+      return redirect()->action('HomeController@index')
+                       ->withErrors([__('messages.perms.edicao')]);
+    }
     $frota = frotas::find($id);
     $abastecimento = abastecimentos::find($id_abastecimento);
     return view('frotas.abastecer')
@@ -92,7 +123,10 @@ class FrotasController extends BaseController
   }
   public function abastecer_salvar($id, request $request){
     Log::info('Mostrando abastecimento de Frota com ID: '.$id.' para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
-
+    if (!isset(Auth::user()->perms["frotas"]["edicao"]) or Auth::user()->perms["frotas"]["edicao"]!=1){
+      return redirect()->action('HomeController@index')
+                       ->withErrors([__('messages.perms.edicao')]);
+    }
     $this->validate($request, [
       'abastecido_em' => 'required',
       'abastecido_por' => 'required',
@@ -141,6 +175,10 @@ class FrotasController extends BaseController
   }
   public function abastecer_guardar($id, $id_abastecimento, request $request){
     Log::info('Mostrando abastecimento de Frota com ID: '.$id.' para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
+    if (!isset(Auth::user()->perms["frotas"]["edicao"]) or Auth::user()->perms["frotas"]["edicao"]!=1){
+      return redirect()->action('HomeController@index')
+                       ->withErrors([__('messages.perms.edicao')]);
+    }
     $date_temp = date_create($request->data);
     $abastecer = abastecimentos::find($id_abastecimento);
     $abastecer->data = $date_temp;
@@ -167,6 +205,10 @@ class FrotasController extends BaseController
   }
   public function abastecer_delete($id){
     Log::info('Apagar abastecimento de Frota com ID: '.$id.' para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
+    if (!isset(Auth::user()->perms["frotas"]["edicao"]) or Auth::user()->perms["frotas"]["edicao"]!=1){
+      return redirect()->action('HomeController@index')
+                       ->withErrors([__('messages.perms.edicao')]);
+    }
     $abastecimento = abastecimentos::withTrashed()->find($id);
     $conta = contas::withTrashed()->find($abastecimento->conta->id);
 
@@ -184,7 +226,10 @@ class FrotasController extends BaseController
 
   public function edit($id){
     Log::info('Editar Frota com ID: '.$id.' para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
-
+    if (!isset(Auth::user()->perms["frotas"]["edicao"]) or Auth::user()->perms["frotas"]["edicao"]!=1){
+      return redirect()->action('HomeController@index')
+                       ->withErrors([__('messages.perms.edicao')]);
+    }
     $frota = Frotas::find($id);
     return view('frotas.novo')
                 ->with('frota', $frota);

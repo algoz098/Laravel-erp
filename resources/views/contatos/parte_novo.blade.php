@@ -419,7 +419,7 @@ function addEndereco() {
   $('#cep', $clone).mask('99999-999');
   $('#cep', $clone).attr('onchange', 'selectCep('+i_endereco+')');
   $('#endereco', $clone).attr('name', 'endereco['+i_endereco+']');
-  $('#numero', $clone).attr('name', 'numero['+i_endereco+']');
+  $('#numero_endereco', $clone).attr('name', 'numero['+i_endereco+']');
   $('#complemento', $clone).attr('name', 'complemento['+i_endereco+']');
   $('#bairro', $clone).attr('name', 'bairro['+i_endereco+']');
   $('#cidade', $clone).attr('name', 'cidade['+i_endereco+']');

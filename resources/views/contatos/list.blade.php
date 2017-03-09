@@ -12,8 +12,10 @@
               <div class="row">
                 <div class="col-md-3 text-left pull-left">
                   <div class=" form-inline col-md-10 text-right">
-                    @botaoDelete
-                    @botaoEditar
+                    @ifPerms(contatos*edicao)
+                      @botaoDelete
+                      @botaoEditar
+                    @endPerms
                     @botaoDetalhes
                     <span id="buttonRelate" class="btn btn-primary btn_xs" title="Relacionamentos"  data-toggle="collapse" data-target="#relacionamentos" aria-expanded="">
                       <i class="fa fa-users"></i>
@@ -32,8 +34,9 @@
                   </div>
                 </div>
                   <div class="col-md-2 pull-right ">
-                    @botaoNovo(contatos*funcionarios*Nova Entidade*Novo Func.)
-
+                    @ifPerms(contatos*adicao  )
+                      @botaoNovo(contatos*funcionarios*Nova Entidade*Novo Func.)
+                    @endPerms
                   </div>
               </div>
               <div id="buscaAvançada" class="row collapse " aria-expanded="" style="background-color: #fff; z-index:1030;">

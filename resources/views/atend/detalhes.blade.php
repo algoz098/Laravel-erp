@@ -76,8 +76,10 @@
       <button type="submit" class="btn btn-primary" onclick="rotateUnclock()"><i class="fa fa-arrow-left"></i> Rotacionar</button>
       <button type="submit" class="btn btn-primary" onclick="rotateClock()"><i class="fa fa-arrow-right"></i> Rotacionar</button>
 
-      <button type="button" class="btn btn-default" data-dismiss="modal"><span aria-hidden="true">×</span> Fechar</button>
-      <a href="{{ url('novo/atendimentos') }}/{{$atendimento->id}}"><button type="submit" class="btn btn-primary"><i class="fa fa-pencil"></i> Editar</button></a>
+      @botaoFecharModal
+      @ifPerms(atendimentos*edicao)
+        @botaoEditarExtenso(novo/atendimentos*$atendimento->id)
+      @endPerms
     </div>
   </div>
 </div>

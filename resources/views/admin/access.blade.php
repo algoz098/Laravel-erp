@@ -146,6 +146,34 @@
             </div>
           </div>
         @endif
+        @if ($modulo_bancos=="1")
+          <div class="row list-contacts">
+            <div class="col-md-1">
+              Bancos
+            </div>
+            <div class="col-md-2">
+              @if ($contato->user->perms["bancos"]["leitura"]==1)
+                @botaoSimNao(bancos*leitura*1)
+              @else
+                @botaoSimNao(bancos*leitura*0)
+              @endif
+            </div>
+            <div class="col-md-2">
+              @if ($contato->user->perms["bancos"]["adicao"]==1)
+                @botaoSimNao(bancos*adicao*1)
+              @else
+                @botaoSimNao(bancos*adicao*0)
+              @endif
+            </div>
+            <div class="col-md-2">
+              @if ($contato->user->perms["bancos"]["edicao"]==1)
+                @botaoSimNao(bancos*edicao*1)
+              @else
+                @botaoSimNao(bancos*edicao*0)
+              @endif
+            </div>
+          </div>
+        @endif
         @if ($modulo_caixas=="1")
           <div class="row list-contacts">
             <div class="col-md-1">

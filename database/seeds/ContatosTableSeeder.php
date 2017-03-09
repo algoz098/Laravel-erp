@@ -55,7 +55,7 @@ class ContatosTableSeeder extends Seeder
           'password' => bcrypt('123mudar'),
           'ativo' => 1,
           'trabalho_id' => 1,
-          'perms' => '{"admin":"1","contatos":{"leitura":"1", "edicao":"1", "adicao":"0"},"atendimentos":{"leitura":"1", "edicao":"1", "adicao":"0"},"tickets":{"leitura":"1", "edicao":"1", "adicao":"0"},"contas":{"leitura":"1", "edicao":"1", "adicao":"0"},"caixas":{"leitura":"1", "edicao":"1", "adicao":"0"},"vendas":{"leitura":"1", "edicao":"1", "adicao":"0"},"estoques":{"leitura":"1", "edicao":"1", "adicao":"0"},"frotas":{"leitura":"1", "edicao":"1", "adicao":"0"}}'
+          'perms' => '{"admin":"1","contatos":{"leitura":"1", "edicao":"1", "adicao":"0"},"bancos":{"leitura":"1", "edicao":"1", "adicao":"0"},"atendimentos":{"leitura":"1", "edicao":"1", "adicao":"0"},"tickets":{"leitura":"1", "edicao":"1", "adicao":"0"},"contas":{"leitura":"1", "edicao":"1", "adicao":"0"},"caixas":{"leitura":"1", "edicao":"1", "adicao":"0"},"vendas":{"leitura":"1", "edicao":"1", "adicao":"0"},"estoques":{"leitura":"1", "edicao":"1", "adicao":"0"},"frotas":{"leitura":"1", "edicao":"1", "adicao":"0"}}'
       ]);
       DB::table('combobox_texts')->insert([
           'combobox_textable_id' => "1",

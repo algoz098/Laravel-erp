@@ -61,6 +61,8 @@ Route::post('novo/contas/busca', 'ContasController@searchContatos')->middleware(
 Route::get('novo/contas/', 'ContasController@add_2')->middleware('auth');
 Route::post('novo/contas/parcelas', 'ContasController@add_3')->middleware('auth');
 Route::post('novo/contas/parcelas/{conta_id}', 'ContasController@add_4')->middleware('auth');
+Route::get('novo/contas/{id}', 'ContasController@editar')->middleware('auth');
+Route::post('novo/contas/{id}', 'ContasController@atualiza')->middleware('auth');
 
 Route::get('novo/consumos/', 'ContasController@consumos_novo2')->middleware('auth');
 Route::post('novo/consumos/parcelas', 'ContasController@consumos_novo3')->middleware('auth');

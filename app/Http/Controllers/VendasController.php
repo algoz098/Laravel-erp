@@ -19,18 +19,30 @@ class VendasController  extends BaseController
   public function __construct(){
      parent::__construct();
   }
-  
+
     public function index(){
+      if (!isset(Auth::user()->perms["vendas"]["leitura"]) or Auth::user()->perms["vendas"]["leitura"]!=1){
+        return redirect()->action('HomeController@index')
+                         ->withErrors([__('messages.perms.leitura')]);
+      }
       $vendas = Vendas::paginate(15);
       Log::info('Vendo vendaspara -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
       return view('vendas.index')->with('vendas', $vendas);
     }
     public function novo(){
+      if (!isset(Auth::user()->perms["vendas"]["adicao"]) or Auth::user()->perms["vendas"]["adicao"]!=1){
+        return redirect()->action('HomeController@index')
+                         ->withErrors([__('messages.perms.adicao')]);
+      }
       $contatos = contatos::paginate(30);
       Log::info('Criando venda, para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
       return view('vendas.contatos')->with('contatos', $contatos);
     }
     public function produtos($id){
+      if (!isset(Auth::user()->perms["vendas"]["adicao"]) or Auth::user()->perms["vendas"]["adicao"]!=1){
+        return redirect()->action('HomeController@index')
+                         ->withErrors([__('messages.perms.adicao')]);
+      }
       $estoques = estoque::all();
       if ($id==0){
         $contato = "0";
@@ -65,6 +77,10 @@ class VendasController  extends BaseController
     }
 
     public function salvar($id, request $request){
+      if (!isset(Auth::user()->perms["vendas"]["adicao"]) or Auth::user()->perms["vendas"]["adicao"]!=1){
+        return redirect()->action('HomeController@index')
+                         ->withErrors([__('messages.perms.adicao')]);
+      }
       if ($request->forma=="0"){
         $estado_caixa = new CaixasLib;
         if ($estado_caixa->isOpen()){

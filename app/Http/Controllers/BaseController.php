@@ -27,6 +27,7 @@ class BaseController extends Controller {
       $modulo_vendas = Configs::where('field', 'modulo_vendas')->pluck('value')->first();
       $modulo_estoques = Configs::where('field', 'modulo_estoques')->pluck('value')->first();
       $modulo_frotas = Configs::where('field', 'modulo_frotas')->pluck('value')->first();
+      $modulo_bancos = Configs::where('field', 'modulo_bancos')->pluck('value')->first();
 
       View::share ( 'imagem_destaque', $imagem_destaque );
       View::share ( 'modulo_atendimentos', $modulo_atendimentos );
@@ -36,6 +37,7 @@ class BaseController extends Controller {
       View::share ( 'modulo_vendas', $modulo_vendas );
       View::share ( 'modulo_estoques', $modulo_estoques );
       View::share ( 'modulo_frotas', $modulo_frotas );
+      View::share ( 'modulo_bancos', $modulo_bancos );
 
     }
 
