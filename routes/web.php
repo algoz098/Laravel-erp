@@ -69,7 +69,7 @@ Route::post('novo/consumos/parcelas', 'ContasController@consumos_novo3')->middle
 
 Route::get('lista/bancos/', 'BancosController@index')->middleware('auth');
 Route::get('lista/bancos/selecionar', 'BancosController@selecionar')->middleware('auth');
-Route::post('lista/bancos/selecionar', 'BancosController@selecionar_busca')->middleware('auth');
+Route::post('lista/bancos/', 'BancosController@busca')->middleware('auth');
 Route::get('lista/bancos/{id}', 'BancosController@detalhes')->middleware('auth');
 Route::get('lista/bancos/{id}/delete', 'BancosController@delete')->middleware('auth');
 Route::get('novo/bancos/', 'BancosController@novo')->middleware('auth');
@@ -141,6 +141,7 @@ Route::post('novo/tickets/{id}/edit', 'TicketsController@editar_salvar')->middle
 Route::post('novo/tickets/', 'TicketsController@salvar')->middleware('auth');
 
 Route::get('lista/frotas', 'FrotasController@index')->middleware('auth');
+Route::post('lista/frotas', 'FrotasController@busca')->middleware('auth');
 Route::get('lista/frotas/{id}', 'FrotasController@detalhes')->middleware('auth');
 Route::get('lista/frotas/{id}/delete', 'FrotasController@delete')->middleware('auth');
 Route::get('lista/frotas/{id}/abastecer/{id_abastecimento}', 'FrotasController@abastecer_editar')->middleware('auth');

@@ -30,8 +30,10 @@ class ContatosController extends BaseController
     if (!isset(Auth::user()->perms["contatos"]["leitura"]) or Auth::user()->perms["contatos"]["leitura"]!=1){
       return response()->json([__('messages.perms.leitura')], 403);
     }
+    $apenas_filial = FALSE;
     $contatos = contatos::orderBy('nome', 'asc')->paginate(15);
     return view('contatos.selecionar')
+                ->with('apenas_filial', $apenas_filial)
                 ->with('contatos', $contatos);
   }
   public function selecionar_filial()
@@ -59,7 +61,6 @@ class ContatosController extends BaseController
       return response()->json([__('messages.perms.leitura')], 403);
     }
     $contatos = Contatos::query();
-    $apenas_filial = FALSE;
     if (!empty($request->busca)){
       $contatos = $contatos->orWhere('nome', 'like', '%' .  $request->busca . '%');
       $contatos = $contatos->orWhere('sobrenome', 'like', '%' .  $request->busca . '%');
@@ -70,14 +71,14 @@ class ContatosController extends BaseController
       $contatos = $contatos->orWhere('bairro', 'like', '%' .  $request->busca . '%');
       $contatos = $contatos->orWhere('cep', 'like', '%' .  $request->busca . '%');
     }
-    if (isset($request->apenas_filial)){
-      $apenas_filial = TRUE;
+    if ($request->apenas_filial==TRUE){
       $a = "Filial";
       $contato = $contatos->whereHas('from', function ($query) use ($a){
                         $query->where('from_text', 'like', '%'.$a.'%');
                       })->paginate(15);
+    } else {
+      $contatos = $contatos->orderBy('nome', 'asc')->get();
     }
-    $contatos = $contatos->orderBy('nome', 'asc')->get();
     return view('contatos.selecionarbusca')
                 ->with('contatos', $contatos)
                 ->with('apenas_filial', $apenas_filial);
@@ -228,21 +229,20 @@ class ContatosController extends BaseController
                                               ->orWhere('bairro', 'like', '%' .  $request->busca . '%')
                                               ->orWhere('cep', 'like', '%' .  $request->busca . '%');
                                       });
+                }
+    if ($request->apenas_filial=="TRUE"){
+      $a = "Filial";
+      $contatos = $contatos->whereHas('from', function ($query) use ($a){
+                        $query->where('from_text', 'like', '%'.$a.'%');
+                      })->get();
+      $matriz = Contatos::where('id', '1')->paginate(100);
+      $apenas_filial = TRUE;
+      $contatos = $matriz->merge($contatos);
+    } else {
+      $contatos = $contatos->paginate(100);
+      $apenas_filial = FALSE;
 
     }
-    if ($request->data_de){
-      $data_de = DateTime::createFromFormat('d-m-Y', $request->data_de);
-      $data_de = $data_de->format('Y-m-d');
-    }
-    if ($request->data_de and !$request->data_ate){
-      $contatos = $contatos->whereBetween('created_at', [$data_de, Carbon::today()]);
-    }
-    if ($request->data_de and $request->data_ate){
-      $data_ate = DateTime::createFromFormat('d-m-Y', $request->data_ate);
-      $data_ate = $data_ate->format('Y-m-d');
-      $contatos = $contatos->whereBetween('created_at', [$data_de, $data_ate]);
-    }
-    $contatos = $contatos->paginate(15);
     if ((is_array(Auth::user()->perms) and Auth::user()->perms["admin"]==1) and $request->deletados){
         $deletados = Contatos::onlyTrashed()->get();
     } else {
@@ -252,10 +252,12 @@ class ContatosController extends BaseController
     $pessoas = contatos::where('tipo', '1')->count();
     $total= contatos::count();
     $comboboxes = comboboxes::where('combobox_textable_type', 'App\Relacionamento')->get();
-    return view('contatos.list')->with('contatos', $contatos)->with('deletados', $deletados)
+
+    return view('contatos.lista')->with('contatos', $contatos)->with('deletados', $deletados)
     ->with('total', $total)
     ->with('empresas', $empresas)
     ->with('pessoas', $pessoas)
+    ->with('apenas_filial', $apenas_filial)
     ->with('comboboxes', $comboboxes);
   }
 

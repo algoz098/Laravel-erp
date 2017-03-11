@@ -602,21 +602,8 @@ function enviarContato(){
     url: url,
     data: data,
     success: function( data ) {
-      $("#contatosHolder").html("");
-      var url = "{{url('lista/contatos/selecionar')}}";
-      var data = {
-                'busca'              : '',
-                '_token'            : $('input[name=_token]').val()
-            };
-      $.ajax({
-        type: "POST",
-        url: url,
-        data: data,
-        success: function( data ) {
-          $("#contatosHolder").html(data);
-          $("#botaoSalvar").hide();
-        }
-      });
+      efetuarBusca("{{ url('lista/contatos') }}");
+      $.toaster({ message : 'Entidade adicionado com sucesso', title : 'Sucesso', priority : 'success' , settings : {'timeout' : 3000,}});
     }
   });
 }

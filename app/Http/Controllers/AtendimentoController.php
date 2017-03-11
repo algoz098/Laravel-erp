@@ -47,7 +47,7 @@ class AtendimentoController  extends BaseController
 
   public function detalhes($id){
 
-    
+
     $atendimento = Atendimento::find($id);
     Log::info('Mostando detalhes atendimento -> "'.$atendimento.'", para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
 
@@ -146,7 +146,7 @@ class AtendimentoController  extends BaseController
 
     Log::info('Mostando atendimentos com busca -> "'.$request->busca.'", para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
 
-    return view('atend.index')->with('atendimentos', $atendimentos)->with('total', $total)->with('comboboxes', $comboboxes)->with('deletados', $deletados);
+    return view('atend.lista')->with('atendimentos', $atendimentos)->with('total', $total)->with('comboboxes', $comboboxes)->with('deletados', $deletados);
   }
 
 /*

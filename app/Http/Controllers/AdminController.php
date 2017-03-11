@@ -302,11 +302,9 @@ class AdminController  extends BaseController
       $a['vendas']['adicao'] = $request->vendas['adicao'];
       $a['vendas']['edicao'] = $request->vendas['edicao'];
 
-
       $a['caixas']['leitura'] = $request->caixas['leitura'];
       $a['caixas']['adicao'] = $request->caixas['adicao'];
       $a['caixas']['edicao'] = $request->caixas['edicao'];
-
 
       $a['estoques']['leitura'] = $request->estoques['leitura'];
       $a['estoques']['adicao'] = $request->estoques['adicao'];
@@ -315,7 +313,6 @@ class AdminController  extends BaseController
       $a['frotas']['leitura'] = $request->frotas['leitura'];
       $a['frotas']['adicao'] = $request->frotas['adicao'];
       $a['frotas']['edicao'] = $request->frotas['edicao'];
-
 
       $contato->user->perms = json_decode(json_encode($a), true);
       $contato->user->save();
@@ -363,6 +360,7 @@ class AdminController  extends BaseController
       $manifest = json_decode(file_get_contents($manifest_local), true);
 
       $migrate = Artisan::call('migrate');
+      $migrate = Artisan::call('view:clear');
       return view('admin.update')->with('manifest', $manifest)->with('remoto', $json_remoto);
     }
 

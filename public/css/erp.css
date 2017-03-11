@@ -118,3 +118,11 @@ body {
   overflow-y: scroll;
   white-space: nowrap;
 }
+.carregando > *{
+  opacity: 0.45;
+
+  -webkit-transition: opacity 0.2s ease-out;
+    -moz-transition: opacity 0.2s ease-out;
+    -ms-transition: opacity 0.2s ease-out;
+    -o-transition: opacity 0.2s ease-out;
+}

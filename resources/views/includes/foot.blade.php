@@ -22,7 +22,7 @@
     });
   });
   var scroll = jQuery(document).scroll(function() {
-      if (jQuery(this).scrollTop() > 175) {
+      if (jQuery(this).scrollTop() > 105) {
         jQuery('#secondNavbar').css({
            'position': 'fixed',
            'top': '50px',
@@ -87,10 +87,30 @@
       },
       error: function(xhr, status, error) {
         $("#modal").modal('hide');
-
       }
     });
   };
+  function efetuarBusca(url){
+    $("#listaHolder").addClass("carregando");
+    var data = {
+              'busca'              : $('input[name=busca]').val(),
+              '_token'            : $('input[name=_token]').val(),
+              'apenas_filial'      : $('#apenas_filial').val(),
+              'data_de'       : $('#data_de').val(),
+              'data_ate'       : $('#data_ate').val(),
+              'assunto'       : $('#assunto').val(),
+          };
+          console.log(data);
+    $.ajax({
+      type: 'post',
+      url: url,
+      data: data,
+      success: function( data ) {
+        $( "#listaHolder" ).html( data );
+        $("#listaHolder").removeClass("carregando");
+      },
+    });
+  }
   $( document ).ajaxError(function( event, jqxhr, settings, thrownError ) {
     var a = jQuery.parseJSON( jqxhr.responseText );
     for (var contador = 0, len = a.length; contador < len; contador++) {

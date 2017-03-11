@@ -29,6 +29,19 @@ class FrotasController extends BaseController
                 ->with('frotas', $frotas)
                 ->with('deletados', $deletados);
   }
+  public function busca(request $request)
+  {
+    if (!isset(Auth::user()->perms["frotas"]["leitura"]) or Auth::user()->perms["frotas"]["leitura"]!=1){
+      return redirect()->action('HomeController@index')
+                       ->withErrors([__('messages.perms.leitura')]);
+    }
+    Log::info('Lista de Frota para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
+    $frotas = Frotas::all();
+    $deletados = 0;
+    return view('frotas.lista')
+                ->with('frotas', $frotas)
+                ->with('deletados', $deletados);
+  }
   public function detalhes($id)
   {
     Log::info('Detalhes de Frota para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());

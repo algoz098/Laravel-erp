@@ -7,8 +7,7 @@
           <i class="fa fa-car fa-1x"></i> Frotas
         </div>
         <div class="panel-body">
-          <form method="POST" action="{{ url('/lista/contas') }}/">
-            <div id="secondNavbar" class="row">
+          <div id="secondNavbar" class="row">
               <div class="row">
                 <div class="col-md-3 text-left" >
                   <div class=" form-inline col-md-10 text-right">
@@ -38,11 +37,8 @@
                         data-placement="top"
                   >
                     {{ csrf_field() }}
-                    <input type="text" class="form-control" name="busca" id="busca" placeholder="Busca">
-                    <button type="submit" class="btn btn-success"><i class="fa fa-search"></i> Buscar</button>
-                    <a class="btn btn-info"  title="Busca Avançada" data-toggle="collapse" data-target="#buscaAvançada" aria-expanded="" onclick="listaTop()">
-                      <i class="fa fa-search-plus"></i>
-                    </a>
+                    @buscaSimples(lista/frotas)
+                    @buscaExtraBotao
                   </div>
                 </div>
                   <div class="col-md-1 pull-right text-right ajuda-popover">
@@ -58,72 +54,7 @@
                 {placeholder}
               </div>
             </div>
-          </form>
-          <div class="row" id="lista">
-            <div class="col-md-1">
-              ID
-            </div>
-            <div class="col-md-1">
-              Placa
-            </div>
-            <div class="col-md-2">
-              Modelo
-            </div>
-            <div class="col-md-1">
-              Ano
-            </div>
-            <div class="col-md-2">
-              Combustivel
-            </div>
-            <div class="col-md-2">
-              A quem
-            </div>
-            <div class="col-md-1 pull-right">
-              Compra
-            </div>
-          </div>
-          @foreach($frotas as $key => $frota)
-            <div class="row list-contacts" onclick="selectRow({{$frota->id}})">
-              <div class="col-md-1" >
-                <span class="label label-info">
-                  ID: {{$frota->id}}
-                </span>
-              </div>
-              <div class="col-md-1" >
-                <span class="label label-info">
-                  {{$frota->placa}}
-                </span>
-              </div>
-              <div class="col-md-2" >
-                <span class="label label-info">
-                  {{$frota->modelo}}
-                </span>
-              </div>
-              <div class="col-md-1" >
-                <span class="label label-info">
-                  {{$frota->ano}}
-                </span>
-              </div>
-              <div class="col-md-2" >
-                <span class="label label-info">
-                  {{$frota->combustivel}}
-                </span>
-              </div>
-              <div class="col-md-2" >
-                <a class="label label-primary" onclick="openModal('{{url('lista/contatos/')}}/{{$frota->contato->id}}')">
-                  <i class="fa fa-user"></i>
-                  {{$frota->contato->nome}}
-                </a>
-              </div>
-              <div class="col-md-1 pull-right" >
-                <span class="label label-info">
-                  {{$frota->compra}}
-                </span>
-              </div>
-            </div>
-
-
-          @endforeach
+          <div id="listaHolder"></div>
           @if($deletados!==0)
             <hr>
             <h3>Deletados</h3>
@@ -173,6 +104,9 @@
     </div>
   </div>
 <script>
+  $(document).ready(function(){
+    efetuarBusca();
+  });
   function selectRow(id){
     $("#ids").val(id);
     $("#buttonDelete").attr('href', '{{ url('lista/frotas') }}/'+id+'/delete/');

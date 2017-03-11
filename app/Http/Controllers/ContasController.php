@@ -61,6 +61,7 @@ class ContasController  extends BaseController
                        ->withErrors([__('messages.perms.leitura')]);
     }
     $contas = Contas::query();
+    $contas = $contas->orderBy('vencimento', 'desc');
     if ($request->data_de){
       $data_de = DateTime::createFromFormat('d-m-Y', $request->data_de);
       $data_de = $data_de->format('Y-m-d');
@@ -117,28 +118,22 @@ class ContasController  extends BaseController
         }
     }
     #return $contas->toSql();
-    $contas = $contas->paginate(15);
+    $contas = $contas->paginate(100);
+    $deletados = 0;
     $total_debito = Contas::where('tipo', '!=', '1')->where('estado', '1')->sum('valor');
     $total_credito = Contas::where('tipo', '1')->where('estado', '1')->sum('valor');
     $total_apagar = Contas::where('tipo', '!=', '1')->where('estado', '0')->sum('valor');
     $total_areceber = Contas::where('tipo', '1')->where('estado', '0')->sum('valor');
     $comboboxes = comboboxes::where('combobox_textable_type', 'App\Contas')->get();
-    Log::info('Vendo contas com busca "'.$request.'", para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
 
-    if ((is_array(Auth::user()->perms) and Auth::user()->perms["admin"]==1) and $request->deletados){
-        $deletados = Contas::onlyTrashed()->get();
-    } else {
-      $deletados = 0;
-    };
+    return view('contas.lista')->with('contas', $contas)
+                                ->with('deletados', $deletados)
+                                ->with('total_debito', $total_debito)
+                                ->with('total_credito', $total_credito)
+                                ->with('total_apagar', $total_apagar)
+                                ->with('total_areceber', $total_areceber)
+                                ->with('comboboxes', $comboboxes);
 
-    return view('contas.index')->with('contas', $contas)
-                              ->with('deletados', $deletados)
-                              ->with('total', $total)
-                              ->with('total_debito', $total_debito)
-                              ->with('total_credito', $total_credito)
-                              ->with('total_apagar', $total_apagar)
-                              ->with('total_areceber', $total_areceber)
-                              ->with('comboboxes', $comboboxes);
   }
 
   public function novo(){

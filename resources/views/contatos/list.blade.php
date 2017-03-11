@@ -7,8 +7,7 @@
           <i class="fa fa-users fa-1x"></i> Lista de entidades
         </div>
         <div class="panel-body">
-          <form method="POST" action="{{ url('lista/contatos') }}/">
-            <div id="secondNavbar" class="row">
+          <div id="secondNavbar" class="row">
               <div class="row">
                 <div class="col-md-3 text-left pull-left">
                   <div class=" form-inline col-md-10 text-right">
@@ -29,7 +28,7 @@
                 <div class="col-md-6">
                   <div class="form-group form-inline text-center">
                     {{ csrf_field() }}
-                    @buscaSimples
+                    @buscaSimples(lista/contatos)
                     @buscaExtraBotao
                   </div>
                 </div>
@@ -77,124 +76,7 @@
                 @endif
               </div>
             </div>
-          </form>
-          <div class="row list-contacts" id="lista">
-            <div class="col-md-1">
-              IDs
-            </div>
-            <div class="col-md-1">
-              Social
-            </div>
-            <div class="col-md-4">
-              Razão Social
-            </div>
-            <div class="col-md-3">
-              Nome Fantasia
-            </div>
-            <div class="col-md-2">
-              Relação
-            </div>
-            <div class="col-md-1 pull-right">
-              Detalhes
-            </div>
-          </div>
-          @foreach($contatos as $key => $contato)
-              <div class="row list-contacts" onclick="selectRow({{$contato->id}})">
-                <div class="col-md-1">
-                  <span class="label label-primary">
-                    {{{$contato->id}}}
-                  </span>
-                </div>
-                <div class="col-md-1">
-                  @if(is_null($contato->active))
-                    <i class="fa fa-user level1"></i>
-                  @else
-                    <i class="fa fa-user level{{$contato->active}}"></i>
-                  @endif
-                  <i class="fa fa-signal level{{$contato->sociabilidade}}"></i>
-                </div>
-                <div class="limitar-string col-md-4">
-                  {{ $contato->nome }}
-                  @if ($contato->tipo=="1"){{ $contato->sobrenome }}@endif
-                </div>
-                <div class="limitar-string col-md-3">
-                   @if ($contato->tipo!="1"){{ $contato->sobrenome }}@endif
-                </div>
-                <div class="limitar-string col-md-2">
-                  @if ($contato->id=="1")<span class="label label-danger">Matriz</span>
-                  @else
-                    @foreach($contato->from as $key => $from)
-                      @if ($from->id=="1")
-                        <span class="label label-warning">{{$from->pivot->from_text}}</span>
-                      @else
-                        <span class="label label-default">N/C</span>
-                      @endif
-                    @endforeach
-                  @endif
-                  @if ($contato->from=="[]" and $contato->id!=1)
-                    <span class="label label-default">N/C</span>
-                  @endif
-                </div>
-                <div class="col-md-1 pull-right">
-
-                  <span class="label label-primary">{{date('d/m/Y', strtotime($contato->created_at))}}</label>
-                </div>
-              </div>
-              <div class="sub-menu collapse " aria-expanded="" id="relacionamentos{{$contato->id}}" style="padding-left: 100px; padding-top: 15px; padding-bottom: 30px;">
-                <a href="{{ url('lista/contatos') }}/{{$contato->id}}/relacoes" class="btn btn-warning" title="Relacionamentos">
-                  Editar relações
-                </a><br>
-                @foreach($contato->from as $key => $from)
-                  <div class="row list-contacts">
-                    {{$from->nome}} <span class="label label-info">{{$from->pivot->to_text}}</span>
-                  </div>
-                @endforeach
-                @foreach($contato->to as $key => $to)
-                  <div class="row list-contacts">
-                    {{$to->nome}} <span class="label label-info">{{$to->pivot->from_text}}</span>
-                  </div>
-                @endforeach
-              </div>
-            <!-- Modal -->
-            <form action="{{ url('lista/contatos') }}/{{$contato->id}}/attach" method="post" enctype="multipart/form-data">
-              {{ csrf_field() }}
-            <div class="modal fade" id="upload{{$contato->id}}" tabindex="-1" role="dialog" aria-labelledby="upload">
-              <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                  <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title" id="addTelefonesLabel">Adicionar Anexo</h4>
-                  </div>
-                  <div class="modal-body">
-
-                  </div>
-                  <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary">Novo</button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </form>
-          @endforeach
-          <div class="row">
-            <div class="col-md-10 text-center">
-              <span class="label label-primary">
-                PJ: {{$empresas}}
-              </span>&nbsp
-              <span class="label label-primary">
-                PF: {{$pessoas}}
-              </span>&nbsp
-              <span class="label label-primary">
-                Total: {{$total}}
-              </span>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-md-10 text-center">
-              {{ $contatos->links() }}
-            </div>
-          </div>
+          <span id="listaHolder"></span>
           @if($deletados!==0)
             <h3>Deletados</h3>
             @foreach($deletados as $key => $contato)
@@ -231,6 +113,16 @@
   </div>
 
   <script language="javascript">
+    $(document).ready(function(){
+      efetuarBusca();
+      $('#busca').focus();
+    });
+    $(document).keypress(function(e) {
+        if(e.which == 13) {
+          efetuarBusca();
+        }
+    });
+
     function selectRow(id){
       window.id_attach_form = id;
       $("#ids").val(id);
@@ -245,11 +137,11 @@
       }
     }
     function listaTop(){
-      var css = $('#lista').css('margin-top');
+      var css = $('#listaHolder').css('margin-top');
       if(css == "75px"){
-        $('#lista').css('margin-top', '0px');
+        $('#listaHolder').css('margin-top', '0px');
       } else {
-        $('#lista').css('margin-top', '75px');
+        $('#listaHolder').css('margin-top', '75px');
       }
     }
   </script>

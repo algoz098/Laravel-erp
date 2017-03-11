@@ -10,12 +10,12 @@
     <div class="modal-body">
         <div class="form-group form-inline text-center">
           {{ csrf_field() }}
-          @buscaModal(buscarBancos())
+          @buscaSimples(lista/bancos)
           @ifPerms(bancos*adicao)
             <a href="{{url('novo/bancos/')}}"class="btn btn-success"><i class="fa fa-plus"></i></a>
           @endPerms
         </div>
-      <div id="contatosHolder">
+      <div id="listaHolder">
 
       </div>
     </div>
@@ -30,22 +30,5 @@ function retornarEsta(id, nome) {
   window.contatos_nome = nome;
  $('#modal').modal('toggle');
 };
-$(document).ready(buscarBancos());
-function buscarBancos(){
-  $("#contatosHolder").html("");
-  var url = "{{url('lista/bancos/selecionar')}}";
-  var data = {
-            'busca'              : $('input[name=busca]').val(),
-            '_token'            : $('input[name=_token]').val()
-        };
-
-  $.ajax({
-    type: "POST",
-    url: url,
-    data: data,
-    success: function( data ) {
-      $("#contatosHolder").html(data);
-    }
-  });
-}
+$(document).ready(efetuarBusca());
 </script>

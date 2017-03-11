@@ -82,12 +82,12 @@ class AppServiceProvider extends ServiceProvider
         list($url, $icone) = explode('*', $a);
         return "<?php echo '<a class=\"btn btn-warning\" href=\"'.URL::to('lista\\$url').'\" ><i class=\"fa $icone\"></i> Voltar a Lista</a>'; ?>";
       });
-      Blade::directive('buscaSimples', function () {
+      Blade::directive('buscaSimples', function ($url) {
         return "<?php echo '
             <div class=\"input-group\">
               <input type=\"text\" class=\"form-control\" name=\"busca\" id=\"busca\"   data-toggle=\"tooltip\" title=\"Busca\" size=\"40\" placeholder=\"Busca...\">
               <span class=\"input-group-btn\">
-                <button   data-toggle=\"tooltip\" title=\"Efetuar busca\" class=\"btn btn-info\" type=\"submit\"><i class=\"fa fa-search\"></i></button>
+                <button   data-toggle=\"tooltip\" title=\"Efetuar busca\" class=\"btn btn-info\" type=\"submit\" onclick=\"efetuarBusca(&#39;'.URL::to('$url').'&#39;)\"><i class=\"fa fa-search\"></i></button>
               </span>
             </div>';?>";
       });
@@ -103,8 +103,10 @@ class AppServiceProvider extends ServiceProvider
 
       Blade::directive('buscaExtraBotao', function () {
         return "<?php echo '
-            <a class=\"btn btn-info\"   data-toggle=\"tooltip\" title=\"Mostrar busca avançada\" title=\"Busca Avançada\" data-toggle=\"collapse\" data-target=\"#buscaAvançada\" aria-expanded=\"\" onclick=\"listaTop()\">
-              <i class=\"fa fa-search-plus\"></i>
+            <a class=\"btn btn-info\"   data-toggle=\"collapse\" title=\"Busca Avançada\" data-toggle=\"collapse\" data-target=\"#buscaAvançada\" aria-expanded=\"\" onclick=\"listaTop()\">
+            <span data-toggle=\"tooltip\" title=\"Mostrar busca avançada\" >
+                <i class=\"fa fa-search-plus\"></i>
+              </span>
             </a>'?>";
       });
       Blade::directive('botaoDelete', function () {

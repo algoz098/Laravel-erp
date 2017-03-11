@@ -36,7 +36,8 @@ class BancosController  extends BaseController
 
     return view('bancos.selecionar')->with('bancos', $bancos);
   }
-  public function selecionar_busca(request $request){
+
+  public function busca(request $request){
     Log::info('Selecionar  busca bancos, para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
     if (!isset(Auth::user()->perms["bancos"]["leitura"]) or Auth::user()->perms["bancos"]["leitura"]!=1){
       return response()->json([__('messages.perms.leitura')], 403);
@@ -52,7 +53,7 @@ class BancosController  extends BaseController
     }
     $bancos = Bancos::paginate(15);
 
-    return view('bancos.selecionar_parte')->with('bancos', $bancos);
+    return view('bancos.lista')->with('bancos', $bancos);
   }
   public function detalhes($id){
     if (!isset(Auth::user()->perms["bancos"]["leitura"]) or Auth::user()->perms["bancos"]["leitura"]!=1){
