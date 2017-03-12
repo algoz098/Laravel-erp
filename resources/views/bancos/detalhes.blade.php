@@ -39,7 +39,7 @@
              {{$banco->banco->sobrenome}}
            </div>
            <div class="col-md-2">
-             <strong>Conta corrente</strong>
+             <strong>Numero de conta</strong>
            </div>
            <div class="col-md-4">
              {{$banco->cc}}-{{$banco->cc_dig}}
@@ -50,7 +50,7 @@
              <strong>Tipo:</strong>
            </div>
            <div class="col-md-4">
-             {{$banco->tipo}}
+             {{$banco->tipo=="cc" ? "CC - Conta Corrente" : "CP - Conta Poupança"}}
            </div>
            <div class="col-md-2">
              <strong>Compensação</strong>

@@ -15,11 +15,11 @@
           <select class="form-control" id="tipo_banco" name="tipo" >
             @if (isset($banco))
               <option value="{{$banco->tipo}}" selected>{{$banco->tipo}} (atual)</option>
-              <option value="Conta corrente" >Conta corrente</option>
-              <option value="Poupança" >Poupança</option>
+              <option value="CC" >CC - Conta corrente</option>
+              <option value="CP" >CP - Poupança</option>
             @else
-              <option value="Conta corrente" selected>Conta corrente</option>
-              <option value="Poupança" >Poupança</option>
+              <option value="CC" selected>CC - Conta corrente</option>
+              <option value="CP" >CP - Poupança</option>
             @endif
           </select>
         </div>

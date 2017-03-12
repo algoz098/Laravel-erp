@@ -24,7 +24,7 @@
           @if (isset($modulo_contas) and $modulo_contas=="1")
             @ifPerms(contas*adicao)
               @sidemenuItem(novo*contas*fa-usd*Plano bancario)
-              @sidemenuItem(novo*contas*fa-arrow-right*Cosumo bancario)
+              @sidemenuItem(novo*consumos*fa-arrow-right*Consumo bancario)
             @endPerms
           @endif
           @if (isset($modulo_estoques) and $modulo_estoques=="1")
@@ -73,7 +73,7 @@
             @sidemenuItem(lista*estoque*fa-bell*Estoque)
           @endif
           @if (isset($modulo_caixas) and $modulo_caixas=="1")
-            @sidemenuItem(lista*caixas*fa-money*Movimentações de caixas)
+            @sidemenuItem(lista*caixas*fa-money*Movs. de caixas)
           @endif
           @sidemenuItem(lista*bancos*fa-bank*Contas em bancos)
           @if (isset($modulo_vendas) and $modulo_vendas=="1")

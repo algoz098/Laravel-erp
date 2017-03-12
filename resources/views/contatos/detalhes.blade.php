@@ -156,6 +156,16 @@
                         <span class="">{{$contato->rg}}</span>
                       </div>
                     </div>
+                    @if ($contato->tipo!="0")
+                      <div class="row">
+                        <div class="col-md-2">
+                          <strong>Dt. Nasc.:</strong>
+                        </div>
+                        <div class="col-md-10">
+                          {{$contato->nascimento}}
+                        </div>
+                      </div>
+                    @endif
                     <div class="row">
                       <div class="col-md-2">
                         <strong>Ins. Pref.:</strong>
@@ -293,57 +303,50 @@
                           <span class="">{{$contato->funcionario->rg}}</span>
                         </div>
                       </div>
-                      <div class="row">
-                        <div class="col-md-7">
-                          <strong>Nome do Pai:</strong>
-                        </div>
-                        <div class="col-md-5">
-                          <span class="">{{$contato->funcionario->rg_pai}}</span>
-                        </div>
-                      </div>
-                      <div class="row">
-                        <div class="col-md-7">
-                          <strong>Nome da Mãe:</strong>
-                        </div>
-                        <div class="col-md-5">
-                          <span class="">{{$contato->funcionario->rg_mae}}</span>
-                        </div>
-                      </div>
+
 
                     </div>
                     <div class="col-md-4">
                       <div class="row">
-                        <div class="col-md-7">
+                        <div class="col-md-5">
                           <strong>N. do PIS:</strong>
                         </div>
-                        <div class="col-md-5">
+                        <div class="col-md-7">
                           <span class="">{{$contato->funcionario->pis}}</span>
                         </div>
                       </div>
                       <div class="row">
-                        <div class="col-md-7">
+                        <div class="col-md-5">
                           <strong>Banco do PIS:</strong>
                         </div>
-                        <div class="col-md-5">
+                        <div class="col-md-7">
                           <span class="">{{$contato->funcionario->pis_banco}}</span>
                         </div>
                       </div>
                       <div class="row">
-                        <div class="col-md-7">
-                          <strong>N. do INSS:</strong>
-                        </div>
                         <div class="col-md-5">
-                          <span class="">{{$contato->funcionario->inss}}</span>
-                        </div>
-                      </div>
-                      <div class="row">
-                        <div class="col-md-7">
                           <strong>N. de reservista:</strong>
                         </div>
-                        <div class="col-md-5">
+                        <div class="col-md-7">
                           <span class="">{{$contato->funcionario->reservista}}</span>
                         </div>
                       </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-2">
+                      <strong>Nome do Pai:</strong>
+                    </div>
+                    <div class="col-md-10">
+                      <span class="">{{$contato->funcionario->rg_pai}}</span>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-2">
+                      <strong>Nome da Mãe:</strong>
+                    </div>
+                    <div class="col-md-10">
+                      <span class="">{{$contato->funcionario->rg_mae}}</span>
                     </div>
                   </div>
                   <hr>
@@ -370,7 +373,7 @@
                           <strong>V. Transp.:</strong>
                         </div>
                         <div class="col-md-5">
-                          <span class="">R$ {{$contato->funcionario->vt}}</span>
+                          <span class="">R$ {{number_format($contato->funcionario->vt, 2)}}</span>
                         </div>
                       </div>
                       <div class="row">
@@ -402,7 +405,7 @@
                           <strong>INSS:</strong>
                         </div>
                         <div class="col-md-5">
-                          <span class="">R$ {{$contato->funcionario->inss}}</span>
+                          <span class="">R$ {{number_format($contato->funcionario->inss, 2)}}</span>
                         </div>
                       </div>
                     </div>

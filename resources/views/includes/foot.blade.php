@@ -6,6 +6,7 @@
     ]); ?>
 </script>
 <script language="javascript">
+
   var height = $(window).height()-200;
   $(document).ready( function (){
     tinymce.init({

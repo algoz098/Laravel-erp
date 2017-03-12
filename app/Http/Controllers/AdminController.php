@@ -389,7 +389,7 @@ class AdminController  extends BaseController
     }
     public function backup_do(){
       Log::info('!!!ADMIN!!! Realizando BKP, para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
-       Artisan::call('backup:run', ['--only-db' => true]);
+       Artisan::call('backup:run');
        $files = File::Files(storage_path('backups/'));
        foreach ($files as $key => $file) {
          $backups[]=basename($file, ".zip");

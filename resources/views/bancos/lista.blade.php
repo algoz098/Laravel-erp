@@ -1,4 +1,3 @@
-
 <div class="row" id="lista">
   <div class="col-md-1">
     ID
@@ -6,10 +5,10 @@
   <div class="col-md-2">
     Filial
   </div>
-  <div class="col-md-1">
+  <div class="col-md-2">
     Banco
   </div>
-  <div class="col-md-2">
+  <div class="col-md-1">
     Tipo
   </div>
   <div class="col-md-1">
@@ -38,15 +37,14 @@
     <div class="col-md-2 ">
       @mostraContato($banco->contato->id*$banco->contato->sobrenome)
     </div>
-    <div class="col-md-1 ">
+    <div class="col-md-2 limitar-string">
       @if (isset($banco->banco->id))
         @mostraContato($banco->banco->id*$banco->banco->sobrenome)
       @else
         N/C
       @endif
     </div>
-
-    <div class="col-md-2">
+    <div class="col-md-1">
       {{$banco->tipo}}
     </div>
     <div class="col-md-1">

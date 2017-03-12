@@ -133,7 +133,7 @@
                             @php $total_disc = $total_disc + $disc->valor; @endphp
                           @endforeach
                           <div class="row list-contacts">
-                            <div class="col-md-6 text-right">
+                            <div class="col-md-7 text-right">
                                 <strong>Total:</strong>
                             </div>
                             <div class="col-md-2 text-left">
@@ -348,7 +348,7 @@
     <div class="modal-footer">
       @botaoFecharModal
       @ifPerms(contas*edicao)
-        @botaoEditarExtenso(novo/contas*$contas->id)
+        @botaoEditarExtenso(novo/contas*$conta->id)
       @endPerms
       <!--<a href="{{ url('/novo/contas/editar') }}/{{$conta->id}}"><button type="submit" class="btn btn-primary">Editar</button></a>-->
     </div>

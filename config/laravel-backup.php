@@ -19,7 +19,7 @@ return [
                  * specify individual files as well.
                  */
                 'include' => [
-                    base_path(),
+                    storage_path("app"),
                 ],
 
                 /*
@@ -29,7 +29,7 @@ return [
                 'exclude' => [
                     base_path('vendor'),
                     base_path('node_modules'),
-                    storage_path(),
+                    storage_path('backups'),
                 ],
 
                 /*

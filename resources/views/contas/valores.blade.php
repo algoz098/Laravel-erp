@@ -60,12 +60,12 @@ use Carbon\Carbon;
                             @else
                               @if (isset($conta))
                                 <select class="form-control" id="tipo_conta" name="tipo" onchange="tipoChange()">
-                                  <option value="0" {{$conta->tipo==0 ? "selected" : ""}}>Saida</option>
-                                  <option value="1" {{$conta->tipo==1 ? "selected" : ""}}>Entrada</option>
+                                  <option value="0" {{$conta->tipo==0 ? "selected" : ""}}>Provisionamento de conta</option>
+                                  <option value="1" {{$conta->tipo==1 ? "selected" : ""}}>Provisionamento de recebimento</option>
                               @else
                                 <select class="form-control" id="tipo_conta" name="tipo" onchange="tipoChange()">
-                                  <option value="0" selected>Saida</option>
-                                  <option value="1">Entrada</option>
+                                  <option value="0" selected>Provisionamento de conta</option>
+                                  <option value="1">Provisionamento de recebimento</option>
                               @endif
                             @endif
 

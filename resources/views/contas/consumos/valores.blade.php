@@ -64,7 +64,7 @@
   </div>
   <div class="col-md-3">
     <div class="panel panel-default">
-      <div class="panel-heading">Outras dicriminações</div>
+      <div class="panel-heading">Descrição da conta</div>
       <div class="panel-body">
         <div class="form-group">
           <label for="text">Titulo</label>
@@ -83,13 +83,13 @@
               <hr>
               <div class="form-group">
                 <label for="text">Titulo</label>
-                <input type="numeric" class="form-control" id="disc_text_edit{{$key}}" name="disc_text_edit[{{$key}}]" placeholder="Titulo da discriminação" value="{{$disc->text}}">
+                <input type="numeric" class="form-control" id="disc_text_edit{{$key}}" name="disc_text_edit[{{$key}}]" placeholder="Descrição da conta" value="{{$disc->nome}}">
               </div>
               <div class="form-group">
                 <label for="text">Valor</label>
                 <div class="input-group">
                   <span class="input-group-addon" id="basic-addon1">R$</span>
-                  <input type="text" class="form-control real-mask" name="disc_valor_edit[{{$key}}]" id="disc_valor_edit{{$key}}" placeholder="valor da discriminação" value="{{$disc->value}}" onchange="totalValor(this.value)">
+                  <input type="text" class="form-control real-mask" name="disc_valor_edit[{{$key}}]" id="disc_valor_edit{{$key}}" placeholder="valor da discriminação" value="{{$disc->valor}}" onchange="totalValor(this.value)">
                 </div>
               </div>
             @endforeach
@@ -98,7 +98,8 @@
       </div>
     </div>
   </div>
-  <div class="col-md-3 pull-right">
+  <div class="col-md-3">
+    <div data-spy="affix" data-offset-top="60" data-offset-bottom="200"  style="width: 200px;">
     <div class="row">
       <div class="col-md-12">
         <a class="btn btn-danger" onclick="remove()">
@@ -112,13 +113,24 @@
     <hr>
     <div class="row">
       <div class="col-md-12" >
-        Total discriminado: <span class="label label-info">R$<span id="discTotal">0</span></span>
+        Total descrito: <br><br><span class="label label-info" style="font-size: 24px ">R$<span id="discTotal">0</span></span>
       </div>
     </div>
+  </div>
   </div>
 </div>
 
   <script>
+  var discs = "{{count($conta->discs)}}";
+  $(document).ready(function(){
+    var soma = 0.0;
+    for (contador = 0; contador<discs; contador++){
+      if (parseFloat($('#disc_valor_edit'+contador).val())){
+        var soma = parseFloat($('#disc_valor_edit'+contador).val())+soma;
+      }
+    }
+    $('#discTotal').text(soma);
+  });
     function referenciaChange(){
       if ($('#nome').val()=="1001"){
         $('#consumosRow').show();
@@ -201,13 +213,13 @@
     <hr>
     <div class="form-group">
       <label for="text">Titulo</label>
-      <input type="numeric" class="form-control" id="disc_text" name="disc_text[0]" placeholder="Titulo da discriminação">
+      <input type="numeric" class="form-control" id="disc_text" name="disc_text[0]" placeholder="Descrição da conta">
     </div>
     <div class="form-group">
       <label for="text">Valor</label>
       <div class="input-group">
         <span class="input-group-addon" id="basic-addon1">R$</span>
-        <input type="text" class="form-control real-mask" name="disc_valor[0]" id="disc_valor" placeholder="valor da discriminação" onchange="totalValor(this.value)">
+        <input type="text" class="form-control real-mask" name="disc_valor[0]" id="disc_valor" onchange="totalValor(this.value)">
       </div>
     </div>
   </div>
