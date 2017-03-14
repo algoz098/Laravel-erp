@@ -7,5 +7,12 @@ return [
         'edicao'  => 'Você nao tem permissão de Gravação',
         'adicao'  => 'Você nao tem permissão de Adicionar'
       ],
-    'erro' => 'Erro'
+    'sucesso' => [
+        'mensagem' => 'Item adicionado com sucesso',
+        'title' => 'Consegui'
+      ],
+    'erros' => [
+        '404' => 'Nada encontrado',
+      ],
+    'erro' => 'Erro',
 ];

@@ -82,12 +82,13 @@ class AppServiceProvider extends ServiceProvider
         list($url, $icone) = explode('*', $a);
         return "<?php echo '<a class=\"btn btn-warning\" href=\"'.URL::to('lista\\$url').'\" ><i class=\"fa $icone\"></i> Voltar a Lista</a>'; ?>";
       });
-      Blade::directive('buscaSimples', function ($url) {
+      Blade::directive('buscaSimples', function ($a) {
+        list($url, $target) = explode('*', $a);
         return "<?php echo '
             <div class=\"input-group\">
               <input type=\"text\" class=\"form-control\" name=\"busca\" id=\"busca\"   data-toggle=\"tooltip\" title=\"Busca\" size=\"40\" placeholder=\"Busca...\">
               <span class=\"input-group-btn\">
-                <button   data-toggle=\"tooltip\" title=\"Efetuar busca\" class=\"btn btn-info\" type=\"submit\" onclick=\"efetuarBusca(&#39;'.URL::to('$url').'&#39;)\"><i class=\"fa fa-search\"></i></button>
+                <button id=\"botaoBuscaSimples\"  data-toggle=\"tooltip\" title=\"Efetuar busca\" class=\"btn btn-info\" type=\"submit\" onclick=\"efetuarBusca(&#39;'.URL::to('$url').'&#39;, &#39;$target&#39;)\"><i class=\"fa fa-search\"></i></button>
               </span>
             </div>';?>";
       });
@@ -273,6 +274,32 @@ class AppServiceProvider extends ServiceProvider
             '?>";
           }
       });
+      Blade::directive('selecionaProdutoGrupo', function ($a) {
+        if (strpos($a, '*')){
+          list($id, $nome) = explode('*', $a);
+          return "<?php echo '
+            <div class=\"form-group\">
+              <label for=\"por\">Escolhe produto:</label>
+              <div class=\"input-group\">
+                <input type=\"hidden\" class=\"form-control\" id=\"produtosHidden\" name=\"produtos_id\" value=\"'.$id.'\">
+                <input type=\"text\" class=\"form-control\" id=\"produtos\" disabled value=\"'.$nome.'\">
+                <a onclick=\"window.activeTarget=&#39;produtos&#39;&#59; openModal(&#39;'.URL::to('lista/produtos/selecionar').'&#39;)\" class=\"input-group-addon btn btn-info\"><i class=\"fa fa-gear\"></i></a>
+              </div>
+            </div>'?>";
+          } else {
+            return "<?php echo '
+              <div class=\"form-group\">
+                <label for=\"por\">Escolher grupo:</label>
+                <div class=\"input-group\">
+                  <input type=\"hidden\" class=\"form-control\" id=\"grupoHidden\" name=\"produtos_grupos_id\" value=\"\">
+                  <input type=\"text\" class=\"form-control\" id=\"grupo\" disabled value=\"\">
+                  <a onclick=\"window.activeTarget=&#39;grupo&#39;&#59; openModal(&#39;'.URL::to('lista/produtos/grupo').'&#39;)\" class=\"input-group-addon btn btn-info\"><i class=\"fa fa-gear\"></i></a>
+                </div>
+              </div>
+            '?>";
+          }
+      });
+
       Blade::directive('botaoEditarExtenso', function ($a) {
         list($caminho, $id) = explode('*', $a);
         return "<?php echo '

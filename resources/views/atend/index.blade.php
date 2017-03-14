@@ -24,7 +24,7 @@
                 <div class="col-md-8">
                   <div class="form-group form-inline text-center">
                     {{ csrf_field() }}
-                    @buscaSimples(lista/atendimentos)
+                    @buscaSimples(lista/atendimentos*Atendimentos)
                     @buscaExtraBotao
                   </div>
                 </div>
@@ -66,7 +66,7 @@
                 @endif
               </div>
             </div>
-          <div id="listaHolder"></div>
+          <div id="listaHolderAtendimentos"></div>
         </div>
       </div>
     </div>
@@ -90,7 +90,7 @@
     </script>
     <script language="javascript">
       $( function() {
-        efetuarBusca();
+        efetuarBusca('{{url('lista/atendimentos')}}', 'Atendimentos');
         $( ".datepicker" ).datepicker({ dateFormat: 'yy-mm-dd' });
       } );
     </script>

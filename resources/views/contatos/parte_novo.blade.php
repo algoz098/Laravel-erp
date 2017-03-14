@@ -260,7 +260,7 @@
             </div>
             <div class="form-group">
               <label for="nome">Nome ou Razão Social</label>
-              <input type="text" class="form-control" value="{{ $contato->nome or "" }}" name="nome" id="nome" placeholder="Razão Social/Nome">
+              <input type="text" class="form-control" value="{{ $contato->nome or "" }}" name="nome" id="nomeContato" placeholder="Razão Social/Nome">
             </div>
             <div class="form-group">
               <label for="sobrenome">Nome Fantasia/Sobrenome</label>
@@ -573,7 +573,7 @@ function enviarContato(){
             '_token'            : $('input[name=_token]').val(),
             'tipo'              : $('#tipo').val(),
             'tipo_filial'       : $('#tipo_filial').val(),
-            'nome'              : $('input[name=nome]').val(),
+            'nome'              : $('#nomeContato').val(),
             'sobrenome'         : $('input[name=sobrenome]').val(),
             'codigo'            : $('input[name=codigo]').val(),
             'cpf'               : $('input[name=cpf]').val(),
@@ -602,7 +602,7 @@ function enviarContato(){
     url: url,
     data: data,
     success: function( data ) {
-      efetuarBusca("{{ url('lista/contatos') }}");
+      efetuarBusca("{{ url('lista/contatos') }}", "Contatos");
       $.toaster({ message : 'Entidade adicionado com sucesso', title : 'Sucesso', priority : 'success' , settings : {'timeout' : 3000,}});
     }
   });

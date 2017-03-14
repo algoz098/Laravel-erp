@@ -17,6 +17,7 @@ use App\Funcionarios;
 use App\Bancos;
 use App\Frotas;
 use App\Enderecos;
+use App\Produtos;
 
 class Contatos extends Model
 {
@@ -97,5 +98,9 @@ class Contatos extends Model
     public function enderecos()
     {
         return $this->hasMany('App\Enderecos');
+    }
+    public function produtos()
+    {
+        return $this->hasMany('App\Produtos');
     }
 }

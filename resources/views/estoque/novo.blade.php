@@ -4,9 +4,9 @@ use Carbon\Carbon;
 @extends('main')
 @section('content')
   @if (isset($estoque))
-    <form method="POST" action="{{ url('/novo/estoque') }}/{{$estoque->id}}">
+    <form method="POST" action="{{ url('/novo/estoques') }}/{{$estoque->id}}">
   @else
-    <form method="POST" action="{{ url('/novo/estoque') }}">
+    <form method="POST" action="{{ url('/novo/estoques') }}">
   @endif
     {{ csrf_field() }}
     <div class="row">
@@ -18,7 +18,7 @@ use Carbon\Carbon;
           <div class="panel-body">
             <div class="row" id="secondNavbar">
               <div class="col-md-3 text-right pull-right">
-                @botaoLista(estoque*fa-bell-o)
+                @botaoLista(estoques*fa-bell-o)
                 @botaoSalvar
               </div>
             </div>

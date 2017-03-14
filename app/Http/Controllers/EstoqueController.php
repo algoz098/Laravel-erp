@@ -8,6 +8,8 @@ use App\Estoque as Estoque;
 use Carbon\Carbon;
 use App\Estoque_campos as Campos;
 use App\Produtos as Produtos;
+use App\Produtos_grupos as Grupos;
+use App\Produtos_tipos as Tipos;
 use Log;
 use Auth;
 class EstoqueController  extends BaseController
@@ -54,6 +56,90 @@ class EstoqueController  extends BaseController
     return view('estoque.detalhes')->with('estoque', $estoque);
   }
 
+  public function grupo_selecionar()
+  {
+    if (!isset(Auth::user()->perms["estoques"]["leitura"]) or Auth::user()->perms["estoques"]["leitura"]!=1){
+      return response()->json([__('messages.perms.leitura')], 403);
+    }
+    Log::info('Criando novo estoque, para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
+    return view('estoque.grupos.selecionar');
+  }
+  public function tipo_selecionar()
+  {
+    if (!isset(Auth::user()->perms["estoques"]["leitura"]) or Auth::user()->perms["estoques"]["leitura"]!=1){
+      return response()->json([__('messages.perms.leitura')], 403);
+    }
+    Log::info('Criando novo estoque, para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
+    return view('estoque.tipos.selecionar');
+  }
+  public function grupo_busca(request $request)
+  {
+    if (!isset(Auth::user()->perms["estoques"]["leitura"]) or Auth::user()->perms["estoques"]["leitura"]!=1){
+      return response()->json([__('messages.perms.leitura')], 403);
+    }
+    $grupos = Grupos::all();
+    Log::info('Criando novo estoque, para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
+    return view('estoque.grupos.lista')->with('grupos', $grupos);
+  }
+  public function tipo_busca(request $request)
+  {
+    if (!isset(Auth::user()->perms["estoques"]["leitura"]) or Auth::user()->perms["estoques"]["leitura"]!=1){
+      return response()->json([__('messages.perms.leitura')], 403);
+    }
+    if ($request->id!=""){
+      $tipos = Tipos::where('produtos_grupos_id', 'like', $request->id)->get();
+      if (!count($tipos)){
+        $erro = "Nenhum tipo encontrado";
+        return view('estoque.tipos.lista')->with('tipos', $tipos)->with('erro', $erro);
+
+      }
+    } else {
+      $tipos = Tipos::all();
+    }
+    Log::info('Criando novo estoque, para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
+    return view('estoque.tipos.lista')->with('tipos', $tipos);
+  }
+  public function grupo_novo()
+  {
+    if (!isset(Auth::user()->perms["estoques"]["adicao"]) or Auth::user()->perms["estoques"]["adicao"]!=1){
+      return response()->json([__('messages.perms.adicao')], 403);
+    }
+    Log::info('Criando novo estoque, para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
+    return view('estoque.grupos.novo');
+  }
+  public function tipo_novo($id)
+  {
+    if (!isset(Auth::user()->perms["estoques"]["adicao"]) or Auth::user()->perms["estoques"]["adicao"]!=1){
+      return response()->json([__('messages.perms.adicao')], 403);
+    }
+    $grupo = Grupos::find($id);
+    Log::info('Criando novo estoque, para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
+    return view('estoque.tipos.novo')->with("grupo", $grupo);
+  }
+  public function grupo_salva(request $request)
+  {
+    if (!isset(Auth::user()->perms["estoques"]["adicao"]) or Auth::user()->perms["estoques"]["adicao"]!=1){
+      return response()->json([__('messages.perms.adicao')], 403);
+    }
+    $grupo = new Grupos;
+    $grupo->nome = $request->nome;
+    $grupo->save();
+    Log::info('Criando novo estoque, para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
+    return response()->json([__('messages.adicao.sucesso')], 201);
+  }
+  public function tipo_salva(request $request)
+  {
+    if (!isset(Auth::user()->perms["estoques"]["adicao"]) or Auth::user()->perms["estoques"]["adicao"]!=1){
+      return response()->json([__('messages.perms.adicao')], 403);
+    }
+    $tipo = new tipos;
+    $tipo->produtos_grupos_id = $request->grupos_id;
+    $tipo->nome = $request->nome;
+    $tipo->save();
+    Log::info('Criando novo estoque, para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
+    return response()->json([__('messages.adicao.sucesso')], 201);
+  }
+
   public function save(request $request)
   {
     if (!isset(Auth::user()->perms["estoques"]["adicao"]) or Auth::user()->perms["estoques"]["adicao"]!=1){
@@ -62,7 +148,7 @@ class EstoqueController  extends BaseController
     }
     $this->validate($request, [
         'filiais_id' => 'required',
-        'produtos_id' => 'required|max:50',
+        'produtos_id' => 'required',
         'quantidade' => 'required',
     ]);
     $estoque = new Estoque;
@@ -94,12 +180,12 @@ class EstoqueController  extends BaseController
                        ->withErrors([__('messages.perms.edicao')]);
     }
     $this->validate($request, [
-        'contatos_id' => 'required',
-        'produtos_id' => 'required|max:50',
+        'filiais_id' => 'required',
+        'produtos_id' => 'required',
         'quantidade' => 'required',
     ]);
     $estoque = Estoque::find($id);
-    $estoque->contatos_id = $request->contatos_id;
+    $estoque->contatos_id = $request->filiais_id;
     $estoque->produtos_id = $request->produtos_id;
     $estoque->quantidade = $request->quantidade;
 
@@ -148,9 +234,12 @@ class EstoqueController  extends BaseController
     }
     $estoques = $estoques->paginate(30);
     Log::info('Vendo estoque com busca -> "'.$request.'", para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
-
+    $total= Estoque::count();
     $deletados = 0;
-    return view('estoque.index')->with('estoques', $estoques)->with('deletados', $deletados);
+    return view('estoque.lista')
+      ->with('estoques', $estoques)
+      ->with('total', $total)
+      ->with('deletados', $deletados);
   }
 
   public function delete($id)
@@ -214,11 +303,17 @@ class EstoqueController  extends BaseController
       $barras = $request->barras;
     }
     $produto->barras = $barras;
-    $produto->grupo = $request->grupo;
-    $produto->tipo = $request->tipo;
+    $produto->produtos_tipo_id = $request->produtos_grupos_id;
     $produto->nome = $request->nome;
     $produto->unidade = $request->unidade;
+    $produto->embalagem = $request->embalagem;
+    $produto->fabricante_id = $request->contatos_id;
     $produto->custo = $request->custo;
+    $produto->margem = $request->margem;
+    $produto->venda = $request->venda;
+    $produto->qtd_minima = $request->qtd_minima;
+    $produto->qtd_maxima = $request->qtd_maxima;
+    $produto->estado = $request->estado;
     $produto->save();
     if(isset($request->campo_nome_edit)){
       foreach ($request->campo_nome_edit as $key => $value) {
@@ -305,7 +400,7 @@ class EstoqueController  extends BaseController
     return view('estoque.produto.selecionar')->with('produtos', $produtos);
   }
 
-  public function produto_selecionar_busca(request $request)
+  public function produto_busca(request $request)
   {
     if (!isset(Auth::user()->perms["estoques"]["leitura"]) or Auth::user()->perms["estoques"]["leitura"]!=1){
       return redirect()->action('HomeController@index')
@@ -320,7 +415,7 @@ class EstoqueController  extends BaseController
     }
 
     $produtos = $produtos->orderBy('nome', 'asc')->get();
-    return view('estoque.produto.selecionarbusca')
+    return view('estoque.produto.lista')
                 ->with('produtos', $produtos);
   }
 

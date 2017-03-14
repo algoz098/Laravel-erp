@@ -47,7 +47,7 @@
                 <strong>Custo:</strong>
               </div>
               <div class="col-md-2">
-                R$ {{ number_format($estoque->produto->custo, 2) }}
+                R$ {{$estoque->produto->custo}}
               </div>
             </div>
             <div class="row">

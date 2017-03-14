@@ -28,7 +28,7 @@
                 <div class="col-md-6">
                   <div class="form-group form-inline text-center">
                     {{ csrf_field() }}
-                    @buscaSimples(lista/contatos)
+                    @buscaSimples(lista/contatos*Contatos)
                     @buscaExtraBotao
                   </div>
                 </div>
@@ -76,7 +76,7 @@
                 @endif
               </div>
             </div>
-          <span id="listaHolder"></span>
+          <span id="listaHolderContatos"></span>
           @if($deletados!==0)
             <h3>Deletados</h3>
             @foreach($deletados as $key => $contato)
@@ -114,7 +114,7 @@
 
   <script language="javascript">
     $(document).ready(function(){
-      efetuarBusca();
+      efetuarBusca('{{url('lista/contatos')}}', 'Contatos');
       $('#busca').focus();
     });
     $(document).keypress(function(e) {
@@ -137,11 +137,11 @@
       }
     }
     function listaTop(){
-      var css = $('#listaHolder').css('margin-top');
+      var css = $('#listaHolderContatos').css('margin-top');
       if(css == "75px"){
-        $('#listaHolder').css('margin-top', '0px');
+        $('#listaHolderContatos').css('margin-top', '0px');
       } else {
-        $('#listaHolder').css('margin-top', '75px');
+        $('#listaHolderContatos').css('margin-top', '75px');
       }
     }
   </script>

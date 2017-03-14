@@ -28,8 +28,8 @@
             @endPerms
           @endif
           @if (isset($modulo_estoques) and $modulo_estoques=="1")
-            @ifPerms(estoque*adicao)
-              @sidemenuItem(novo*estoque*fa-bell*Novo produto)
+            @ifPerms(estoques*adicao)
+              @sidemenuItem(novo*estoques*fa-bell*Novo Produto)
             @endPerms
           @endif
           @if (isset($modulo_caixas) and $modulo_caixas=="1")
@@ -70,7 +70,7 @@
             @sidemenuItem(lista*contas*fa-usd*Historico bancario)
           @endif
           @if (isset($modulo_estoques) and $modulo_estoques=="1")
-            @sidemenuItem(lista*estoque*fa-bell*Estoque)
+            @sidemenuItem(lista*estoques*fa-bell*Estoque)
           @endif
           @if (isset($modulo_caixas) and $modulo_caixas=="1")
             @sidemenuItem(lista*caixas*fa-money*Movs. de caixas)

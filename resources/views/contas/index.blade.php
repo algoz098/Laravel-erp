@@ -31,7 +31,7 @@
               </div>
               <div class="col-md-6">
                 <div class="form-group form-inline text-center">
-                  @buscaSimples(lista/contas)
+                  @buscaSimples(lista/contas*Contas)
                   @buscaExtraBotao
                 </div>
               </div>
@@ -72,14 +72,14 @@
               @endif
             </div>
           </div>
-          <div id="listaHolder"></div>
+          <div id="listaHolderContas"></div>
         </div>
       </div>
     </div>
   </div>
 <script>
 $(document).ready(function(){
-  efetuarBusca();
+  efetuarBusca('{{url('lista/contas')}}', 'Contas');
 });
   function selectRow(id){
     $("#ids").val(id);
@@ -90,7 +90,7 @@ $(document).ready(function(){
     $("#buttonPagar").attr('href', '{{ url('/lista/contas') }}/'+id+'/pago');
   }
   function listaTop(){
-    var css = $('#listaHolder').css('margin-top');
+    var css = $('#listaHolderBancos').css('margin-top');
     if(css == "75px"){
       $('#listaHolder').css('margin-top', '0px');
     } else {

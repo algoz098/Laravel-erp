@@ -1,4 +1,5 @@
 <div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby=""></div>
+<div class="modal fade" id="modal2" tabindex="-1" role="dialog" aria-labelledby=""></div>
 <script src="{{ asset('js/pushy.min.js') }}"></script>
 <script>
     window.Laravel = <?php echo json_encode([
@@ -8,6 +9,22 @@
 <script language="javascript">
 
   var height = $(window).height()-200;
+
+  function retornarEsta(id, nome) {
+    if (($("#modal2").data('bs.modal') || {}).isShown) {
+      window.contatos_id2 = id;
+      window.contatos_nome2 = nome;
+      console.log(window.contatos_id2, window.contatos_nome2);
+      $('#modal2').modal('toggle');
+    } else {
+      window.contatos_id = id;
+      window.contatos_nome = nome;
+      $('#modal').modal('toggle');
+      console.log(window.contatos_id, window.contatos_nome);
+    }
+  };
+
+
   $(document).ready( function (){
     tinymce.init({
       selector: 'textarea',
@@ -22,6 +39,7 @@
 
     });
   });
+
   var scroll = jQuery(document).scroll(function() {
       if (jQuery(this).scrollTop() > 105) {
         jQuery('#secondNavbar').css({
@@ -77,46 +95,69 @@
         }
     });
   });
-  function openModal(url){
-    $("#modal").modal('show');
-    $( "#modal" ).html();
-    $.ajax({
-      type: 'GET',
-      url: url,
-      success: function( data ) {
-        $( "#modal" ).html( data );
-      },
-      error: function(xhr, status, error) {
-        $("#modal").modal('hide');
+  $(document).keyup(function(event){
+      if(event.keyCode == 13){
+          $("#"+focandoEnter).click();
       }
-    });
+  });
+  window.modalAtivo = "";
+  function openModal(url){
+    if (($("#modal").data('bs.modal') || {}).isShown) {
+      $("#modal2").modal('show');
+      $( "#moda2").html();
+      $.ajax({
+        type: 'GET',
+        url: url,
+        success: function( data ) {
+          $( "#modal2" ).html( data );
+        },
+        error: function(xhr, status, error) {
+          $("#modal2").modal('hide');
+        }
+      });
+    } else {
+      $("#modal").modal('show');
+      $( "#modal").html();
+      $.ajax({
+        type: 'GET',
+        url: url,
+        success: function( data ) {
+          $( "#modal").html( data );
+        },
+        error: function(xhr, status, error) {
+          $("#modal").modal('hide');
+        }
+      });
+    }
   };
-  function efetuarBusca(url){
-    $("#listaHolder").addClass("carregando");
+  function efetuarBusca(url, target){
+    $("#"+target).addClass("carregando");
+    $('#botaoSalvar'+target).hide();
     var data = {
-              'busca'              : $('input[name=busca]').val(),
-              '_token'            : $('input[name=_token]').val(),
-              'apenas_filial'      : $('#apenas_filial').val(),
-              'data_de'       : $('#data_de').val(),
-              'data_ate'       : $('#data_ate').val(),
-              'assunto'       : $('#assunto').val(),
-          };
-          console.log(data);
+      'busca'              : $('input[name=busca]').val(),
+      '_token'            : $('input[name=_token]').val(),
+      'apenas_filial'      : $('#apenas_filial').val(),
+      'data_de'       : $('#data_de').val(),
+      'data_ate'       : $('#data_ate').val(),
+      'assunto'       : $('#assunto').val(),
+    };
     $.ajax({
       type: 'post',
       url: url,
       data: data,
       success: function( data ) {
-        $( "#listaHolder" ).html( data );
-        $("#listaHolder").removeClass("carregando");
+        $( "#listaHolder"+target ).html( data );
+        $("#listaHolder"+target).removeClass("carregando");
       },
     });
   }
   $( document ).ajaxError(function( event, jqxhr, settings, thrownError ) {
-    var a = jQuery.parseJSON( jqxhr.responseText );
-    for (var contador = 0, len = a.length; contador < len; contador++) {
-      var title = "@lang('messages.erro')";
-      $.toaster({ message : a[contador], title : title, priority : 'danger' , settings : {'timeout' : 3000,}});
+    if (!jQuery.isEmptyObject(jqxhr.responseText)){
+      var a = jQuery.parseJSON( jqxhr.responseText );
+      for (var contador = 0, len = a.length; contador < len; contador++) {
+        var title = "@lang('messages.erro')";
+        $.toaster({ message : a[contador], title : title, priority : 'danger' , settings : {'timeout' : 3000,}});
+      }
     }
   });
   $('#modal').on("hidden.bs.modal", function (e) {
@@ -125,6 +166,13 @@
       $('#'+activeTarget).val(window.contatos_nome);
     }
   });
+  $('#modal2').on("hidden.bs.modal", function (e) {
+    if (typeof activeTarget != 'undefined'){
+      $('#'+activeTarget+'Hidden').val(window.contatos_id2);
+      $('#'+activeTarget).val(window.contatos_nome2);
+    }
+  });
+
 
 
   !function ($) {

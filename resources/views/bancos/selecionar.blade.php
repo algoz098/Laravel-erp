@@ -10,12 +10,12 @@
     <div class="modal-body">
         <div class="form-group form-inline text-center">
           {{ csrf_field() }}
-          @buscaSimples(lista/bancos)
+          @buscaSimples(lista/bancos*Bancos)
           @ifPerms(bancos*adicao)
             <a href="{{url('novo/bancos/')}}"class="btn btn-success"><i class="fa fa-plus"></i></a>
           @endPerms
         </div>
-      <div id="listaHolder">
+      <div id="listaHolderBancos">
 
       </div>
     </div>
@@ -30,5 +30,5 @@ function retornarEsta(id, nome) {
   window.contatos_nome = nome;
  $('#modal').modal('toggle');
 };
-$(document).ready(efetuarBusca());
+$(document).ready(efetuarBusca('{{url('lista/bancos')}}', 'Bancos'));
 </script>

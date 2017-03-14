@@ -37,7 +37,7 @@
                         data-placement="top"
                   >
                     {{ csrf_field() }}
-                    @buscaSimples(lista/frotas)
+                    @buscaSimples(lista/frotas*Frotas)
                     @buscaExtraBotao
                   </div>
                 </div>
@@ -54,7 +54,7 @@
                 {placeholder}
               </div>
             </div>
-          <div id="listaHolder"></div>
+          <div id="listaHolderFrotas"></div>
           @if($deletados!==0)
             <hr>
             <h3>Deletados</h3>
@@ -105,7 +105,7 @@
   </div>
 <script>
   $(document).ready(function(){
-    efetuarBusca();
+    efetuarBusca('{{url('lista/frotas')}}', 'Frotas');
   });
   function selectRow(id){
     $("#ids").val(id);

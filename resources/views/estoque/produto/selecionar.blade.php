@@ -10,53 +10,61 @@
     <div class="modal-body">
         <div class="form-group form-inline text-center">
           {{ csrf_field() }}
-          @buscaModal(buscarContatos())
+          @buscaSimples(lista/produtos*Produtos)
           <button type="button" class="btn btn-success" onclick="novoProduto()"><i class="fa fa-plus"></i></button>
         </div>
-      <div id="contatosHolder">
-        @foreach ($produtos as $key => $produto)
-          <div class="row list-contacts" onclick="retornarEsta({{$produto->id}}, '{{str_replace("'", " ", $produto->nome)}}')">
-            <div class="col-md-1">
-              <span class="label label-info">
-                ID: {{$produto->id}}
-              </span>
-            </div>
-            <div class="col-md-3">
-              {{$produto->nome}}
-            </div>
-            <div class="col-md-3">
-              <span class="label label-info">
-                {{$produto->barras}}
-              </span>
-            </div>
-            <div class="col-md-2">
-              <span class="label label-info">
-                {{$produto->unidade}}
-              </span>
-            </div>
-          </div>
-        @endforeach
-      </div>
+        <div id="listaHolderProdutos"></div>
     </div>
     <div class="modal-footer">
       @botaoFecharModal
-
+      <a onclick="salvarProduto()" class="btn btn-success" id="botaoSalvarProduto" style="display: none;">
+        <i class="fa fa-check"></i> Salvar
+      </a>
     </div>
   </div>
 </div>
 <script>
-function retornarEsta(id, nome) {
-  window.contatos_id = id;
-  window.contatos_nome = nome;
- $('#modal').modal('toggle');
-};
-function buscarContatos(){
-  $("#contatosHolder").html("");
+efetuarBusca("{{url('lista/produtos')}}", 'Produtos');
+function novoProduto(){
+  $("#listaHolderProdutos").html("");
+  var url = "{{url('lista/produtos/selecionar/novo')}}";
+  console.log(url);
+  $.ajax({
+    type: "GET",
+    url: url,
+    success: function( data ) {
+      $("#listaHolderProdutos").html(data);
+      $("#botaoSalvarProduto").show();
+    }
+  });
+}
+function salvarProduto(){
+  var url = "{{url('novo/produto')}}";
 
-  var url = "{{url('lista/produtos/selecionar')}}";
+  var b = 0;
+  var campo_nome = new Array;
+  var campo_valor = new Array;
+  while (b <= e){
+    campo_nome[e] = $('#campo_nome'+b).val();
+    campo_valor[e] = $('#campo_valor'+b).val();
+    b++;
+  }
   var data = {
-            'busca'              : $('input[name=busca]').val(),
-            '_token'            : $('input[name=_token]').val()
+            '_token'            : $('input[name=_token]').val(),
+            'barras'            : $('#barras').val(),
+            'produtos_grupos_id': $('#grupoHidden').val(),
+            'contatos_id'       : $('#contatosHidden').val(),
+            'nome'              : $('#nome').val(),
+            'unidade'           : $('#unidade').val(),
+            'embalagem'         : $('#embalagem').val(),
+            'custo'             : $('#custo').val(),
+            'margem'            : $('#margem').val(),
+            'venda'             : $('#venda').val(),
+            'minimo'            : $('#minimo').val(),
+            'maximo'            : $('#maximo').val(),
+            'descricao'         : $('#descricao').val(),
+            'campo_nome'        : campo_nome,
+            'campo_valor'       : campo_valor
         };
 
   $.ajax({
@@ -64,19 +72,7 @@ function buscarContatos(){
     url: url,
     data: data,
     success: function( data ) {
-      $("#contatosHolder").html(data);
-    }
-  });
-}
-function novoProduto(){
-  $("#contatosHolder").html("");
-  var url = "{{url('lista/produtos/selecionar/novo')}}";
-  console.log(url);
-  $.ajax({
-    type: "GET",
-    url: url,
-    success: function( data ) {
-      $("#contatosHolder").html(data);
+      efetuarBusca("{{url('lista/produtos')}}", 'Produtos')
     }
   });
 }
