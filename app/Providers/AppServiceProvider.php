@@ -281,9 +281,9 @@ class AppServiceProvider extends ServiceProvider
             <div class=\"form-group\">
               <label for=\"por\">Escolhe produto:</label>
               <div class=\"input-group\">
-                <input type=\"hidden\" class=\"form-control\" id=\"produtosHidden\" name=\"produtos_id\" value=\"'.$id.'\">
-                <input type=\"text\" class=\"form-control\" id=\"produtos\" disabled value=\"'.$nome.'\">
-                <a onclick=\"window.activeTarget=&#39;produtos&#39;&#59; openModal(&#39;'.URL::to('lista/produtos/selecionar').'&#39;)\" class=\"input-group-addon btn btn-info\"><i class=\"fa fa-gear\"></i></a>
+                <input type=\"hidden\" class=\"form-control\" id=\"grupoHidden\" name=\"produtos_grupos_id\" value=\"'.$id.'\">
+                <input type=\"text\" class=\"form-control\" id=\"grupo\" disabled value=\"'.$nome.'\">
+                <a onclick=\"window.activeTarget=&#39;grupo&#39;&#59; openModal(&#39;'.URL::to('lista/produtos/grupo').'&#39;)\" class=\"input-group-addon btn btn-info\"><i class=\"fa fa-gear\"></i></a>
               </div>
             </div>'?>";
           } else {

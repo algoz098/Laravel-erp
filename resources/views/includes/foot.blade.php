@@ -9,7 +9,6 @@
 <script language="javascript">
 
   var height = $(window).height()-200;
-
   function retornarEsta(id, nome) {
     if (($("#modal2").data('bs.modal') || {}).isShown) {
       window.contatos_id2 = id;
@@ -100,7 +99,6 @@
           $("#"+focandoEnter).click();
       }
   });
-  window.modalAtivo = "";
   function openModal(url){
     if (($("#modal").data('bs.modal') || {}).isShown) {
       $("#modal2").modal('show');
@@ -110,9 +108,12 @@
         url: url,
         success: function( data ) {
           $( "#modal2" ).html( data );
+          $('.colocar-rolagem').css({'max-height': height});
+
         },
         error: function(xhr, status, error) {
           $("#modal2").modal('hide');
+          $('.colocar-rolagem').css({'max-height': height});
         }
       });
     } else {

@@ -118,6 +118,11 @@ body {
   overflow-y: scroll;
   white-space: nowrap;
 }
+.colocar-rolagem{
+  overflow-y: auto;
+  overflow-x: hidden;
+  max-height: 250px;
+}
 .carregando > *{
   opacity: 0.45;
 

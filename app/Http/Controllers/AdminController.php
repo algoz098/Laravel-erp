@@ -466,6 +466,14 @@ class AdminController  extends BaseController
       Log::info('!!!ADMIN!!! Mostrando novo combobox, para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
       return view('admin.combobox_novo_formas');
     }
+    public function combobox_novo_medidas(){
+      Log::info('!!!ADMIN!!! Mostrando novo combobox, para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
+      return view('admin.combobox_novo_medidas');
+    }
+    public function combobox_novo_embalagens(){
+      Log::info('!!!ADMIN!!! Mostrando novo combobox, para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
+      return view('admin.combobox_novo_embalagens');
+    }
     public function combobox_edit($id){
       Log::info('!!!ADMIN!!! Mostrando ediçao combobox, para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
 
@@ -491,6 +499,12 @@ class AdminController  extends BaseController
       if($combobox->combobox_textable_type=="App\Consumos"){
         return view('admin.combobox_novo_consumos')->with("combobox", $combobox);
       }
+      if($combobox->combobox_textable_type=="App\Produtos\Medidas"){
+        return view('admin.combobox_novo_medidas')->with("combobox", $combobox);
+      }
+      if($combobox->combobox_textable_type=="App\Produtos\Embalagens"){
+        return view('admin.combobox_novo_embalagens')->with("combobox", $combobox);
+      }
     }
     public function combobox_salvar(request $request){
       #return $request;
@@ -504,13 +518,13 @@ class AdminController  extends BaseController
           $combobox->text = $request->text[$key];
           $combobox->value = $request->text[$key];
         }
-        if($request->tipo[$key]=="Relacionamento" or $request->tipo[$key]=="Consumos" ){
+        if($request->tipo[$key]=="Relacionamento" or $request->tipo[$key]=="Consumos"  or $request->tipo[$key]=="Produtos\Medidas" or $request->tipo[$key]=="Produtos\Embalagens" ){
           $combobox->combobox_textable_type = "App\\".$request->tipo[$key];
           $combobox->field= "tipo";
           $combobox->text=$request->text[$key];
           $combobox->value=$request->value[$key];
         }
-        if($request->tipo[$key]=="Atendimentos" or $request->tipo[$key]=="Contas\Formas" ){
+        if($request->tipo[$key]=="Atendimentos" or $request->tipo[$key]=="Contas\Formas"){
           $combobox->combobox_textable_type = "App\\".$request->tipo[$key];
           $combobox->field= "tipo";
           $combobox->text=$request->text[$key];

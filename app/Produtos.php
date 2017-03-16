@@ -19,12 +19,12 @@ class Produtos extends Model
   {
     return $this->hasMany('App\Estoque');
   }
-  public function tipo()
-  {
-    return $this->belongsTo('App\produtos_tipo_id', 'produtos_tipos_id');
-  }
   public function fabricante()
   {
     return $this->belongsTo('App\Contatos', 'fabricante_id');
+  }
+  public function tipos()
+  {
+    return $this->belongsTo('App\Produtos_tipos', 'produtos_tipo_id');
   }
 }

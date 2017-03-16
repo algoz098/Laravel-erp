@@ -117,6 +117,10 @@
             @if (isset($modulo_caixas) and $modulo_caixas=="1")
               <li class="pushy-link "><a class="{{{ Request::path()=='novo/combobox/caixas' ? "active" : "" }}}" href="{{ url('novo/combobox/caixas') }}"><i class="fa fa-list"></i> Desc. movimentação</a></li>
             @endif
+            @if (isset($modulo_estoques) and $modulo_estoques=="1")
+              <li class="pushy-link "><a class="{{{ Request::path()=='novo/combobox/estoque/produtos/medidas' ? "active" : "" }}}" href="{{ url('novo/combobox/estoque/produtos/medidas') }}"><i class="fa fa-thermometer-full"></i> Un. Med. Produto</a></li>
+              <li class="pushy-link "><a class="{{{ Request::path()=='novo/combobox/estoque/produtos/embalagens' ? "active" : "" }}}" href="{{ url('novo/combobox/estoque/produtos/embalagens') }}"><i class="fa fa-archive"></i> Emb. de Produto</a></li>
+            @endif
           </ul class="menu" >
       </li>
     @endif

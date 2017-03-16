@@ -13,7 +13,7 @@
           @buscaSimples(lista/produtos*Produtos)
           <button type="button" class="btn btn-success" onclick="novoProduto()"><i class="fa fa-plus"></i></button>
         </div>
-        <div id="listaHolderProdutos"></div>
+        <div id="listaHolderProdutos" class="lista-holder-rolagem"></div>
     </div>
     <div class="modal-footer">
       @botaoFecharModal

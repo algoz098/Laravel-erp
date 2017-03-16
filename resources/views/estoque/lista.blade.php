@@ -8,11 +8,20 @@
   <div class="col-md-1">
     Valor
   </div>
-  <div class="col-md-2">
+  <div class="col-md-1">
     Qtd.
   </div>
-  <div class="col-md-4">
-    Esta em:
+  <div class="col-md-1">
+    Min/Max
+  </div>
+  <div class="col-md-1">
+    Codigo
+  </div>
+  <div class="col-md-2">
+    Fabricante
+  </div>
+  <div class="col-md-2">
+    Esta em
   </div>
 </div>
 @if ($estoques!==0)
@@ -21,16 +30,25 @@
       <div class="col-md-1">
         <span class="label label-info">ID: {{$estoque->id}} </span>
       </div>
-      <div class="col-md-2">
+      <div class="col-md-2 limitar-string">
         {{$estoque->produto->nome}}
       </div>
       <div class="col-md-1">
-        <span class="label label-warning">R$ {{ number_format($estoque->valor_custo, 2) }}</span>
+        R$ {{ $estoque->produto->venda }}
       </div>
-      <div class="col-md-2">
-        <span class="label label-info">{{$estoque->quantidade}} {{$estoque->unidade}}</span>
+      <div class="col-md-1">
+        {{$estoque->quantidade}} {{$estoque->produto->unidade}}
       </div>
-      <div class="col-md-6" >
+      <div class="col-md-1">
+        {{$estoque->produto->qtd_minima}}/{{$estoque->produto->qtd_maxima}}
+      </div>
+      <div class="col-md-1">
+        {{$estoque->produto->barras}}
+      </div>
+      <div class="col-md-2 limitar-string">
+        @mostraContato($estoque->produto->fabricante->id*$estoque->produto->fabricante->nome)
+      </div>
+      <div class="col-md-2 limitar-string" >
         @mostraContato($estoque->contato->id*str_limit($estoque->contato->nome, 55))
       </div>
     </div>

@@ -10,6 +10,7 @@ use App\Estoque_campos as Campos;
 use App\Produtos as Produtos;
 use App\Produtos_grupos as Grupos;
 use App\Produtos_tipos as Tipos;
+use App\Combobox_texts as Comboboxes;
 use Log;
 use Auth;
 class EstoqueController  extends BaseController
@@ -258,6 +259,19 @@ class EstoqueController  extends BaseController
     }
     return redirect()->action('EstoqueController@index');
   }
+  public function produto_campos_delete($id)
+  {
+    if (!isset(Auth::user()->perms["estoques"]["edicao"]) or Auth::user()->perms["estoques"]["edicao"]!=1){
+      return redirect()->action('HomeController@index')
+                       ->withErrors([__('messages.perms.edicao')]);
+    }
+    $campo = Campos::withTrashed()->find($id);
+    if ($campo->trashed()){
+      $campo->restore();
+    }else{
+      $campo->delete();
+    }
+  }
 
 
   public function produto_novo()
@@ -266,8 +280,13 @@ class EstoqueController  extends BaseController
       return redirect()->action('HomeController@index')
                        ->withErrors([__('messages.perms.adicao')]);
     }
+    $comboboxes = comboboxes::where('combobox_textable_type', 'App\Produtos\Medidas')->get();
+    $embalagens = comboboxes::where('combobox_textable_type', 'App\Produtos\Embalagens')->get();
+
     Log::info('Criando novo produto, para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
-    return view('estoque.produto.novo');
+    return view('estoque.produto.novo')
+      ->with('embalagens', $embalagens)
+      ->with('medidas', $comboboxes);
   }
   public function produto_editar($id)
   {
@@ -277,7 +296,12 @@ class EstoqueController  extends BaseController
     }
     Log::info('Criando novo produto, para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
     $produto = produtos::find($id);
-    return view('estoque.produto.novo')->with('produto', $produto);
+    $comboboxes = comboboxes::where('combobox_textable_type', 'App\Produtos\Medidas')->get();
+    $embalagens = comboboxes::where('combobox_textable_type', 'App\Produtos\Embalagens')->get();
+    return view('estoque.produto.novo')
+      ->with('medidas', $comboboxes)
+      ->with('embalagens', $embalagens)
+      ->with('produto', $produto);
   }
   public function produto_salva(request $request)
   {
@@ -311,8 +335,8 @@ class EstoqueController  extends BaseController
     $produto->custo = $request->custo;
     $produto->margem = $request->margem;
     $produto->venda = $request->venda;
-    $produto->qtd_minima = $request->qtd_minima;
-    $produto->qtd_maxima = $request->qtd_maxima;
+    $produto->qtd_minima = $request->minimo;
+    $produto->qtd_maxima = $request->maximo;
     $produto->estado = $request->estado;
     $produto->save();
     if(isset($request->campo_nome_edit)){
@@ -361,16 +385,23 @@ class EstoqueController  extends BaseController
       $barras = $request->barras;
     }
     $produto->barras = $barras;
-    $produto->grupo = $request->grupo;
-    $produto->tipo = $request->tipo;
+    $produto->produtos_tipo_id = $request->produtos_grupos_id;
     $produto->nome = $request->nome;
     $produto->unidade = $request->unidade;
+    $produto->embalagem = $request->embalagem;
+    $produto->fabricante_id = $request->contatos_id;
     $produto->custo = $request->custo;
+    $produto->margem = $request->margem;
+    $produto->venda = $request->venda;
+    $produto->qtd_minima = $request->minimo;
+    $produto->qtd_maxima = $request->maximo;
+    $produto->estado = $request->estado;
     $produto->save();
+
     if(isset($request->campo_nome_edit)){
       foreach ($request->campo_nome_edit as $key => $value) {
         $campo = Campos::find($request->campo_id_edit[$key]);
-        $campo->tipo = $request->tipo;
+        $campo->tipo = "0";
         $campo->nome = $request->campo_nome_edit[$key];
         $campo->valor = $request->campo_valor_edit[$key];
         $campo->save();
@@ -380,7 +411,7 @@ class EstoqueController  extends BaseController
       foreach ($request->campo_nome as $key => $value) {
         $campo = new Campos;
         $campo->estoque_id = $produto->id;
-        $campo->tipo = $request->tipo;
+        $campo->tipo = "0";
         $campo->nome = $request->campo_nome[$key];
         $campo->valor = $request->campo_valor[$key];
         $campo->save();
@@ -426,7 +457,11 @@ class EstoqueController  extends BaseController
                        ->withErrors([__('messages.perms.adicao')]);
     }
     Log::info('Modal novo produto, para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
-    return view('estoque.produto.parte_novo');
+    $comboboxes = comboboxes::where('combobox_textable_type', 'App\Produtos\Medidas')->get();
+    $embalagens = comboboxes::where('combobox_textable_type', 'App\Produtos\Embalagens')->get();
+    return view('estoque.produto.parte_novo')
+      ->with('embalagens', $embalagens)
+      ->with('medidas', $comboboxes);
   }
   public function produto_selecionar_salvar(request $request)
   {

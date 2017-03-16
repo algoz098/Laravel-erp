@@ -30,78 +30,112 @@
         <div class="col-md-9">
           <span id="contentDiv">
             <div class="row">
-              <div class="col-md-2">
-                <strong>Filial:</strong>
-              </div>
-              <div class="col-md-2">
-                {{str_limit($estoque->contato->nome, 10)}}
-              </div>
-              <div class="col-md-1">
-                <strong>G/T:</strong>
-              </div>
-              <div class="col-md-2">
-                {{$estoque->produto->grupo}}/
-                {{$estoque->produto->tipo}}
-              </div>
-              <div class="col-md-1">
-                <strong>Custo:</strong>
-              </div>
-              <div class="col-md-2">
-                R$ {{$estoque->produto->custo}}
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-md-2">
-                <strong>Cod. barras:</strong>
-              </div>
-              <div class="col-md-2">
-                <a href="{{url('novo/produto/')}}/{{$estoque->produto->id}}" class="label label-primary">
-                  <i class="fa fa-pencil"></i>
-                  {{$estoque->produto->barras}}
-                </a>
-              </div>
-              <div class="col-md-1">
-                <strong>Nome:</strong>
-              </div>
-              <div class="col-md-2">
-                {{$estoque->produto->nome}}
-              </div>
-              <div class="col-md-1">
-                <strong>Qtd:</strong>
-              </div>
-              <div class="col-md-2">
-                {{$estoque->quantidade}} {{$estoque->produto->unidade}}
-              </div>
-            </div>
-            <hr>
-            <div class="row">
               <div class="col-md-12">
-                @foreach ($estoque->produto->campos as $key => $campo)
-                  <div class="row list-contacts">
-                    <div class="col-md-1">
-                      {{$campo->id}}
-                    </div>
-                    <div class="col-md-3">
-                      {{$campo->nome}}
-                    </div>
-                    <div class="col-md-3">
-                      {{$campo->valor}}
+                <span style="font-size: 24px;">
+                  <strong>Nome:</strong>
+                  {{$estoque->produto->nome}}
+                </span>
+              </div>
+            </div>
+            <div class="panel panel-default">
+              <div class="panel-body">
+                <div class="row">
+                  <div class="col-md-2">
+                    <strong>Estoque de:</strong>
+                  </div>
+                  <div class="col-md-2">
+                    {{str_limit($estoque->contato->nome, 10)}}
+                  </div>
+                  <div class="col-md-1">
+                    <strong>G/T:</strong>
+                  </div>
+                  <div class="col-md-2">
+                    {{$estoque->produto->tipos->nome}}/
+                    {{$estoque->produto->tipos->grupo->nome}}
+                  </div>
+                  <div class="col-md-1">
+                    <strong>Custo:</strong>
+                  </div>
+                  <div class="col-md-2">
+                    R$ {{$estoque->produto->custo}}
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-2">
+                    <strong>Cod. barras:</strong>
+                  </div>
+                  <div class="col-md-2">
+                    <a href="{{url('novo/produto/')}}/{{$estoque->produto->id}}" class="label label-primary">
+                      <i class="fa fa-pencil"></i>
+                      {{$estoque->produto->barras}}
+                    </a>
+                  </div>
+                  <div class="col-md-1">
+                    <strong>Qtd:</strong>
+                  </div>
+                  <div class="col-md-2">
+                    {{$estoque->quantidade}} {{$estoque->produto->unidade}}
+                  </div>
+                  <div class="col-md-1">
+                    <strong>Venda:</strong>
+                  </div>
+                  <div class="col-md-2">
+                    R$ {{$estoque->produto->venda}} ({{$estoque->produto->margem}} %)
+                  </div>
+                </div>
+              </div>
+            </div>
+            @if (isset($estoque->produto->campos) and $estoque->produto->campos!='[]')
+              <div class="row">
+              <div class="col-md-12">
+                <div class="panel panel-default">
+                  <div class="panel-body">
+                    <span style="font-size: 16px;">
+                      Campos extras
+                    </span>
+                    @foreach ($estoque->produto->campos as $key => $campo)
+                      <div class="row list-contacts" id="campo{{$campo->id}}">
+                        <div class="col-md-1">
+                          <a onclick="apagaCampoExtra({{$campo->id}})" class="btn btn-danger btn-xs">
+                            <i class="fa fa-ban"></i>
+                          </a>
+                        </div>
+                        <div class="col-md-1">
+                          {{$campo->id}}
+                        </div>
+                        <div class="col-md-3">
+                          {{$campo->nome}}
+                        </div>
+                        <div class="col-md-3">
+                          {{$campo->valor}}
+                        </div>
+                      </div>
+                    @endforeach
+                  </div>
+                </div>
+              </div>
+            </div>
+            @endif
+            @if (isset($estoque->produto->descricao) and $estoque->produto->descricao!='[]')
+              <div class="row">
+                <div class="col-md-12">
+                  <div class="panel panel-default">
+                    <div class="panel-body">
+                      <strong>Descrição:</strong>
+                      {!! $estoque->produto->descricao !!}
                     </div>
                   </div>
-                @endforeach
+                </div>
               </div>
-            </div>
-            <hr>
+            @endif
             <div class="row">
               <div class="col-md-12">
-                <strong>Descrição:</strong>
-                {!! $estoque->descricao !!}
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-md-12">
-                <strong>Localizada:</strong><br>
-                A peça esta localizada em: {{$estoque->contato->endereco }} - {{$estoque->contato->bairro }} - {{$estoque->contato->cidade }}
+                <div class="panel panel-default">
+                  <div class="panel-body">
+                    <strong>Localizada:</strong><br>
+                    A peça esta localizada em: {{$estoque->contato->endereco }} - {{$estoque->contato->bairro }} - {{$estoque->contato->cidade }}
+                  </div>
+                </div>
               </div>
             </div>
           </span>
@@ -196,4 +230,10 @@ function fullImage() {
       $('#object').attr("data", "{{ url('/attach') }}/"+window.attachId);
     });
   };
+  function apagaCampoExtra(id){
+    a = "{{url('/lista/produtos')}}/campos/"+id+"/delete"
+    $.get( a, function( data ) {
+      $( "#campo"+id ).remove();
+    });
+  }
 </script>

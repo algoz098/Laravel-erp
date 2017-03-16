@@ -4,7 +4,7 @@
   <ul class="nav nav-tabs" role="tablist">
     <li role="presentation" class="active"><a href="#basico" aria-controls="basico" role="tab" data-toggle="tab">Basico</a></li>
     <li role="presentation"><a href="#extras" aria-controls="extras" role="tab" data-toggle="tab">Campos Extras</a></li>
-    <li role="presentation"><a href="#descricao" aria-controls="descricao" role="tab" data-toggle="tab">Descrição</a></li>
+    <!-- <li role="presentation"><a href="#descricao" aria-controls="descricao" role="tab" data-toggle="tab">Descrição</a></li>-->
   </ul>
 
   <!-- Tab panes -->
@@ -28,7 +28,7 @@
                </div>
              </div>
              @if(isset($produto))
-                @campoTexto(Produto do grupo*grupo*$produto->grupo)
+                @selecionaProdutoGrupo($produto->tipos->id*$produto->tipos->nome)
                 @selecionaContato(Seleciona Fabricante*$produto->fabricante->id*$produto->fabricante->nome)
             @else
               @selecionaProdutoGrupo
@@ -53,20 +53,22 @@
                   @else
                     <option selected>- Escolha -</option>
                   @endif
-                  <option value="Pç">Peça</option>
-                  <option value="Un">Unidade</option>
-                  <option value="Kg">Kilograma</option>
-                  <option value="Lts">Litro</option>
+                  @foreach ($medidas as $key => $medida)
+                    <option value="{{$medida->text}}">{{$medida->value}}</option>
+                  @endforeach
                 </select>
               </div>
               <div class="form-group">
                 <label for="unidade">Embalagem:</label>
-                <select class="form-control" id="unidade" name="unidade">
+                <select class="form-control" id="embalagem" name="embalagem">
                   @if(isset($produto))
                     <option value="{{$produto->embalagem}}" selected>{{$produto->embalagem}} (atual)</option>
                   @else
                     <option selected>- Escolha -</option>
                   @endif
+                  @foreach ($embalagens as $key => $embalagem)
+                    <option value="{{$embalagem->text}}">{{$embalagem->value}}</option>
+                  @endforeach
                 </select>
               </div>
             </div>
@@ -77,16 +79,23 @@
             <div class="panel-body">
               @if(isset($produto))
                 @campoDinheiro(Valor de custo*custo*$produto->custo)
+                <div class="form-group">
+                  <label for="">Margem</label>
+                  <div class="input-group">
+                    <input type="text" class="form-control moneymask" value="{{$produto->margem}}" name="margem" id="margem" onchange="calculaVenda()">
+                    <span class="input-group-addon">%</span>
+                  </div>
+                </div>
               @else
                 @campoDinheiro(Valor de custo*custo*)
-              @endif
-              <div class="form-group">
-                <label for="">Margem</label>
-                <div class="input-group">
-                  <input type="text" class="form-control moneymask" name="margem" id="margem" onchange="calculaVenda()">
-                  <span class="input-group-addon">%</span>
+                <div class="form-group">
+                  <label for="">Margem</label>
+                  <div class="input-group">
+                    <input type="text" class="form-control moneymask" name="margem" id="margem" onchange="calculaVenda()">
+                    <span class="input-group-addon">%</span>
+                  </div>
                 </div>
-              </div>
+              @endif
               @if(isset($produto))
                 @campoDinheiro(Valor de venda*venda*$produto->custo)
               @else
@@ -99,8 +108,8 @@
           <div class="panel panel-default">
             <div class="panel-body">
               @if(isset($produto))
-                @campoTexto(Estoque minimo*minimo*$produto->minimo)
-                @campoTexto(Estoque maximo*maximo*$produto->maximo)
+                @campoTexto(Estoque minimo*minimo*$produto->qtd_minima)
+                @campoTexto(Estoque maximo*maximo*$produto->qtd_maxima)
               @else
                 @campoTexto(Estoque minimo*minimo*)
                 @campoTexto(Estoque maximo*maximo*)
@@ -127,19 +136,27 @@
             <div class="panel-body">
               <div class="row">
                 <div class="col-md-2 pull-right text-right">
-                      <a class="btn btn-danger" onclick="remove()">
-                        <i class="fa fa-minus"></i>
-                      </a>
-                      <a class="btn btn-success" onclick="add()">
-                        <i class="fa fa-plus"></i>
-                      </a>
+                  <div data-spy="affix" data-offset-top="60" data-offset-bottom="200"  style="width: 100px;">
+                    <a class="btn btn-danger" onclick="remove()">
+                      <i class="fa fa-minus"></i>
+                    </a>
+                    <a class="btn btn-success" onclick="add()">
+                      <i class="fa fa-plus"></i>
+                    </a>
+                  </div>
                 </div>
-                <span id="mais">
+                <div id="mais" class="colocar-rolagem">
                   @if (isset($produto))
                     @foreach ($produto->campos as $key => $campo)
-                      <div class="col-md-9" id="campo{{$key}}">
+                      <div class="col-md-9" id="campo{{$campo->id}}">
                         <div class="panel panel-default">
                           <div class="panel-body">
+                            <div class="col-md-1">
+                              <label>&nbsp&nbsp&nbsp&nbsp&nbsp</label>
+                              <a onclick="apagaCampoExtra({{$campo->id}})" class="btn btn-danger btn-xs">
+                                <i class="fa fa-ban"></i>
+                              </a>
+                            </div>
                             <div class="col-md-3">
                               <div class="form-group">
                                 <label>Nome do campo</label>
@@ -158,7 +175,7 @@
                       </div>
                     @endforeach
                   @endif
-                </span>
+                </div>
               </div>
             </div>
           </div>
@@ -233,6 +250,12 @@ function calculaVenda(){
   $(document).ready(function(){
     window.e = 0;
   });
+  function apagaCampoExtra(id){
+    a = "{{url('/lista/produtos')}}/campos/"+id+"/delete"
+    $.get( a, function( data ) {
+      $( "#campo"+id ).remove();
+    });
+  }
   function add() {
     var $clone = $($('#ToClone').html());
     $('#campo_nome', $clone).attr('name', 'campo_nome['+e+']');
@@ -246,7 +269,7 @@ function calculaVenda(){
   function remove() {
     if (e<0){}else {
       $('#linha'+e).remove();
-      if(i>0){
+      if(e>0){
         e = e - 1;
       }
     }

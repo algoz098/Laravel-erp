@@ -102,6 +102,7 @@ Route::post('novo/estoques', 'EstoqueController@save')->middleware('auth');
 
 Route::get('lista/produtos/selecionar', 'EstoqueController@produto_selecionar')->middleware('auth');
 Route::post('lista/produtos', 'EstoqueController@produto_busca')->middleware('auth');
+Route::get('lista/produtos/campos/{id}/delete', 'EstoqueController@produto_campos_delete')->middleware('auth');
 Route::get('lista/produtos/selecionar/novo', 'EstoqueController@produto_selecionar_novo')->middleware('auth');
 Route::post('lista/produtos/selecionar/novo', 'EstoqueController@produto_selecionar_salva')->middleware('auth');
 Route::get('lista/produtos/grupo', 'EstoqueController@grupo_selecionar')->middleware('auth');
@@ -198,6 +199,8 @@ Route::get('/novo/combobox/contas', 'AdminController@combobox_novo_contas')->mid
 Route::get('/novo/combobox/caixas', 'AdminController@combobox_novo_caixas')->middleware('auth')->middleware('admin');
 Route::get('/novo/combobox/consumos', 'AdminController@combobox_novo_consumos')->middleware('auth')->middleware('admin');
 Route::get('/novo/combobox/formas', 'AdminController@combobox_novo_formas')->middleware('auth')->middleware('admin');
+Route::get('novo/combobox/estoque/produtos/medidas', 'AdminController@combobox_novo_medidas')->middleware('auth')->middleware('admin');
+Route::get('novo/combobox/estoque/produtos/embalagens', 'AdminController@combobox_novo_embalagens')->middleware('auth')->middleware('admin');
 
 Route::post('/admin/combobox/novo', 'AdminController@combobox_salvar')->middleware('auth')->middleware('admin');
 Route::get('/admin/combobox/{id}', 'AdminController@combobox_edit')->middleware('auth')->middleware('admin');
