@@ -48,6 +48,10 @@ class Contatos extends Model
     {
       return $this->belongsToMany('App\Contatos', 'contatos_pivot', 'to_id', 'from_id')->withPivot('to_text', 'from_text', 'id');
     }
+    public function armazenagens()
+    {
+      return $this->belongsToMany('App\Produtos', 'armazenagens', 'filiais_id', 'produtos_id')->withPivot('local');
+    }
 
     public function user()
     {

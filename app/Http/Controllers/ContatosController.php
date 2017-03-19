@@ -104,7 +104,8 @@ class ContatosController extends BaseController
       return response()->json([__('messages.perms.adicao')], 403);
     }
     $this->validate($request, [
-        'nome' => 'required|max:50'
+        'nome' => 'required|max:50',
+        'cpf'  => 'unique:contatos'
     ]);
     $contato = new Contatos;
     $contato->nome = $request->nome;
@@ -260,7 +261,20 @@ class ContatosController extends BaseController
     ->with('apenas_filial', $apenas_filial)
     ->with('comboboxes', $comboboxes);
   }
-
+  public function consulta_cpf(request $request)
+  {
+    Log::info('Selecionar de contatos para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
+    if (!isset(Auth::user()->perms["contatos"]["leitura"]) or Auth::user()->perms["contatos"]["leitura"]!=1){
+      return response()->json([__('messages.perms.leitura')], 403);
+    }
+    $contato = contatos::where('cpf', 'like', $request->cpf)->get();
+    #return $contato;
+    if($contato=="[]"){
+      return response()->json([__('messages.sucessos.cpf')], 404);
+    } else {
+      return response()->json([__('messages.erros.cpf')], 302);
+    }
+  }
   public function detalhes($id){
     if (!isset(Auth::user()->perms["contatos"]["leitura"]) or Auth::user()->perms["contatos"]["leitura"]!=1){
       return response()->json([__('messages.perms.leitura')], 403);
@@ -311,7 +325,8 @@ class ContatosController extends BaseController
       return back()->withErrors([__('messages.perms.adicao')]);
     }
     $this->validate($request, [
-        'nome' => 'required|max:50'
+        'nome' => 'required|max:50',
+        'cpf'  => 'unique:contatos'
     ]);
     $contato = new Contatos;
     $contato->nome = $request->nome;
@@ -490,6 +505,7 @@ class ContatosController extends BaseController
     }
     $this->validate($request, [
         'nome' => 'required|max:50',
+        'cpf'  => 'unique:contatos'
     ]);
     $contato = contatos::find($id);
 

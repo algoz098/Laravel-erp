@@ -13,6 +13,10 @@ return [
       ],
     'erros' => [
         '404' => 'Nada encontrado',
+        'cpf' => 'Documento cadastrado!'
       ],
+    'sucessos' => [
+        'cpf' => 'Documento não cadastrado',
+    ],
     'erro' => 'Erro',
 ];

@@ -434,6 +434,19 @@ class AdminController  extends BaseController
       $comboboxes = Comboboxes::orderBy('combobox_textable_type', 'text')->get();
       return view('admin.combobox')->with('comboboxes', $comboboxes);
     }
+    public function combobox_lista_contas(){
+      Log::info('!!!ADMIN!!! Mostrando edicao de combobox, para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
+
+      return view('admin.combobox.selecionar_conta');
+    }
+    public function combobox_lista_contas_search(request $request){
+      Log::info('!!!ADMIN!!! Mostrando edicao de combobox, para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
+      $comboboxes = Comboboxes::where('combobox_textable_type', 'App\Contas')->get();
+
+      return view('admin.combobox.lista_conta')
+        ->with('opcoes', $comboboxes);
+    }
+
     public function combobox_novo(){
       Log::info('!!!ADMIN!!! Mostrando novo combobox, para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
       return view('admin.combobox_novo');

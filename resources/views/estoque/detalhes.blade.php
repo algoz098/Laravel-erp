@@ -7,146 +7,207 @@
       </h4>
     </div>
     <div class="modal-body">
-      <div class="row">
-        <div class="col-md-3 pull-right text-center">
-          <button class="btn btn-info" onclick="showDesc()">
-            Ver descrição
-          </button>
-          <a class="btn btn-success" onclick="attachForm()">
-            Adicionar anexo
-          </a>
-          <hr>
-          @if($estoque->attachs)
-            @foreach($estoque->attachs as $key => $attach)
-              <div class="row list-contacts" id="attachRow{{$attach->id}}">
-                {{$attach->name}}
-                <span class="label label-info" onClick="loadImage({{$attach->id}})"  >Ver</span>
-                <a href="{{ url('/attach') }}/{{$attach->id}}/get"  class="label label-info" >Salvar</a>
-                <a onClick="deleteImage({{$attach->id}})" class="label label-danger" >Apagar</a>
-              </div>
-            @endforeach
-          @endif
-        </div>
-        <div class="col-md-9">
-          <span id="contentDiv">
+      <div>
+        <!-- Nav tabs -->
+        <ul class="nav nav-tabs" role="tablist">
+          <li role="presentation" class="active"><a href="#detalhes" aria-controls="detalhes" role="tab" data-toggle="tab">Detalhes</a></li>
+          <li role="presentation"><a href="#semelhantes" aria-controls="semelhantes" role="tab" data-toggle="tab">Semelhantes</a></li>
+        </ul>
+
+        <!-- Tab panes -->
+        <div class="tab-content">
+          <div role="tabpanel" class="tab-pane active" id="detalhes"><br>
             <div class="row">
-              <div class="col-md-12">
-                <span style="font-size: 24px;">
-                  <strong>Nome:</strong>
-                  {{$estoque->produto->nome}}
-                </span>
+              <div class="col-md-3 pull-right text-center">
+                <button class="btn btn-info" onclick="showDesc()">
+                  Ver descrição
+                </button>
+                <a class="btn btn-success" onclick="attachForm()">
+                  Adicionar anexo
+                </a>
+                <hr>
+                @if($estoque->attachs)
+                  @foreach($estoque->attachs as $key => $attach)
+                    <div class="row list-contacts" id="attachRow{{$attach->id}}">
+                      {{$attach->name}}
+                      <span class="label label-info" onClick="loadImage({{$attach->id}})"  >Ver</span>
+                      <a href="{{ url('/attach') }}/{{$attach->id}}/get"  class="label label-info" >Salvar</a>
+                      <a onClick="deleteImage({{$attach->id}})" class="label label-danger" >Apagar</a>
+                    </div>
+                  @endforeach
+                @endif
               </div>
-            </div>
-            <div class="panel panel-default">
-              <div class="panel-body">
-                <div class="row">
-                  <div class="col-md-2">
-                    <strong>Estoque de:</strong>
+              <div class="col-md-9">
+                <span id="contentDiv">
+                  <div class="row">
+                    <div class="col-md-12">
+                      <span style="font-size: 24px;">
+                        <strong>Nome:</strong>
+                        {{$estoque->produto->nome}}
+                      </span>
+                    </div>
                   </div>
-                  <div class="col-md-2">
-                    {{str_limit($estoque->contato->nome, 10)}}
-                  </div>
-                  <div class="col-md-1">
-                    <strong>G/T:</strong>
-                  </div>
-                  <div class="col-md-2">
-                    {{$estoque->produto->tipos->nome}}/
-                    {{$estoque->produto->tipos->grupo->nome}}
-                  </div>
-                  <div class="col-md-1">
-                    <strong>Custo:</strong>
-                  </div>
-                  <div class="col-md-2">
-                    R$ {{$estoque->produto->custo}}
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="col-md-2">
-                    <strong>Cod. barras:</strong>
-                  </div>
-                  <div class="col-md-2">
-                    <a href="{{url('novo/produto/')}}/{{$estoque->produto->id}}" class="label label-primary">
-                      <i class="fa fa-pencil"></i>
-                      {{$estoque->produto->barras}}
-                    </a>
-                  </div>
-                  <div class="col-md-1">
-                    <strong>Qtd:</strong>
-                  </div>
-                  <div class="col-md-2">
-                    {{$estoque->quantidade}} {{$estoque->produto->unidade}}
-                  </div>
-                  <div class="col-md-1">
-                    <strong>Venda:</strong>
-                  </div>
-                  <div class="col-md-2">
-                    R$ {{$estoque->produto->venda}} ({{$estoque->produto->margem}} %)
-                  </div>
-                </div>
-              </div>
-            </div>
-            @if (isset($estoque->produto->campos) and $estoque->produto->campos!='[]')
-              <div class="row">
-              <div class="col-md-12">
-                <div class="panel panel-default">
-                  <div class="panel-body">
-                    <span style="font-size: 16px;">
-                      Campos extras
-                    </span>
-                    @foreach ($estoque->produto->campos as $key => $campo)
-                      <div class="row list-contacts" id="campo{{$campo->id}}">
+                  <div class="panel panel-default">
+                    <div class="panel-body">
+                      <div class="row">
+                        <div class="col-md-2">
+                          <strong>Estoque de:</strong>
+                        </div>
+                        <div class="col-md-2">
+                          {{str_limit($estoque->contato->nome, 10)}}
+                        </div>
                         <div class="col-md-1">
-                          <a onclick="apagaCampoExtra({{$campo->id}})" class="btn btn-danger btn-xs">
-                            <i class="fa fa-ban"></i>
+                          <strong>G/T:</strong>
+                        </div>
+                        <div class="col-md-2">
+                          {{$estoque->produto->tipos->nome}}/
+                          {{$estoque->produto->tipos->grupo->nome}}
+                        </div>
+                        <div class="col-md-1">
+                          <strong>Custo:</strong>
+                        </div>
+                        <div class="col-md-2">
+                          R$ {{$estoque->produto->custo}}
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-md-2">
+                          <strong>Cod. barras:</strong>
+                        </div>
+                        <div class="col-md-2">
+                          <a href="{{url('novo/produto/')}}/{{$estoque->produto->id}}" class="label label-primary">
+                            <i class="fa fa-pencil"></i>
+                            {{$estoque->produto->barras}}
                           </a>
                         </div>
                         <div class="col-md-1">
-                          {{$campo->id}}
+                          <strong>Qtd:</strong>
                         </div>
-                        <div class="col-md-3">
-                          {{$campo->nome}}
+                        <div class="col-md-2">
+                          {{$estoque->quantidade}} {{$estoque->produto->unidade}}
                         </div>
-                        <div class="col-md-3">
-                          {{$campo->valor}}
+                        <div class="col-md-1">
+                          <strong>Venda:</strong>
+                        </div>
+                        <div class="col-md-2">
+                          R$ {{$estoque->produto->venda}} ({{$estoque->produto->margem}} %)
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  @if (isset($estoque->produto->campos) and $estoque->produto->campos!='[]')
+                    <div class="row">
+                      <div class="col-md-12">
+                        <div class="panel panel-default">
+                          <div class="panel-body">
+                            <span style="font-size: 16px;">
+                              Campos extras
+                            </span>
+                            @foreach ($estoque->produto->campos as $key => $campo)
+                              <div class="row list-contacts" id="campo{{$campo->id}}">
+                                <div class="col-md-1">
+                                  <a onclick="apagaCampoExtra({{$campo->id}})" class="btn btn-danger btn-xs">
+                                    <i class="fa fa-ban"></i>
+                                  </a>
+                                </div>
+                                <div class="col-md-1">
+                                  {{$campo->id}}
+                                </div>
+                                <div class="col-md-3">
+                                  {{$campo->nome}}
+                                </div>
+                                <div class="col-md-3">
+                                  {{$campo->valor}}
+                                </div>
+                              </div>
+                            @endforeach
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  @endif
+                  @if (isset($estoque->produto->descricao) and $estoque->produto->descricao!='[]')
+                    <div class="row">
+                      <div class="col-md-12">
+                        <div class="panel panel-default">
+                          <div class="panel-body">
+                            <strong>Descrição:</strong>
+                            {!! $estoque->produto->descricao !!}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  @endif
+                  <div class="row">
+                    <div class="col-md-12">
+                      <div class="panel panel-default">
+                        <div class="panel-body">
+                          <strong>Localizada:</strong><br>
+                          A peça esta localizada em: {{$estoque->contato->endereco }} - {{$estoque->contato->bairro }} - {{$estoque->contato->cidade }}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </span>
+                <div class="panel panel-default" style="display:none" id="contentDiv2">
+                  <div class="panel-body">
+                    <span id="dataSpace"></span>
+                    <object data="" id="object" width="100%" height="0" ></object>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div role="tabpanel" class="tab-pane" id="semelhantes"><br>
+            <div class="row">
+              <div class="col-md-12">
+                <span style="font-size: 16px;">
+                  Produtos semelhantes:
+                </span>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-1">
+
+              </div>
+              <div class="col-md-10">
+                <div class="panel panel-default">
+                  <div class="panel-body">
+                    @foreach ($estoque->produto->semelhantes_to as $key => $semelhante)
+                      <div class="row list-contacts">
+                        <div class="col-md-1">
+                          ID: {{$semelhante->id}}
+                        </div>
+                        <div class="col-md-2">
+                          {{$semelhante->barras}}
+                        </div>
+                        <div class="col-md-9">
+                          {{$semelhante->nome}}
                         </div>
                       </div>
                     @endforeach
+                    @foreach ($estoque->produto->semelhantes_from as $key => $semelhante)
+                      <div class="row list-contacts">
+                        <div class="col-md-1">
+                          ID: {{$semelhante->id}}
+                        </div>
+                        <div class="col-md-2">
+                          {{$semelhante->barras}}
+                        </div>
+                        <div class="col-md-9">
+                          {{$semelhante->nome}}
+                        </div>
+                      </div>
+                    @endforeach
+
                   </div>
                 </div>
               </div>
-            </div>
-            @endif
-            @if (isset($estoque->produto->descricao) and $estoque->produto->descricao!='[]')
-              <div class="row">
-                <div class="col-md-12">
-                  <div class="panel panel-default">
-                    <div class="panel-body">
-                      <strong>Descrição:</strong>
-                      {!! $estoque->produto->descricao !!}
-                    </div>
-                  </div>
-                </div>
-              </div>
-            @endif
-            <div class="row">
-              <div class="col-md-12">
-                <div class="panel panel-default">
-                  <div class="panel-body">
-                    <strong>Localizada:</strong><br>
-                    A peça esta localizada em: {{$estoque->contato->endereco }} - {{$estoque->contato->bairro }} - {{$estoque->contato->cidade }}
-                  </div>
-                </div>
-              </div>
-            </div>
-          </span>
-          <div class="panel panel-default" style="display:none" id="contentDiv2">
-            <div class="panel-body">
-              <span id="dataSpace"></span>
-              <object data="" id="object" width="100%" height="0" ></object>
             </div>
           </div>
         </div>
       </div>
+
     </div>
     <div class="modal-footer">
       @botaoFecharModal

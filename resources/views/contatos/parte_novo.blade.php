@@ -279,9 +279,9 @@
         <div class="panel panel-default">
           <div class="panel-heading">Documentos</div>
           <div class="panel-body">
-            <div class="form-group">
-              <label for="cpf">CNPJ ou CPF</label>
-              <input type="text" class="form-control" value="{{ $contato->cpf or "" }}" name="cpf" id="cpf" placeholder="CNPJ\CPF">
+            <div class="form-group" id="cpfHolder">
+              <label for="cpf" class="control-label">CNPJ ou CPF</label>
+              <input type="text" onchange="checkCPF()" class="form-control" value="{{ $contato->cpf or "" }}" name="cpf" id="cpf" placeholder="CNPJ\CPF">
             </div>
             <div class="form-group">
               <label for="rg">Inscrição Estadual ou RG</label>
@@ -480,6 +480,7 @@ function selMask(a, b){
       $("#numeroText"+a).text(x);
     }
     @endforeach
+
   }
 }
 
@@ -535,8 +536,40 @@ function selectCep_edit(a){
     }
   });
 }
-
+function checkCPF(){
+  var cpf = $('#cpf').val();
+  var url = "{{url('lista/contatos/cpf')}}";
+  var data = {
+                '_token' : $('input[name=_token]').val(),
+                'cpf'    : cpf
+              }
+  $.ajax({
+    type: "POST",
+    url: url,
+    data: data,
+    error: function(xhr, status, error){
+      var mensagem = jQuery.parseJSON( xhr.responseText );
+      if (xhr.status==404){
+        $('#cpfHolder').addClass("has-success");
+        $('#cpfHolder').removeClass("has-error");
+        $('button[type="submit"]').prop("disabled",false);
+        $.toaster({ message : mensagem[0], title : 'Opa!', priority : 'info' , settings : {'timeout' : 3000,}});
+      } else {
+        if (xhr.status==302){
+          $('#cpfHolder').addClass("has-error");
+          $('#cpfHolder').removeClass("has-success");
+          $('button[type="submit"]').prop("disabled",true);
+          $.toaster({ message : mensagem[0], title : 'Opa!', priority : 'danger' , settings : {'timeout' : 3000,}});
+        }
+      }
+    }
+  });
+}
 function enviarContato(){
+  checkCPF();
+  if(cpfInvalido==TRUE){
+    return;
+  }
   var a = 0;
   var tipo_tel = new Array;
   var numero_tel = new Array;

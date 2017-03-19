@@ -15,7 +15,7 @@
           <div class="panel-body">
             <div class="row" id="secondNavbar">
               <div class="col-md-3 text-right pull-right">
-                @botaoLista(estoques*fa-bell-o)
+                @botaoLista(produtos*fa-bell-o)
                 @botaoSalvar
               </div>
             </div>

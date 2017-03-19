@@ -17,6 +17,7 @@ Auth::routes();
 
 Route::get('/home', 'HomeController@index')->middleware('auth');
 Route::get('/lista/contatos', 'ContatosController@show')->name('contatos')->middleware('auth');
+Route::post('/lista/contatos/cpf', 'ContatosController@consulta_cpf')->middleware('auth');
 Route::get('/lista/contatos/selecionar', 'ContatosController@selecionar')->middleware('auth');
 Route::get('/lista/filiais/selecionar', 'ContatosController@selecionar_filial')->middleware('auth');
 Route::post('/lista/contatos/selecionar', 'ContatosController@selecionar_busca')->middleware('auth');
@@ -101,19 +102,25 @@ Route::get('novo/estoques', 'EstoqueController@novo')->middleware('auth');
 Route::post('novo/estoques', 'EstoqueController@save')->middleware('auth');
 
 Route::get('lista/produtos/selecionar', 'EstoqueController@produto_selecionar')->middleware('auth');
+Route::get('lista/produtos', 'EstoqueController@produto_index')->middleware('auth');
 Route::post('lista/produtos', 'EstoqueController@produto_busca')->middleware('auth');
 Route::get('lista/produtos/campos/{id}/delete', 'EstoqueController@produto_campos_delete')->middleware('auth');
+Route::get('lista/produtos/externos/{id}/delete', 'EstoqueController@produto_externos_delete')->middleware('auth');
 Route::get('lista/produtos/selecionar/novo', 'EstoqueController@produto_selecionar_novo')->middleware('auth');
 Route::post('lista/produtos/selecionar/novo', 'EstoqueController@produto_selecionar_salva')->middleware('auth');
 Route::get('lista/produtos/grupo', 'EstoqueController@grupo_selecionar')->middleware('auth');
 Route::post('lista/produtos/grupo', 'EstoqueController@grupo_busca')->middleware('auth');
 Route::get('lista/produtos/grupo/novo', 'EstoqueController@grupo_novo')->middleware('auth');
+Route::get('lista/produtos/grupo/novo/{id}', 'EstoqueController@grupo_edit')->middleware('auth');
 Route::post('lista/produtos/grupo/novo', 'EstoqueController@grupo_salva')->middleware('auth');
+Route::get('lista/produtos/{id}', 'EstoqueController@produto_detalhes')->middleware('auth');
+Route::get('lista/produtos/{id}/delete', 'EstoqueController@produto_delete')->middleware('auth');
 Route::get('novo/produto', 'EstoqueController@produto_novo')->middleware('auth');
 
 Route::get('lista/produtos/tipo', 'EstoqueController@tipo_selecionar')->middleware('auth');
 Route::post('lista/produtos/tipo', 'EstoqueController@tipo_busca')->middleware('auth');
 Route::get('lista/produtos/tipo/novo/{id}', 'EstoqueController@tipo_novo')->middleware('auth');
+Route::get('lista/produtos/tipo/editar/{id}', 'EstoqueController@tipo_editar')->middleware('auth');
 Route::post('lista/produtos/tipo/novo', 'EstoqueController@tipo_salva')->middleware('auth');
 
 Route::get('novo/produto/barras', 'EstoqueController@gerar_barras')->middleware('auth');
@@ -190,6 +197,9 @@ Route::get('/admin/access/{id}/delete/{id_access}', 'AdminController@access_dele
 Route::get('/admin/update', 'AdminController@update_index')->middleware('auth')->middleware('admin');
 Route::get('/admin/update/do', 'AdminController@update_do')->middleware('auth')->middleware('admin');
 Route::get('/admin/logs', 'AdminController@logs')->middleware('auth')->middleware('admin');
+
+Route::get('/lista/combobox/contas', 'AdminController@combobox_lista_contas')->middleware('auth')->middleware('admin');
+Route::post('/lista/combobox/contas', 'AdminController@combobox_lista_contas_search')->middleware('auth')->middleware('admin');
 
 Route::get('/admin/combobox', 'AdminController@combobox')->middleware('auth')->middleware('admin');
 Route::get('/novo/combobox/telefone', 'AdminController@combobox_novo_telefone')->middleware('auth')->middleware('admin');

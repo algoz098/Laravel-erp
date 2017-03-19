@@ -15,11 +15,13 @@
       window.contatos_nome2 = nome;
       console.log(window.contatos_id2, window.contatos_nome2);
       $('#modal2').modal('toggle');
-    } else {
-      window.contatos_id = id;
-      window.contatos_nome = nome;
-      $('#modal').modal('toggle');
-      console.log(window.contatos_id, window.contatos_nome);
+    } else{
+      if (($("#modal").data('bs.modal') || {}).isShown) {
+        window.contatos_id = id;
+        window.contatos_nome = nome;
+        $('#modal').modal('toggle');
+        console.log(window.contatos_id, window.contatos_nome);
+      }
     }
   };
 
@@ -141,6 +143,10 @@
       'data_de'       : $('#data_de').val(),
       'data_ate'       : $('#data_ate').val(),
       'assunto'       : $('#assunto').val(),
+      'subgrupoBusca'       : $('#grupoHidden').val(),
+      'aplicacaoBusca'       : $('#aplicacaoBusca').val(),
+      'fabricanteBusca'       : $('#fabricanteBusca').val(),
+      'codigoBusca'       : $('#codigoBusca').val()
     };
     $.ajax({
       type: 'post',
@@ -152,7 +158,7 @@
       },
     });
   }
-  $( document ).ajaxError(function( event, jqxhr, settings, thrownError ) {
+  /*$( document ).ajaxError(function( event, jqxhr, settings, thrownError ) {
     if (!jQuery.isEmptyObject(jqxhr.responseText)){
       var a = jQuery.parseJSON( jqxhr.responseText );
       for (var contador = 0, len = a.length; contador < len; contador++) {
@@ -160,7 +166,7 @@
         $.toaster({ message : a[contador], title : title, priority : 'danger' , settings : {'timeout' : 3000,}});
       }
     }
-  });
+  });*/
   $('#modal').on("hidden.bs.modal", function (e) {
     if (typeof activeTarget != 'undefined'){
       $('#'+activeTarget+'Hidden').val(window.contatos_id);

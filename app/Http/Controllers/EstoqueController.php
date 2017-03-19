@@ -10,6 +10,7 @@ use App\Estoque_campos as Campos;
 use App\Produtos as Produtos;
 use App\Produtos_grupos as Grupos;
 use App\Produtos_tipos as Tipos;
+use App\Semelhantes_externos as Externos;
 use App\Combobox_texts as Comboboxes;
 use Log;
 use Auth;
@@ -108,6 +109,15 @@ class EstoqueController  extends BaseController
     Log::info('Criando novo estoque, para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
     return view('estoque.grupos.novo');
   }
+  public function grupo_edit($id)
+  {
+    if (!isset(Auth::user()->perms["estoques"]["edicao"]) or Auth::user()->perms["estoques"]["edicao"]!=1){
+      return response()->json([__('messages.perms.edicao')], 403);
+    }
+    Log::info('Criando novo estoque, para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
+    $grupo = Grupos::find($id);
+    return view('estoque.grupos.novo')->with('grupo', $grupo);
+  }
   public function tipo_novo($id)
   {
     if (!isset(Auth::user()->perms["estoques"]["adicao"]) or Auth::user()->perms["estoques"]["adicao"]!=1){
@@ -117,12 +127,25 @@ class EstoqueController  extends BaseController
     Log::info('Criando novo estoque, para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
     return view('estoque.tipos.novo')->with("grupo", $grupo);
   }
+  public function tipo_editar($id)
+  {
+    if (!isset(Auth::user()->perms["estoques"]["adicao"]) or Auth::user()->perms["estoques"]["adicao"]!=1){
+      return response()->json([__('messages.perms.adicao')], 403);
+    }
+    $tipo = Tipos::find($id);
+    Log::info('Criando novo estoque, para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
+    return view('estoque.tipos.novo')->with("tipo", $tipo);
+  }
   public function grupo_salva(request $request)
   {
     if (!isset(Auth::user()->perms["estoques"]["adicao"]) or Auth::user()->perms["estoques"]["adicao"]!=1){
       return response()->json([__('messages.perms.adicao')], 403);
     }
-    $grupo = new Grupos;
+    if($request->id!=""){
+      $grupo = Grupos::find($request->id);
+    } else {
+      $grupo = new Grupos;
+    }
     $grupo->nome = $request->nome;
     $grupo->save();
     Log::info('Criando novo estoque, para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
@@ -133,7 +156,12 @@ class EstoqueController  extends BaseController
     if (!isset(Auth::user()->perms["estoques"]["adicao"]) or Auth::user()->perms["estoques"]["adicao"]!=1){
       return response()->json([__('messages.perms.adicao')], 403);
     }
-    $tipo = new tipos;
+    if ($request->tipos_id!=""){
+      $tipo = tipos::find($request->tipos_id);
+
+    } else {
+      $tipo = new tipos;
+    }
     $tipo->produtos_grupos_id = $request->grupos_id;
     $tipo->nome = $request->nome;
     $tipo->save();
@@ -259,6 +287,7 @@ class EstoqueController  extends BaseController
     }
     return redirect()->action('EstoqueController@index');
   }
+
   public function produto_campos_delete($id)
   {
     if (!isset(Auth::user()->perms["estoques"]["edicao"]) or Auth::user()->perms["estoques"]["edicao"]!=1){
@@ -272,7 +301,29 @@ class EstoqueController  extends BaseController
       $campo->delete();
     }
   }
-
+  public function produto_delete($id)
+  {
+    if (!isset(Auth::user()->perms["estoques"]["edicao"]) or Auth::user()->perms["estoques"]["edicao"]!=1){
+      return redirect()->action('HomeController@index')
+                       ->withErrors([__('messages.perms.edicao')]);
+    }
+    $produto = Produtos::withTrashed()->find($id);
+    if ($produto->trashed()){
+      $produto->restore();
+    }else{
+      $produto->delete();
+    }
+    return redirect()->action('EstoqueController@produto_index');
+  }
+  public function produto_externos_delete($id)
+  {
+    if (!isset(Auth::user()->perms["estoques"]["edicao"]) or Auth::user()->perms["estoques"]["edicao"]!=1){
+      return redirect()->action('HomeController@index')
+                       ->withErrors([__('messages.perms.edicao')]);
+    }
+    $campo = Campos::find($id);
+    $campo->delete();
+  }
 
   public function produto_novo()
   {
@@ -338,7 +389,36 @@ class EstoqueController  extends BaseController
     $produto->qtd_minima = $request->minimo;
     $produto->qtd_maxima = $request->maximo;
     $produto->estado = $request->estado;
+    $produto->ncm = $request->ncm;
+    $produto->peso = $request->peso;
+    $produto->aplicacao = $request->aplicacao;
+    $produto->estado = $request->estado;
     $produto->save();
+    if(isset($request->armazenagem)){
+      $data = [
+        $produto->id =>
+        [
+          'filiais_id' => Auth::user()->trabalho_id,
+          'local' => $request->armazenagem,
+        ]
+      ];
+      $produto->armazenagens()->sync($data, true);
+    }
+    if($request->semelhante_id){
+      foreach ($request->semelhante_id as $key => $semelhante) {
+        $produto->semelhantes_to()->sync([$semelhante]);
+      }
+    }
+    if(isset($request->codigoExterno)){
+      foreach ($request->codigoExterno as $key => $cod_externo) {
+        $externo = new Externos;
+        $externo->produtos_id = $produto->id;
+        $externo->codigo = $request->codigoExterno[$key];
+        $externo->nome = $request->nomeExterno[$key];
+        $externo->origem = $request->origemExterno[$key];
+        $externo->save();
+      }
+    }
     if(isset($request->campo_nome_edit)){
       foreach ($request->campo_nome_edit as $key => $value) {
         $campo = Campos::find($request->campo_id_edit[$key]);
@@ -359,7 +439,7 @@ class EstoqueController  extends BaseController
       }
     }
 
-    return redirect()->action('EstoqueController@index');
+    return redirect()->action('EstoqueController@produto_index');
   }
   public function produto_atualiza($id, request $request)
   {
@@ -396,8 +476,55 @@ class EstoqueController  extends BaseController
     $produto->qtd_minima = $request->minimo;
     $produto->qtd_maxima = $request->maximo;
     $produto->estado = $request->estado;
+    $produto->ncm = $request->ncm;
+    $produto->peso = $request->peso;
+    $produto->aplicacao = $request->aplicacao;
     $produto->save();
-
+    if(isset($request->armazenagem)){
+      $data = [
+        $produto->id =>
+        [
+          'filiais_id' => Auth::user()->trabalho_id,
+          'local' => $request->armazenagem,
+        ]
+      ];
+      $produto->armazenagens()->sync($data, true);
+    }
+    if($request->semelhante_id){
+      foreach ($request->semelhante_id as $key => $semelhante) {
+        $produto->semelhantes_to()->sync([$semelhante]);
+      }
+    }
+    if($request->semelhante_id_from){
+      foreach ($request->semelhante_id_from as $key => $semelhante) {
+        $produto->semelhantes_from()->sync([$semelhante]);
+      }
+    }
+    if($request->semelhante_id_to){
+      foreach ($request->semelhante_id_to as $key => $semelhante) {
+        $produto->semelhantes_to()->sync([$semelhante]);
+      }
+    }
+    if(isset($request->codigoExterno)){
+      foreach ($request->codigoExterno as $key => $cod_externo) {
+        $externo = new Externos;
+        $externo->produtos_id = $produto->id;
+        $externo->codigo = $request->codigoExterno[$key];
+        $externo->nome = $request->nomeExterno[$key];
+        $externo->origem = $request->origemExterno[$key];
+        $externo->save();
+      }
+    }
+    if(isset($request->codigoExterno)){
+      foreach ($request->codigoExterno as $key => $cod_externo) {
+        $externo = new Externos;
+        $externo->produtos_id = $produto->id;
+        $externo->codigo = $request->codigoExterno[$key];
+        $externo->nome = $request->nomeExterno[$key];
+        $externo->origem = $request->origemExterno[$key];
+        $externo->save();
+      }
+    }
     if(isset($request->campo_nome_edit)){
       foreach ($request->campo_nome_edit as $key => $value) {
         $campo = Campos::find($request->campo_id_edit[$key]);
@@ -418,7 +545,7 @@ class EstoqueController  extends BaseController
       }
     }
 
-    return redirect()->action('EstoqueController@index');
+    return redirect()->action('EstoqueController@produto_index');
   }
   public function produto_selecionar()
   {
@@ -431,6 +558,26 @@ class EstoqueController  extends BaseController
     return view('estoque.produto.selecionar')->with('produtos', $produtos);
   }
 
+  public function produto_index()
+  {
+    if (!isset(Auth::user()->perms["estoques"]["leitura"]) or Auth::user()->perms["estoques"]["leitura"]!=1){
+      return redirect()->action('HomeController@index')
+                       ->withErrors([__('messages.perms.leitura')]);
+    }
+    Log::info('produto index, para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
+    return view('estoque.produto.index');
+  }
+  public function produto_detalhes($id)
+  {
+    if (!isset(Auth::user()->perms["estoques"]["leitura"]) or Auth::user()->perms["estoques"]["leitura"]!=1){
+      return redirect()->action('HomeController@index')
+                       ->withErrors([__('messages.perms.leitura')]);
+    }
+    Log::info('produto index, para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
+    $produto = Produtos::Find($id);
+    return view('estoque.produto.detalhes')
+      ->with('produto', $produto);
+  }
   public function produto_busca(request $request)
   {
     if (!isset(Auth::user()->perms["estoques"]["leitura"]) or Auth::user()->perms["estoques"]["leitura"]!=1){
@@ -444,8 +591,43 @@ class EstoqueController  extends BaseController
       $produtos = $produtos->orWhere('barras', 'like', '%' .  $request->busca . '%');
       $produtos = $produtos->orWhere('id', 'like', '%' .  $request->busca . '%');
     }
+    if(!empty($request->aplicacaoBusca)){
+      $produtos = $produtos->orWhere('aplicacao', 'like', '%' .  $request->aplicacaoBusca . '%');
+    }
+    if(!empty($request->subgrupoBusca)){
+      $a = $request->subgrupoBusca;
+      $produtos = $produtos->orWhere('produtos_tipo_id', $request->subgrupoBusca);
+    }
+    if(!empty($request->codigoBusca)){
+      $produtos = $produtos->orWhere('barras', $request->codigoBusca);
+      $produtos = $produtos->orWhere('nome', $request->codigoBusca);
+      $externos = Externos::where('codigo', $request->codigoBusca)->get();
+    }
+    if(!empty($request->fabricanteBusca)){
 
+      $contatos = Contatos::where('nome', 'like', '%' .  $request->fabricanteBusca . '%')
+                            ->orWhere('sobrenome', 'like', '%' .  $request->fabricanteBusca . '%')
+                            ->orWhere('endereco', 'like', '%' .  $request->fabricanteBusca . '%')
+                            ->orWhere('cpf', 'like', '%' .  $request->fabricanteBusca . '%')
+                            ->orWhere('cidade', 'like', '%' .  $request->fabricanteBusca . '%')
+                            ->orWhere('uf', 'like', '%' .  $request->fabricanteBusca . '%')
+                            ->orWhere('bairro', 'like', '%' .  $request->fabricanteBusca . '%')
+                            ->orWhere('cep', 'like', '%' .  $request->fabricanteBusca . '%')
+                            ->get();
+        $a = 0;
+        while ($a < count($contatos)) {
+          $produtos = $produtos->orWhere('fabricante_id', '=', $contatos[$a]->id);
+          $a++;
+        }
+    }
     $produtos = $produtos->orderBy('nome', 'asc')->get();
+
+    if (isset($externos)){
+      foreach ($externos as $key => $externo) {
+        $produtos->push($externo->produto);
+      }
+    }
+    #return $produtos;
     return view('estoque.produto.lista')
                 ->with('produtos', $produtos);
   }

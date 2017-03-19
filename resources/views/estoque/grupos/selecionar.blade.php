@@ -29,6 +29,33 @@
 <script>
 
 function selectRow(){};
+function editarTipo(id){
+  $("#listaHolderGrupos").html("");
+  var url = "{{url('lista/produtos/tipo/editar')}}/"+id;
+  $.ajax({
+    type: "GET",
+    url: url,
+    success: function( data ) {
+      $("#listaHolderGrupos").html(data);
+      $("#botaoSalvarGrupo").show();
+      window.focandoEnter ="botaoSalvarGrupo";
+    }
+  });
+};
+function editarGrupo(id){
+  $("#listaHolderGrupos").html("");
+  var url = "{{url('lista/produtos/grupo/novo')}}/"+id;
+  $.ajax({
+    type: "GET",
+    url: url,
+    success: function( data ) {
+      $("#listaHolderGrupos").html(data);
+      $("#botaoSalvarGrupo").show();
+      window.focandoEnter ="botaoSalvarGrupo";
+    }
+  });
+};
+
 function voltarUmNivel(){
   $('#botaoNovoModalGrupos').attr('onclick', 'novoGrupo()');
   $('#botaoSalvarGrupo').attr('onclick', 'botaoSalvarGrupo()');
@@ -94,6 +121,7 @@ function botaoSalvarGrupo(){
   var data = {
             '_token'            : $('input[name=_token]').val(),
             'nome'       : $('#produto_grupo_nome').val(),
+            'id'       : $('#grupos_id').val(),
         };
         console.log(data);
   $.ajax({
@@ -148,6 +176,7 @@ function botaoSalvarTipo(){
             '_token'          : $('input[name=_token]').val(),
             'nome'            : $('#produto_tipo_nome').val(),
             'grupos_id'       : $('#grupo_selecionado_id').val(),
+            'tipos_id'       : $('#tipos_id').val(),
         };
         console.log(data);
   $.ajax({

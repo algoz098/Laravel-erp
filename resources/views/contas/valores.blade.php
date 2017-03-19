@@ -73,13 +73,18 @@ use Carbon\Carbon;
                         </div>
                         <div class="form-group">
                           <label>Referencia</label>
-                          <select class="form-control" id="nome" name="nome"  onchange="referenciaChange()">
-                            <option value="" {{!isset($conta) ? "selected" : ""}}> - Escolha uma opção - </option>
-                            @foreach($comboboxes as $key => $combobox)
-                              <option value="{{$combobox->value}}"
-                                {{{isset($conta) && $conta->nome==$combobox->value ? "selected" : ""}}}>{{$combobox->text}}</option>
-                            @endforeach
-                          </select>
+                          <div class="input-group">
+                            <select class="form-control" id="nome" name="nome"  onchange="referenciaChange()">
+                              <option value="" {{!isset($conta) ? "selected" : ""}}> - Escolha uma opção - </option>
+                              @foreach($comboboxes as $key => $combobox)
+                                <option value="{{$combobox->value}}"
+                                  {{{isset($conta) && $conta->nome==$combobox->value ? "selected" : ""}}}>{{$combobox->text}}</option>
+                              @endforeach
+                            </select>
+                            <a onclick="window.activeTarget='nome'; openModal('{{url('lista/combobox/contas')}}')" class="btn btn-info input-group-addon">
+                              <i class="fa fa-gear"></i>
+                            </a>
+                          </div>
                         </div>
                       </div>
                     </div>

@@ -24,6 +24,8 @@
   </div>
 </div>
 <script>
+function selectRow(){}
+
 efetuarBusca("{{url('lista/produtos')}}", 'Produtos');
 function novoProduto(){
   $("#listaHolderProdutos").html("");
