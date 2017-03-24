@@ -36,7 +36,12 @@
       <div class="row">
         <div class="col-md-12">
           <div class="form-group">
-            <label for="Descricao">Andamentos:</label>
+            <label for="Descricao">
+              <a onclick="openModal('{{url('/lista/tickets/')}}/{{$ticket->id}}/andamento')" class="btn btn-success btn-xs">
+                <i class="fa fa-plus"></i>
+              </a>
+              Andamentos:
+            </label>
             @foreach ($ticket->andamentos as $key => $andamento)
               <div class="row list-contacts" >
                 <div class="col-md-2">
@@ -75,8 +80,8 @@
       </div>
     </div>
     <div class="modal-footer">
-      <button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
-      <a href="{{ url('novo/tickets') }}/{{$ticket->id}}/edit"><button type="submit" class="btn btn-primary">Editar</button></a>
+      @botaoFecharModal
+      @botaoEditarExtenso(novo/tickets*$ticket->id)
     </div>
   </div>
 </div>

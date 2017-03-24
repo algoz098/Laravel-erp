@@ -29,7 +29,8 @@
           @endif
           @if (isset($modulo_estoques) and $modulo_estoques=="1")
             @ifPerms(estoques*adicao)
-              @sidemenuItem(novo*estoques*fa-bell*Novo Produto)
+            @sidemenuItem(novo*estoques*fa-bell*Novo Produto)
+            <li class="pushy-link "><a class="{{{ Request::path()=='novo/nf-entrada' ? "active" : "" }}}" href="{{ url('novo/nf-entrada') }}"><i class="fa fa-bell-o"></i> NF Entrada</a></li>
             @endPerms
           @endif
           @if (isset($modulo_caixas) and $modulo_caixas=="1")
@@ -53,7 +54,7 @@
             @endPerms
           @endif
           @if (isset($modulo_tickets) and $modulo_tickets=="1")
-            @ifPerms(novo*adicao)
+            @ifPerms(tickets*adicao)
               @sidemenuItem(novo*tickets*fa-book*Tickets)
             @endPerms
           @endif

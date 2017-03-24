@@ -8,36 +8,43 @@
         </div>
         <div class="panel-body">
           <div id="secondNavbar" class="row">
+            <div class="col-md-3 col-xs-12 text-left pull-left">
               <div class="row">
-                <div class="col-md-3 text-left pull-left">
-                  <div class=" form-inline col-md-10 text-right">
-                    @ifPerms(contatos*edicao)
-                      @botaoDelete
-                      @botaoEditar
-                    @endPerms
-                    @botaoDetalhes
-                    <span id="buttonRelate" class="btn btn-primary btn_xs" title="Relacionamentos"  data-toggle="collapse" data-target="#relacionamentos" aria-expanded="">
-                      <i class="fa fa-users"></i>
-                    </span>
-                    @botaoAnexos
-                  </div>
-                  <div class=" form-inline col-md-2 text-left">
-                    @idSelecionado
-                  </div>
+                <div class=" form-inline col-md-10 col-xs-8 text-right">
+                  @ifPerms(contatos*edicao)
+                  @botaoDelete
+                  @botaoEditar
+                  @endPerms
+                  @botaoDetalhes
+                  <span id="buttonRelate" class="btn btn-primary hidden-xs" title="Relacionamentos"  data-toggle="collapse" data-target="#relacionamentos" aria-expanded="">
+                    <i class="fa fa-users"></i>
+                  </span>
+                  @botaoAnexos
                 </div>
-                <div class="col-md-6">
-                  <div class="form-group form-inline text-center">
-                    {{ csrf_field() }}
-                    @buscaSimples(lista/contatos*Contatos)
-                    @buscaExtraBotao
-                  </div>
+                <div class=" form-inline col-md-2 col-xs-2 text-left">
+                  @idSelecionado
                 </div>
-                  <div class="col-md-2 pull-right ">
-                    @ifPerms(contatos*adicao  )
-                      @botaoNovo(contatos*funcionarios*Nova Entidade*Novo Func.)
-                    @endPerms
-                  </div>
+                <div class="col-xs-2 hidden-md">
+                  <a class="btn btn-warning" role="button" data-toggle="collapse" href=".collapse-mobile">
+                    <i class="fa fa-search"></i>
+                  </a>
+                </div>
               </div>
+            </div>
+            <div class="col-md-6 col-xs-12 collapse-mobile" data-toggle="collapse">
+              <div class="form-group form-inline text-center ">
+                {{ csrf_field() }}
+                @buscaSimples(lista/contatos*Contatos)
+                <div class="hidden-xs">
+                  @buscaExtraBotao
+                </div>
+              </div>
+            </div>
+            <div class="col-md-2 col-xs-12 pull-right collapse-mobile" data-toggle="collapse">
+              @ifPerms(contatos*adicao  )
+              @botaoNovo(contatos*funcionarios*Nova Entidade*Novo Func.)
+              @endPerms
+            </div>
               <div id="buscaAvançada" class="row collapse " aria-expanded="" style="background-color: #fff; z-index:1030;">
                 <div class="col-md-2">
                   <div class="form-group">

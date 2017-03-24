@@ -32,10 +32,10 @@
 </div>
 <script>
 function selectRow(){};
-$(function(){
+$(document).ready(function(){
   efetuarBusca("{{ url('lista/contatos') }}", "Contatos");
-  $('#busca_modal').focus();
-  focandoEnter = "Contatos";
+  $('#busca').focus();
+  window.focandoEnter ="botaoBuscaSimples";
 });
 function novoContato(){
   $("#listaHolderContatos").html("");
@@ -47,6 +47,7 @@ function novoContato(){
     success: function( data ) {
       $("#listaHolderContatos").html(data);
       $("#botaoSalvarContatos").show();
+      window.focandoEnter ="botaoSalvarContatos";
       tinymce.init({
         selector: 'textarea',
         height: 200,

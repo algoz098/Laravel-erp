@@ -100,6 +100,7 @@ Route::get('novo/estoques/{id}', 'EstoqueController@edit')->middleware('auth');
 Route::post('novo/estoques/{id}', 'EstoqueController@edit_save')->middleware('auth');
 Route::get('novo/estoques', 'EstoqueController@novo')->middleware('auth');
 Route::post('novo/estoques', 'EstoqueController@save')->middleware('auth');
+Route::get('novo/nf-entrada', 'EstoqueController@nf_entrada')->middleware('auth');
 
 Route::get('lista/produtos/selecionar', 'EstoqueController@produto_selecionar')->middleware('auth');
 Route::get('lista/produtos', 'EstoqueController@produto_index')->middleware('auth');
@@ -146,6 +147,7 @@ Route::post('novo/vendas/{id}', 'VendasController@confirmar')->middleware('auth'
 Route::post('novo/vendas/{id}/salvar', 'VendasController@salvar')->middleware('auth');
 
 Route::get('lista/tickets/', 'TicketsController@index')->middleware('auth');
+Route::post('lista/tickets/', 'TicketsController@busca')->middleware('auth');
 Route::get('lista/tickets/{id}', 'TicketsController@detalhes')->middleware('auth');
 Route::get('lista/tickets/{id}/delete', 'TicketsController@delete')->middleware('auth');
 Route::get('lista/tickets/{id}/andamento', 'TicketsController@andamento')->middleware('auth');

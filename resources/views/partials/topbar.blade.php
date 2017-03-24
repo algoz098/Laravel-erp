@@ -7,7 +7,7 @@
            data-placement="right"></i>
        </div>
      </div>
-         <ul class="nav navbar-nav navbar-right">
+         <ul class="nav navbar-nav navbar-right hidden-xs hidden-sm">
            <li>
              <a class="navbar-brand" id="mostrarAjuda" href="#"><i class="fa fa-question fa-1x"></i></a>
            </li>

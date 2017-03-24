@@ -538,6 +538,9 @@ function selectCep_edit(a){
 }
 function checkCPF(){
   var cpf = $('#cpf').val();
+  if (cpf==""){
+    return;
+  }
   var url = "{{url('lista/contatos/cpf')}}";
   var data = {
                 '_token' : $('input[name=_token]').val(),
@@ -560,6 +563,7 @@ function checkCPF(){
           $('#cpfHolder').removeClass("has-success");
           $('button[type="submit"]').prop("disabled",true);
           $.toaster({ message : mensagem[0], title : 'Opa!', priority : 'danger' , settings : {'timeout' : 3000,}});
+          return;
         }
       }
     }
@@ -567,9 +571,6 @@ function checkCPF(){
 }
 function enviarContato(){
   checkCPF();
-  if(cpfInvalido==TRUE){
-    return;
-  }
   var a = 0;
   var tipo_tel = new Array;
   var numero_tel = new Array;
@@ -636,6 +637,7 @@ function enviarContato(){
     data: data,
     success: function( data ) {
       efetuarBusca("{{ url('lista/contatos') }}", "Contatos");
+      window.focandoEnter = "botaoBuscaSimples";
       $.toaster({ message : 'Entidade adicionado com sucesso', title : 'Sucesso', priority : 'success' , settings : {'timeout' : 3000,}});
     }
   });

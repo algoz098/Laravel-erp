@@ -21,57 +21,24 @@
                 </div>
               </div>
             </div>
+            <div class="col-md-7">
+              <div class="form-group form-inline text-center">
+                @buscaSimples(lista/tickets*Tickets)
+              </div>
+            </div>
             <div class="col-md-1 pull-right text-right">
               @botaoNovo(tickets)
             </div>
           </div>
-          <div class="row">
-            <div class="col-md-1">
-              Id
-            </div>
-            <div class="col-md-2">
-              Contato
-            </div>
-            <div class="col-md-3">
-              Estado
-            </div>
-            <div class="col-md-2">
-              Descrição
-            </div>
-            <div class="col-md-1 pull-right text-right">
-              Quando
-            </div>
-          </div>
-          <div class="row">
-            @foreach ($tickets as $key => $ticket)
-              <div class="row list-contacts" onclick="selectRow({{$ticket->id}})">
-                <div class="col-md-1">
-                  <span class="label label-info">
-                    id: {{$ticket->id}}
-                  </span>
-                </div>
-                <div class="col-md-2">
-                  @mostraContato($ticket->contato->id*$ticket->contato->nome)
-                </div>
-                <div class="col-md-3">
-                  {{$ticket->status}}
-                </div>
-                <div class="col-md-5">
-                  {{strip_tags($ticket->descricao)}}
-                </div>
-                <div class="col-md-1 pull-right text-right">
-                  <span class="label label-info">
-                    {{date('d/m/Y', strtotime($ticket->created_at))}}
-                  </span>
-                </div>
-              </div>
-            @endforeach
-          </div>
+          <div id="listaHolderTickets"></div>
         </div>
       </div>
     </div>
   </div>
-  <script language="javascript">
+<script language="javascript">
+  $(document).ready(function(){
+    efetuarBusca('{{url('lista/tickets')}}', 'Tickets')
+  });
   var imageStatus = false;
     function selectRow(id){
       window.id_attach_form = id;
@@ -81,6 +48,5 @@
       $("#botaoEditar").attr('href', '{{ url('novo/tickets') }}/'+id+'/edit/');
       $("#botaoDetalhes").attr('onclick', 'openModal("{{ url('lista/tickets') }}/'+id+'")');
     }
-  </script>
-
+</script>
 @endsection

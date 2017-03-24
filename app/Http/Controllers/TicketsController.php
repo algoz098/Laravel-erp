@@ -19,8 +19,11 @@ class TicketsController extends BaseController
   }
 
   public function index(){
+    return view('tickets.index');
+  }
+  public function busca(request $request){
     $tickets=Tickets::all();
-    return view('tickets.index')
+    return view('tickets.lista')
                 ->with('tickets', $tickets);
   }
   public function detalhes($id){

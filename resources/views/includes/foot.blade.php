@@ -9,22 +9,24 @@
 <script language="javascript">
 
   var height = $(window).height()-200;
-  function retornarEsta(id, nome) {
-    if (($("#modal2").data('bs.modal') || {}).isShown) {
-      window.contatos_id2 = id;
-      window.contatos_nome2 = nome;
-      console.log(window.contatos_id2, window.contatos_nome2);
-      $('#modal2').modal('toggle');
-    } else{
-      if (($("#modal").data('bs.modal') || {}).isShown) {
-        window.contatos_id = id;
-        window.contatos_nome = nome;
-        $('#modal').modal('toggle');
-        console.log(window.contatos_id, window.contatos_nome);
-      }
-    }
-  };
 
+  @if (!isset($retornarEstaLocal))
+    function retornarEsta(id, nome) {
+      if (($("#modal2").data('bs.modal') || {}).isShown) {
+        window.contatos_id2 = id;
+        window.contatos_nome2 = nome;
+        console.log(window.contatos_id2, window.contatos_nome2);
+        $('#modal2').modal('toggle');
+      } else{
+        if (($("#modal").data('bs.modal') || {}).isShown) {
+          window.contatos_id = id;
+          window.contatos_nome = nome;
+          $('#modal').modal('toggle');
+          console.log(window.contatos_id, window.contatos_nome);
+        }
+      }
+    };
+  @endif
 
   $(document).ready( function (){
     tinymce.init({
@@ -39,9 +41,14 @@
       toolbar: 'undo redo | insert | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image',
 
     });
+    if ($(window).width() <= 800){
+      $('.collapse-mobile').addClass('collapse');
+    }
   });
 
   var scroll = jQuery(document).scroll(function() {
+      var secondNavbarHeight = $('#secondNavbar').height();
+      console.log(secondNavbarHeight);
       if (jQuery(this).scrollTop() > 105) {
         jQuery('#secondNavbar').css({
            'position': 'fixed',
@@ -134,7 +141,6 @@
     }
   };
   function efetuarBusca(url, target){
-    $("#"+target).addClass("carregando");
     $('#botaoSalvar'+target).hide();
     var data = {
       'busca'              : $('input[name=busca]').val(),

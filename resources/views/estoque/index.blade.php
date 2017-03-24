@@ -11,7 +11,7 @@
           <div class="row" id="secondNavbar">
             <div class="col-md-2 pull-right text-right">
               @ifPerms(estoques*adicao)
-              @botaoNovo(estoques*produto*Estoque*Produto)
+                @botaoNovo(estoques*nf-entrada*Estoque*NF Entrada)
               @endPerms
             </div>
             <div class="col-md-3">

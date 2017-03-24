@@ -368,6 +368,8 @@ class ComposerStaticIniteb7ed518eae24fc4a2b91da7f84bfb6b
         'CreateFuncionariosTable' => __DIR__ . '/../..' . '/database/migrations/2017_01_18_125211_create_funcionarios_table.php',
         'CreateMovsPrestacaoTable' => __DIR__ . '/../..' . '/database/migrations/2017_01_05_231634_create_movs_prestacao_table.php',
         'CreateMovsTable' => __DIR__ . '/../..' . '/database/migrations/2017_01_05_151209_create_movs_table.php',
+        'CreateNfEntradasTable' => __DIR__ . '/../..' . '/database/migrations/2017_03_20_140150_create_nf_entradas_table.php',
+        'CreateNfProdutos' => __DIR__ . '/../..' . '/database/migrations/2017_03_20_140735_create_nf_produtos.php',
         'CreatePasswordResetsTable' => __DIR__ . '/../..' . '/database/migrations/2014_10_12_100000_create_password_resets_table.php',
         'CreateProdutosGrupos' => __DIR__ . '/../..' . '/database/migrations/2017_03_12_134659_create_produtos_grupos.php',
         'CreateProdutosSemelhantesTable' => __DIR__ . '/../..' . '/database/migrations/2017_03_16_151606_create_produtos_semelhantes_table.php',

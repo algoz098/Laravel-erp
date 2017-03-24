@@ -1,4 +1,4 @@
-<div class="row" id="lista">
+<div class="row hidden-xs" id="lista">
   <div class="col-md-1">
     IDs
   </div>
@@ -20,12 +20,12 @@
 </div>
 @foreach($contatos as $key => $contato)
     <div class="row list-contacts" onclick="selectRow({{$contato->id}}), retornarEsta({{$contato->id}}, '{{$contato->nome}}')" >
-      <div class="col-md-1">
+      <div class="col-md-1  col-xs-2">
         <span class="label label-primary">
           {{{$contato->id}}}
         </span>
       </div>
-      <div class="col-md-1">
+      <div class="col-md-1  col-xs-2">
         @if(is_null($contato->active))
           <i class="fa fa-user level1"></i>
         @else
@@ -33,17 +33,17 @@
         @endif
         <i class="fa fa-signal level{{$contato->sociabilidade}}"></i>
       </div>
-      <div class="limitar-string col-md-4">
+      <div class="limitar-string col-md-4 col-xs-3">
         {{ $contato->nome }}
         @if ($contato->tipo=="1"){{ $contato->sobrenome }}@endif
       </div>
-      <div class="limitar-string col-md-3">
+      <div class="limitar-string col-md-3 col-xs-3">
          @if ($contato->tipo!="1"){{ $contato->sobrenome }}@endif
       </div>
-      <div class="col-md-2">
+      <div class="col-md-2 hidden-xs">
         {{ $contato->cpf }}
       </div>
-      <div class="col-md-1 pull-right">
+      <div class="col-md-1 hidden-xs pull-right">
         <span class="label label-primary">{{date('d/m/Y', strtotime($contato->created_at))}}</label>
       </div>
     </div>

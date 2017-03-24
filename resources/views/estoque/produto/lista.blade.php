@@ -16,7 +16,7 @@
   </div>
 </div>
 @foreach ($produtos as $key => $produto)
-  <div class="row list-contacts" onclick="selectRow({{$produto->id}}), retornarEsta({{$produto->id}}, '{{$produto->nome}}')">
+  <div class="row list-contacts" onclick="selectRow({{$produto->id}}), retornarEsta({{$produto->id}}, '{{$produto->nome}}', '{{$produto->tipos->nome}}', '{{$produto->barras}}', '{{$produto->ncm}}')">
     <div class="col-md-1">
       <span class="label label-info">
         ID: {{$produto->id}}
