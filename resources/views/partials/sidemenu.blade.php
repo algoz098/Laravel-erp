@@ -63,6 +63,7 @@
     <li class="pushy-submenu ">
         <a href="#" class="{{{ Request::is('lista*') ? "active" : ""}}}"><i class="fa fa-list fa-lg"></i> Listas</a>
         <ul class="menu" >
+          <li class="pushy-link "><a class="{{{ Request::path()=='lista/produtos' ? "active" : "" }}}" href="{{ url('lista/cons_int') }}"><i class="fa fa-bell-o"></i> Consumo Interno</a></li>
           @sidemenuItem(lista*contatos*fa-user*Entidades)
           @if (isset($modulo_atendimentos) and $modulo_atendimentos=="1")
             @sidemenuItem(lista*atendimentos*fa-list*Atendimento)

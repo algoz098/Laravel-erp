@@ -184,6 +184,11 @@ Route::get('attach/{id}/resize/{width}', 'AttachmentsController@resize')->middle
 Route::get('attach/{modulo}/{id}/{contatos_id}', 'AttachmentsController@novo')->middleware('auth');
 Route::post('attach/{modulo}/{id}/{contatos_id}', 'AttachmentsController@salva')->middleware('auth');
 
+
+Route::get('/lista/cons_int', 'Cons_intController@index')->middleware('auth');
+
+
+
 Route::get('/admin/config/img_destaque', 'AdminController@img_destaque'); // Rota espcial nao colocar middleware de proteção
 
 Route::get('/admin', 'AdminController@index')->name('admin')->middleware('auth')->middleware('admin');

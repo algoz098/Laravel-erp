@@ -23,23 +23,53 @@ use Carbon\Carbon;
               </div>
             </div>
             <div class="row">
-              <div class="col-md-3">
+              <div class="col-md-12">
                 <div class="panel panel-default">
                   <div class="panel-body">
+                    <div class="col-md-3">
+                      @selecionaFilial
+                    </div>
+                    <div class="col-md-4">
+                      @selecionaContato(Fornecedor:)
+                    </div>
+                    <div class="col-md-2">
+                      @campoTexto(Nro da NF:*numero_nota*)
+                    </div>
+                    <div class="col-md-2">
+                      @campoDinheiro(Total Nota Fiscal:*total_nota*)
+                    </div>
                     @if (isset($estoque))
                       @selecionaFilial($estoque->contato->id*$estoque->contato->nome)
                     @else
-                      @selecionaFilial
-                      @campoTexto(Numero da nota:*numero_nota*)
-                      @selecionaContato(Fornecedor:)
-                      @campoDinheiro(Total da nota:*total_nota*)
                     @endif
                   </div>
                 </div>
               </div>
             </div>
+            <div class="panel panel-default">
+              <div class="panel-body">
+                <div class="col-md-2">
+                  @campoDinheiro(Frete da nota*frete_nota*)
+                </div>
+                <div class="col-md-2">
+                  @campoDinheiro(Transportadora*transportadora*)
+                </div>
+                <div class="col-md-2">
+                  @campoDinheiro(Seguro/Dep.*seguro*)
+                </div>
+                <div class="col-md-2">
+                  @campoDinheiro(ICMS Substituição*icms_substituicao*)
+                </div>
+                <div class="col-md-2">
+                  @campoDinheiro(Acrescimo*acrescimo*)
+                </div>
+                <div class="col-md-2">
+                  @campoDinheiro(Desconto*desconto*)
+                </div>
+              </div>
+            </div>
             <div class="row">
-              <div class="panel panel-default" style="font-size: 10px;">
+              <div class="panel panel-default" style="font-size: 12px;">
                 <div class="panel-body">
                   <div class="col-md-1 pull-right">
                     <div>
@@ -60,10 +90,13 @@ use Carbon\Carbon;
                         <strong>NCM Nota</strong>
                       </div>
                       <div class="col-md-1">
-                        <strong>Quantidade</strong>
+                        <strong>Tipo</strong>
                       </div>
                       <div class="col-md-1">
-                        <strong>Valor Unid.</strong>
+                        <strong>Qde</strong>
+                      </div>
+                      <div class="col-md-1">
+                        <strong>Vlr Unit.</strong>
                       </div>
                       <div class="col-md-1">
                         <strong>ICMS</strong>
@@ -72,7 +105,7 @@ use Carbon\Carbon;
                         <strong>IPI</strong>
                       </div>
                       <div class="col-md-1">
-                        <strong>Total</strong>
+                        <strong>Vlr Total</strong>
                       </div>
                       <div class="col-md-1">
                         <strong>Vlr ICMS</strong>
@@ -106,28 +139,6 @@ use Carbon\Carbon;
                       </div>
                     </div>
                   </div>
-                </div>
-              </div>
-            </div>
-            <div class="panel panel-default">
-              <div class="panel-body">
-                <div class="col-md-2">
-                  @campoDinheiro(Frete da nota*frete_nota*)
-                </div>
-                <div class="col-md-2">
-                  @campoDinheiro(Transportadora*transportadora*)
-                </div>
-                <div class="col-md-2">
-                  @campoDinheiro(Seguro/Dep.*seguro*)
-                </div>
-                <div class="col-md-2">
-                  @campoDinheiro(ICMS Substituição*icms_substituicao*)
-                </div>
-                <div class="col-md-2">
-                  @campoDinheiro(Acrescimo*acrescimo*)
-                </div>
-                <div class="col-md-2">
-                  @campoDinheiro(Desconto*desconto*)
                 </div>
               </div>
             </div>
@@ -230,6 +241,19 @@ function remove() {
     </div>
     <div class="col-md-2">
       <input type="text" class="form-control input-sm" id="ncmNota" name="ncmNota">
+    </div>
+    <div class="col-md-1">
+      <select id="tipoNota" name="tipoNota" class="input-sm form-control">
+        <option selected>Escolha</option>
+        <option value="Conjunto">Conj</option>
+        <option value="Fardo">Frd</option>
+        <option value="Jogo">Jg</option>
+        <option value="kilo">Kg</option>
+        <option value="Kit">Kit</option>
+        <option value="Litros">Lts</option>
+        <option value="Peça">Pc</option>
+        <option value="Unidade">Unid</option>
+      </select>
     </div>
     <div class="col-md-1">
       <input type="text" class="form-control input-sm maskMoney" id="qtdNota" name="qtdNota" onchange="cacularLinha()">
