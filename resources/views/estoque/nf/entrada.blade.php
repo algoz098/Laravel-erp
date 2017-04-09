@@ -73,10 +73,10 @@ use Carbon\Carbon;
                 <div class="panel-body">
                   <div class="col-md-1 pull-right">
                     <div>
-                      <a class="btn btn-danger" onclick="remove()">
+                      <a class="btn btn-danger" onclick="removeProdutos()">
                         <i class="fa fa-minus"></i>
                       </a>
-                      <a class="btn btn-success" onclick="add()">
+                      <a class="btn btn-success" onclick="addProdutos()">
                         <i class="fa fa-plus"></i>
                       </a>
                     </div>
@@ -114,26 +114,25 @@ use Carbon\Carbon;
                         <strong>Vlr IPI</strong>
                       </div>
                     </div>
-                    <div id="mais"></div>
+                    <div id="maisProdutos"></div>
                   </div>
-                  <div class="col-md-11">
+                  <div class="col-md-11" style="font-size: 11px;">
                     <div class="row">
-                      <div class="col-md-1 pull-right"></div>
                       <div class="col-md-1 pull-right">
                         <div class="form-group">
-                          <label>IPI Total:</label>
+                          <label>TOT IPI</label>
                           <input type="text" class="form-control input-sm" id="ipiTotal" name="ipiTotal" readonly>
                         </div>
                       </div>
                       <div class="col-md-1 pull-right">
                         <div class="form-group">
-                          <label>ICMS Total:</label>
+                          <label>TOT ICMS</label>
                           <input type="text" class="form-control input-sm" id="icmsTotal" name="icmsTotal" readonly>
                         </div>
                       </div>
                       <div class="col-md-1 pull-right">
                         <div class="form-group">
-                          <label>Total:</label>
+                          <label>TOT PROD</label>
                           <input type="text" class="form-control input-sm" id="total" name="total" readonly>
                         </div>
                       </div>
@@ -184,8 +183,9 @@ function calcularLinha(linha){
   $('#icmsTotal').val(icms);
 };
 window.e = 0;
-function add() {
+function addProdutos() {
   var $clone = $($('#toCloneProduto').html());
+  $('#linhaNumeroProduto', $clone).text(e+1);
   $('#nota_produtoHidden', $clone).attr('name', 'nota_produto_id['+e+']');
   $('#nota_produtoHidden', $clone).attr('id', 'nota_produto'+e+'Hidden');
   $('#nota_produto', $clone).attr('id', 'nota_produto'+e);
@@ -214,14 +214,12 @@ function add() {
   $('#IpiTotalNota', $clone).attr('id', 'IpiTotalNota'+e);
   $('.3397', $clone).attr('id', 'linha'+e);
   e = e + 1;
-  $clone.appendTo('#mais');
+  $clone.appendTo('#maisProdutos');
 }
-function remove() {
-  if (e<0){}else {
+function removeProdutos() {
+  if (e>=0){
+    e = e - 1;
     $('#linha'+e).remove();
-    if(e>0){
-      e = e - 1;
-    }
   }
 }
 </script>
@@ -229,13 +227,18 @@ function remove() {
   <div>
     <div class="row list-contacts 3397">
     <div class="col-md-2">
-      <div class="form-group">
-        <div class="input-group">
-          <input type="hidden" class="form-control" id="nota_produtoHidden" name="nota_produto_id">
-          <input type="text" class="form-control input-sm" id="nota_produto" disabled>
-          <span id ="nota_produtoBotao" onclick="window.activeTarget='nota_produto'; openModal('{{url('lista/produtos/selecionar')}}')" class=" btn btn-info  input-sm input-group-addon">
-            <i class="fa fa-gear"></i>
-          </span>
+      <div class="form-inline">
+        <strong>
+          <span id="linhaNumeroProduto"></span>
+        </strong>
+        <div class="form-group">
+          <div class="input-group">
+            <input type="hidden" class="form-control" id="nota_produtoHidden" name="nota_produto_id">
+            <input type="text" class="form-control input-sm" id="nota_produto" disabled>
+            <span id ="nota_produtoBotao" onclick="window.activeTarget='nota_produto'; openModal('{{url('lista/produtos/selecionar')}}')" class=" btn btn-info  input-sm input-group-addon">
+              <i class="fa fa-gear"></i>
+            </span>
+          </div>
         </div>
       </div>
     </div>

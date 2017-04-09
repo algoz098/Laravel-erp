@@ -343,7 +343,7 @@ class AppServiceProvider extends ServiceProvider
               <label>".$label."</label>
               <div class=\"input-group\">
                 <span class=\"input-group-addon\" id=\"campoDinheiroAddon\">R$</span>
-                <input type=\"text\" class=\"form-control\" aria-describedby=\"campoDinheiroAddon\" id=\"".$name."\" name=\"".$name."\" value=\"\" >
+                <input type=\"text\" class=\"form-control real-mask\" aria-describedby=\"campoDinheiroAddon\" id=\"".$name."\" name=\"".$name."\" value=\"\" >
               </div>
             </div>
           '?>";
@@ -352,8 +352,8 @@ class AppServiceProvider extends ServiceProvider
           <div class=\"form-group\">
             <label>".$label."</label>
             <div class=\"input-group\">
-              <span class=\"input-group-addon\" id=\"campoDinheiroAddon\">R$</span>
-              <input type=\"text\" class=\"form-control\" aria-describedby=\"campoDinheiroAddon\" id=\"".$name."\" name=\"".$name."\" value=\"'.$value.'\">
+              <span class=\"input-group-addon \" id=\"campoDinheiroAddon\">R$</span>
+              <input type=\"text\" class=\"form-control real-mask\" aria-describedby=\"campoDinheiroAddon\" id=\"".$name."\" name=\"".$name."\" value=\"'.$value.'\">
             </div>
           </div>
         '?>";
