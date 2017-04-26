@@ -100,7 +100,14 @@ Route::get('novo/estoques/{id}', 'EstoqueController@edit')->middleware('auth');
 Route::post('novo/estoques/{id}', 'EstoqueController@edit_save')->middleware('auth');
 Route::get('novo/estoques', 'EstoqueController@novo')->middleware('auth');
 Route::post('novo/estoques', 'EstoqueController@save')->middleware('auth');
+
+Route::get('lista/nf-entrada', 'EstoqueController@nf_entrada_lista')->middleware('auth');
+Route::post('lista/nf-entrada', 'EstoqueController@nf_entrada_busca')->middleware('auth');
+
 Route::get('novo/nf-entrada', 'EstoqueController@nf_entrada')->middleware('auth');
+Route::get('novo/nf-entrada/{id}', 'EstoqueController@nf_entrada_editar')->middleware('auth');
+Route::post('novo/nf-entrada', 'EstoqueController@nf_entrada_salva')->middleware('auth');
+Route::post('novo/nf-entrada/{id}', 'EstoqueController@nf_entrada_atualiza')->middleware('auth');
 
 Route::get('lista/produtos/selecionar', 'EstoqueController@produto_selecionar')->middleware('auth');
 Route::get('lista/produtos', 'EstoqueController@produto_index')->middleware('auth');

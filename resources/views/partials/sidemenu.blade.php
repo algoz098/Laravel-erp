@@ -73,6 +73,7 @@
           @endif
           @if (isset($modulo_estoques) and $modulo_estoques=="1")
             @sidemenuItem(lista*estoques*fa-bell*Estoque)
+            <li class="pushy-link "><a class="{{{ Request::path()=='lista/nf-entrada' ? "active" : "" }}}" href="{{ url('lista/nf-entrada') }}"><i class="fa fa-bell-o"></i> NF Entradas</a></li>
           @endif
           <li class="pushy-link "><a class="{{{ Request::path()=='lista/produtos' ? "active" : "" }}}" href="{{ url('lista/produtos') }}"><i class="fa fa-bell-o"></i> Produtos</a></li>
           @if (isset($modulo_caixas) and $modulo_caixas=="1")

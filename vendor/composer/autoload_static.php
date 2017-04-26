@@ -463,6 +463,7 @@ class ComposerStaticIniteb7ed518eae24fc4a2b91da7f84bfb6b
         'ModifyEstoqueTable' => __DIR__ . '/../..' . '/database/migrations/2016_12_26_153252_modify_estoque_table.php',
         'ModifyTelefonesTable' => __DIR__ . '/../..' . '/database/migrations/2017_01_14_234852_modify_telefones_table.php',
         'ModifyUsersTable' => __DIR__ . '/../..' . '/database/migrations/2017_01_16_141414_modify_users_table.php',
+        'ObsParaNfentradasTable' => __DIR__ . '/../..' . '/database/migrations/2017_04_26_125446_obs_para_nfentradas_table.php',
         'PHPUnit\\Framework\\Assert' => __DIR__ . '/..' . '/phpunit/phpunit/src/ForwardCompatibility/Assert.php',
         'PHPUnit\\Framework\\BaseTestListener' => __DIR__ . '/..' . '/phpunit/phpunit/src/ForwardCompatibility/BaseTestListener.php',
         'PHPUnit\\Framework\\TestCase' => __DIR__ . '/..' . '/phpunit/phpunit/src/ForwardCompatibility/TestCase.php',
@@ -925,6 +926,7 @@ class ComposerStaticIniteb7ed518eae24fc4a2b91da7f84bfb6b
         'SoftdeletesAtendimentosTable' => __DIR__ . '/../..' . '/database/migrations/2017_01_12_124249_softdeletes_atendimentos_table.php',
         'TestCase' => __DIR__ . '/../..' . '/tests/TestCase.php',
         'Text_Template' => __DIR__ . '/..' . '/phpunit/php-text-template/src/Template.php',
+        'TipoProdutosTable' => __DIR__ . '/../..' . '/database/migrations/2017_04_26_134802_tipo_produtos_table.php',
         'UserContasRelate' => __DIR__ . '/../..' . '/database/migrations/2017_03_05_171417_user_contas_relate.php',
     );
 

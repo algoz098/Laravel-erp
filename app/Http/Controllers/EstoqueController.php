@@ -7,6 +7,8 @@ use App\Contatos as Contatos;
 use App\Estoque as Estoque;
 use Carbon\Carbon;
 use App\Estoque_campos as Campos;
+use App\Nf_entradas as nf_entradas;
+use App\Nf_produtos as nf_produtos;
 use App\Produtos as Produtos;
 use App\Produtos_grupos as Grupos;
 use App\Produtos_tipos as Tipos;
@@ -47,6 +49,27 @@ class EstoqueController  extends BaseController
     Log::info('Criando novo estoque, para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
     return view('estoque.novo')->with('contatos', $contatos);
   }
+
+  public function nf_entrada_lista()
+  {
+    if (!isset(Auth::user()->perms["estoques"]["leitura"]) or Auth::user()->perms["estoques"]["leitura"]!=1){
+      return redirect()->action('HomeController@index')
+                       ->withErrors([__('messages.perms.leitura')]);
+    }
+    Log::info('Criando novo estoque, para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
+    return view('estoque.nf.index');
+  }
+  public function nf_entrada_busca(request $request)
+  {
+    if (!isset(Auth::user()->perms["estoques"]["leitura"]) or Auth::user()->perms["estoques"]["leitura"]!=1){
+      return redirect()->action('HomeController@index')
+                       ->withErrors([__('messages.perms.leitura')]);
+    }
+    $nfs = nf_entradas::all();
+
+    Log::info('Criando novo estoque, para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
+    return view('estoque.nf.lista')->with('nfs', $nfs);
+  }
   public function nf_entrada()
   {
     if (!isset(Auth::user()->perms["estoques"]["adicao"]) or Auth::user()->perms["estoques"]["adicao"]!=1){
@@ -55,6 +78,114 @@ class EstoqueController  extends BaseController
     }
     Log::info('Criando novo estoque, para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
     return view('estoque.nf.entrada');
+  }
+  public function nf_entrada_editar($id)
+  {
+    if (!isset(Auth::user()->perms["estoques"]["adicao"]) or Auth::user()->perms["estoques"]["adicao"]!=1){
+      return redirect()->action('HomeController@index')
+                       ->withErrors([__('messages.perms.adicao')]);
+    }
+    $nf = nf_entradas::find($id);
+    Log::info('Criando novo estoque, para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
+    return view('estoque.nf.entrada')->with('nf', $nf);
+  }
+  public function nf_entrada_salva(request $request )
+  {
+    if (!isset(Auth::user()->perms["estoques"]["adicao"]) or Auth::user()->perms["estoques"]["adicao"]!=1){
+      return redirect()->action('HomeController@index')
+                       ->withErrors([__('messages.perms.adicao')]);
+    }
+    $nf = new nf_entradas;
+    $nf->filiais_id = $request->filiais_id;
+    $nf->fornecedor_id = $request->contatos_id;
+    $nf->numero = $request->numero_nota;
+    $nf->total = $request->total_nota;
+    $nf->frete = $request->frete_nota;
+    $nf->transportadora = $request->transportadora;
+    $nf->seguro = $request->seguro;
+    $nf->icms = $request->icms_substituicao;
+    $nf->acrescimo = $request->acrescimo;
+    $nf->desconto = $request->desconto;
+    $nf->obs = $request->obs;
+    $nf->criado_por = Auth::user()->contato->id;
+    $nf->save();
+    foreach ($request->nota_produto_id as $key => $produto_id) {
+      $nfp = new nf_produtos;
+      $nfp->notas_id = $nf->id;
+      $nfp->produtos_id = $request->nota_produto_id[$key];
+      $nfp->ncm = $request->ncmNota[$key];
+      $nfp->quantidade = $request->qtdNota[$key];
+      $nfp->tipo = $request->tipoNota[$key];
+      $nfp->valor = $request->valorUniNota[$key];
+      $nfp->icms = $request->IcmsUniNota[$key];
+      $nfp->ipi = $request->IpiUniNota[$key];
+      $nfp->total_icms = $request->IcmsTotalNota[$key];
+      $nfp->total_ipi = $request->IpiTotalNota[$key];
+      $nfp->total = $request->valorTotalNota[$key];
+      $nfp->save();
+
+      $estoque = $nf->filial->estoque->where('produtos_id', $nfp->produto->id)->first();
+      if (is_null($estoque)){
+        $estoque = new Estoque;
+        $estoque->contatos_id = $nf->filial->id;
+        $estoque->produtos_id = $nfp->id;
+      }
+      $estoque->quantidade = $estoque->quantidade+$nfp->quantidade;
+      $estoque->save();
+
+    }
+
+    Log::info('Criando novo estoque, para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
+    return view('estoque.nf.index');
+  }
+  public function nf_entrada_atualiza($id, request $request )
+  {
+    if (!isset(Auth::user()->perms["estoques"]["adicao"]) or Auth::user()->perms["estoques"]["adicao"]!=1){
+      return redirect()->action('HomeController@index')
+                       ->withErrors([__('messages.perms.adicao')]);
+    }
+    $nf = nf_entradas::find($id);
+    $nf->filiais_id = $request->filiais_id;
+    $nf->fornecedor_id = $request->contatos_id;
+    $nf->numero = $request->numero_nota;
+    $nf->total = $request->total_nota;
+    $nf->frete = $request->frete_nota;
+    $nf->transportadora = $request->transportadora;
+    $nf->seguro = $request->seguro;
+    $nf->icms = $request->icms_substituicao;
+    $nf->acrescimo = $request->acrescimo;
+    $nf->desconto = $request->desconto;
+    $nf->obs = $request->obs;
+    $nf->criado_por = Auth::user()->contato->id;
+    $nf->save();
+    foreach ($request->nota_produto_id as $key => $produto_id) {
+      $nfp = new nf_produtos;
+      $nfp->notas_id = $nf->id;
+      $nfp->produtos_id = $request->nota_produto_id[$key];
+      $nfp->ncm = $request->ncmNota[$key];
+      $nfp->quantidade = $request->qtdNota[$key];
+      $nfp->tipo = $request->tipoNota[$key];
+      $nfp->valor = $request->valorUniNota[$key];
+      $nfp->icms = $request->IcmsUniNota[$key];
+      $nfp->ipi = $request->IpiUniNota[$key];
+      $nfp->total_icms = $request->IcmsTotalNota[$key];
+      $nfp->total_ipi = $request->IpiTotalNota[$key];
+      $nfp->total = $request->valorTotalNota[$key];
+      $nfp->save();
+
+      $estoque = $nf->filial->estoque->where('produtos_id', $nfp->produto->id)->first();
+      if (is_null($estoque)){
+        $estoque = new Estoque;
+        $estoque->contatos_id = $nf->filial->id;
+        $estoque->produtos_id = $nfp->id;
+      }
+      $estoque->quantidade = $estoque->quantidade+$nfp->quantidade;
+      $estoque->save();
+
+    }
+
+    Log::info('Criando novo estoque, para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
+    return view('estoque.nf.index');
   }
   public function detalhes($id)
   {
