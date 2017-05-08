@@ -15,7 +15,7 @@
 @foreach($tipos as $key => $tipo)
   <div class="row list-contacts">
     <div class="col-md-1">
-      <a data-toggle="tooltip" title="Selecionar" class="btn btn-info btn-xs" onclick="selectRow({{$tipo->id}}) , retornarEsta({{$tipo->id}}, '{{$tipo->nome}}')">
+      <a data-toggle="tooltip" title="Selecionar" class="btn btn-info btn-xs" onclick="selectRow({{$tipo->id}}) , retornarEsta({{$tipo->id}}, '{{$tipo->grupo->nome}}/{{$tipo->nome}}')">
         <i data-toggle="tooltip" title="Selecionar" class="fa fa-sign-out"></i>
       </a>
       <a  data-toggle="tooltip" title="Editar" class="btn btn-info btn-xs" onclick="editarTipo({{$tipo->id}})">

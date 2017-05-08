@@ -279,7 +279,7 @@ class AppServiceProvider extends ServiceProvider
           list($id, $nome) = explode('*', $a);
           return "<?php echo '
             <div class=\"form-group\">
-              <label for=\"por\">Escolhe produto:</label>
+              <label for=\"por\">Escolhe grupo:</label>
               <div class=\"input-group\">
                 <input type=\"hidden\" class=\"form-control\" id=\"grupoHidden\" name=\"produtos_grupos_id\" value=\"'.$id.'\">
                 <input type=\"text\" class=\"form-control\" id=\"grupo\" disabled value=\"'.$nome.'\">

@@ -239,7 +239,7 @@ class AdminController  extends BaseController
         $user->contatos_id = $id;
         $user->perms = "{}";
       }
-      $user->user = $request->email;
+      $user->email = $request->email;
       $user->password = bcrypt($request->password);
       $user->ativo = $request->ativo;
       $user->trabalho_id = $request->filial;

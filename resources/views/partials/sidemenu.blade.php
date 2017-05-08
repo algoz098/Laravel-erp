@@ -29,7 +29,7 @@
           @endif
           @if (isset($modulo_estoques) and $modulo_estoques=="1")
             @ifPerms(estoques*adicao)
-            @sidemenuItem(novo*estoques*fa-bell*Novo Produto)
+            <li class="pushy-link "><a class="{{{ Request::path()=='novo/produto' ? "active" : "" }}}" href="{{ url('novo/produto') }}"><i class="fa fa-bell-o"></i> Novo produto</a></li>
             <li class="pushy-link "><a class="{{{ Request::path()=='novo/nf-entrada' ? "active" : "" }}}" href="{{ url('novo/nf-entrada') }}"><i class="fa fa-bell-o"></i> NF Entrada</a></li>
             @endPerms
           @endif

@@ -24,7 +24,7 @@
   </div>
 </div>
 <script>
-function selectRow(){}
+function selectRow(){};
 
 efetuarBusca("{{url('lista/produtos')}}", 'Produtos');
 function novoProduto(){

@@ -528,7 +528,7 @@ class EstoqueController  extends BaseController
     $produto->qtd_minima = $request->minimo;
     $produto->qtd_maxima = $request->maximo;
     $produto->estado = $request->estado;
-    $produto->ncm = $request->ncm;
+    // $produto->ncm = $request->ncm;
     $produto->peso = $request->peso;
     $produto->aplicacao = $request->aplicacao;
     $produto->estado = $request->estado;
@@ -615,7 +615,7 @@ class EstoqueController  extends BaseController
     $produto->qtd_minima = $request->minimo;
     $produto->qtd_maxima = $request->maximo;
     $produto->estado = $request->estado;
-    $produto->ncm = $request->ncm;
+    // $produto->ncm = $request->ncm;
     $produto->peso = $request->peso;
     $produto->aplicacao = $request->aplicacao;
     $produto->save();

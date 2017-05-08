@@ -10,23 +10,22 @@
 
   var height = $(window).height()-200;
 
-  @if (!isset($retornarEstaLocal))
-    function retornarEsta(id, nome) {
-      if (($("#modal2").data('bs.modal') || {}).isShown) {
-        window.contatos_id2 = id;
-        window.contatos_nome2 = nome;
-        console.log(window.contatos_id2, window.contatos_nome2);
-        $('#modal2').modal('toggle');
-      } else{
-        if (($("#modal").data('bs.modal') || {}).isShown) {
-          window.contatos_id = id;
-          window.contatos_nome = nome;
-          $('#modal').modal('toggle');
-          console.log(window.contatos_id, window.contatos_nome);
-        }
+  function retornarEsta(id, nome) {
+    console.log('retornar esta: ID: '+id+', nome: '+nome);
+    if (($("#modal2").data('bs.modal') || {}).isShown) {
+      window.contatos_id2 = id;
+      window.contatos_nome2 = nome;
+      console.log(window.contatos_id2, window.contatos_nome2);
+      $('#modal2').modal('toggle');
+    } else{
+      if (($("#modal").data('bs.modal') || {}).isShown) {
+        window.contatos_id = id;
+        window.contatos_nome = nome;
+        $('#modal').modal('toggle');
+        console.log(window.contatos_id, window.contatos_nome);
       }
-    };
-  @endif
+    }
+  };
 
   $(document).ready( function (){
     tinymce.init({
@@ -110,6 +109,7 @@
   });
   function openModal(url){
     if (($("#modal").data('bs.modal') || {}).isShown) {
+      console.log("openModal: abrindoo MODAL2");
       $("#modal2").modal('show');
       $( "#moda2").html();
       $.ajax({
@@ -117,15 +117,13 @@
         url: url,
         success: function( data ) {
           $( "#modal2" ).html( data );
-          $('.colocar-rolagem').css({'max-height': height});
-
         },
         error: function(xhr, status, error) {
           $("#modal2").modal('hide');
-          $('.colocar-rolagem').css({'max-height': height});
         }
       });
     } else {
+      console.log("openModal: abrindoo MODAL");
       $("#modal").modal('show');
       $( "#modal").html();
       $.ajax({
@@ -174,15 +172,17 @@
     }
   });*/
   $('#modal').on("hidden.bs.modal", function (e) {
+    console.log("Fechando #modal");
     if (typeof activeTarget != 'undefined'){
       $('#'+activeTarget+'Hidden').val(window.contatos_id);
       $('#'+activeTarget).val(window.contatos_nome);
     }
   });
   $('#modal2').on("hidden.bs.modal", function (e) {
+    console.log("Fechando #modal2");
     if (typeof activeTarget != 'undefined'){
-      $('#'+activeTarget+'Hidden').val(window.contatos_id2);
-      $('#'+activeTarget).val(window.contatos_nome2);
+      $('#modal').find('#'+activeTarget+'Hidden').val(window.contatos_id2);
+      $('#modal').find('#'+activeTarget).val(window.contatos_nome2);
     }
   });
 

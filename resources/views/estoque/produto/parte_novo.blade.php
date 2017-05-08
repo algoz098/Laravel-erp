@@ -12,7 +12,7 @@
   <div class="col-md-3">
     @if(isset($produto))
      @campoTexto(Codigo*nome*$produto->nome)
-     @selecionaProdutoGrupo($produto->tipos->id*$produto->tipos->nome)
+     @selecionaProdutoGrupo($produto->tipos->id*$produto->tipos->grupo->nome." -> ".$produto->tipos->nome)
      @selecionaContato(Seleciona Fabricante*$produto->fabricante->id*$produto->fabricante->nome)
    @else
      @campoTexto(Codigo*nome*)
@@ -60,13 +60,6 @@
      @else
        @campoTexto(Local armazenagem*armazenagem*)
      @endif
-  </div>
-  <div class="col-md-3 pull-right">
-    @if(isset($produto))
-      @campoTexto(NCM*ncm*$produto->ncm)
-    @else
-      @campoTexto(NCM*ncm*)
-    @endif
   </div>
 </div>
 <div class="panel panel-default">
@@ -170,7 +163,7 @@
   <div class="panel-heading">
     <h3 class="panel-title">Semelhantes internos</h3>
   </div>
-  <div class="panel-body">
+  <div class="panel-body" id="semelhantesHolderLinhas">
     <div class="row">
       <div class="col-md-2 pull-right">
         <a class="btn btn-danger" onclick="removeSemelhante()">
@@ -335,6 +328,12 @@
   </span>
   </script>
 <script>
+$(document).ready(function(){
+    if (($("#modal").data('bs.modal') || {}).isShown) {
+      $("#semelhantesHolderLinhas").html("<p>DESABILITADO EM MODAL</P>");
+    }
+})
+
 function calculaVenda(){
   var custo = parseFloat($('#custo').val());
   var margem = parseFloat($('#margem').val());

@@ -24,20 +24,13 @@
                 <div class=" form-inline col-md-2 col-xs-2 text-left">
                   @idSelecionado
                 </div>
-                <div class="col-xs-2 hidden-md">
-                  <a class="btn btn-warning" role="button" data-toggle="collapse" href=".collapse-mobile">
-                    <i class="fa fa-search"></i>
-                  </a>
-                </div>
               </div>
             </div>
             <div class="col-md-6 col-xs-12 collapse-mobile" data-toggle="collapse">
               <div class="form-group form-inline text-center ">
                 {{ csrf_field() }}
                 @buscaSimples(lista/contatos*Contatos)
-                <div class="hidden-xs">
-                  @buscaExtraBotao
-                </div>
+                @buscaExtraBotao
               </div>
             </div>
             <div class="col-md-2 col-xs-12 pull-right collapse-mobile" data-toggle="collapse">

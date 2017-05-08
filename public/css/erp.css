@@ -123,6 +123,11 @@ body {
   overflow-x: hidden;
   max-height: 250px;
 }
+.modal-body{
+  overflow-y: auto;
+  overflow-x: hidden;
+  max-height: 500px;
+}
 .carregando > *{
   opacity: 0.45;
 

@@ -31,7 +31,9 @@
   </div>
 </div>
 <script>
-function selectRow(){};
+function selectRow(){
+  console.log("Select Row");
+};
 $(document).ready(function(){
   efetuarBusca("{{ url('lista/contatos') }}", "Contatos");
   $('#busca').focus();

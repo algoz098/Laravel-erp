@@ -844,6 +844,7 @@ class ComposerStaticIniteb7ed518eae24fc4a2b91da7f84bfb6b
         'PHP_Token_YIELD_FROM' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
         'RelateBancosContatosTable' => __DIR__ . '/../..' . '/database/migrations/2017_03_07_093300_relate_bancos_contatos_table.php',
         'RelateBancosContatosTable2' => __DIR__ . '/../..' . '/database/migrations/2017_03_07_094642_relate_bancos_contatos_table2.php',
+        'RemoverNcmProdutosTable' => __DIR__ . '/../..' . '/database/migrations/2017_05_08_103232_remover_ncm_produtos_table.php',
         'SebastianBergmann\\CodeCoverage\\CodeCoverage' => __DIR__ . '/..' . '/phpunit/php-code-coverage/src/CodeCoverage.php',
         'SebastianBergmann\\CodeCoverage\\CoveredCodeNotExecutedException' => __DIR__ . '/..' . '/phpunit/php-code-coverage/src/Exception/CoveredCodeNotExecutedException.php',
         'SebastianBergmann\\CodeCoverage\\Driver\\Driver' => __DIR__ . '/..' . '/phpunit/php-code-coverage/src/Driver/Driver.php',
