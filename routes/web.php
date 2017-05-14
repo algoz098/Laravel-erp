@@ -101,6 +101,8 @@ Route::post('novo/estoques/{id}', 'EstoqueController@edit_save')->middleware('au
 Route::get('novo/estoques', 'EstoqueController@novo')->middleware('auth');
 Route::post('novo/estoques', 'EstoqueController@save')->middleware('auth');
 
+Route::get('lista/nf-entrada/{id}/delete', 'EstoqueController@nf_entrada_delete')->middleware('auth');
+Route::get('lista/nf-entrada/{id}', 'EstoqueController@nf_entrada_detalhes')->middleware('auth');
 Route::get('lista/nf-entrada', 'EstoqueController@nf_entrada_lista')->middleware('auth');
 Route::post('lista/nf-entrada', 'EstoqueController@nf_entrada_busca')->middleware('auth');
 

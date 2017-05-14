@@ -5,7 +5,7 @@
     <div class="col-md-12">
       <div class="panel panel-default">
         <div class="panel-heading ">
-          <i class="fa fa-bell-o fa-1x"></i> Estoques
+          <i class="fa fa-bell-o fa-1x"></i> Lista de NFs de entrada
         </div>
         <div class="panel-body">
           <div class="row" id="secondNavbar">
@@ -47,7 +47,7 @@
     function selectRow(id){
       window.id_attach_form = id;
       $("#ids").val(id);
-      //$("#botaoDelete").attr('href', '{{ url('lista/nf-entrada') }}/'+id+'/delete/');
+      $("#botaoDelete").attr('href', '{{ url('lista/nf-entrada') }}/'+id+'/delete/');
       $("#botaoDetalhes").attr('onclick', 'openModal("{{ url('lista/nf-entrada') }}/'+id+'")');
       $("#botaoEditar").attr('href', '{{ url('novo/nf-entrada') }}/'+id);
     }

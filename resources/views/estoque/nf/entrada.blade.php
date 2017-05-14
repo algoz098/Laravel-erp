@@ -154,12 +154,13 @@ use Carbon\Carbon;
                             <div class="form-inline">
                               <strong>
                                 <span id="linhaNumeroProduto">{{$key+1}}</span>
+                                <input type="hidden" name="nfp_id[{{$key}}]" value="{{$nfp->id}}">
                               </strong>
                               <div class="form-group">
                                 <div class="input-group">
-                                  <input type="hidden" class="form-control" id="nota_produtoHidden" name="nota_produto_id[{{$key}}]" value="{{$nfp->produto->id}}">
-                                  <input type="text" class="form-control input-sm" id="nota_produto" value="{{$nfp->produto->nome}}" disabled>
-                                  <span id ="nota_produtoBotao" onclick="window.activeTarget='nota_produto'; openModal('{{url('lista/produtos/selecionar')}}')" class=" btn btn-info  input-sm input-group-addon">
+                                  <input type="hidden" class="form-control" id="nota_produtoEditarHidden" name="nota_produto_idEditar[{{$key}}]" value="{{$nfp->produto->id}}">
+                                  <input type="text" class="form-control input-sm" id="nota_produtoEditar" value="{{$nfp->produto->nome}}" disabled>
+                                  <span id ="nota_produtoBotao" onclick="window.activeTarget='nota_produtoEditar'; openModal('{{url('lista/produtos/selecionar')}}')" class=" btn btn-info  input-sm input-group-addon">
                                     <i class="fa fa-gear"></i>
                                   </span>
                                 </div>
@@ -167,10 +168,10 @@ use Carbon\Carbon;
                             </div>
                           </div>
                           <div class="col-md-2">
-                            <input type="text" class="form-control input-sm" id="ncmNota" name="ncmNota[{{$key}}]" value="{{$nfp->ncm}}">
+                            <input type="text" class="form-control input-sm" id="ncmNota" name="ncmNotaEditar[{{$key}}]" value="{{$nfp->ncm}}">
                           </div>
                           <div class="col-md-1">
-                            <select id="tipoNota" name="tipoNota[{{$key}}]" class="input-sm form-control">
+                            <select id="tipoNota" name="tipoNotaEditar[{{$key}}]" class="input-sm form-control">
                               <option value="{{$nfp->tipo}}" selected>{{$nfp->tipo}} (atual)</option>
                               <option value="Conjunto">Conj</option>
                               <option value="Fardo">Frd</option>
@@ -183,25 +184,25 @@ use Carbon\Carbon;
                             </select>
                           </div>
                           <div class="col-md-1">
-                            <input type="text" class="form-control input-sm maskMoney" id="qtdNota" name="qtdNota[{{$key}}]" value="{{$nfp->quantidade}}" onchange="cacularLinha({{$key}})">
+                            <input type="text" class="form-control input-sm maskMoney" id="qtdNota{{$key}}" name="qtdNotaEditar[{{$key}}]" value="{{$nfp->quantidade}}" onchange="cacularLinha({{$key}})">
                           </div>
                           <div class="col-md-1">
-                            <input type="text" class="form-control input-sm real-mask" id="valorUniNota" name="valorUniNota[{{$key}}]" value="{{$nfp->valor}}" onchange="cacularLinha({{$key}})">
+                            <input type="text" class="form-control input-sm real-mask" id="valorUniNota{{$key}}" name="valorUniNotaEditar[{{$key}}]" value="{{$nfp->valor}}" onchange="cacularLinha({{$key}})">
                           </div>
                           <div class="col-md-1">
-                            <input type="text" class="form-control input-sm maskMoney" id="IcmsUniNota" name="IcmsUniNota[{{$key}}]" value="{{$nfp->icms}}" onchange="cacularLinha({{$key}})">
+                            <input type="text" class="form-control input-sm maskMoney" id="IcmsUniNota{{$key}}" name="IcmsUniNotaEditar[{{$key}}]" value="{{$nfp->icms}}" onchange="cacularLinha({{$key}})">
                           </div>
                           <div class="col-md-1">
-                            <input type="text" class="form-control input-sm maskMoney" id="IpiUniNota" name="IpiUniNota[{{$key}}]" value="{{$nfp->ipi}}" onchange="cacularLinha({{$key}})">
+                            <input type="text" class="form-control input-sm maskMoney" id="IpiUniNota{{$key}}" name="IpiUniNotaEditar[{{$key}}]" value="{{$nfp->ipi}}" onchange="cacularLinha({{$key}})">
                           </div>
                           <div class="col-md-1">
-                            <input type="text" class="form-control input-sm maskMoney" id="valorTotalNota" name="valorTotalNota[{{$key}}]" value="{{$nfp->total}}" readonly>
+                            <input type="text" class="form-control input-sm maskMoney" id="valorTotalNota{{$key}}" name="valorTotalNotaEditar[{{$key}}]" value="{{$nfp->total}}" readonly>
                           </div>
                           <div class="col-md-1">
-                            <input type="text" class="form-control input-sm maskMoney" id="IcmsTotalNota" name="IcmsTotalNota[{{$key}}]" value="{{$nfp->total_icms}}" readonly>
+                            <input type="text" class="form-control input-sm maskMoney" id="IcmsTotalNota{{$key}}" name="IcmsTotalNotaEditar[{{$key}}]" value="{{$nfp->total_icms}}" readonly>
                           </div>
                           <div class="col-md-1">
-                            <input type="text" class="form-control input-sm maskMoney" id="IpiTotalNota" name="IpiTotalNota[{{$key}}]" value="{{$nfp->total_ipi}}" readonly>
+                            <input type="text" class="form-control input-sm maskMoney" id="IpiTotalNota{{$key}}" name="IpiTotalNotaEditar[{{$key}}]" value="{{$nfp->total_ipi}}" readonly>
                           </div>
                         </div>
                         @endforeach
@@ -261,50 +262,70 @@ use Carbon\Carbon;
 <script>
 <?php $retornarEstaLocal = 1; ?>
 $(document).ready(function(){
-  // $('button[type="submit"]').addClass('disabled');
-  // $('#icms_substituicao').prop('readonly', 'true');
-  // $('button[type="submit"]').attr('data-toggle', 'tooltip');
-  // $('button[type="submit"]').attr('title', 'Verificar os dados da nota');
-  // $('button[type="submit"]').attr('data-placement', 'bottom');
-  // $("form").submit(function(e){
-  //       e.preventDefault(verificarCamposNf());
-  //   });
-});
-function verificarCamposNf(){
-  var totalNota = parseFloat($("#total_nota").val());
-  if(typeof totalNota === "undefined"){
-    $("#total_nota").parent().parent().addClass('has-error');
-  }
-  if(totalNota>0){
-    $("#total_nota").parent().parent().removeClass('has-error');
-  } else {
-    $("#total_nota").parent().parent().addClass('has-error');
-  }
-  var freteNota = parseFloat($("#frete_nota").val());
-  var transportadora = parseFloat($("#transportadora").val());
-  var icmsSubstituicao = parseFloat($("#icms_substituicao").val());
-  var icmsProdutos = parseFloat($("#icmsTotal").val());
-  if (icmsSubstituicao != icmsProdutos) {
-    $.toaster({ message : 'O total de ICMS e o ICMS dos produtos não bate.', title : 'Cuidado', priority : 'warning' , settings : {'timeout' : 3000,}});
-    $("#icms_substituicao").parent().parent().addClass('has-error');
-  } else {
-    $("#icms_substituicao").parent().parent().removeClass('has-error');
-  }
-  var acrescimo = parseFloat($("#acrescimo").val());
-  var desconto = parseFloat($("#desconto").val());
-  var totalProdutos = parseFloat($("#total").val());
-  if(window.e <= 0){
-    $.toaster({ message : 'A nota precisa de produtos.', title : 'Epa', priority : 'danger' , settings : {'timeout' : 3000,}});
-  } else {
-    if(typeof totalProdutos === "undefined"){
-      $.toaster({ message : 'Não tem total do valor dos produtos.', title : 'Epa', priority : 'danger' , settings : {'timeout' : 3000,}});
-    }
-    if (totalProdutos<0){
-      $.toaster({ message : 'Não tem total do valor dos produtos.', title : 'Epa', priority : 'danger' , settings : {'timeout' : 3000,}});
-    }
-  }
+  @if (!isset($nf))
+    $('#frete_nota').val('0');
+    $('#transportadora').val('0');
+    $('#seguro').val('0');
+    $('#icms_substituicao').val('0');
+    $('#acrescimo').val('0');
+    $('#desconto').val('0');
+  @else
+    calcularLinha({{$nf->count()}});
+    // window.e="{{$nf->count()}}";
+  @endif
+  $('#frete_nota').attr('onchange', 'calcularLinha("1")');
+  $('#transportadora').attr('onchange', 'calcularLinha("1")');
+  $('#seguro').attr('onchange', 'calcularLinha("1")');
+  $('#icms_substituicao').attr('onchange', 'calcularLinha("1")');
+  $('#acrescimo').attr('onchange', 'calcularLinha("1")');
+  $('#desconto').attr('onchange', 'calcularLinha("1")');
 
-};
+  $("form").submit(function(e){
+    var totalDig = parseFloat($('#total_nota').val());
+    var totalCalc = parseFloat($('#totalNotaVerificar').val());
+    if (totalDig != totalCalc) {
+      e.preventDefault();
+      $.toaster({ message : 'Valor total da nota com valores informados incorreto.', title : 'Cuidado', priority : 'danger' , settings : {'timeout' : 3000,}});
+
+    }
+  });
+});
+
+// function verificarCamposNf(){
+//   var totalNota = parseFloat($("#total_nota").val());
+//   if(typeof totalNota === "undefined"){
+//     $("#total_nota").parent().parent().addClass('has-error');
+//   }
+//   if(totalNota>0){
+//     $("#total_nota").parent().parent().removeClass('has-error');
+//   } else {
+//     $("#total_nota").parent().parent().addClass('has-error');
+//   }
+//   var freteNota = parseFloat($("#frete_nota").val());
+//   var transportadora = parseFloat($("#transportadora").val());
+//   var icmsSubstituicao = parseFloat($("#icms_substituicao").val());
+//   var icmsProdutos = parseFloat($("#icmsTotal").val());
+//   if (icmsSubstituicao != icmsProdutos) {
+//     $.toaster({ message : 'O total de ICMS e o ICMS dos produtos não bate.', title : 'Cuidado', priority : 'warning' , settings : {'timeout' : 3000,}});
+//     $("#icms_substituicao").parent().parent().addClass('has-error');
+//   } else {
+//     $("#icms_substituicao").parent().parent().removeClass('has-error');
+//   }
+//   var acrescimo = parseFloat($("#acrescimo").val());
+//   var desconto = parseFloat($("#desconto").val());
+//   var totalProdutos = parseFloat($("#total").val());
+//   if(window.e <= 0){
+//     $.toaster({ message : 'A nota precisa de produtos.', title : 'Epa', priority : 'danger' , settings : {'timeout' : 3000,}});
+//   } else {
+//     if(typeof totalProdutos === "undefined"){
+//       $.toaster({ message : 'Não tem total do valor dos produtos.', title : 'Epa', priority : 'danger' , settings : {'timeout' : 3000,}});
+//     }
+//     if (totalProdutos<0){
+//       $.toaster({ message : 'Não tem total do valor dos produtos.', title : 'Epa', priority : 'danger' , settings : {'timeout' : 3000,}});
+//     }
+//   }
+// };
+
 function retornarEsta(id, nome, tipo, barras, ncm) {
   window.contatos_id = id;
   window.contatos_nome = nome;
@@ -315,11 +336,11 @@ function retornarEsta(id, nome, tipo, barras, ncm) {
 }
 function calcularLinha(linha){
   qtd = parseFloat($('#qtdNota'+linha).val());
-  valor = parseFloat($('#valorUniNota'+linha).val());
   icms = parseFloat($('#IcmsUniNota'+linha).val());
   ipi = parseFloat($('#IpiUniNota'+linha).val());
-  $('#valorTotalNota'+linha).val(qtd*valor);
+  valor = parseFloat($('#valorUniNota'+linha).val());
   total = parseFloat($('#valorTotalNota'+linha).val());
+  $('#valorTotalNota'+linha).val(qtd*valor);
   $('#IcmsTotalNota'+linha).val(total*(icms/100));
   $('#IpiTotalNota'+linha).val(total*(ipi/100));
   var esteContador = 0;
@@ -327,6 +348,7 @@ function calcularLinha(linha){
   var icms = 0;
   var ipi = 0;
   while (esteContador < window.e){
+    console.log("total: "+total+", estecontador:"+esteContador+", Elemento valorTotalNota: "+$('#valorTotalNota'+esteContador).val());
     var total = total+parseFloat($('#valorTotalNota'+esteContador).val());
     var icms = icms+parseFloat($('#IcmsTotalNota'+esteContador).val());
     var ipi = ipi+parseFloat($('#IpiTotalNota'+esteContador).val());
@@ -339,12 +361,8 @@ function calcularLinha(linha){
   transportadora = transportadora || 0;
   var seguro = parseFloat($('#seguro').val());
   seguro = seguro || 0;
-  console.log(frete+" "+transportadora+" "+seguro);
   var somatoria = frete+transportadora+custos;
-  console.log(somatoria);
   var custos = (frete+transportadora+custos)/window.e;
-  console.log(window.e);
-  console.log('custos > '+custos);
   custos = custos || 0;
   outroContador = 0
   while (outroContador < window.e){
@@ -352,11 +370,22 @@ function calcularLinha(linha){
     outroContador = outroContador+1;
   }
 
+  var frete_nota = parseFloat($('#frete_nota').val());
+  var transportadora = parseFloat($('#transportadora').val());
+  var seguro = parseFloat($('#seguro').val());
+  var icms_substituicao = parseFloat($('#icms_substituicao').val());
+  var acrescimo = parseFloat($('#acrescimo').val());
+  var desconto = parseFloat($('#desconto').val());
+
+  console.log("total: "+total+", ipi: "+ipi+", icms: "+icms+
+  ", frete: "+frete_nota+", transportadora: "+transportadora+", seguro: "+seguro+", icms_subs: "+icms_substituicao+
+   ", acrescimo: "+acrescimo+", desconto: "+desconto);
+
   $('#total').val(total);
   $('#ipiTotal').val(ipi);
   $('#icmsTotal').val(icms);
-  $('#icms_substituicao').val(icms);
-  $('#totalNotaVerificar').val(total+ipi+icms);
+  // $('#icms_substituicao').val(icms);
+  $('#totalNotaVerificar').val(total+frete_nota+seguro+icms_substituicao+acrescimo-desconto);
 };
 @if (isset($nf))
   window.e = {{$nf->nf_produtos->count()}};
