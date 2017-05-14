@@ -240,7 +240,9 @@ class ContatosController extends BaseController
       $apenas_filial = TRUE;
       $contatos = $matriz->merge($contatos);
     } else {
+      $contatos = $contatos->select('id', 'active', 'sociabilidade', 'nome', 'sobrenome', 'tipo', 'cpf', 'created_at');
       $contatos = $contatos->paginate(100);
+
       $apenas_filial = FALSE;
 
     }
@@ -254,12 +256,15 @@ class ContatosController extends BaseController
     $total= contatos::count();
     $comboboxes = comboboxes::where('combobox_textable_type', 'App\Relacionamento')->get();
 
-    return view('contatos.lista')->with('contatos', $contatos)->with('deletados', $deletados)
-    ->with('total', $total)
-    ->with('empresas', $empresas)
-    ->with('pessoas', $pessoas)
-    ->with('apenas_filial', $apenas_filial)
-    ->with('comboboxes', $comboboxes);
+
+    return $contatos;
+
+    // return view('contatos.lista')->with('contatos', $contatos)->with('deletados', $deletados)
+    // ->with('total', $total)
+    // ->with('empresas', $empresas)
+    // ->with('pessoas', $pessoas)
+    // ->with('apenas_filial', $apenas_filial)
+    // ->with('comboboxes', $comboboxes);
   }
   public function consulta_cpf(request $request)
   {

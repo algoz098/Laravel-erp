@@ -148,6 +148,11 @@ return array(
     //
     // To disable update checks entirely, set to 'never'.
     'updateCheck' => 'daily',
+
+    // Display an additional startup message. Default is ''.
+    // You can color and style the message thanks to the Symfony Console tags.
+    // See https://symfony.com/doc/current/console/coloring.html for more details.
+    'startupMessage' => sprintf('<info>%s</info>', shell_exec('uptime')),
 );
 ```
 
@@ -175,10 +180,12 @@ The PsySH `doc` command is great for documenting source code, but you'll need a 
 ## As Seen On…
 
  * Cake: [`cake console`](http://book.cakephp.org/3.0/en/console-and-shells/repl.html)
+ * CiviCRM: [`cv cli`](https://github.com/civicrm/cv)
  * Drupal: [`drush php`](http://drushcommands.com/drush-8x/core/core-cli/), [drush-psysh](https://github.com/grota/drush-psysh)
  * eZ Publish: [`ezsh`](https://github.com/lolautruche/ezsh)
+ * Grav: [`bin/plugin psysh shell`](https://github.com/akeif/grav-plugin-psysh)
  * Jupyter: [Jupyter-PHP](https://github.com/Litipk/Jupyter-PHP)
- * Laravel: [`artisan tinker`](https://github.com/laravel/framework/blob/5.0/src/Illuminate/Foundation/Console/TinkerCommand.php)
+ * Laravel: [`artisan tinker`](https://github.com/laravel/tinker)
  * Lumen: [`artisan tinker`](https://github.com/vluzrmos/lumen-tinker)
  * Magento: [`magerun console`](https://github.com/netz98/n98-magerun/blob/develop/src/N98/Magento/Command/Developer/ConsoleCommand.php)
  * Pantheon CLI: [`terminus cli console`](https://github.com/pantheon-systems/terminus)

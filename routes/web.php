@@ -15,6 +15,8 @@ Route::get('/', 'HomeController@index');
 
 Auth::routes();
 
+Route::get('/menus', 'BaseController@menus')->middleware('auth');
+
 Route::get('/home', 'HomeController@index')->middleware('auth');
 Route::get('/lista/contatos', 'ContatosController@show')->name('contatos')->middleware('auth');
 Route::post('/lista/contatos/cpf', 'ContatosController@consulta_cpf')->middleware('auth');
@@ -27,7 +29,7 @@ Route::post('/lista/contatos/selecionar/novo', 'ContatosController@selecionar_sa
 Route::post('lista/contatos', 'ContatosController@search')->middleware('auth');
 Route::get('lista/contatos/{id}/attachs', 'ContatosController@attachs_detalhes')->middleware('auth');
 Route::post('lista/contatos/{id}/attach', 'ContatosController@attach')->middleware('auth');
-Route::get('lista/contatos/delete/{id}', 'ContatosController@delete')->middleware('auth');
+Route::get('lista/contatos/{id}/delete/', 'ContatosController@delete')->middleware('auth');
 Route::get('lista/contatos/{id}', 'ContatosController@detalhes')->middleware('auth');
 Route::get('lista/contatos/{id}/telefones', 'ContatosController@telefones')->middleware('auth');
 Route::post('lista/contatos/{id}/telefones', 'ContatosController@telefones_new')->middleware('auth');
@@ -101,8 +103,6 @@ Route::post('novo/estoques/{id}', 'EstoqueController@edit_save')->middleware('au
 Route::get('novo/estoques', 'EstoqueController@novo')->middleware('auth');
 Route::post('novo/estoques', 'EstoqueController@save')->middleware('auth');
 
-Route::get('lista/nf-entrada/{id}/delete', 'EstoqueController@nf_entrada_delete')->middleware('auth');
-Route::get('lista/nf-entrada/{id}', 'EstoqueController@nf_entrada_detalhes')->middleware('auth');
 Route::get('lista/nf-entrada', 'EstoqueController@nf_entrada_lista')->middleware('auth');
 Route::post('lista/nf-entrada', 'EstoqueController@nf_entrada_busca')->middleware('auth');
 

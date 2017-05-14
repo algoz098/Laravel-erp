@@ -59,25 +59,13 @@ class EstoqueController  extends BaseController
     Log::info('Criando novo estoque, para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
     return view('estoque.nf.index');
   }
-
-  public function nf_entrada_detalhes($id)
-  {
-    if (!isset(Auth::user()->perms["estoques"]["leitura"]) or Auth::user()->perms["estoques"]["leitura"]!=1){
-      return redirect()->action('HomeController@index')
-                       ->withErrors([__('messages.perms.leitura')]);
-    }
-    $nf = nf_entradas::find($id);
-    Log::info('Criando novo estoque, para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
-    return view('estoque.nf.detalhes')->with('nf', $nf);
-  }
-
   public function nf_entrada_busca(request $request)
   {
     if (!isset(Auth::user()->perms["estoques"]["leitura"]) or Auth::user()->perms["estoques"]["leitura"]!=1){
       return redirect()->action('HomeController@index')
                        ->withErrors([__('messages.perms.leitura')]);
     }
-    $nfs = nf_entradas::orderBy('created_at', 'desc')->get();
+    $nfs = nf_entradas::all();
 
     Log::info('Criando novo estoque, para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
     return view('estoque.nf.lista')->with('nfs', $nfs);
@@ -150,25 +138,6 @@ class EstoqueController  extends BaseController
     Log::info('Criando novo estoque, para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
     return view('estoque.nf.index');
   }
-  public function nf_entrada_delete($id)
-  {
-    if (!isset(Auth::user()->perms["estoques"]["edicao"]) or Auth::user()->perms["estoques"]["edicao"]!=1){
-      return redirect()->action('HomeController@index')
-                       ->withErrors([__('messages.perms.edicao')]);
-    }
-    $nf = nf_entradas::find($id);
-    foreach ($nf->nf_produtos as $key => $produto) {
-      $produto->delete();
-      $estoque = $nf->filial->estoque->where('produtos_id', $produto->id)->first();
-      $estoque->delete();
-
-    }
-    $nf->delete();
-
-    Log::info('Criando novo estoque, para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
-    return view('estoque.nf.index');
-  }
-
   public function nf_entrada_atualiza($id, request $request )
   {
     if (!isset(Auth::user()->perms["estoques"]["adicao"]) or Auth::user()->perms["estoques"]["adicao"]!=1){
@@ -202,32 +171,6 @@ class EstoqueController  extends BaseController
       $nfp->total_icms = $request->IcmsTotalNota[$key];
       $nfp->total_ipi = $request->IpiTotalNota[$key];
       $nfp->total = $request->valorTotalNota[$key];
-      $nfp->save();
-
-      $estoque = $nf->filial->estoque->where('produtos_id', $nfp->produto->id)->first();
-      if (is_null($estoque)){
-        $estoque = new Estoque;
-        $estoque->contatos_id = $nf->filial->id;
-        $estoque->produtos_id = $nfp->id;
-      }
-      $estoque->quantidade = $estoque->quantidade+$nfp->quantidade;
-      $estoque->save();
-
-    }
-
-    foreach ($request->nota_produto_id as $key => $produto_id) {
-      $nfp = nf_produtos::find($request->nfp_id[$key]);
-      $nfp->notas_id = $nf->id;
-      $nfp->produtos_id = $request->nota_produto_idEditar[$key];
-      $nfp->ncm = $request->ncmNotaEditar[$key];
-      $nfp->quantidade = $request->qtdNotaEditar[$key];
-      $nfp->tipo = $request->tipoNotaEditar[$key];
-      $nfp->valor = $request->valorUniNotaEditar[$key];
-      $nfp->icms = $request->IcmsUniNotaEditar[$key];
-      $nfp->ipi = $request->IpiUniNotaEditar[$key];
-      $nfp->total_icms = $request->IcmsTotalNotaEditar[$key];
-      $nfp->total_ipi = $request->IpiTotalNotaEditar[$key];
-      $nfp->total = $request->valorTotalNotaEditar[$key];
       $nfp->save();
 
       $estoque = $nf->filial->estoque->where('produtos_id', $nfp->produto->id)->first();

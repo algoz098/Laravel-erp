@@ -1,0 +1,32 @@
+body{
+  background-color: #f5f8fa;
+}
+.navbar{
+  background-color: #fff;
+  border-bottom: 1px solid #efefef;
+}
+.container-fluid{
+  margin-top: 1em;
+}
+.level5{
+  color: blue;
+}
+.level4{
+  color: green;
+}
+.level3{
+  color: yellow;
+}
+.level2{
+  color: orange;
+}
+.level1{
+  color: red;
+}
+
+.listagem:hover, .listagem:nth-of-type(even):hover{
+  background-color: #efefef;
+}
+.listagem:nth-of-type(even) {
+    background-color: rgba(0,0,0,.02);
+}

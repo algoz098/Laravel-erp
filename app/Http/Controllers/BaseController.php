@@ -3,10 +3,10 @@
 use View;
 use Auth;
 use ErpSnippets;
-use App\Erp_configs as Configs;
+use Config;
 
+use App\Erp_configs as Configs;
 use App\Attachments as Attachs;
-//You can create a BaseController:
 
 class BaseController extends Controller {
     #public $variable1 = "I am Data";
@@ -39,6 +39,47 @@ class BaseController extends Controller {
       View::share ( 'modulo_frotas', $modulo_frotas );
       View::share ( 'modulo_bancos', $modulo_bancos );
 
+    }
+
+    public function menus(){
+      $resposta = [];
+
+      $menu = [];
+      $modulos = ['contatos', 'atendimentos', 'contas', 'bancos', 'tickets', 'caixas', 'vendas', 'estoques', 'frotas'];
+      $niveis = ['adicao', 'edicao', 'leitura'];
+
+      foreach ($modulos as $key => $modulo) {
+        foreach ($niveis as $key2 => $nivel) {
+          if (isset(Auth::user()->perms[$modulo][$nivel]) or Auth::user()->perms[$modulo][$nivel]==1){
+            if($nivel='adicao'){
+              $menu['Novo'][$modulo] = 'novo/'.$modulo;
+            }
+            if($nivel='edicao'){
+              $menu[$nivel][$modulo] = 'edicao/'.$modulo;
+            }
+            if($nivel='leitura'){
+              $menu['Lista'][$modulo] = 'lista/'.$modulo.'/';
+            }
+          }
+        }
+      }
+
+      if (isset(Auth::user()->perms["admin"]) and Auth::user()->perms["admin"]==1){
+        $menu['admin']['Controle de Úsuario'] = 'admin';
+        $menu['admin']['Configurações'] = 'admin/config';
+        $menu['admin']['Atualização'] = 'admin/update';
+        $menu['admin']['Backup'] = 'admin/backup';
+        $menu['admin']['Logs'] = 'admin/logs';
+
+        $menu['Combobox']['Painel'] = 'admin/combobox';
+        $menu['Combobox']['Tipo de telefones'] = 'novo/combobox/telefone';
+
+      }
+      $resposta['menu'] = $menu;
+
+      $resposta['erp_nome'] =  Config::get('app.name');
+
+      return $resposta;
     }
 
 }

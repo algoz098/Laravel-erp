@@ -1,40 +1,42 @@
-<nav class="navbar navbar-default navbar-fixed-top">
+  <b-navbar toggleable type="light" variant="light" toggleable sticky="true">
+
+    <b-nav-toggle label=" oi" target="nav_collapse"></b-nav-toggle>
+
+    <b-link class="navbar-brand" to="/">
+      <span>@{{erpDono}}</span>
+    </b-link>
+
+    <b-collapse is-nav id="nav_collapse">
+
+      <b-nav is-nav-bar>
+
+        {{-- <b-nav-item v-if="menus.admin" :href="base_url + 'admin'">Administrator</b-nav-item> --}}
+
+        <b-nav is-nav-bar>
+          <b-nav-item-dropdown v-if='index!="edicao"' :text="index | capitalize"v-for='(menu,index) in menus' left-alignment :key="menu.index">
+            <b-dropdown-item v-for="(acao, index2) in menu" :to="'/' + acao"  :key="menu.index">@{{index2 | capitalize}}</b-dropdown-item>
+          </b-nav-item-dropdown>
+        </b-nav>
+
+      </b-nav>
+
+
+      <b-nav is-nav-bar class="ml-auto">
+
+        <b-nav-item-dropdown right-alignment>
+
+          <!-- Using text slot -->
+          <template slot="text">
+            <span style="font-weight: bold;">Olá, {{explode(' ', Auth::user()->contato->nome, 2)[0]}}</span>
+          </template>
+
+          <b-dropdown-item @click=""><template><span @click="deslogar">Sair</span></template></b-dropdown-item>
+        </b-nav-item-dropdown>
+
+      </b-nav>
+    </b-collapse>
+  </b-navbar>
+
   <div class="container-fluid">
-    <div class="navbar-header">
-       <div class="menu-btn navbar-brand">
-         <i class="fa fa-bars ajuda-popover"
-           data-content="Clique aqui para o menu"
-           data-placement="right"></i>
-       </div>
-     </div>
-         <ul class="nav navbar-nav navbar-right hidden-xs hidden-sm">
-           <li>
-             <a class="navbar-brand" id="mostrarAjuda" href="#"><i class="fa fa-question fa-1x"></i></a>
-           </li>
-           <li><a href="#">Olá, {{explode(' ', Auth::user()->contato->nome, 2)[0]}}</a></li>
-           <li class="dropdown">
-             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-               <i class="fa fa-cog ajuda-popover"
-                  data-content="Opções da sua conta"
-                  data-placement="botton"
-                  ></i> Opções <span class="caret"></span>
-             </a>
-             <ul class="dropdown-menu">
-               <li><a href="{{ url('/logout') }}"
-                   onclick="event.preventDefault();
-                            document.getElementById('logout-form').submit();">Sair</a></li>
-               <li role="separator" class="divider"></li>
-               <li><a href="#">Another action</a></li>
-               <li><a href="#">Something else here</a></li>
-               <li><a href="#">Separated link</a></li>
-               <form id="logout-form" action="{{ url('/logout') }}" method="POST" style="display: none;">
-                   {{ csrf_field() }}
-               </form>
-             </ul>
-           </li>
-         </ul>
-       </div><!-- /.navbar-collapse -->
-     </div><!-- /.container-fluid -->
-    </div>
+    <router-view></router-view>
   </div>
-</div>

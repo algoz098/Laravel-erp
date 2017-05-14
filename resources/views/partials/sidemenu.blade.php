@@ -1,4 +1,4 @@
-<nav class="pushy pushy-left">
+{{-- <nav class="pushy pushy-left">
   <div class="text-center webgs-brand">
     Web GS - ERP
   </div>
@@ -129,4 +129,4 @@
       </li>
     @endif
   </ul class="menu" >
- </nav>
+ </nav> --}}
