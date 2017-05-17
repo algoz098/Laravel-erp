@@ -18,5 +18,16 @@
     "lodash": "^4.17.4",
     "vue": "^2.1.10",
     "vue-router": "^2.5.3"
+  },
+  "dependencies": {
+    "v-affix": "^0.1.0",
+    "vue-native-scrollbar": "^1.0.2",
+    "vue-sticky": "^3.1.5",
+    "vue-sticky-js": "0.0.4",
+    "vue-sticky-scroll": "^0.1.0",
+    "vue-text-mask": "^5.1.1",
+    "vue-toastr": "^2.0.6",
+    "vuejs-datepicker": "^0.7.11",
+    "vuex": "^2.3.1"
   }
 }

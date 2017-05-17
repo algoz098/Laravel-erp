@@ -11,13 +11,12 @@
 |
 */
 
-Route::get('/', 'HomeController@index');
-
 Auth::routes();
 
+Route::get('/', 'HomeController@index');
 Route::get('/menus', 'BaseController@menus')->middleware('auth');
-
 Route::get('/home', 'HomeController@index')->middleware('auth');
+
 Route::get('/lista/contatos', 'ContatosController@show')->name('contatos')->middleware('auth');
 Route::post('/lista/contatos/cpf', 'ContatosController@consulta_cpf')->middleware('auth');
 Route::get('/lista/contatos/selecionar', 'ContatosController@selecionar')->middleware('auth');
@@ -36,7 +35,7 @@ Route::post('lista/contatos/{id}/telefones', 'ContatosController@telefones_new')
 Route::post('lista/contatos/{id}/telefones/{id_tel}', 'ContatosController@telefones_post')->middleware('auth');
 Route::get('lista/contatos/{id}/telefones/{id_tel}', 'ContatosController@telefones_get')->middleware('auth');
 Route::get('lista/contatos/{id}/telefones/{id_tel}/delete', 'ContatosController@telefones_delete')->middleware('auth');
-Route::get('lista/contatos/{id}/enderecos/{id_endereco}/delete', 'ContatosController@enderecos_delete')->middleware('auth');
+Route::get('lista/contatos/enderecos/{id_endereco}/delete', 'ContatosController@enderecos_delete')->middleware('auth');
 Route::post('/novo/contatos', 'ContatosController@novo')->middleware('auth');
 Route::get('/novo/contatos', 'ContatosController@showNovo')->middleware('auth');
 Route::get('novo/contatos/{id}', 'ContatosController@showId')->middleware('auth');

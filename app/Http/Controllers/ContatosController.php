@@ -194,7 +194,9 @@ class ContatosController extends BaseController
       return redirect()->action('HomeController@index')
                        ->withErrors([__('messages.perms.leitura')]);
     }
-    $contatos = contatos::orderBy('nome', 'asc')->paginate(15);
+    $contatos = contatos::orderBy('nome', 'asc')->paginate(100);
+    return $contatos;
+
     $total= contatos::count();
     $empresas = contatos::where('tipo', '0')->count();
     $pessoas = contatos::where('tipo', '1')->count();
@@ -284,8 +286,14 @@ class ContatosController extends BaseController
     if (!isset(Auth::user()->perms["contatos"]["leitura"]) or Auth::user()->perms["contatos"]["leitura"]!=1){
       return response()->json([__('messages.perms.leitura')], 403);
     }
-    $contato = contatos::find($id);
+    $contato = contatos::with('user', 'funcionario', 'enderecos', 'telefones', 'attachsToo')->find($id);
     $comboboxes_telefones = comboboxes::where('combobox_textable_type', 'App\Telefones')->get();
+
+    $resposta=[];
+    $resposta['contato'] = $contato;
+    $resposta['comboboxes_telefones'] = $comboboxes_telefones;
+    return $resposta;
+
     return view('contatos.detalhes')->with('contato', $contato)->with('comboboxes_telefones', $comboboxes_telefones);
   }
 
@@ -698,16 +706,15 @@ class ContatosController extends BaseController
     return redirect()->action('ContatosController@show');
   }
 
-  public function enderecos_delete( $id, $id_endereco )
+  public function enderecos_delete( $id_endereco )
   {
     if (!isset(Auth::user()->perms["contatos"]["edicao"]) or Auth::user()->perms["contatos"]["edicao"]!=1){
       return response()->json([__('messages.perms.edicao')], 403);
     }
 
     $endereco = Enderecos::find($id_endereco);
-    Log::info('Deletando endereco para contato(id'.$id.'), para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
     $endereco->delete();
-    return redirect()->action('ContatosController@show');
+    return 302;
   }
 
   public function relacoes( $id)

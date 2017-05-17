@@ -79,6 +79,8 @@ class BaseController extends Controller {
 
       $resposta['erp_nome'] =  Config::get('app.name');
 
+      $resposta['perms'] = Auth::user()->perms;
+
       return $resposta;
     }
 

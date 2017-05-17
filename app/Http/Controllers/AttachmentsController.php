@@ -84,6 +84,8 @@ class AttachmentsController  extends BaseController
     Log::info('Virando anexo sentido relogio -> "'.$attach.'", para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
 
     $file->save();
+
+    return redirect()->action('AttachmentsController@show' , ['id' => $id]);
   }
   public function rotate_unclock($id){
     $attach = Attachs::find($id);

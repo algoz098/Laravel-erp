@@ -23,10 +23,32 @@ body{
 .level1{
   color: red;
 }
-
 .listagem:hover, .listagem:nth-of-type(even):hover{
   background-color: #efefef;
 }
 .listagem:nth-of-type(even) {
     background-color: rgba(0,0,0,.02);
+}
+
+
+/* Modal */
+@media (min-width: 1400px){
+  .modal-xl{
+    max-width: 1600px;
+  }
+  .modal-body{
+    max-height: 700px;
+  }
+}
+.modal-body{
+  overflow-y: scroll;
+}
+
+
+/* Anexos */
+@media (min-width: 1400px){
+  .lista-anexos {
+    overflow-y: scroll;
+    max-height: 390px;
+  }
 }

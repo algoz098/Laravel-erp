@@ -6,11 +6,11 @@
     </b-tooltip>
 
     <b-tooltip content="Editar">
-      <b-button size="sm" variant="info" :disabled="disabled" v-if="opcoes.editar" :to="'/'+opcoes.editar.caminho+selecionado"><icone icon="pencil" /></b-button>
+      <b-button size="sm" variant="info" :disabled="disabled" v-if="opcoes.editar" :to="'/' + opcoes.editar.caminho + selecionado"><icone icon="pencil" /></b-button>
     </b-tooltip>
 
     <b-tooltip content="Detalhes">
-      <b-button size="sm" variant="info" :disabled="disabled" v-if="opcoes.detalhes"><icone icon="file-text" /></b-button>
+      <b-button size="sm" variant="info" :disabled="disabled" v-if="opcoes.detalhes" @click="$root.$emit('show::modal', opcoes.lista.caminho)"><icone icon="file-text" /></b-button>
     </b-tooltip>
 
     <b-tooltip content="Relacionamentos">
