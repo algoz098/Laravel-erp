@@ -21,11 +21,15 @@
   },
   "dependencies": {
     "v-affix": "^0.1.0",
+    "vue-js-toggle-button": "^1.0.9",
+    "vue-masked-input": "^0.5.1",
     "vue-native-scrollbar": "^1.0.2",
+    "vue-quill-editor": "^2.2.1",
     "vue-sticky": "^3.1.5",
     "vue-sticky-js": "0.0.4",
     "vue-sticky-scroll": "^0.1.0",
     "vue-text-mask": "^5.1.1",
+    "vue-the-mask": "^0.8.0",
     "vue-toastr": "^2.0.6",
     "vuejs-datepicker": "^0.7.11",
     "vuex": "^2.3.1"

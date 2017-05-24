@@ -1,6 +1,6 @@
 <template>
   <b-tooltip content="Adicionar registro">
-    <b-dropdown text="Novo" variant="success" class="m-md-2" >
+    <b-dropdown text="Novo" variant="success">
       <b-dropdown-item v-for="opcao in opcoes" :to="opcao.to" :key="'novo'+opcao.titulo">{{opcao.titulo}}</b-dropdown-item>
     </b-dropdown>
   </b-tooltip>

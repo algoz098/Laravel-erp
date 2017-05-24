@@ -13,14 +13,6 @@
       <b-button size="sm" variant="info" :disabled="disabled" v-if="opcoes.detalhes" @click="$root.$emit('show::modal', opcoes.lista.caminho)"><icone icon="file-text" /></b-button>
     </b-tooltip>
 
-    <b-tooltip content="Relacionamentos">
-      <b-button size="sm" variant="info" :disabled="disabled" v-if="opcoes.relacionamentos"><icone icon="users" /></b-button>
-    </b-tooltip>
-
-    <b-tooltip content="Anexos">
-      <b-button size="sm" variant="warning" :disabled="disabled" v-if="opcoes.anexos"><icone icon="paperclip" /></b-button>
-    </b-tooltip>
-
     <div class="col-3">
       <b-form-input v-model="selecionado" type="text" size="sm" disabled ></b-form-input>
     </div>

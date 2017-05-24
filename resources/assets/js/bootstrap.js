@@ -34,6 +34,7 @@ let token = document.head.querySelector('meta[name="csrf-token"]');
 
 if (token) {
     window.axios.defaults.headers.common['X-CSRF-TOKEN'] = token.content;
+    window.token = token.content;
 } else {
     console.error('CSRF token not found: https://laravel.com/docs/csrf#csrf-x-csrf-token');
 }
@@ -45,7 +46,7 @@ if (token) {
  */
 
 // import Echo from 'laravel-echo'
-
+window.maskedinput = require('../../../node_modules/jquery.maskedinput/src/jquery.maskedinput.js');
 // window.Pusher = require('pusher-js');
 
 // window.Echo = new Echo({

@@ -19,12 +19,25 @@ Vue.component('vue-toastr', Toastr);
 
 import VueSticky from 'vue-sticky';
 
-import MaskedInput from 'vue-text-mask'
-Vue.component('masked-input', MaskedInput);
+// import MaskedInput from 'vue-masked-input';
+// Vue.component('masked-input', MaskedInput);
+// import Component from './components/Component'
+import VueTheMask from 'vue-the-mask'
+Vue.use(VueTheMask)
 
-import {default as Vuedals, Component as Vuedal, Bus as VuedalsBus} from 'vuedals';
-Vue.use(Vuedals);
-Vue.component('vuedal', Vuedal);
+
+import Dropzone from 'vue2-dropzone';
+Vue.use(Dropzone);
+Vue.component('dropzone', Dropzone);
+
+ import Multiselect from 'vue-multiselect'
+ Vue.component('multiselect', Multiselect);
+
+import ToggleButton from 'vue-js-toggle-button'
+Vue.use(ToggleButton)
+
+import VueQuillEditor from 'vue-quill-editor'
+Vue.use(VueQuillEditor)
 
 import navbar from 'bootstrap-vue/lib/components/navbar';
 import button from 'bootstrap-vue/lib/components/button';
@@ -42,12 +55,24 @@ Vue.component('busca-mais', require('./components/Busca-mais.vue'));
 Vue.component('botao-busca-mais', require('./components/Botao-busca-mais.vue'));
 Vue.component('busca-padrao', require('./components/Busca-padrao.vue'));
 Vue.component('botao-novo', require('./components/Botao-novo.vue'));
+Vue.component('botao-salvar-lista', require('./components/Botao-salvar-lista.vue'));
+
+Vue.component('input-texto', require('./components/Input-texto.vue'));
+Vue.component('input-mascara', require('./components/Input-mascara.vue'));
+Vue.component('input-editor', require('./components/Input-editor.vue'));
+Vue.component('selecionar-busca', require('./components/Selecionar-busca.vue'));
+Vue.component('switch-erp', require('./components/Switch-erp.vue'));
 
 Vue.component('contatos-detalhes', require('./views/contatos/Detalhes.vue'));
 Vue.component('contatos-tab-detalhes', require('./views/contatos/partials/Tab-detalhes.vue'));
 Vue.component('contatos-enderecos', require('./views/contatos/partials/Enderecos.vue'));
 Vue.component('contatos-telefones', require('./views/contatos/partials/Telefones.vue'));
 Vue.component('contatos-anexos', require('./views/contatos/partials/Anexos.vue'));
+
+Vue.component('contatos-editar-nome', require('./views/contatos/partials/Editar-nome.vue'));
+Vue.component('contatos-editar-enderecos', require('./views/contatos/partials/Editar-enderecos.vue'));
+Vue.component('contatos-editar-telefones', require('./views/contatos/partials/Editar-telefones.vue'));
+Vue.component('contatos-editar-funcionario', require('./views/contatos/partials/Editar-funcionario.vue'));
 
 var Filters = require('./filters.js');
 import router from './routes';
@@ -60,6 +85,8 @@ import Errors from './core/Errors';
 //     perms: []
 //   },
 // })
+
+Vue.use(Filters);
 
 new Vue({
     el: '#app',

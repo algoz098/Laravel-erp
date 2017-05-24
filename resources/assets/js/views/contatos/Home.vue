@@ -21,11 +21,11 @@
       <busca-mais v-model="busca" :busca-de="busca.de" :busca-ate="busca.ate" :deletados="perms.admin">
 
         <template slot="1">
-          <selecionar-data label="Data de:" v-model="busca.de" />
+          <input-mascara v-model="busca.de" titulo="Data de:" mascara="XX/XX/XX" placeholder="__/__/__" />
         </template>
 
         <template slot="2">
-          <selecionar-data label="Data até:" v-model="busca.ate"></selecionar-data>
+          <input-mascara v-model="busca.ate" titulo="Data até:" mascara="XX/XX/XX" placeholder="__/__/__" />
         </template>
 
         <template slot="ultimo">

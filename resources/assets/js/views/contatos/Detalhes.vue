@@ -1,5 +1,5 @@
 <template>
-  <b-modal id="contatos-detalhes" title="Detalhes de entidade"  size="xl" @shown="carregarContato">
+  <b-modal id="contatos-detalhes" title="Detalhes de entidade"  close-title="Fechar" ok-title="Editar" size="xl" @shown="carregarContato" @ok="editarContato">
     <b-tabs ref="tabs" v-model="tabIndex">
 
       <b-tab title="Detalhes">
@@ -30,15 +30,18 @@
       <b-tab title="Anexos" >
 
         <br>
-        <contatos-anexos :contato="contato" />
+        <contatos-anexos :contato="contato" :upload="upload" @uploaded="carregarContato"/>
 
       </b-tab>
 
       <b-tab title="Relacionamentos" >
-
       </b-tab>
 
+      <template slot="modal-footer">
+        aaaaaa
+      </template>
     </b-tabs>
+
   </b-modal>
 </template>
 
@@ -57,7 +60,8 @@ export default {
       comboboxes_telefones: {
         type: Object,
         default: function() { return {} }
-      }
+      },
+      upload: "",
     }
   },
   methods: {
@@ -67,8 +71,12 @@ export default {
       axios.get(base_url + '/lista/contatos/' + self.id)
       .then(function(response){
         self.contato = response.data.contato;
+        self.upload = base_url + 'attach/contatos/' + self.contato.id + '/' + self.contato.id;
         self.comboboxes_telefones = response.data.comboboxes_telefones;
       })
+    },
+    editarContato() {
+      this.$router.push('/novo/contatos/' + this.id);
     }
   }
 }

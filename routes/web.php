@@ -17,6 +17,7 @@ Route::get('/', 'HomeController@index');
 Route::get('/menus', 'BaseController@menus')->middleware('auth');
 Route::get('/home', 'HomeController@index')->middleware('auth');
 
+Route::get('/lista/combobox/{app}', 'ContatosController@combobox')->middleware('auth');
 Route::get('/lista/contatos', 'ContatosController@show')->name('contatos')->middleware('auth');
 Route::post('/lista/contatos/cpf', 'ContatosController@consulta_cpf')->middleware('auth');
 Route::get('/lista/contatos/selecionar', 'ContatosController@selecionar')->middleware('auth');
@@ -190,11 +191,12 @@ Route::get('attach/{id}/rotate/unclock', 'AttachmentsController@rotate_unclock')
 Route::get('attach/{id}/resize/{width}', 'AttachmentsController@resize')->middleware('auth');
 
 Route::get('attach/{modulo}/{id}/{contatos_id}', 'AttachmentsController@novo')->middleware('auth');
+
+Route::post('attach/nome/{id}', 'AttachmentsController@nome')->middleware('auth');
 Route::post('attach/{modulo}/{id}/{contatos_id}', 'AttachmentsController@salva')->middleware('auth');
 
 
 Route::get('/lista/cons_int', 'Cons_intController@index')->middleware('auth');
-
 
 
 Route::get('/admin/config/img_destaque', 'AdminController@img_destaque'); // Rota espcial nao colocar middleware de proteção
@@ -236,4 +238,4 @@ Route::get('/admin/backup', 'AdminController@backup_index')->middleware('auth')-
 Route::get('/admin/backup/do', 'AdminController@backup_do')->middleware('auth')->middleware('admin');
 Route::get('/admin/backup/download/{file}', 'AdminController@backup_download')->middleware('auth')->middleware('admin');
 
-Route::get('/busca/cep/{cep}', 'CepController@buscacep')->middleware('auth')->middleware('admin');
+Route::get('/busca/cep/{cep}', 'CepController@buscacep')->middleware('auth');

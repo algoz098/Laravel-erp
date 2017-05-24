@@ -21,6 +21,8 @@ use App\Observers\ContasObserver;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Blade;
 
+use Schema;
+
 Use Auth;
 use App\Erp_configs as Configs;
 
@@ -33,6 +35,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+      Schema::defaultStringLength(191);
+
       Contatos::observe(ContatosObserver::class);
       Atendimento::observe(AtendimentosObserver::class);
       Bancos::observe(BancosObserver::class);

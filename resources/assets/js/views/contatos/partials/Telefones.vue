@@ -14,7 +14,7 @@
           <b-button size="sm" variant="danger" @click="deletarTelefone(telefone.id, index)">
             <icone icon="ban" />
           </b-button>
-          
+
           <span class="">{{telefone.contato}}, {{telefone.setor}}</strong></span> {{ telefone.numero }}<br>
 
         </span>
@@ -42,7 +42,7 @@
       methods: {
         deletarTelefone(id, index) {
           var self = this;
-          axios.get(base_url + 'lista/contatos/telefones/' + id + '/delete')
+          axios.get(base_url + 'lista/contatos/' + self.contato.id + '/telefones/' + id + '/delete')
             .then(function(response){
               self.contato.telefones.splice(index, 1);
             })
