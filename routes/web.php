@@ -18,7 +18,11 @@ Route::get('/menus', 'BaseController@menus')->middleware('auth');
 Route::get('/home', 'HomeController@index')->middleware('auth');
 
 Route::get('/lista/combobox/{app}', 'ContatosController@combobox')->middleware('auth');
+
 Route::get('/lista/contatos', 'ContatosController@show')->name('contatos')->middleware('auth');
+
+Route::post('/lista/filiais', 'ContatosController@filiais_busca')->middleware('auth');
+
 Route::post('/lista/contatos/cpf', 'ContatosController@consulta_cpf')->middleware('auth');
 Route::get('/lista/contatos/selecionar', 'ContatosController@selecionar')->middleware('auth');
 Route::get('/lista/filiais/selecionar', 'ContatosController@selecionar_filial')->middleware('auth');

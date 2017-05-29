@@ -93,7 +93,7 @@ class ContatosController extends BaseController
     if (!isset(Auth::user()->perms["contatos"]["edicao"]) or Auth::user()->perms["contatos"]["edicao"]!=1){
       return back()->withErrors([__('messages.perms.edicao')]);
     }
-    $contato = contatos::with('user', 'funcionario', 'enderecos', 'telefones', 'attachsToo')->find($id);
+    $contato = contatos::with('user.trabalho', 'funcionario', 'enderecos', 'telefones', 'attachsToo')->find($id);
 
     return $contato;
 
@@ -188,7 +188,7 @@ class ContatosController extends BaseController
     }
 
 
-
+    // Checa se é empresa, e se é filial está marcada
     if ($request->tipo=="0"){
       if ($request->tipo_filial=="1"){
         $data = [
@@ -202,21 +202,9 @@ class ContatosController extends BaseController
         $contato->from()->sync($data, true);
       }
     }
-    if ($request->is_funcionario!="1"){
-      $combobox = Comboboxes::where('text', $request->relacao)->first();
-      if ($combobox){
-        $data = [
-          $request->from_id =>
-          [
-            'from_text' => $combobox->text,
-            'to_id' => 1,
-            'to_text' => $combobox->value
-          ]
-        ];
-        $contato->from()->sync($data, false);
-      }
-    } else {
-      // CASO FOR CADASTRO DE FUNCIONARIO
+
+    // CASO FOR CADASTRO DE FUNCIONARIO
+    if ($request->tipo=="2"){
       $data = [
         $request->filial =>
         [
@@ -226,44 +214,42 @@ class ContatosController extends BaseController
         ]
       ];
       $contato->from()->sync($data, false);
+
       $func = new Funcionarios;
       $func->contatos_id = $contato->id;
-      $func->cargo = $request->cargo;
-      $func->data_adm = $request->data_adm;
-      $func->data_dem = $request->data_dem;
-      $func->cnh = $request->cnh;
-      $func->cnh_cat = $request->cnh_cat;
-      $func->cnh_venc = $request->cnh_venc;
-      $func->cart_trab_num = $request->cart_trab_num;
-      $func->cart_trab_serie = $request->cart_trab_serie;
-      $func->eleitor = $request->eleitor;
-      $func->eleitor_sessao = $request->eleitor_sessao;
-      $func->eleitor_zona = $request->eleitor_zona;
-      $func->eleitor_exp = $request->eleitor_exp;
-      $func->pis = $request->pis;
-      $func->pis_banco = $request->pis_banco;
-      $func->inss = $request->sal_real*($request->sal_inss/100);
-      $func->rg_exp = $request->rg_exp;
-      $func->rg_pai = $request->rg_pai;
-      $func->rg_mae = $request->rg_mae;
-      $func->ajuda_custo = $request->ajuda_custo;
-      $func->reservista = $request->reservista;
-      $func->sal = $request->sal;
-      $func->sal_real = $request->sal_real;
-      $func->sal_inss = $request->sal_inss;
-      $func->vt = $request->sal_real*($request->vt_percentual/100);
-      $func->vt_percentual = $request->vt_percentual;
-      $func->va = $request->va;
-      $func->vr = $request->vr;
-      $func->peri = $request->sal_real*($request->peri_percentual/100);
-      $func->peri_percentual = $request->peri_percentual;
+      $func->cargo = $request->funcionario['cargo'];
+      $func->data_adm = $request->funcionario['data_adm'];
+      $func->data_dem = $request->funcionario['data_dem'];
+      $func->sal = $request->funcionario['sal'];
+      $func->sal_real = $request->funcionario['sal_real'];
+      $func->vt = $request->funcionario['vt'];
+      $func->vt_percentual = $request->funcionario['vt_percentual'];
+      $func->va = $request->funcionario['va'];
+      $func->vr = $request->funcionario['vr'];
+      $func->peri = $request->funcionario['peri'];
+      $func->peri_percentual = $request->funcionario['peri_percentual'];
+      $func->cart_trab_num = $request->funcionario['cart_num_trab'];
+      $func->pis = $request->funcionario['pis'];
+      $func->pis_banco = $request->funcionario['pis_banco'];
+      $func->inss = $request->funcionario['inss'];
+      $func->sal_inss = $request->funcionario['sal_inss'];
+      $func->cnh = $request->funcionario['cnh'];
+      $func->cnh_venc = $request->funcionario['cnh_venc'];
+      $func->eleitor = $request->funcionario['eleitor'];
+      $func->eleitor_sessao = $request->funcionario['eleitor_sessao'];
+      $func->eleitor_zona = $request->funcionario['eleitor_zona'];
+      $func->eleitor_exp = $request->funcionario['eleitor_data'];
+      $func->reservista = $request->funcionario['reservista'];
+      $func->rg_mae = $request->funcionario['rg_mae'];
+      $func->rg_pai = $request->funcionario['rg_pai'];
       $func->save();
+
       $user = new User;
-      $user->email = $request->user;
-      $user->password = bcrypt($request->password);
-      $user->ativo = $request->ativo;
-      if ($request->filial!=""){
-        $user->trabalho_id = $request->filiais_id;
+      $user->email = $request->user['email'];
+      $user->password = bcrypt($request->user['password']);
+      $user->ativo = $request->user['ativo'];
+      if (isset($request->funcionario['filiais_id']) and $request->funcionario['filiais_id']!=""){
+        $user->trabalho_id = $request->funcionario['filiais_id'];
       } else {
         $user->trabalho_id = 1;
       }
@@ -340,89 +326,9 @@ class ContatosController extends BaseController
       $telefone->ramal = $tel['ramal'];
       $telefone->save();
     }
-    // if (isset($request->cep_edit)) {
-    //   foreach ($request->cep_edit as $key => $cep) {
-    //     $endereco =  Enderecos::find($request->endereco_id[$key]);
-    //     $endereco->tipo = $request->endereco_tipo_edit[$key];
-    //     $endereco->cep = $request->cep_edit[$key];
-    //     $endereco->endereco = $request->endereco_edit[$key];
-    //     $endereco->numero = $request->numero_edit[$key];
-    //     $endereco->complemento = $request->complemento_edit[$key];
-    //     $endereco->bairro = $request->bairro_edit[$key];
-    //     $endereco->cidade = $request->cidade_edit[$key];
-    //     $endereco->uf = $request->uf_edit[$key];
-    //     $endereco->contatos_id = $contato->id;
-    //     $endereco->save();
-    //   }
-    //
-    // }
-    //
-    // if (isset($request->cep)){
-    //   foreach ($request->cep as $key => $cep) {
-    //     $endereco = new Enderecos;
-    //     $endereco->tipo = $request->endereco_tipo[$key];
-    //     $endereco->cep = $request->cep[$key];
-    //     $endereco->endereco = $request->endereco[$key];
-    //     $endereco->numero = $request->numero_endereco[$key];
-    //     $endereco->complemento = $request->complemento[$key];
-    //     $endereco->bairro = $request->bairro[$key];
-    //     $endereco->cidade = $request->cidade[$key];
-    //     $endereco->uf = $request->uf[$key];
-    //     $endereco->contatos_id = $contato->id;
-    //     $endereco->save();
-    //   }
-    // }
-    // if ($contato->tipo=="0"){
-    //   if ($request->tipo_filial=="1"){
-    //     $data = [
-    //       $request->from_id =>
-    //       [
-    //         'from_text' => 'Filial',
-    //         'to_id' => 1,
-    //         'to_text' => 'Matriz'
-    //       ]
-    //     ];
-    //     $contato->from()->sync($data, true);
-    //   } else {
-    //     $contato->from()->detach();
-    //   }
-    // }
-      // foreach ($request->tipo_id as $a => $tipo_id) {
-      //   $telefone = Telefones::find($request->id_tel[$a]);
-      //   $telefone->tipo = $request->tipo_id[$a];
-      //   $telefone->numero = $request->numero_id[$a];
-      //   $telefone->contato = $request->contato_id[$a];
-      //   $telefone->setor = $request->setor_id[$a];
-      //   $telefone->ramal = $request->ramal_id[$a];
-      //   $telefone->save();
-      // }
-    // if ($request->tipo_tel){
-    //   foreach ($request->tipo_tel as $key => $tipo) {
-    //     $telefone = new Telefones;
-    //     $telefone->contatos_id = $contato->id;
-    //     $telefone->tipo = $request->tipo_tel[$key];
-    //     $telefone->numero = $request->numero_tel[$key];
-    //     $telefone->contato = $request->contato_tel[$key];
-    //     $telefone->setor = $request->setor_tel[$key];
-    //     $telefone->ramal = $request->ramal_tel[$key];
-    //     $telefone->save();
-    //   }
-    // }
-    if ($request->is_funcionario!="1"){
-      $combobox = Comboboxes::where('text', $request->relacao)->first();
-      if ($combobox){
-        $data = [
-          $request->from_id =>
-          [
-            'from_text' => $combobox->text,
-            'to_id' => 1,
-            'to_text' => $combobox->value
-          ]
-        ];
-        $contato->from()->sync($data, false);
-      }
-    } else {
-      // CASO FOR CADASTRO DE FUNCIONARIO
+
+    // CASO FOR CADASTRO DE FUNCIONARIO
+    if ($request->tipo=='2'){
       $data = [
         $request->contatos_id =>
         [
@@ -432,66 +338,84 @@ class ContatosController extends BaseController
         ]
       ];
       $contato->from()->sync($data, true);
+
       $func = Funcionarios::where('contatos_id', $id)->first();
-      $func->contatos_id = $contato->id;
-      $func->cargo = $request->cargo;
-      $func->data_adm = $request->data_adm;
-      $func->data_dem = $request->data_dem;
-      $func->cnh = $request->cnh;
-      $func->cnh_cat = $request->cnh_cat;
-      $func->cnh_venc = $request->cnh_venc;
-      $func->cart_trab_num = $request->cart_trab_num;
-      $func->cart_trab_serie = $request->cart_trab_serie;
-      $func->eleitor = $request->eleitor;
-      $func->eleitor_sessao = $request->eleitor_sessao;
-      $func->eleitor_zona = $request->eleitor_zona;
-      $func->eleitor_exp = $request->eleitor_exp;
-      $func->pis = $request->pis;
-      $func->pis_banco = $request->pis_banco;
-      $func->inss = $request->sal_real*($request->sal_inss/100);
-      $func->rg_exp = $request->rg_exp;
-      $func->rg_pai = $request->rg_pai;
-      $func->rg_mae = $request->rg_mae;
-      $func->ajuda_custo = $request->ajuda_custo;
-      $func->reservista = $request->reservista;
-      $func->sal = $request->sal;
-      $func->sal_real = $request->sal_real;
-      $func->sal_inss = $request->sal_inss;
-      $func->vt = $request->sal_real*($request->vt_percentual/100);
-      $func->vt_percentual = $request->vt_percentual;
-      $func->va = $request->va;
-      $func->vr = $request->vr;
-      $func->peri = $request->sal_real*($request->peri_percentual/100);
-      $func->peri_percentual = $request->peri_percentual;
+      $func->cargo = $request->funcionario['cargo'];
+      $func->data_adm = $request->funcionario['data_adm'];
+      $func->data_dem = $request->funcionario['data_dem'];
+      $func->sal = $request->funcionario['sal'];
+      $func->sal_real = $request->funcionario['sal_real'];
+      $func->vt = $request->funcionario['vt'];
+      $func->vt_percentual = $request->funcionario['vt_percentual'];
+      $func->va = $request->funcionario['va'];
+      $func->vr = $request->funcionario['vr'];
+      $func->peri = $request->funcionario['peri'];
+      $func->peri_percentual = $request->funcionario['peri_percentual'];
+      $func->cart_trab_num = $request->funcionario['cart_trab_num'];
+      $func->pis = $request->funcionario['pis'];
+      $func->pis_banco = $request->funcionario['pis_banco'];
+      $func->inss = $request->funcionario['inss'];
+      $func->sal_inss = $request->funcionario['sal_inss'];
+      $func->cnh = $request->funcionario['cnh'];
+      $func->cnh_venc = $request->funcionario['cnh_venc'];
+      $func->eleitor = $request->funcionario['eleitor'];
+      $func->eleitor_sessao = $request->funcionario['eleitor_sessao'];
+      $func->eleitor_zona = $request->funcionario['eleitor_zona'];
+      $func->eleitor_exp = $request->funcionario['eleitor_exp'];
+      $func->reservista = $request->funcionario['reservista'];
+      $func->rg_mae = $request->funcionario['rg_mae'];
+      $func->rg_pai = $request->funcionario['rg_pai'];
       $func->save();
-      $contato->user->email = $request->user;
-      $contato->user->password = bcrypt($request->password);
-      $contato->user->ativo = $request->ativo;
-      $contato->user->trabalho_id = $request->filiais_id;
-      $contato->user->contatos_id = $contato->id;
-      $contato->user->save();
+
+      $user = User::where('contatos_id', $id)->first();
+      $user->email = $request->user['email'];
+      $user->password = bcrypt($request->user['password']);
+      $user->ativo = $request->user['ativo'];
+      $user->trabalho_id = $request->funcionario['trabalho_id'];
+      $user->save();
     }
 
-    $combobox = Comboboxes::where('text', $request->relacao)->first();
-    #return $combobox;
-    if ($combobox){
-
-      $data = [
-        $request->from_id =>
-        [
-          'from_text' => $combobox->text,
-          'to_id' => 1,
-          'to_text' => $combobox->value
-        ]
-      ];
-      $contato->from()->sync($data, false);
-    }
+    // $combobox = Comboboxes::where('text', $request->relacao)->first();
+    // #return $combobox;
+    // if ($combobox){
+    //
+    //   $data = [
+    //     $request->from_id =>
+    //     [
+    //       'from_text' => $combobox->text,
+    //       'to_id' => 1,
+    //       'to_text' => $combobox->value
+    //     ]
+    //   ];
+    //   $contato->from()->sync($data, false);
+    // }
 
     $contato->save();
-
+    return $user;
     return redirect()->action('ContatosController@show');
   }
 
+
+  public function filiais_busca(request $request)
+  {
+    Log::info('Selecionar de filais para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
+    if (!isset(Auth::user()->perms["contatos"]["leitura"]) or Auth::user()->perms["contatos"]["leitura"]!=1){
+      return response()->json([__('messages.perms.leitura')], 403);
+    }
+    $a ="Filial";
+    $contatos = contatos::orderBy('nome', 'asc')->whereHas('from', function ($query) use ($a){
+                      $query->where('from_text', 'like', '%'.$a.'%');
+                    })->paginate(15);
+    $matriz = contatos::find(1);
+
+    $contatos->push($matriz);
+    return $contatos;
+
+    // return view('contatos.selecionar')
+    //             ->with('contatos', $contatos)
+    //             ->with('matriz', $matriz)
+    //             ->with('apenas_filial', $apenas_filial);
+  }
 
 
 
@@ -514,23 +438,7 @@ class ContatosController extends BaseController
                 ->with('apenas_filial', $apenas_filial)
                 ->with('contatos', $contatos);
   }
-  public function selecionar_filial()
-  {
-    Log::info('Selecionar de filais para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
-    if (!isset(Auth::user()->perms["contatos"]["leitura"]) or Auth::user()->perms["contatos"]["leitura"]!=1){
-      return response()->json([__('messages.perms.leitura')], 403);
-    }
-    $a ="Filial";
-    $apenas_filial = TRUE;
-    $contatos = contatos::orderBy('nome', 'asc')->whereHas('from', function ($query) use ($a){
-                      $query->where('from_text', 'like', '%'.$a.'%');
-                    })->paginate(15);
-    $matriz = contatos::find(1);
-    return view('contatos.selecionar')
-                ->with('contatos', $contatos)
-                ->with('matriz', $matriz)
-                ->with('apenas_filial', $apenas_filial);
-  }
+
   public function selecionar_busca(request $request)
   {
     #return $request;
@@ -708,7 +616,7 @@ class ContatosController extends BaseController
     if (!isset(Auth::user()->perms["contatos"]["leitura"]) or Auth::user()->perms["contatos"]["leitura"]!=1){
       return response()->json([__('messages.perms.leitura')], 403);
     }
-    $contato = contatos::with('user', 'funcionario', 'enderecos', 'telefones', 'attachsToo')->find($id);
+    $contato = contatos::with('user.trabalho', 'funcionario', 'enderecos', 'telefones', 'attachsToo')->find($id);
     $comboboxes_telefones = comboboxes::where('combobox_textable_type', 'App\Telefones')->get();
 
     $resposta=[];

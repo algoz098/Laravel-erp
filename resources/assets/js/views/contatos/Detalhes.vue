@@ -17,6 +17,11 @@
         <contatos-telefones :contato="contato"  :comboboxes_telefones="comboboxes_telefones"/>
       </b-tab>
 
+      <b-tab title="Funcionario" v-if="contato.tipo=='2'">
+        <br>
+        <contatos-funcionario :contato="contato" />
+      </b-tab>
+
       <b-tab title="Observações">
 
         <br>

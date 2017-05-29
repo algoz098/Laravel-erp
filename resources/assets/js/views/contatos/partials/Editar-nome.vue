@@ -6,14 +6,16 @@
       <selecionar-busca v-model="contato.tipo" titulo="Tipo" :erros="contato.errors.errors.tipo" :options="tipos" v-if="edicao==false" />
 
       <div class="form-group" v-if="edicao==true">
+
         <label for="">Tipo:</label>
         <span class="form-control" v-if="contato.tipo==0">Empresa</span>
-        <span class="form-control" v-else-if="contato.tipo==1">Pessoa fisica</span>
-        <span class="form-control" v-else>Funcionario</span>
+        <span class="form-control" v-if="contato.tipo==1">Pessoa fisica</span>
+        <span class="form-control" v-if="contato.tipo==2">Funcionario</span>
 
       </div>
 
       <input-texto v-model="contato.nome" :titulo="labels[contato.tipo].nome" :erros="contato.errors.errors.nome" />
+
       <input-texto v-model="contato.sobrenome" :titulo="labels[contato.tipo].sobrenome" :erros="contato.errors.errors.sobrenome" />
 
     </b-card>
@@ -23,8 +25,11 @@
     <b-card header="Documentos">
 
       <input-mascara v-model="contato.cpf" :titulo="labels[contato.tipo].cpf.label" :erros="contato.errors.errors.cpf" :mascara="labels[contato.tipo].cpf.mascara" />
+
       <input-mascara v-model="contato.rg" :titulo="labels[contato.tipo].rg.label" :erros="contato.errors.errors.rg" :mascara="labels[contato.tipo].rg.mascara" />
+
       <input-texto v-model="contato.cod_prefeitura" :titulo="labels[contato.tipo].cod_prefeitura" :erros="contato.errors.errors.cod_prefeitura" />
+
       <input-mascara v-model="contato.nascimento" :titulo="labels[contato.tipo].nascimento.label" :erros="contato.errors.errors.nascimento" :mascara="labels[contato.tipo].nascimento.mascara"  v-if="contato.tipo!='0'"/>
 
     </b-card>
@@ -81,9 +86,27 @@
           edicao: false,
           tipos: [
             {value: '0', label: 'PJ - Pessoa Juridica'},
-            {value: '1', label: 'PF - Pessoa Fisica'}
+            {value: '1', label: 'PF - Pessoa Fisica'},
+            {value: '2', label: 'Funcionario'}
           ],
           labels:{
+            2: {
+              nome: 'Nome',
+              sobrenome: 'Sobrenome',
+              cpf: {
+                label: 'CPF',
+                mascara: "XXX.XXX.XXX-XX"
+              },
+              rg: {
+                label: 'RG',
+                mascara: "##.###.###-##"
+              },
+              cod_prefeitura: 'Codigo de autonomo',
+              nascimento: {
+                label: 'Data de nascimento',
+                mascara: "##/##/##"
+              }
+            },
             1: {
               nome: 'Nome',
               sobrenome: 'Sobrenome',
@@ -117,16 +140,15 @@
                 label: 'Data de nascimento',
                 mascara: "##/##/##"
               },
-
             }
           }
         }
       },
       created(){
-        if (this.$route.fullpath == "/novo/funcionario") {
+        if (this.$route.name == "funcionario_novo") {
           this.e_funcionario = true;
+          // this.tipos = [{value: '2', label: 'PF - Funcionario'}];
           this.edicao = true;
-          this.tipos = [{value: '2', label: 'PF - Funcionario'}];
         }
         if (this.$route.name == "contato_editar") {
           this.edicao = true;

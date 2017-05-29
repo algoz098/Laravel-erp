@@ -6,6 +6,7 @@
       <span class="h2">
         <icone icon="user" :level="contato.active"  />
         <icone icon="signal" :level="contato.sociabilidade" />
+        <span v-if="contato.tipo=='2'">Funcionario: {{contato.user.trabalho.nome}} ({{contato.user.trabalho.sobrenome}})</span>
       </span>
     </div>
 

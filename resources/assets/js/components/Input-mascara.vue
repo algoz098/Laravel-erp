@@ -10,6 +10,7 @@
         @input="onInput($event)"
         @change="onChange($event)"
         :placeholder="placeholder"
+        :readonly="readonly"
       />
       <p class="form-control-feedback" v-for="erro in erros">{{erro}}</p>
     </div>
@@ -27,6 +28,9 @@
         },
         mascara: {
           default: ''
+        },
+        readonly: {
+          default: false
         },
         value: '',
         titulo: '',

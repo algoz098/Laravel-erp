@@ -5,7 +5,7 @@
       <div class="row">
 
         <div class="col-sm-12 col-md-4">
-          <painel-acao :disabled="disabled" :selecionado="id_selecionado" :opcoes="opcoes" @recarregar="recarregar_listagem" @apagar="apagar"></painel-acao>
+          <painel-acao  v-if="!em_modal" :disabled="disabled" :selecionado="id_selecionado" :opcoes="opcoes" @recarregar="recarregar_listagem" @apagar="apagar"></painel-acao>
         </div>
 
         <div class="col-sm-12  col-md-4 text-center">
@@ -13,7 +13,7 @@
         </div>
 
         <div class="col-sm-12 col-md-4 text-right">
-          <botao-novo :opcoes="opcoes.novo" />
+          <botao-novo :opcoes="opcoes.novo" v-if="opcoes.novo" />
         </div>
 
       </div>
@@ -38,7 +38,7 @@
     </b-card>
 
      <b-card class="mb-2 hidden-md-down">
-       <b-table striped hover class="table-sm" :items="lista.data" :fields="fields" :filter="busca.busca"  @row-clicked="linhaSelecionada($event.id)">
+       <b-table striped hover class="table-sm" :items="lista.data" :fields="fields" :filter="busca.busca"  @row-clicked="linhaSelecionada($event)">
 
          <template slot="nome" scope="item">
            {{item.value}}
@@ -102,9 +102,15 @@
       directives:{
         'sticky': VueSticky,
       },
+      props: {
+        tipo: {
+          default: "contatos"
+        }
+      },
       data:function () {
         return {
           disabled: true,
+          em_modal: false,
           busca: new Form({
             naoResete: true,
             busca: '',
@@ -190,7 +196,7 @@
       methods: {
         efetuarBusca: function(){
           var self = this;
-          this.busca.post(base_url + 'lista/contatos').
+          this.busca.post(base_url + 'lista/' + this.tipo).
             then(function(response){
               self.lista = response;
               if (self.lista.data < 1){
@@ -200,7 +206,7 @@
         },
         mudarPagina: function(a){
           var self = this;
-          this.busca.post(base_url + "/lista/contatos?page=" + a)
+          this.busca.post(base_url + "/lista" + this.tipo + "?page=" + a)
             .then(function(response){
               self.lista = response;
             });
@@ -221,14 +227,21 @@
 
             });;
         },
-        linhaSelecionada: function(id) {
-          this.id_selecionado = id;
+        linhaSelecionada: function(linha) {
+          this.id_selecionado = linha.id;
+          if ( this.em_modal ){
+            this.$emit('selecionado', linha);
+          }
           this.disabled = false;
         }
       },
       mounted() {
+        if (this.$route.name!="contato_lista") {
+          this.em_modal = true;
+          this.opcoes.novo = false;
+        }
         var self = this;
-        axios.post(base_url + 'lista/contatos')
+        axios.post(base_url + 'lista/' + this.tipo)
           .then(function(response){
             self.lista = response.data;
             self.perms = self.$root.perms;

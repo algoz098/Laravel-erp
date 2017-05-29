@@ -35,7 +35,7 @@
 
          <b-tab title="Funcionario" v-if="e_funcionario">
            <br>
-           <contatos-editar-funcionario :contato="funcionario" />
+           <contatos-editar-funcionario :contato="contato" />
          </b-tab>
 
          <b-tab title="Observações">
@@ -45,7 +45,7 @@
 
          <b-tab title="Anexos" v-if="contato.id != null">
            <br>
-           <contatos-anexos :contato="contato" :upload="upload" @uploaded="carregarContato"/>
+           <contatos-anexos :contato="contato" :upload="upload" />
          </b-tab>
        </b-tabs>
      </b-card>
@@ -74,7 +74,6 @@
             active: true,
             tipo_filial: false,
             sociabilidade: '3',
-            tipo: '0',
             nome: '',
             sobrenome: '',
             cpf: '',
@@ -84,20 +83,25 @@
             cod_prefeitura: '',
             obs: '',
             enderecos: [],
-            telefones: [{}],
+            telefones: [],
+            user: {},
+            funcionario: {},
+            tipo: '0',
           }),
         }
       },
       mounted(){
         if (this.$route.name == "funcionario_novo" || this.$route.name == "funcionario_editar" ) {
           this.e_funcionario = true;
+          this.contato.tipo = "2";
+          // this.contato.funcionario = {vt:'', vt_percentual:''};
         }
         if (this.$route.name == "contato_editar") {
           this.edicao = true;
           var self = this;
           axios.get(base_url + 'novo/contatos/' + self.$route.params.id)
             .then(function(response){
-              console.log(response.data);
+              // console.log(response.data);
               self.contato.id = response.data.id;
               self.contato.nome = response.data.nome;
               self.contato.tipo = response.data.tipo;
@@ -110,6 +114,14 @@
               self.contato.nascimento = response.data.nascimento;
               self.contato.telefones = response.data.telefones;
               self.contato.enderecos = response.data.enderecos;
+
+              if (response.data.funcionario!=null){
+                self.contato.funcionario = response.data.funcionario;
+                self.contato.user = response.data.user;
+                self.e_funcionario = true;
+
+              }
+
 
               self.contato.attachs_too = response.data.attachs_too;
               self.upload = base_url + 'attach/contatos/' + self.contato.id + '/' + self.contato.id;
@@ -140,6 +152,14 @@
             this.contato.post(base_url + 'novo/contatos/' + self.contato.id)
               .then(function(response){
                 self.$root.$refs.toastr.s("Contato salvo com sucesso", "Informativo");
+                self.$router.push({ name: 'contato_lista'})
+              });
+          }
+          // Confere se é um novo funcionario pela rota
+          if (this.$route.name == "funcionario_novo") {
+            this.contato.post(base_url + 'novo/funcionarios')
+              .then(function(response){
+                self.$root.$refs.toastr.s("Funcionario salvo com sucesso", "Informativo");
                 self.$router.push({ name: 'contato_lista'})
               });
           }
