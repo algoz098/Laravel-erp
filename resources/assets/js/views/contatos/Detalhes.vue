@@ -42,9 +42,6 @@
       <b-tab title="Relacionamentos" >
       </b-tab>
 
-      <template slot="modal-footer">
-        aaaaaa
-      </template>
     </b-tabs>
 
   </b-modal>
@@ -52,11 +49,10 @@
 
 <script>
 export default {
-  props:{
-    id: '',
-  },
+
   data: function(){
     return {
+      id: '',
       tabIndex: 0,
       contato: {
         type: Object,
@@ -69,16 +65,49 @@ export default {
       upload: "",
     }
   },
+  created(){
+    //Pega o evento do root, e efetua a sequencia de "carregaContato" porem usando o ID passado pelo evento.
+    // - artur
+    this.$root.$on('show::contato', (id, triggerEl) => {
+      //Copiei este codigo do BootstrapVue, não sei ainda para que se usa.
+      //Pesquisar
+      // - artur
+      this.return_focus = triggerEl || this.return_focus || this.returnFocus || null;
+
+      // Toda vez que abrir o modal coloca a primeira tab como ativa
+      // - artur
+      this.tabIndex = 0;
+      this.id = id;
+
+      //Axios ele cria uma promessa, e pro ser uma promessa, ele trabalha "idenpendente" deste escopo, então THIS no axios é o axios.
+      //Faça um 'var self = this' para referenciar aos THIS deste elemento ao qual trabalhar
+      // - artur
+      var self = this;
+      axios.get(base_url + '/lista/contatos/' + id)
+      .then(function(response){
+        self.contato = response.data.contato;
+        self.upload = base_url + 'attach/contatos/' + self.contato.id + '/' + self.contato.id;
+        self.comboboxes_telefones = response.data.comboboxes_telefones;
+        self.$root.$emit('show::modal', 'contatos-detalhes');
+      });
+    });
+
+    
+  },
   methods: {
     carregarContato() {
-      this.tabIndex = 0;
       var self = this;
+
       axios.get(base_url + '/lista/contatos/' + self.id)
       .then(function(response){
         self.contato = response.data.contato;
         self.upload = base_url + 'attach/contatos/' + self.contato.id + '/' + self.contato.id;
         self.comboboxes_telefones = response.data.comboboxes_telefones;
-      })
+      });
+
+      this.tabIndex = 0;
+
+
     },
     editarContato() {
       this.$router.push('/novo/contatos/' + this.id);

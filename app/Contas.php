@@ -13,9 +13,9 @@ class Contas extends Model
   protected $table = 'contas';
   protected $dates = ['deleted_at'];
 
-  public function contatos()
+  public function contato()
   {
-      return $this->belongsTo('App\Contatos');
+      return $this->belongsTo('App\Contatos', 'contatos_id');
   }
   public function attachs()
   {

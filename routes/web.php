@@ -23,6 +23,15 @@ Route::get('/lista/contatos', 'ContatosController@show')->name('contatos')->midd
 
 Route::post('/lista/filiais', 'ContatosController@filiais_busca')->middleware('auth');
 
+Route::get('novo/contas/{id}', 'ContasController@editar')->middleware('auth');
+Route::get('lista/contas/{id}/delete', 'ContasController@delete')->middleware('auth');
+Route::post('novo/contas/', 'ContasController@salva')->middleware('auth');
+Route::post('novo/contas/{id}', 'ContasController@atualiza')->middleware('auth');
+Route::post('lista/contas/{id}/pago', 'ContasController@pago')->middleware('auth');
+
+
+
+
 Route::post('/lista/contatos/cpf', 'ContatosController@consulta_cpf')->middleware('auth');
 Route::get('/lista/contatos/selecionar', 'ContatosController@selecionar')->middleware('auth');
 Route::get('/lista/filiais/selecionar', 'ContatosController@selecionar_filial')->middleware('auth');
@@ -56,19 +65,14 @@ Route::post('lista/contatos/{id}/relacoes/novo', 'ContatosController@relacoes_po
 Route::get('lista/contatos/{id}/relacoes/{id_relacao}', 'ContatosController@relacoes_edit')->middleware('auth');
 Route::get('lista/contatos/{id}/relacoes/{id_relacao}/delete', 'ContatosController@relacoes_delete')->middleware('auth');
 
-Route::get('lista/contas', 'ContasController@index')->middleware('auth');
 Route::post('lista/contas', 'ContasController@search')->middleware('auth');
 Route::get('lista/contas/{id}', 'ContasController@detalhes')->middleware('auth');
 Route::get('lista/contas/{id}/attachs', 'ContasController@attachs')->middleware('auth');
-Route::get('lista/contas/{id}/delete', 'ContasController@delete')->middleware('auth');
 Route::get('lista/contas/{id}/pago', 'ContasController@pagar')->middleware('auth');
-Route::post('lista/contas/{id}/pago', 'ContasController@pago')->middleware('auth');
 Route::get('novo/contas', 'ContasController@novo')->middleware('auth');
 Route::post('novo/contas/busca', 'ContasController@searchContatos')->middleware('auth');
 Route::get('novo/contas/', 'ContasController@add_2')->middleware('auth');
-Route::post('novo/contas/parcelas', 'ContasController@add_3')->middleware('auth');
 Route::post('novo/contas/parcelas/{conta_id}', 'ContasController@add_4')->middleware('auth');
-Route::get('novo/contas/{id}', 'ContasController@editar')->middleware('auth');
 Route::post('novo/contas/{id}', 'ContasController@atualiza')->middleware('auth');
 
 Route::get('novo/consumos/', 'ContasController@consumos_novo2')->middleware('auth');

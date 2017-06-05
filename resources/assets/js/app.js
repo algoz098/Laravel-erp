@@ -61,7 +61,9 @@ Vue.component('botao-busca-mais', require('./components/Botao-busca-mais.vue'));
 Vue.component('busca-padrao', require('./components/Busca-padrao.vue'));
 Vue.component('botao-novo', require('./components/Botao-novo.vue'));
 Vue.component('botao-salvar-lista', require('./components/Botao-salvar-lista.vue'));
+Vue.component('selecionar-contato', require('./components/Selecionar-contato.vue'));
 Vue.component('selecionar-filial', require('./components/Selecionar-filial.vue'));
+Vue.component('selecionar-banco', require('./components/Selecionar-banco.vue'));
 
 Vue.component('input-texto', require('./components/Input-texto.vue'));
 Vue.component('input-mascara', require('./components/Input-mascara.vue'));
@@ -70,6 +72,7 @@ Vue.component('input-percentual', require('./components/Input-percentual.vue'));
 Vue.component('input-editor', require('./components/Input-editor.vue'));
 Vue.component('selecionar-busca', require('./components/Selecionar-busca.vue'));
 Vue.component('switch-erp', require('./components/Switch-erp.vue'));
+Vue.component('anexos', require('./components/Anexos.vue'));
 
 Vue.component('contatos-detalhes', require('./views/contatos/Detalhes.vue'));
 Vue.component('contatos-selecionar', require('./views/contatos/Selecionar.vue'));
@@ -85,6 +88,16 @@ Vue.component('contatos-editar-telefones', require('./views/contatos/partials/Ed
 Vue.component('contatos-editar-funcionario', require('./views/contatos/partials/Editar-funcionario.vue'));
 
 Vue.component('contatos-lista', require('./views/contatos/Home.vue'));
+
+Vue.component('contas-editar-inicio', require('./views/contas/partials/Editar-inicio.vue'));
+
+Vue.component('contas-tab-detalhes', require('./views/contas/partials/Tab-detalhes.vue'));
+Vue.component('contas-detalhes', require('./views/contas/Detalhes.vue'));
+
+Vue.component('bancos-editar-inicio', require('./views/bancos/partials/Editar-inicio.vue'));
+Vue.component('bancos-selecionar', require('./views/bancos/Selecionar.vue'));
+Vue.component('bancos-lista', require('./views/bancos/Home.vue'));
+
 
 var Filters = require('./filters.js');
 import router from './routes';

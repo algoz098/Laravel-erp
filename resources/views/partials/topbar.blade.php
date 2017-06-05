@@ -37,8 +37,14 @@
   </b-collapse>
 </b-navbar>
 
+
+
 <div class="container-fluid">
   <router-view></router-view>
 </div>
 
+<bancos-selecionar></bancos-selecionar>
+<contatos-selecionar></contatos-selecionar>
+<contatos-detalhes></contatos-detalhes>
+<contas-detalhes></contas-detalhes>
 <vue-toastr ref="toastr"></vue-toastr>

@@ -1,16 +1,20 @@
 <template>
   <b-button-group justify>
 
-    <b-tooltip content="Deletar">
+    <b-tooltip content="Deletar" v-if="opcoes.deletar">
       <b-button size="sm" variant="danger" :disabled="disabled" v-if="opcoes.deletar" @click="apagar"><icone icon="ban" /></b-button>
     </b-tooltip>
 
-    <b-tooltip content="Editar">
+    <b-tooltip content="Editar" v-if="opcoes.editar">
       <b-button size="sm" variant="info" :disabled="disabled" v-if="opcoes.editar" :to="'/' + opcoes.editar.caminho + selecionado"><icone icon="pencil" /></b-button>
     </b-tooltip>
 
-    <b-tooltip content="Detalhes">
-      <b-button size="sm" variant="info" :disabled="disabled" v-if="opcoes.detalhes" @click="$root.$emit('show::modal', opcoes.lista.caminho)"><icone icon="file-text" /></b-button>
+    <b-tooltip content="Detalhes" v-if="opcoes.detalhes">
+      <b-button size="sm" variant="info" :disabled="disabled" v-if="opcoes.detalhes" @click="$root.$emit('show::' + opcoes.lista.caminho, selecionado)"><icone icon="file-text" /></b-button>
+    </b-tooltip>
+
+    <b-tooltip content="Creditar" v-if="opcoes.creditar">
+      <b-button size="sm" variant="success" :disabled="disabled" v-if="opcoes.creditar" @click="$emit('creditar')"><icone icon="check" /></b-button>
     </b-tooltip>
 
     <div class="col-3">

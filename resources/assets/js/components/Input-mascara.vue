@@ -11,6 +11,7 @@
         @change="onChange($event)"
         :placeholder="placeholder"
         :readonly="readonly"
+        masked
       />
       <p class="form-control-feedback" v-for="erro in erros">{{erro}}</p>
     </div>
@@ -22,10 +23,6 @@
 <script>
     export default {
       props: {
-        mascarado: {
-          type: Boolean,
-          default: true
-        },
         mascara: {
           default: ''
         },

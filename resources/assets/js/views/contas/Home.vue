@@ -1,11 +1,11 @@
 <template>
   <div>
 
-    <b-card header="Lista de Entidades" class="mb-2" v-sticky="{ zIndex: 500, stickyTop: 7 }">
+    <b-card header="Lista de Contas" class="mb-2" v-sticky="{ zIndex: 500, stickyTop: 7 }">
       <div class="row">
 
         <div class="col-sm-12 col-md-4">
-          <painel-acao  v-if="!modal" :disabled="disabled" :selecionado="id_selecionado" :opcoes="opcoes" @recarregar="recarregar_listagem" @apagar="apagar"></painel-acao>
+          <painel-acao  v-if="!em_modal" :disabled="disabled" :selecionado="id_selecionado" :opcoes="opcoes" @recarregar="recarregar_listagem" @apagar="apagar" @creditar="creditar"></painel-acao>
         </div>
 
         <div class="col-sm-12  col-md-4 text-center">
@@ -13,7 +13,7 @@
         </div>
 
         <div class="col-sm-12 col-md-4 text-right">
-          <botao-novo :opcoes="opcoes.novo" v-if="opcoes.novo && !modal" />
+          <botao-novo :opcoes="opcoes.novo" v-if="opcoes.novo" />
         </div>
 
       </div>
@@ -40,21 +40,31 @@
      <b-card class="mb-2 hidden-md-down">
        <b-table striped hover class="table-sm" :items="lista.data" :fields="fields" :filter="busca.busca"  @row-clicked="linhaSelecionada($event)">
 
-         <template slot="nome" scope="item">
-           {{item.value}}
-           <span v-if="item.item.tipo==1">{{item.item.sobrenome}}</span>
+          <template slot="contato" scope="item">
+            <b-button variant="info" size="sm" @click="mostrar_contato(item.value.id)">
+              <icone icon="user" />
+              {{item.value.nome}} ({{item.value.sobrenome}})
+            </b-button>
+          </template>
+
+         <template slot="valor" scope="item">
+           R$ {{item.value}}
          </template>
 
-         <template slot="sobrenome" scope="item">
-           <span v-if="item.item.tipo!=1">{{item.value}}</span>
-         </template>
+          <template slot="estado" scope="item">
+            <span v-if="item.value=='0' && (item.item.tipo=='0' || item.item.tipo=='2')">A pagar</span>
+            <span v-if="item.value=='0' && (item.item.tipo=='1' || item.item.tipo=='2')">A receber</span>
+            <span v-if="item.value=='1' && (item.item.tipo=='0' || item.item.tipo=='2')">Pago</span>
+            <span v-if="item.value=='1' && (item.item.tipo=='1' || item.item.tipo=='2')">Recebido</span>
+          </template>
 
-         <template slot="active" scope="item">
-           <icone icon="user" :level="item.value"></icone>
-           <icone icon="signal" :level="item.item.sociabilidade"></icone>
-         </template>
+          <template slot="banco" scope="item" >
+            <span v-if='item.value!=null'>
+              {{item.value.banco.nome}} ({{item.value.agencia}})
+            </span>
+          </template>
 
-         <template slot="created_at" scope="item">
+         <template slot="vencimento" scope="item">
            {{item.value | moment("DD/MM/YY") }}
          </template>
 
@@ -67,24 +77,6 @@
 
      <b-card class="mb-2 hidden-md-up">
        <b-table striped hover class="table-sm table-responsive" :items="lista.data" :fields="fields_mobile" :filter="busca.busca" :current-page="lista.current_page" :per-page="lista.per_page" @row-clicked="linhaSelecionada($event.id)">
-
-         <template slot="nome" scope="item">
-           {{item.value}}
-           <span v-if="item.item.tipo==1">{{item.item.sobrenome}}</span>
-         </template>
-
-         <template slot="sobrenome" scope="item">
-           <span v-if="item.item.tipo!=1">{{item.value}}</span>
-         </template>
-
-         <template slot="active" scope="item">
-           <icone icon="user" :level="item.value"></icone>
-           <icone icon="signal" :level="item.item.sociabilidade"></icone>
-         </template>
-
-         <template slot="created_at" scope="item">
-           {{item.value | moment("DD/MM/YY") }}
-         </template>
 
        </b-table>
      </b-card>
@@ -101,14 +93,14 @@
         'sticky': VueSticky,
       },
       props: {
-        modal: {
-          default: false
-        },
+        tipo: {
+          default: "contas"
+        }
       },
       data:function () {
         return {
-          tipo: 'contatos',
           disabled: true,
+          em_modal: false,
           busca: new Form({
             naoResete: true,
             busca: '',
@@ -121,91 +113,88 @@
           opcoes: {
             'novo': {
               0: {
-                titulo: 'Entidade',
-                to: '/novo/contatos'
+                titulo: 'Nova conta',
+                to: '/novo/contas'
               },
               1: {
-                titulo: 'Funcionario',
-                to: '/novo/funcionarios'
+                titulo: 'Novo consumo',
+                to: '/novo/consumos'
               }
             },
             'deletar':{
-              caminho: 'novo/contatos/'
+              caminho: 'novo/contas/'
             },
             'editar':{
-              caminho: 'novo/contatos/'
+              caminho: 'novo/contas/'
             },
             'lista':{
-              caminho: 'contato'
+              caminho: 'conta'
             },
             'detalhes':true,
-            'anexos':true,
-            'relacionamentos':true,
+            'creditar':true,
           },
           id_selecionado: null,
+          selecionado: '',
           fields: {
                 id: {
                   label: 'ID',
                   sortable: true
                 },
-                active: {
-                  label: 'Social',
+                contato: {
+                  label: 'Entidade',
                   sortable: true
                 },
-                nome: {
-                  label: 'Nome',
+                valor: {
+                  label: 'Valor',
                   sortable: true
                 },
-                sobrenome: {
-                  label: 'Nome fantasia',
+                vencimento: {
+                  label: 'Vencimento',
                   sortable: true
                 },
-                cpf: {
-                  label: 'Documento',
+                estado: {
+                  label: 'Estado',
                   sortable: true
                 },
-                created_at: {
-                  label: 'Data'
+                banco: {
+                  label: 'Banco',
+                  sortable: true
+                },
+                vencimento: {
+                  label: 'Vencimento'
                 }
               },
       fields_mobile: {
-            active: {
-              label: 'Social',
+            id: {
+              label: 'ID',
               sortable: true
             },
-            nome: {
-              label: 'Nome',
+            contato: {
+              label: 'Entidade',
               sortable: true
             },
-            sobrenome: {
-              label: 'Nome fantasia',
+            valor: {
+              label: 'Valor',
               sortable: true
             },
-            cpf: {
-              label: 'Documento',
+            vencimento: {
+              label: 'Vencimento',
               sortable: true
             },
-            created_at: {
-              label: 'Data'
+            estado: {
+              label: 'Estado',
+              sortable: true
+            },
+            vencimento: {
+              label: 'Vencimento'
             }
           }
-        }
-      },
-      created(){
-        console.log(this.tipo);
-        if (this.modal==true) {
-          this.$root.$on('show::contatos-selecionar', tipo => {
-            this.tipo = tipo;
-            this.efetuarBusca();
-          });
-        } else {
-          this.efetuarBusca();
         }
       },
       methods: {
         efetuarBusca: function(){
           var self = this;
-          this.busca.post(base_url + 'lista/' + self.tipo).
+          this.busca.post(base_url + 'lista/' + this.tipo).
             then(function(response){
               self.lista = response;
               if (self.lista.data < 1){
@@ -222,27 +211,50 @@
         },
         recarregar_listagem: function() {
           var self = this;
-          axios.post(base_url + 'lista/contatos')
+          axios.post(base_url + 'lista/contas')
             .then(function(response){
               self.lista = response.data;
             });
         },
         apagar: function(a){
           var self = this;
-          axios.get(base_url + 'lista/contatos/' + this.id_selecionado + '/delete')
+          axios.get(base_url + 'lista/contas/' + this.id_selecionado + '/delete')
             .then(function(response){
               self.recarregar_listagem();
-              self.$root.$refs.toastr.w("Contato: " + self.id_selecionado + " foi apagado", "Alerta!");
+              self.$root.$refs.toastr.w("Conta: " + self.id_selecionado + " foi apagado", "Alerta!");
 
             });;
         },
         linhaSelecionada: function(linha) {
           this.id_selecionado = linha.id;
-          if ( this.modal ){
+          this.selecionado = linha;
+          if ( this.em_modal ){
             this.$emit('selecionado', linha);
           }
           this.disabled = false;
+        },
+        mostrar_contato(id){
+          this.$root.$emit('show::contato', id);
+        },
+        creditar(){
+          if (this.selecionado.estado==0){
+            this.$router.push({ path: '/novo/contas/creditar/' + this.selecionado.id});
+          } else {
+            this.$root.$refs.toastr.w("Este registro consta como quitado.", "Epa");
+          }
         }
+      },
+      mounted() {
+        if (this.$route.name!="contas_lista") {
+          this.em_modal = true;
+          this.opcoes.novo = false;
+        }
+        var self = this;
+        axios.post(base_url + 'lista/' + this.tipo)
+          .then(function(response){
+            self.lista = response.data;
+            self.perms = self.$root.perms;
+          });
       }
 
     }
