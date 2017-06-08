@@ -31,9 +31,9 @@ Vue.use(VueTheMask)
 import Dropzone from 'vue2-dropzone';
 Vue.use(Dropzone);
 Vue.component('dropzone', Dropzone);
-
- import Multiselect from 'vue-multiselect'
- Vue.component('multiselect', Multiselect);
+ //
+ // import Multiselect from 'vue-multiselect'
+ // Vue.component('multiselect', Multiselect);
 
 import ToggleButton from 'vue-js-toggle-button'
 Vue.use(ToggleButton)
@@ -64,6 +64,9 @@ Vue.component('botao-salvar-lista', require('./components/Botao-salvar-lista.vue
 Vue.component('selecionar-contato', require('./components/Selecionar-contato.vue'));
 Vue.component('selecionar-filial', require('./components/Selecionar-filial.vue'));
 Vue.component('selecionar-banco', require('./components/Selecionar-banco.vue'));
+Vue.component('selecionar-grupo', require('./components/Selecionar-grupo.vue'));
+Vue.component('selecionar-produto', require('./components/Selecionar-produto.vue'));
+Vue.component('carta', require('./components/Carta.vue'));
 
 Vue.component('input-texto', require('./components/Input-texto.vue'));
 Vue.component('input-mascara', require('./components/Input-mascara.vue'));
@@ -73,6 +76,7 @@ Vue.component('input-editor', require('./components/Input-editor.vue'));
 Vue.component('selecionar-busca', require('./components/Selecionar-busca.vue'));
 Vue.component('switch-erp', require('./components/Switch-erp.vue'));
 Vue.component('anexos', require('./components/Anexos.vue'));
+Vue.component('novo-modal', require('./components/Novo-modal.vue'));
 
 Vue.component('contatos-detalhes', require('./views/contatos/Detalhes.vue'));
 Vue.component('contatos-selecionar', require('./views/contatos/Selecionar.vue'));
@@ -88,6 +92,7 @@ Vue.component('contatos-editar-telefones', require('./views/contatos/partials/Ed
 Vue.component('contatos-editar-funcionario', require('./views/contatos/partials/Editar-funcionario.vue'));
 
 Vue.component('contatos-lista', require('./views/contatos/Home.vue'));
+Vue.component('contatos-novo', require('./views/contatos/Novo.vue'));
 
 Vue.component('contas-editar-inicio', require('./views/contas/partials/Editar-inicio.vue'));
 
@@ -97,6 +102,17 @@ Vue.component('contas-detalhes', require('./views/contas/Detalhes.vue'));
 Vue.component('bancos-editar-inicio', require('./views/bancos/partials/Editar-inicio.vue'));
 Vue.component('bancos-selecionar', require('./views/bancos/Selecionar.vue'));
 Vue.component('bancos-lista', require('./views/bancos/Home.vue'));
+Vue.component('bancos-novo', require('./views/bancos/Novo.vue'));
+
+Vue.component('produtos-editar-inicio', require('./views/produtos/partials/Editar-inicio.vue'));
+Vue.component('produtos-selecionar', require('./views/produtos/Selecionar.vue'));
+Vue.component('produtos-lista', require('./views/produtos/Home.vue'));
+
+Vue.component('grupos-selecionar', require('./views/grupos/Selecionar.vue'));
+Vue.component('grupos-lista', require('./views/grupos/Home.vue'));
+Vue.component('grupos-novo', require('./views/grupos/Novo.vue'));
+Vue.component('tipos-novo', require('./views/grupos/Tipos_novo.vue'));
+
 
 
 var Filters = require('./filters.js');

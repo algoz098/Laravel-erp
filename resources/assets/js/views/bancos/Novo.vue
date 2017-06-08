@@ -23,7 +23,7 @@
            <bancos-editar-inicio v-model="banco" :banco="banco" />
          </b-tab>
 
-         <b-tab title="Anexos" v-if="banco.id != null">
+         <b-tab title="Anexos" v-if="banco.id">
            <br>
            <anexos :attachs="banco.attachs" :upload="upload" />
          </b-tab>
@@ -41,6 +41,9 @@
     export default {
       directives:{
         'sticky': VueSticky,
+      },
+      props:{
+        modal: false,
       },
       data:function () {
         return {
@@ -89,7 +92,6 @@
                 self.banco.valor = response.data.valor;
 
                 self.upload = base_url + 'attach/Bancos/' + self.banco.id + '/' + self.banco.contatos_id;
-
               });
         }
 
@@ -97,14 +99,27 @@
       methods: {
         onSubmit() {
           var self = this;
+
           // Confere se é um novo conta pela rota
-          if (this.$route.name == "bancos_novo") {
+          if (this.$route.name == "bancos_novo" || this.modal) {
+
             this.banco.post(base_url + 'novo/bancos')
               .then(function(response){
                 self.$root.$refs.toastr.s("Conta bancaria adicionado com sucesso", "Informativo");
-                self.$router.push({ name: 'bancos_lista'})
+
+                var a = self.modal;
+
+                if (!a){
+                  self.$router.push({ name: 'bancos_lista'})
+                }
+
+                if (a){
+                  self.$emit('banco-salvo');
+                }
+
               });
           }
+
           // Confere se é uma edicao de  contato pela rota
           if (this.$route.name == "bancos_editar") {
             this.banco.post(base_url + 'novo/bancos/' + self.banco.id)

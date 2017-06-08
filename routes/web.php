@@ -29,6 +29,25 @@ Route::post('novo/contas/', 'ContasController@salva')->middleware('auth');
 Route::post('novo/contas/{id}', 'ContasController@atualiza')->middleware('auth');
 Route::post('lista/contas/{id}/pago', 'ContasController@pago')->middleware('auth');
 
+Route::post('lista/produtos/grupos', 'GruposController@busca')->middleware('auth');
+Route::post('novo/produtos/grupos', 'GruposController@salva')->middleware('auth');
+Route::get('novo/produtos/grupos/{id}', 'GruposController@editar')->middleware('auth');
+Route::post('lista/produtos/grupos/{id}/tipos', 'GruposController@busca_tipos')->middleware('auth');
+Route::post('novo/produtos/grupos/{id}/tipos', 'GruposController@salva_tipos')->middleware('auth');
+
+Route::post('lista/produtos', 'ProdutosController@busca')->middleware('auth');
+Route::get('lista/produtos/{id}/delete', 'ProdutosController@delete')->middleware('auth');
+Route::post('novo/produtos', 'ProdutosController@salva')->middleware('auth');
+Route::get('novo/produtos/{id}', 'ProdutosController@editar')->middleware('auth');
+Route::post('novo/produtos/{id}', 'ProdutosController@atualizar')->middleware('auth');
+Route::get('lista/produtos/{id}/externo/{id_externo}/delete', 'ProdutosController@externo_delete')->middleware('auth');
+Route::get('lista/produtos/{id}/campo/{id_campo}/delete', 'ProdutosController@campo_delete')->middleware('auth');
+Route::get('lista/produtos/{id}/interno/{id_semelhante}/delete', 'ProdutosController@interno_delete')->middleware('auth');
+
+
+
+
+
 
 
 
@@ -121,22 +140,15 @@ Route::post('novo/nf-entrada/{id}', 'EstoqueController@nf_entrada_atualiza')->mi
 
 Route::get('lista/produtos/selecionar', 'EstoqueController@produto_selecionar')->middleware('auth');
 Route::get('lista/produtos', 'EstoqueController@produto_index')->middleware('auth');
-Route::post('lista/produtos', 'EstoqueController@produto_busca')->middleware('auth');
+// Route::post('lista/produtos', 'EstoqueController@produto_busca')->middleware('auth');
 Route::get('lista/produtos/campos/{id}/delete', 'EstoqueController@produto_campos_delete')->middleware('auth');
 Route::get('lista/produtos/externos/{id}/delete', 'EstoqueController@produto_externos_delete')->middleware('auth');
 Route::get('lista/produtos/selecionar/novo', 'EstoqueController@produto_selecionar_novo')->middleware('auth');
 Route::post('lista/produtos/selecionar/novo', 'EstoqueController@produto_selecionar_salva')->middleware('auth');
-Route::get('lista/produtos/grupo', 'EstoqueController@grupo_selecionar')->middleware('auth');
-Route::post('lista/produtos/grupo', 'EstoqueController@grupo_busca')->middleware('auth');
 Route::get('lista/produtos/grupo/novo', 'EstoqueController@grupo_novo')->middleware('auth');
-Route::get('lista/produtos/grupo/novo/{id}', 'EstoqueController@grupo_edit')->middleware('auth');
-Route::post('lista/produtos/grupo/novo', 'EstoqueController@grupo_salva')->middleware('auth');
 Route::get('lista/produtos/{id}', 'EstoqueController@produto_detalhes')->middleware('auth');
-Route::get('lista/produtos/{id}/delete', 'EstoqueController@produto_delete')->middleware('auth');
-Route::get('novo/produto', 'EstoqueController@produto_novo')->middleware('auth');
 
 Route::get('lista/produtos/tipo', 'EstoqueController@tipo_selecionar')->middleware('auth');
-Route::post('lista/produtos/tipo', 'EstoqueController@tipo_busca')->middleware('auth');
 Route::get('lista/produtos/tipo/novo/{id}', 'EstoqueController@tipo_novo')->middleware('auth');
 Route::get('lista/produtos/tipo/editar/{id}', 'EstoqueController@tipo_editar')->middleware('auth');
 Route::post('lista/produtos/tipo/novo', 'EstoqueController@tipo_salva')->middleware('auth');

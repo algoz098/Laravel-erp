@@ -77,6 +77,24 @@ let routes = [
           component: require('./views/bancos/Novo.vue')
         },
     ]
+  },
+  {
+    path: '/lista/produtos',
+    name: 'produtos_lista',
+    component: require('./views/produtos/Home.vue'),
+  },
+  {
+    path: '/novo/produtos',
+    name: 'produtos_novo',
+    component: require('./views/produtos/Novo.vue'),
+
+    children: [
+        {
+          path: ':id',
+           name: 'produtos_editar',
+          component: require('./views/produtos/Novo.vue')
+        },
+    ]
   }
 ]
 

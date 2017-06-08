@@ -1,7 +1,7 @@
 <template>
     <div class="form-group" :class="{ 'has-warning': erros.length > 0 }" >
       <label class="form-control-label">{{titulo}}</label>
-      <input :type="type" class="form-control" :id="id" :class="{ 'form-control-warning': erros.length > 0}"
+      <input :disabled="disabled" :type="type" class="form-control" :id="id" :class="{ 'form-control-warning': erros.length > 0}"
       @input="onInput($event)"
       @change="onChange($event)"
       @focus="$emit('focus')"
@@ -18,6 +18,9 @@
       props: {
         titulo: '',
         id: '',
+        disabled: {
+          default: false
+        },
         value: '',
         type: {
           default: 'text'

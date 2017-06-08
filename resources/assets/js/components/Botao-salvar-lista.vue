@@ -1,11 +1,11 @@
 <template>
   <b-button-group>
     <b-tooltip content="Ver listagem">
-      <b-button variant="warning" :to="this.lista" ><icone icon="bars" /> Lista</b-button>
+      <b-button type="button" variant="warning" @click="botao_lista" ><icone icon="bars" /> Lista</b-button>
     </b-tooltip>
 
     <b-tooltip content="Salvar registro">
-      <b-button variant="success" type="submit"><icone icon="plus" /> {{salvarLabel}}</b-button>
+      <b-button  variant="success" type="submit"><icone icon="plus" /> {{salvarLabel}}</b-button>
     </b-tooltip>
   </b-button-group>
 </template>
@@ -13,10 +13,25 @@
 <script>
     export default {
       props: {
+        modal: {
+          default: false
+        },
         salvar: '',
-        lista: '',
+        lista: {
+          default: ''
+        },
         salvarLabel: {
           default: 'Salvar'
+        },
+      },
+      methods:{
+        botao_lista(){
+          console.log(this.modal)
+          this.$emit('lista');
+          
+          if (this.modal==false) {
+            this.$router.replace(this.lista)
+          }
         },
       }
     }

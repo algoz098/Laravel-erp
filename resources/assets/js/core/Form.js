@@ -98,9 +98,9 @@ class Form {
 
                 })
                 .catch(error => {
-                    this.onFail(error.response.data);
+                    this.onFail(error);
 
-                    reject(error.response.data);
+                    reject(error);
                 });
         });
 

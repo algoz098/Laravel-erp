@@ -52,12 +52,14 @@ class BaseController extends Controller {
       $menu['novo']['funcionarios'] = 'novo/funcionarios';
       $menu['novo']['contas'] = 'novo/contas';
       $menu['novo']['bancos'] = 'novo/bancos';
+      $menu['novo']['produtos'] = 'novo/produtos';
 
       // Gerando objeto de menu 'lista'
       // - artur
       $menu['lista']['contatos'] = 'lista/contatos';
       $menu['lista']['contas'] = 'lista/contas';
       $menu['lista']['bancos'] = 'lista/bancos';
+      $menu['lista']['produtos'] = 'lista/produtos';
 
       // auto gerando menus depreciado
       // - artur

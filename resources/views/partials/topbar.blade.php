@@ -43,7 +43,9 @@
   <router-view></router-view>
 </div>
 
+<produtos-selecionar></produtos-selecionar>
 <bancos-selecionar></bancos-selecionar>
+<grupos-selecionar></grupos-selecionar>
 <contatos-selecionar></contatos-selecionar>
 <contatos-detalhes></contatos-detalhes>
 <contas-detalhes></contas-detalhes>

@@ -73,7 +73,7 @@
         },
         retornado_filial(a){
           this.banco.filial.nome = a.nome;
-          this.banco.filiais_id = a.id;
+          this.banco.filial_id = a.id;
         },
         onInput(value) {
           this.$emit('input', value);

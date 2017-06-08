@@ -1,9 +1,7 @@
 <template>
   <div>
 
-    <bancos-novo v-if="cadastrando" modal=true @banco-salvo="cadastrado" />
-
-    <b-card header="Lista de contas Bancarias" class="mb-2" v-sticky="{ zIndex: 500, stickyTop: 7 }" v-if="!cadastrando">
+    <b-card header="Lista de Contas" class="mb-2" v-sticky="{ zIndex: 500, stickyTop: 7 }">
       <div class="row">
 
         <div class="col-sm-12 col-md-4">
@@ -15,8 +13,7 @@
         </div>
 
         <div class="col-sm-12 col-md-4 text-right">
-          <novo-modal v-if="em_modal" @novo-modal="mostrar_novo" />
-          <botao-novo :opcoes="opcoes.novo" v-if="opcoes.novo || !em_modal" />
+          <botao-novo :opcoes="opcoes.novo" v-if="opcoes.novo" />
         </div>
 
       </div>
@@ -40,33 +37,11 @@
       </busca-mais>
     </b-card>
 
-     <b-card class="mb-2 hidden-md-down" v-if="!cadastrando">
+     <b-card class="mb-2 hidden-md-down">
        <b-table striped hover class="table-sm" :items="lista.data" :fields="fields" :filter="busca.busca"  @row-clicked="linhaSelecionada($event)">
 
-          <template slot="filial" scope="item">
-            <b-button variant="info" size="sm" @click="mostrar_contato(item.value.id)">
-              <icone icon="user" />
-              {{item.value.nome}} ({{item.value.sobrenome}})
-            </b-button>
-          </template>
-
-          <template slot="banco" scope="item">
-            <b-button variant="info" size="sm" @click="mostrar_contato(item.value.id)">
-              <icone icon="user" />
-              {{item.value.nome}} ({{item.value.sobrenome}})
-            </b-button>
-          </template>
-
-         <template slot="cc" scope="item">
-           {{item.value}}-{{item.item.cc_dig}}
-         </template>
-
-         <template slot="valor" scope="item">
-           R$ {{item.value}}
-         </template>
-
-         <template slot="created_at" scope="item">
-           {{item.value | moment("DD/MM/YY") }}
+         <template slot="tipo" scope="item">
+           <span v-if="item.value != null"> {{item.value.grupo.nome}} -> {{item.value.nome}} </span>
          </template>
 
        </b-table>
@@ -78,32 +53,6 @@
 
      <b-card class="mb-2 hidden-md-up">
        <b-table striped hover class="table-sm table-responsive" :items="lista.data" :fields="fields_mobile" :filter="busca.busca" :current-page="lista.current_page" :per-page="lista.per_page" @row-clicked="linhaSelecionada($event.id)">
-
-         <template slot="filial" scope="item">
-           <b-button variant="info" size="sm" @click="mostrar_contato(item.value.id)">
-             <icone icon="user" />
-             {{item.value.nome}} ({{item.value.sobrenome}})
-           </b-button>
-         </template>
-
-         <template slot="banco" scope="item">
-           <b-button variant="info" size="sm" @click="mostrar_contato(item.value.id)">
-             <icone icon="user" />
-             {{item.value.nome}} ({{item.value.sobrenome}})
-           </b-button>
-         </template>
-
-        <template slot="cc" scope="item">
-          {{item.value}}-{{item.item.cc_dig}}
-        </template>
-
-        <template slot="valor" scope="item">
-          R$ {{item.value}}
-        </template>
-
-        <template slot="created_at" scope="item">
-          {{item.value | moment("DD/MM/YY") }}
-        </template>
 
        </b-table>
      </b-card>
@@ -121,13 +70,12 @@
       },
       props: {
         tipo: {
-          default: "bancos"
+          default: "produtos"
         }
       },
       data:function () {
         return {
           disabled: true,
-          cadastrando: false,
           em_modal: false,
           busca: new Form({
             naoResete: true,
@@ -141,100 +89,75 @@
           opcoes: {
             'novo': {
               0: {
-                titulo: 'Novo banco',
-                to: '/novo/bancos'
+                titulo: 'Novo produto',
+                to: '/novo/produtos'
               },
             },
             'deletar':{
-              caminho: 'novo/bancos/'
+              caminho: 'novo/produtos/'
             },
             'editar':{
-              caminho: 'novo/bancos/'
+              caminho: 'novo/produtos/'
             },
             'lista':{
-              caminho: 'banco'
+              caminho: 'produto'
             },
-            'detalhes':false,
+            'detalhes':true,
+            'creditar':false,
           },
           id_selecionado: null,
+          selecionado: '',
           fields: {
+                id: {
+                  label: 'ID',
+                  sortable: true
+                },
+                nome: {
+                  label: 'Codigo',
+                  sortable: true
+                },
+                tipo: {
+                  label: 'Grupo/Sub-Grupo',
+                  sortable: true
+                },
+                armazem: {
+                  label: 'Local',
+                  sortable: true
+                },
+                aplicacao: {
+                  label: 'Aplicação',
+                  sortable: true
+                },
+                created_at: {
+                  label: 'Data',
+                  sortable: true
+                },
+              },
+      fields_mobile: {
             id: {
               label: 'ID',
               sortable: true
             },
-            filial: {
-              label: 'Filial',
-              sortable: true
-            },
-            banco: {
-              label: 'Banco',
-              sortable: true
-            },
-            tipo: {
-              label: 'Tipo',
-              sortable: true
-            },
-            agencia: {
-              label: 'Agencia',
-              sortable: true
-            },
-            cc: {
-              label: 'CC/Dig',
-              sortable: true
-            },
-            comp: {
-              label: 'Comp',
+            contato: {
+              label: 'Entidade',
               sortable: true
             },
             valor: {
-              label: 'Em conta',
+              label: 'Valor',
               sortable: true
             },
-            created_at: {
-              label: 'Data',
-              sortable: true
-            }
-          },
-          fields_mobile: {
-            id: {
-              label: 'ID',
+            vencimento: {
+              label: 'Vencimento',
               sortable: true
             },
-            filial: {
-              label: 'Filial',
+            estado: {
+              label: 'Estado',
               sortable: true
             },
-            banco: {
-              label: 'Banco',
-              sortable: true
-            },
-            agencia: {
-              label: 'Agencia',
-              sortable: true
-            },
-            cc: {
-              label: 'CC/Dig',
-              sortable: true
-            },
-            valor: {
-              label: 'Em conta',
-              sortable: true
+            vencimento: {
+              label: 'Vencimento'
             }
           }
-        }
-      },
-      created(){
-        if (this.$route.name!="bancos_lista") {
-
-          this.$root.$on('show::bancos-selecionar', id => {
-            this.efetuarBusca();
-          });
-
-          this.em_modal = true;
-          this.opcoes.novo = false;
-
-        } else {
-          this.efetuarBusca();
         }
       },
       methods: {
@@ -248,13 +171,6 @@
               }
             });
         },
-        mostrar_novo(){
-          this.cadastrando = true;
-        },
-        cadastrado(){
-          this.efetuarBusca();
-          this.cadastrando = false;
-        },
         mudarPagina: function(a){
           var self = this;
           this.busca.post(base_url + "/lista" + this.tipo + "?page=" + a)
@@ -264,22 +180,23 @@
         },
         recarregar_listagem: function() {
           var self = this;
-          axios.post(base_url + 'lista/bancos')
+          axios.post(base_url + 'lista/produtos')
             .then(function(response){
               self.lista = response.data;
             });
         },
         apagar: function(a){
           var self = this;
-          axios.get(base_url + 'lista/bancos/' + this.id_selecionado + '/delete')
+          axios.get(base_url + 'lista/produtos/' + this.id_selecionado + '/delete')
             .then(function(response){
               self.recarregar_listagem();
-              self.$root.$refs.toastr.w("Banco: " + self.id_selecionado + " foi apagado", "Alerta!");
+              self.$root.$refs.toastr.w("Produto: " + self.id_selecionado + " foi apagado", "Alerta!");
 
             });;
         },
         linhaSelecionada: function(linha) {
           this.id_selecionado = linha.id;
+          this.selecionado = linha;
           if ( this.em_modal ){
             this.$emit('selecionado', linha);
           }
@@ -288,6 +205,18 @@
         mostrar_contato(id){
           this.$root.$emit('show::contato', id);
         }
+      },
+      mounted() {
+        if (this.$route.name!="produtos_lista") {
+          this.em_modal = true;
+          this.opcoes.novo = false;
+        }
+        var self = this;
+        axios.post(base_url + 'lista/' + this.tipo)
+          .then(function(response){
+            self.lista = response.data;
+            self.perms = self.$root.perms;
+          });
       }
 
     }

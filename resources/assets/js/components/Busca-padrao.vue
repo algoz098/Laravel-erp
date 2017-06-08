@@ -22,7 +22,7 @@
         </b-input-group>
       </div>
 
-      <div class="col-md-2">
+      <div class="col-md-2" v-if="busca_mais">
         <botao-busca-mais />
       </div>
 
@@ -33,6 +33,9 @@
 
 <script>
     export default {
+      props: {
+        busca_mais: { default: false },
+      },
       methods: {
         efetuarBusca() {
           this.$emit('efetuarBusca');

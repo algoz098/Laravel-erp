@@ -1,7 +1,9 @@
 <template>
   <div>
 
-    <b-card header="Lista de Entidades" class="mb-2" v-sticky="{ zIndex: 500, stickyTop: 7 }">
+    <contatos-novo v-if="cadastrando" modal=true @contato-salvo="cadastrado" />
+
+    <b-card header="Lista de Entidades" class="mb-2" v-sticky="{ zIndex: 500, stickyTop: 7 }" v-if="!cadastrando">
       <div class="row">
 
         <div class="col-sm-12 col-md-4">
@@ -9,10 +11,14 @@
         </div>
 
         <div class="col-sm-12  col-md-4 text-center">
+
           <busca-padrao v-model="busca.busca" @efetuarBusca="efetuarBusca" />
+
+
         </div>
 
         <div class="col-sm-12 col-md-4 text-right">
+          <novo-modal v-if="modal" @novo-modal="mostrar_novo" />
           <botao-novo :opcoes="opcoes.novo" v-if="opcoes.novo && !modal" />
         </div>
 
@@ -37,7 +43,7 @@
       </busca-mais>
     </b-card>
 
-     <b-card class="mb-2 hidden-md-down">
+     <b-card class="mb-2 hidden-md-down" v-if="!cadastrando">
        <b-table striped hover class="table-sm" :items="lista.data" :fields="fields" :filter="busca.busca"  @row-clicked="linhaSelecionada($event)">
 
          <template slot="nome" scope="item">
@@ -108,6 +114,7 @@
       data:function () {
         return {
           tipo: 'contatos',
+          cadastrando: false,
           disabled: true,
           busca: new Form({
             naoResete: true,
@@ -212,6 +219,13 @@
                 self.$root.$refs.toastr.i("Nao encontrei nada, reveja a busca", "Informativo");
               }
             });
+        },
+        mostrar_novo(){
+          this.cadastrando = true;
+        },
+        cadastrado(){
+          this.efetuarBusca();
+          this.cadastrando = false;
         },
         mudarPagina: function(a){
           var self = this;

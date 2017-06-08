@@ -109,6 +109,7 @@
             nome: '',
             valor: '',
             contato: '',
+            estado: '',
           },
           historico: new Form({
             naoResete: true,
@@ -131,6 +132,7 @@
               self.conta.tipo = response.data.tipo;
               self.conta.nome = response.data.nome;
               self.conta.valor = response.data.valor;
+              self.conta.estado = response.data.estado;
               self.conta.contato = response.data.contato;
 
               self.historico.valor = response.data.valor;
@@ -139,7 +141,7 @@
       methods: {
         onSubmit() {
           var self = this;
-          if(this.historico.estado==0){
+          if(this.conta.estado==0){
 
             this.historico.post(base_url + 'lista/contas/' + self.conta.id + '/pago')
             .then(function(response){
@@ -148,7 +150,7 @@
             });
 
           } else {
-            self.$root.$refs.toastr.d("Historico já consta como pago.", "Opa!");
+            self.$root.$refs.toastr.e("Historico já consta como pago.", "Opa!");
 
           }
         },

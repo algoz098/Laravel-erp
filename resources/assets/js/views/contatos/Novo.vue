@@ -61,6 +61,14 @@
       directives:{
         'sticky': VueSticky,
       },
+      props:{
+        modal: {
+          default: false
+        },
+        tipo: {
+          default: 'contatos'
+        }
+      },
       data:function () {
         return {
           tabIndex: 0,
@@ -122,7 +130,6 @@
 
               }
 
-
               self.contato.attachs_too = response.data.attachs_too;
               self.upload = base_url + 'attach/contatos/' + self.contato.id + '/' + self.contato.id;
 
@@ -139,12 +146,21 @@
       methods: {
         onSubmit() {
           var self = this;
+
           // Confere se é um novo contato pela rota
-          if (this.$route.name == "contato_novo") {
+          if (this.$route.name == "contato_novo" || this.tipo=="contatos") {
             this.contato.post(base_url + 'novo/contatos')
               .then(function(response){
                 self.$root.$refs.toastr.s("Contato salvo com sucesso", "Informativo");
-                self.$router.push({ name: 'contato_lista'})
+
+                var a = self.modal;
+                if (!a){
+                  self.$router.push({ name: 'contato_lista'})
+                }
+                if (a){
+                  self.$emit('contato-salvo');
+                }
+
               });
           }
           // Confere se é uma edicao de  contato pela rota
@@ -163,6 +179,7 @@
                 self.$router.push({ name: 'contato_lista'})
               });
           }
+
         }
       }
     }
