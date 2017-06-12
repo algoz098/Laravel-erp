@@ -1,12 +1,13 @@
 <template>
   <div>
     <div class="form-group" :class="{ 'has-warning': erros.length > 0 }">
-      <label class="form-control-label">{{titulo}}</label>
+      <label class="form-control-label" v-if="titulo!='false'">{{titulo}}</label>
       <div class="input-group">
-        <span class="input-group-addon">R$</span>
-        <masked-input :class="{ 'form-control-warning': erros.length > 0 }"
+        <span class="input-group-addon" v-if="addon!='false'">R$</span>
+        <masked-input :class="[classe, {'form-control-warning': erros.length > 0}]"
           type="text"
           class="form-control"
+          :disabled=disabled
           :readonly="readonly"
           :mask="mascara"
           :value="value"
@@ -24,8 +25,15 @@ import createNumberMask from 'text-mask-addons/dist/createNumberMask'
 
     export default {
       props: {
+        addon: {
+          default: true
+        },
+        disabled:true,
       	value: null,
         titulo: '',
+        size: {
+          default: 'md'
+        },
         readonly: {
           default: false
         },
@@ -41,6 +49,11 @@ import createNumberMask from 'text-mask-addons/dist/createNumberMask'
               suffix: '',
               allowDecimal: true
             }),
+        }
+      },
+      computed:{
+        classe(){
+          return 'form-control form-control-' + this.size;
         }
       },
       methods: {

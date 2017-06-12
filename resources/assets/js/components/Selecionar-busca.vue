@@ -1,7 +1,7 @@
 <template>
   <div class="form-group" :class="{ 'has-warning': erros.length > 0 }">
-    <label class="form-control-label">{{titulo}}</label>
-    <select value="value" class="form-control"
+    <label class="form-control-label" v-if="titulo!='false'">{{titulo}}</label>
+    <select value="value" :class="'form-control form-control-' + size"
       @input="onInput($event)"
       @change="onChange($event)"
       @focus="$emit('focus')"
@@ -33,6 +33,9 @@
       props: {
         titulo: '',
         value:'',
+        size: {
+          default: 'md'
+        },
         options: {
           type: Array,
           default: function() { return [] }

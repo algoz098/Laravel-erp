@@ -53,6 +53,7 @@ class BaseController extends Controller {
       $menu['novo']['contas'] = 'novo/contas';
       $menu['novo']['bancos'] = 'novo/bancos';
       $menu['novo']['produtos'] = 'novo/produtos';
+      $menu['novo']['NF Entrada'] = 'novo/nfentrada';
 
       // Gerando objeto de menu 'lista'
       // - artur
@@ -83,7 +84,7 @@ class BaseController extends Controller {
       // }
 
       if (isset(Auth::user()->perms["admin"]) and Auth::user()->perms["admin"]==1){
-        $menu['admin']['Controle de Úsuario'] = 'admin';
+        $menu['admin']['Controle de Úsuario'] = 'admin/usuarios/lista';
         $menu['admin']['Configurações'] = 'admin/config';
         $menu['admin']['Atualização'] = 'admin/update';
         $menu['admin']['Backup'] = 'admin/backup';

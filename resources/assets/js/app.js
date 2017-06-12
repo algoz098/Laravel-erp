@@ -107,12 +107,14 @@ Vue.component('bancos-novo', require('./views/bancos/Novo.vue'));
 Vue.component('produtos-editar-inicio', require('./views/produtos/partials/Editar-inicio.vue'));
 Vue.component('produtos-selecionar', require('./views/produtos/Selecionar.vue'));
 Vue.component('produtos-lista', require('./views/produtos/Home.vue'));
+Vue.component('produtos-novo', require('./views/produtos/Novo.vue'));
 
 Vue.component('grupos-selecionar', require('./views/grupos/Selecionar.vue'));
 Vue.component('grupos-lista', require('./views/grupos/Home.vue'));
 Vue.component('grupos-novo', require('./views/grupos/Novo.vue'));
 Vue.component('tipos-novo', require('./views/grupos/Tipos_novo.vue'));
 
+Vue.component('nf-editar-inicio', require('./views/nf_entrada/partials/Editar-inicio.vue'));
 
 
 var Filters = require('./filters.js');

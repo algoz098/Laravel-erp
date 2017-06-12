@@ -1,7 +1,7 @@
 <template lang="html">
   <div class="card">
     <div  v-sticky="{ zIndex: zIndex, stickyTop: top }" >
-      <div class="card-header" >
+      <div class="card-header" v-if="tem_header_slot" >
         <slot name="header"></slot>
       </div>
     </div>
@@ -25,6 +25,11 @@ export default {
     zIndex: {
       default: false
     },
+  },
+  computed:{
+    tem_header_slot () {
+      return !!this.$slots['header']
+    }
   }
 }
 </script>

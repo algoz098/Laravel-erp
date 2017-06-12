@@ -56,7 +56,7 @@ class ProdutosController extends Controller
           $a++;
         }
     }
-    $produtos = $produtos->with('tipo.grupo');
+    $produtos = $produtos->with('tipo.grupo', 'armazenagens');
     $produtos = $produtos->orderBy('nome', 'asc')->paginate(15);
 
     if (isset($externos)){

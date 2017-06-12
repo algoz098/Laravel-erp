@@ -1,7 +1,7 @@
 <template>
   <form method="POST" @submit.prevent="onSubmit" @keydown="produto.errors.clear($event.target.name)">
 
-    <b-card header="Novo produto" class="mb-2" v-sticky="{ zIndex: 500, stickyTop: 7 }" >
+    <b-card header="Novo produto" class="mb-2" v-sticky="{ zIndex: 500, stickyTop: top }" >
       <div class="row">
 
         <div class="col text-left h3" v-if="edicao">
@@ -9,7 +9,7 @@
         </div>
 
         <div class="col text-right">
-          <botao-salvar-lista :lista="caminho_lista" />
+          <botao-salvar-lista @lista="voltar" :lista="caminho_lista" />
         </div>
 
       </div>
@@ -51,6 +51,7 @@
       data:function () {
         return {
           tabIndex: 0,
+          top: 7,
           edicao: false,
           caminho_lista: '/lista/produtos',
           upload: "",
@@ -92,9 +93,6 @@
           axios.get(base_url + 'novo/produtos/' + self.$route.params.id)
               .then(function(response){
                 self.produto.id = response.data.id
-
-                console.log(response.data)
-
                 self.produto.fabricante_id = response.data.fabricante_id
 
                 self.upload = base_url + 'attach/Produtos/' + self.produto.id + '/' + self.produto.contatos_id;
@@ -103,7 +101,10 @@
                 self.produto.nome = response.data.nome
                 self.produto.barras = response.data.barras
                 self.produto.aplicacao = response.data.aplicacao
-                // self.produto.armazenagem = response.data.armazenagens[0].pivot.local
+
+
+                console.log(response.data.armazenagens[0].pivot.local)
+                self.produto.armazenagem = response.data.armazenagens[0].pivot.local
                 self.produto.embalagem = response.data.embalagem
                 self.produto.peso = response.data.peso
                 self.produto.unidade = response.data.unidade
@@ -127,6 +128,9 @@
 
       },
       methods: {
+        voltar(){
+          this.$emit('voltar');
+        },
         onSubmit() {
           var self = this;
 

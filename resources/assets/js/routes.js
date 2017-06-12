@@ -95,7 +95,28 @@ let routes = [
           component: require('./views/produtos/Novo.vue')
         },
     ]
-  }
+  },
+
+  {
+    path: '/admin/usuarios/lista',
+    name: 'usuarios_lista',
+    component: require('./views/admin/usuarios/Home.vue'),
+  },
+  {
+    path: '/admin/usuarios/:id/perms',
+    name: 'usuarios_perms',
+    component: require('./views/admin/usuarios/Perms.vue'),
+  },
+  {
+    path: '/admin/usuarios/novo/:id',
+    name: 'usuarios_novo',
+    component: require('./views/admin/usuarios/Novo.vue'),
+  },
+  {
+    path: '/novo/nfentrada',
+    name: 'nfentrada_novo',
+    component: require('./views/nf_entrada/Novo.vue'),
+  },
 ]
 
 export default new VueRouter({

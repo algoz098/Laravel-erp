@@ -1,10 +1,10 @@
 <template>
   <div class="form-group">
 
-    <label>{{titulo}}</label>
+    <label v-if="portitulo==true" >{{titulo}}</label>
 
-    <div class="input-group">
-      <input type="text" class="form-control" v-model="nome" readonly>
+    <div :class="'input-group input-group-' + size">
+      <input type="text" :class="'form-control form-control-' + size" v-model="nome" readonly>
       <button type="button" class="input-group-addon btn btn-info" @click="$root.$emit('show::produtos-selecionar', id)" ><icone icon="gear" /></button>
     </div>
 
@@ -16,8 +16,14 @@
       props: {
         id: '',
         nome: '',
+        size: {
+          default: 'md'
+        },
         titulo: {
           default: 'Selecionar produto:'
+        },
+        portitulo: {
+          default: true
         }
       },
       data(){

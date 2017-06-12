@@ -17,6 +17,10 @@
       <b-button size="sm" variant="success" :disabled="disabled" v-if="opcoes.creditar" @click="$emit('creditar')"><icone icon="check" /></b-button>
     </b-tooltip>
 
+    <b-tooltip content="Permissões" v-if="opcoes.perms">
+      <b-button size="sm" variant="info" :disabled="disabled" v-if="opcoes.perms" @click="$emit('perms')"><icone icon="gear" /></b-button>
+    </b-tooltip>
+
     <div class="col-3">
       <b-form-input v-model="selecionado" type="text" size="sm" disabled ></b-form-input>
     </div>

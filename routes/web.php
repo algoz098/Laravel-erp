@@ -44,6 +44,9 @@ Route::get('lista/produtos/{id}/externo/{id_externo}/delete', 'ProdutosControlle
 Route::get('lista/produtos/{id}/campo/{id_campo}/delete', 'ProdutosController@campo_delete')->middleware('auth');
 Route::get('lista/produtos/{id}/interno/{id_semelhante}/delete', 'ProdutosController@interno_delete')->middleware('auth');
 
+Route::post('/lista/usuarios', 'AdminController@usuarios')->name('usuarios_lista')->middleware('auth')->middleware('admin');
+Route::get('/novo/usuarios/{id}', 'AdminController@usuarios_editar')->name('usuarios_editar')->middleware('auth')->middleware('admin');
+Route::post('/novo/usuarios/{id}', 'AdminController@usuarios_editar')->name('usuarios_salvar')->middleware('auth')->middleware('admin');
 
 
 
@@ -221,7 +224,6 @@ Route::get('/lista/cons_int', 'Cons_intController@index')->middleware('auth');
 
 Route::get('/admin/config/img_destaque', 'AdminController@img_destaque'); // Rota espcial nao colocar middleware de proteção
 
-Route::get('/admin', 'AdminController@index')->name('admin')->middleware('auth')->middleware('admin');
 
 Route::get('/admin/config', 'AdminController@configuration')->name('admin')->middleware('auth')->middleware('admin');
 Route::post('/admin/config', 'AdminController@configuration_save')->name('admin')->middleware('auth')->middleware('admin');

@@ -1,14 +1,14 @@
 <template>
     <div class="form-group" :class="{ 'has-warning': erros.length > 0 }" >
-      <label class="form-control-label">{{titulo}}</label>
-      <input :disabled="disabled" :type="type" class="form-control" :id="id" :class="{ 'form-control-warning': erros.length > 0}"
-      @input="onInput($event)"
-      @change="onChange($event)"
-      @focus="$emit('focus')"
-      @blur="$emit('blur')"
-      :value="value"
-      :readonly="readonly"
-      />
+      <label v-if="titulo!='false'" class="form-control-label">{{titulo}}</label>
+        <input :disabled="disabled" :type="type" :id="id" :class="[classe, {'form-control-warning': erros.length > 0}]"
+          @input="onInput($event)"
+          @change="onChange($event)"
+          @focus="$emit('focus')"
+          @blur="$emit('blur')"
+          :value="value"
+          :readonly="readonly"
+        />
       <p class="form-control-feedback" v-for="erro in erros">{{erro}}</p>
     </div>
 </template>
@@ -22,6 +22,9 @@
           default: false
         },
         value: '',
+        size:{
+          default: 'md'
+        },
         type: {
           default: 'text'
         },
@@ -31,6 +34,11 @@
         erros: {
           type: Array,
           default: function() { return [] }
+        }
+      },
+      computed:{
+        classe(){
+          return 'form-control form-control-' + this.size;
         }
       },
       methods: {

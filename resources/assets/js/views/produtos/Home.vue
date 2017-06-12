@@ -1,6 +1,8 @@
 <template>
   <div>
 
+    <produtos-novo v-if="cadastrando" modal=true @salvo="cadastrado" @voltar="cadastrado" />
+
     <b-card header="Lista de Contas" class="mb-2" v-sticky="{ zIndex: 500, stickyTop: 7 }">
       <div class="row">
 
@@ -14,6 +16,7 @@
 
         <div class="col-sm-12 col-md-4 text-right">
           <botao-novo :opcoes="opcoes.novo" v-if="opcoes.novo" />
+          <novo-modal v-if="em_modal" @novo-modal="mostrar_novo" />
         </div>
 
       </div>
@@ -42,6 +45,10 @@
 
          <template slot="tipo" scope="item">
            <span v-if="item.value != null"> {{item.value.grupo.nome}} -> {{item.value.nome}} </span>
+         </template>
+
+         <template slot="local" scope="item">
+           {{item.item.armazenagens[0].pivot.local}}
          </template>
 
        </b-table>
@@ -77,6 +84,7 @@
         return {
           disabled: true,
           em_modal: false,
+          cadastrando: false,
           busca: new Form({
             naoResete: true,
             busca: '',
@@ -120,7 +128,7 @@
                   label: 'Grupo/Sub-Grupo',
                   sortable: true
                 },
-                armazem: {
+                local: {
                   label: 'Local',
                   sortable: true
                 },
@@ -134,29 +142,6 @@
                 },
               },
       fields_mobile: {
-            id: {
-              label: 'ID',
-              sortable: true
-            },
-            contato: {
-              label: 'Entidade',
-              sortable: true
-            },
-            valor: {
-              label: 'Valor',
-              sortable: true
-            },
-            vencimento: {
-              label: 'Vencimento',
-              sortable: true
-            },
-            estado: {
-              label: 'Estado',
-              sortable: true
-            },
-            vencimento: {
-              label: 'Vencimento'
-            }
           }
         }
       },
@@ -204,7 +189,10 @@
         },
         mostrar_contato(id){
           this.$root.$emit('show::contato', id);
-        }
+        },
+        mostrar_novo(){
+          this.cadastrando = true;
+        },
       },
       mounted() {
         if (this.$route.name!="produtos_lista") {

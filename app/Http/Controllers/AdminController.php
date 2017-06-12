@@ -25,6 +25,52 @@ class AdminController  extends BaseController
      parent::__construct();
   }
 
+  public function usuarios(request $request){
+
+    Log::info('!!!ADMIN!!! Mostrando index, para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
+    $contatos = contatos::has('user')->with('user')->paginate(15);
+
+    return $contatos;
+  }
+
+  public function usuarios_editar($id){
+    $usuario = User::with('trabalho')->find($id);
+    // $matriz = Contatos::find(1);
+    //
+    // $filiais[]=$matriz;
+    // foreach ($matriz->to as $key => $relacao) {
+    //   if ($relacao->from_text="Filial"){
+    //     $filiais[] = $relacao;
+    //   }
+    // }
+
+    Log::info('!!!ADMIN!!! Editando usuario de -> "'.$usuario.'", para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
+    return $usuario;
+  }
+
+  public function usuarios_salvar(Request $request, $id){
+    $user = User::find($id);
+    $user->email = $request->email;
+    $user->password = bcrypt($request->password);
+    $user->ativo = $request->ativo;
+    $user->save();
+
+    Log::info('!!!ADMIN!!! Salvando usuario -> "'.$user.'", para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
+
+    return $user;
+  }
+
+
+
+
+
+
+
+
+
+
+
+
   public function img_destaque(){
     $imagem_destaque = Configs::where('field', 'img_destaque')->pluck('options')->first();
     $attach = Attachs::find($imagem_destaque);
@@ -46,12 +92,7 @@ class AdminController  extends BaseController
 
     return $response;
   }
-  public function index(){
 
-    Log::info('!!!ADMIN!!! Mostrando index, para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
-    $contatos = contatos::all();
-    return view('admin.index')->with('contatos', $contatos);
-  }
 
   public function configuration(){
     Log::info('!!!ADMIN!!! Mostrando configuration, para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
@@ -215,41 +256,7 @@ class AdminController  extends BaseController
     return redirect()->action('AdminController@configuration');
   }
 
-  public function user_edit($id){
-    $contato = Contatos::find($id);
-    $matriz = Contatos::find(1);
 
-    $filiais[]=$matriz;
-    foreach ($matriz->to as $key => $relacao) {
-      if ($relacao->from_text="Filial"){
-        $filiais[] = $relacao;
-      }
-    }
-
-    Log::info('!!!ADMIN!!! Editando usuario de -> "'.$contato.'", para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
-    return view('admin.useredit')->with('contato', $contato)->with('filiais', $filiais);
-  }
-
-    public function user_modify(Request $request, $id){
-      $contato = Contatos::find($id);
-      if ($contato->user){
-        $user = User::find($contato->user->id);
-      } else{
-        $user = new User;
-        $user->contatos_id = $id;
-        $user->perms = "{}";
-      }
-      $user->email = $request->email;
-      $user->password = bcrypt($request->password);
-      $user->ativo = $request->ativo;
-      $user->trabalho_id = $request->filial;
-      $user->save();
-
-      Log::info('!!!ADMIN!!! Salvando usuario -> "'.$user.'", para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
-
-      $contatos = contatos::all();
-      return view('admin.index')->with('contatos', $contatos);
-    }
 
     public function access($id){
       $contato = Contatos::find($id);
