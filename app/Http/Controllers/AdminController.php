@@ -339,12 +339,22 @@ class AdminController  extends BaseController
       $file = base_path() . "/manifest.json";
       $manifest = json_decode(file_get_contents($file), true);
       $remoto = json_decode(file_get_contents("http://www.webgs.com.br/clientes/erp/manifest.json"), true);
+
+      $resultado['manifest'] = $manifest;
+      $resultado['remoto'] = $remoto;
+
       Log::info('!!!ADMIN!!! Visualizando update, para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
-      return view('admin.update')->with('manifest', $manifest)->with('remoto', $remoto);
+      return $resultado;
+      // return view('admin.update')->with('manifest', $manifest)->with('remoto', $remoto);
     }
 
     public function update_do(){
       Log::info('!!!ADMIN!!! Realizando update, para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
+
+      // sleep(10);
+
+      // return redirect()->action('AdminController@update_index');
+
 
       $storage = storage_path();
       $base = base_path();
@@ -387,7 +397,7 @@ class AdminController  extends BaseController
         $backups = 0;
         $ultimo = 0;
       }
-      return view('admin.backup')->with('backups', $backups)->with('ultimo', $ultimo);
+      return $backups;
     }
     public function backup_download($file){
       Log::info('!!!ADMIN!!! Download de BKP -> "'.$file.'", para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());

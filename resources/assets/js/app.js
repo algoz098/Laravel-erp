@@ -115,6 +115,7 @@ Vue.component('grupos-novo', require('./views/grupos/Novo.vue'));
 Vue.component('tipos-novo', require('./views/grupos/Tipos_novo.vue'));
 
 Vue.component('nf-editar-inicio', require('./views/nf_entrada/partials/Editar-inicio.vue'));
+Vue.component('nfentrada-detalhes', require('./views/nf_entrada/Detalhes.vue'));
 
 
 var Filters = require('./filters.js');

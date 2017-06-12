@@ -47,6 +47,7 @@ import createNumberMask from 'text-mask-addons/dist/createNumberMask'
           mascara: createNumberMask({
               prefix: '',
               suffix: '',
+              includeThousandsSeparator: false,
               allowDecimal: true
             }),
         }

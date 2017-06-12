@@ -47,6 +47,7 @@
 <bancos-selecionar></bancos-selecionar>
 <grupos-selecionar></grupos-selecionar>
 <contatos-selecionar></contatos-selecionar>
+<nfentrada-detalhes></nfentrada-detalhes>
 <contatos-detalhes></contatos-detalhes>
 <contas-detalhes></contas-detalhes>
 <vue-toastr ref="toastr"></vue-toastr>

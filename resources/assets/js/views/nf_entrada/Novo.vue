@@ -61,12 +61,16 @@
             contatos_id: '',
             numero: '',
             total: '',
-            frete: '',
-            transportadora: '',
-            icms_substituicao: '',
-            acrescimo: '',
-            desconto: '',
+            frete: 0,
+            transportadora: 0,
+            seguro: 0,
+            icms_substituicao: 0,
+            acrescimo: 0,
+            desconto: 0,
             obs: '',
+            total_ipi: '',
+            total_icms: '',
+            total_produtos: '',
             fornecedor: {
               nome: ''
             },
@@ -87,6 +91,19 @@
           axios.get(base_url + 'novo/nf_entrada/' + self.$route.params.id)
               .then(function(response){
                 self.nf.id = response.data.id
+                self.nf.filial.nome = response.data.filial.nome
+                self.nf.filiais_id = response.data.filiais_id
+                self.nf.fornecedor.nome = response.data.fornecedor.nome
+                self.nf.contatos_id = response.data.fornecedor_id
+                self.nf.numero = response.data.numero
+                self.nf.total = response.data.total
+                self.nf.frete = response.data.frete
+                self.nf.transportadora = response.data.transportadora
+                self.nf.seguro = response.data.seguro
+                self.nf.icms_substituicao = response.data.icms_substituicao
+                self.nf.acrescimo = response.data.acrescimo
+                self.nf.desconto = response.data.desconto
+                self.nf.produtos = response.data.nf_produtos
 
                 self.upload = base_url + 'attach/Produtos/' + self.nf.id + '/' + self.nf.filiais_id;
 
@@ -98,11 +115,15 @@
         onSubmit() {
           var self = this;
 
-          if (this.nf.fabricante_id==null || this.nf.fabricante_id==0 || this.nf.fabricante_id==false){
+          if (this.nf.filiais_id==null || this.nf.filiais_id==0 || this.nf.filiais_id==false){
 
-            self.$root.$refs.toastr.e("Selecione um fabricante", "Erro");
+            self.$root.$refs.toastr.e("Selecione a filial recebendo os produtos", "Erro");
 
-          } else {
+          } else if (this.nf.contatos_id==null || this.nf.contatos_id==0 || this.nf.contatos_id==false){
+
+            self.$root.$refs.toastr.e("Selecione um fornecedor", "Erro");
+
+          }else {
 
             // Confere se é um novo conta pela rota
             if (this.$route.name == "nfentrada_novo" || this.modal) {
@@ -121,12 +142,15 @@
                     self.$emit('nf-salvo');
                   }
 
+                  self.$router.push({ name: 'nfentrada_lista'})
+
+
                 })
             }
 
             // Confere se é uma edicao de  contato pela rota
             if (this.$route.name == "nfentrada_editar") {
-              this.nf.post(base_url + 'novo/produtos/' + self.nf.id)
+              this.nf.post(base_url + 'novo/nf_entrada/' + self.nf.id)
                 .then(function(response){
                   self.$root.$refs.toastr.s("NF atualizado com sucesso", "Informativo");
                   self.$router.push({ name: 'nfentrada_lista'})

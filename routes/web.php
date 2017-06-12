@@ -48,6 +48,19 @@ Route::post('/lista/usuarios', 'AdminController@usuarios')->name('usuarios_lista
 Route::get('/novo/usuarios/{id}', 'AdminController@usuarios_editar')->name('usuarios_editar')->middleware('auth')->middleware('admin');
 Route::post('/novo/usuarios/{id}', 'AdminController@usuarios_editar')->name('usuarios_salvar')->middleware('auth')->middleware('admin');
 
+Route::post('novo/nf_entrada', 'EstoqueController@nf_entrada')->middleware('auth');
+Route::get('novo/nf_entrada/{id}', 'EstoqueController@nf_entrada_editar')->middleware('auth');
+Route::get('lista/nf_entrada/{id}', 'EstoqueController@nf_entrada_detalhes')->middleware('auth');
+Route::post('lista/estoques', 'EstoqueController@busca')->middleware('auth');
+
+
+//Atualizações
+Route::get('/admin/update', 'AdminController@update_index')->middleware('auth')->middleware('admin');
+Route::get('/admin/update/do', 'AdminController@update_do')->middleware('auth')->middleware('admin');
+//Backups
+Route::get('/admin/backup', 'AdminController@backup_index')->middleware('auth')->middleware('admin');
+Route::get('/admin/backup/do', 'AdminController@backup_do')->middleware('auth')->middleware('admin');
+Route::get('/admin/backup/download/{file}', 'AdminController@backup_download')->middleware('auth')->middleware('admin');
 
 
 
@@ -123,7 +136,7 @@ Route::get('novo/atendimentos/{id}', 'AtendimentoController@show')->middleware('
 Route::post('novo/atendimentos/{id}', 'AtendimentoController@edit')->middleware('auth');
 
 Route::get('lista/estoques', 'EstoqueController@index')->middleware('auth');
-Route::post('lista/estoques', 'EstoqueController@search')->middleware('auth');
+// Route::post('lista/estoques', 'EstoqueController@search')->middleware('auth');
 Route::get('lista/estoques/{id}', 'EstoqueController@detalhes')->middleware('auth');
 Route::get('lista/estoques/{id}/delete', 'EstoqueController@delete')->middleware('auth');
 Route::get('lista/estoques/{id}/up', 'EstoqueController@up')->middleware('auth');
@@ -233,8 +246,6 @@ Route::post('/admin/user/{id}', 'AdminController@user_modify')->middleware('auth
 Route::get('/admin/access/{id}', 'AdminController@access')->middleware('auth')->middleware('admin');
 Route::post('/admin/access/{id}', 'AdminController@access_post')->middleware('auth')->middleware('admin');
 Route::get('/admin/access/{id}/delete/{id_access}', 'AdminController@access_delete')->middleware('auth')->middleware('admin');
-Route::get('/admin/update', 'AdminController@update_index')->middleware('auth')->middleware('admin');
-Route::get('/admin/update/do', 'AdminController@update_do')->middleware('auth')->middleware('admin');
 Route::get('/admin/logs', 'AdminController@logs')->middleware('auth')->middleware('admin');
 
 Route::get('/lista/combobox/contas', 'AdminController@combobox_lista_contas')->middleware('auth')->middleware('admin');
@@ -255,9 +266,5 @@ Route::post('/admin/combobox/novo', 'AdminController@combobox_salvar')->middlewa
 Route::get('/admin/combobox/{id}', 'AdminController@combobox_edit')->middleware('auth')->middleware('admin');
 Route::post('/admin/combobox/novo/{id}', 'AdminController@combobox_atualizar')->middleware('auth')->middleware('admin');
 Route::get('/admin/combobox/delete/{id}', 'AdminController@combobox_delete')->middleware('auth')->middleware('admin');
-
-Route::get('/admin/backup', 'AdminController@backup_index')->middleware('auth')->middleware('admin');
-Route::get('/admin/backup/do', 'AdminController@backup_do')->middleware('auth')->middleware('admin');
-Route::get('/admin/backup/download/{file}', 'AdminController@backup_download')->middleware('auth')->middleware('admin');
 
 Route::get('/busca/cep/{cep}', 'CepController@buscacep')->middleware('auth');

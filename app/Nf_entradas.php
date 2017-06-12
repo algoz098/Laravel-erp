@@ -24,4 +24,8 @@ class Nf_entradas extends Model
   {
       return $this->hasMany('App\Nf_produtos', 'notas_id');
   }
+  public function attachs()
+  {
+      return $this->morphMany('App\Attachments', 'attachmentable');
+  }
 }

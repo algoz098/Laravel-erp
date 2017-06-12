@@ -9,7 +9,7 @@
         </div>
 
         <div class="col text-right">
-          <botao-salvar-lista @lista="voltar" :lista="caminho_lista" />
+          <botao-salvar-lista @lista="voltar" :lista="caminho_lista" :modal="modal" />
         </div>
 
       </div>

@@ -96,6 +96,24 @@ let routes = [
         },
     ]
   },
+  {
+    path: '/novo/nfentrada',
+    name: 'nfentrada_novo',
+    component: require('./views/nf_entrada/Novo.vue'),
+
+    children: [
+        {
+          path: ':id',
+           name: 'nfentrada_editar',
+          component: require('./views/nf_entrada/Novo.vue')
+        },
+    ]
+  },
+  {
+    path: '/lista/nfentrada',
+    name: 'nfentrada_lista',
+    component: require('./views/nf_entrada/Home.vue'),
+  },
 
   {
     path: '/admin/usuarios/lista',
@@ -113,10 +131,16 @@ let routes = [
     component: require('./views/admin/usuarios/Novo.vue'),
   },
   {
-    path: '/novo/nfentrada',
-    name: 'nfentrada_novo',
-    component: require('./views/nf_entrada/Novo.vue'),
+    path: '/admin/backup',
+    name: 'backup_lista',
+    component: require('./views/admin/backup/Home.vue'),
   },
+  {
+    path: '/admin/update',
+    name: 'update_lista',
+    component: require('./views/admin/update/Home.vue'),
+  },
+
 ]
 
 export default new VueRouter({

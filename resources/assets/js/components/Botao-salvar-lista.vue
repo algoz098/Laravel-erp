@@ -26,9 +26,8 @@
       },
       methods:{
         botao_lista(){
-          console.log(this.modal)
           this.$emit('lista');
-          
+
           if (this.modal==false) {
             this.$router.replace(this.lista)
           }

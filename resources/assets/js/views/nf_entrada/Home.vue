@@ -1,9 +1,7 @@
 <template>
   <div>
 
-    <produtos-novo v-if="cadastrando" modal=true @salvo="cadastrado" @voltar="cadastrado" />
-
-    <b-card header="Lista de Contas" class="mb-2" v-sticky="{ zIndex: 500, stickyTop: 7 }">
+    <b-card header="Lista de estoques" class="mb-2" v-sticky="{ zIndex: 500, stickyTop: 7 }">
       <div class="row">
 
         <div class="col-sm-12 col-md-4">
@@ -43,13 +41,20 @@
      <b-card class="mb-2 hidden-md-down">
        <b-table striped hover class="table-sm" :items="lista.data" :fields="fields" :filter="busca.busca"  @row-clicked="linhaSelecionada($event)">
 
-         <template slot="tipo" scope="item">
-           <span v-if="item.value != null"> {{item.value.grupo.nome}} -> {{item.value.nome}} </span>
+         <template slot="filial" scope="item">
+           <b-button variant="info" size="sm" @click="mostrar_contato(item.value.id)">
+             <icone icon="user" />
+             {{item.value.nome}} ({{item.value.sobrenome}})
+           </b-button>
          </template>
 
-         <template slot="local" scope="item">
-           {{item.item.armazenagens[0].pivot.local}}
+         <template slot="fornecedor" scope="item">
+           <b-button variant="info" size="sm" @click="mostrar_contato(item.value.id)">
+             <icone icon="user" />
+             {{item.value.nome}} ({{item.value.sobrenome}})
+           </b-button>
          </template>
+
 
        </b-table>
 
@@ -77,7 +82,7 @@
       },
       props: {
         tipo: {
-          default: "produtos"
+          default: "estoques"
         }
       },
       data:function () {
@@ -97,18 +102,18 @@
           opcoes: {
             'novo': {
               0: {
-                titulo: 'Novo produto',
-                to: '/novo/produtos'
+                titulo: 'Adicionar NF de entrada',
+                to: '/novo/nfentrada'
               },
             },
             'deletar':{
-              caminho: 'novo/produtos/'
+              caminho: 'novo/nf_entrada/'
             },
             'editar':{
-              caminho: 'novo/produtos/'
+              caminho: 'novo/nfentrada/'
             },
             'lista':{
-              caminho: 'produto'
+              caminho: 'nfentrada'
             },
             'detalhes':true,
             'creditar':false,
@@ -120,20 +125,16 @@
                   label: 'ID',
                   sortable: true
                 },
-                nome: {
-                  label: 'Codigo',
+                filial: {
+                  label: 'Filial',
                   sortable: true
                 },
-                tipo: {
-                  label: 'Grupo/Sub-Grupo',
+                fornecedor: {
+                  label: 'Fornecedor',
                   sortable: true
                 },
-                local: {
-                  label: 'Local',
-                  sortable: true
-                },
-                aplicacao: {
-                  label: 'Aplicação',
+                total: {
+                  label: 'Total',
                   sortable: true
                 },
                 created_at: {
@@ -165,17 +166,17 @@
         },
         recarregar_listagem: function() {
           var self = this;
-          axios.post(base_url + 'lista/produtos')
+          axios.post(base_url + 'lista/estoques')
             .then(function(response){
               self.lista = response.data;
             });
         },
         apagar: function(a){
           var self = this;
-          axios.get(base_url + 'lista/produtos/' + this.id_selecionado + '/delete')
+          axios.get(base_url + 'lista/estoques/' + this.id_selecionado + '/delete')
             .then(function(response){
               self.recarregar_listagem();
-              self.$root.$refs.toastr.w("Produto: " + self.id_selecionado + " foi apagado", "Alerta!");
+              self.$root.$refs.toastr.w("Estoque: " + self.id_selecionado + " foi apagado", "Alerta!");
 
             });;
         },
@@ -198,7 +199,7 @@
         },
       },
       mounted() {
-        if (this.$route.name!="produtos_lista") {
+        if (this.$route.name!="nfentrada_lista") {
           this.em_modal = true;
           this.opcoes.novo = false;
         }

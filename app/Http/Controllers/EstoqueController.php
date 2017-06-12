@@ -22,6 +22,98 @@ class EstoqueController  extends BaseController
      parent::__construct();
   }
 
+  public function busca(request $request)
+  {
+    if (!isset(Auth::user()->perms["estoques"]["leitura"]) or Auth::user()->perms["estoques"]["leitura"]!=1){
+      return redirect()->action('HomeController@index')
+                       ->withErrors([__('messages.perms.leitura')]);
+    }
+    $nfs = nf_entradas::with('fornecedor', 'filial', 'nf_produtos')->paginate(15);
+
+    Log::info('Criando novo estoque, para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
+    return $nfs;
+    // return view('estoque.nf.lista')->with('nfs', $nfs);
+  }
+
+  public function nf_entrada_detalhes($id)
+  {
+    if (!isset(Auth::user()->perms["estoques"]["edicao"]) or Auth::user()->perms["estoques"]["edicao"]!=1){
+      return redirect()->action('HomeController@index')
+                       ->withErrors([__('messages.perms.edicao')]);
+    }
+    $nf = nf_entradas::with('fornecedor', 'filial', 'nf_produtos', 'attachs')->find($id);
+
+    Log::info('Detalhes NF_entrada, para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
+    return $nf;
+    // return view('estoque.nf.lista')->with('nfs', $nfs);
+  }
+
+  public function nf_entrada_editar($id)
+  {
+    if (!isset(Auth::user()->perms["estoques"]["edicao"]) or Auth::user()->perms["estoques"]["edicao"]!=1){
+      return redirect()->action('HomeController@index')
+                       ->withErrors([__('messages.perms.edicao')]);
+    }
+    $nf = nf_entradas::with('fornecedor', 'filial', 'nf_produtos')->find($id);
+
+    Log::info('Criando novo estoque, para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
+    return $nf;
+    // return view('estoque.nf.lista')->with('nfs', $nfs);
+  }
+
+  public function nf_entrada(request $request)
+  {
+    if (!isset(Auth::user()->perms["estoques"]["adicao"]) or Auth::user()->perms["estoques"]["adicao"]!=1){
+      return redirect()->action('HomeController@index')
+                       ->withErrors([__('messages.perms.adicao')]);
+    }
+    $nf = new nf_entradas;
+    $nf->filiais_id = $request->filiais_id;
+    $nf->fornecedor_id = $request->contatos_id;
+    $nf->numero = $request->numero;
+    $nf->total = $request->total;
+    $nf->frete = $request->frete;
+    $nf->transportadora = $request->transportadora;
+    $nf->seguro = $request->seguro;
+    $nf->icms = $request->icms_substituicao;
+    $nf->acrescimo = $request->acrescimo;
+    $nf->desconto = $request->desconto;
+    $nf->obs = $request->obs;
+    $nf->criado_por = Auth::user()->contato->id;
+    $nf->save();
+    foreach ($request->produtos as $key => $produto) {
+      $nfp = new nf_produtos;
+      $nfp->notas_id = $nf->id;
+      $nfp->produtos_id = $produto['produtos_id'];
+      $nfp->ncm = $produto['ncm'];
+      $nfp->quantidade = $produto['quantidade'];
+      $nfp->tipo = $produto['tipo'];
+      $nfp->valor = $produto['valor'];
+      $nfp->icms = $produto['icms'];
+      $nfp->ipi = $produto['ipi'];
+      $nfp->total_icms = $produto['total_icms'];
+      $nfp->total_ipi = $produto['total_ipi'];
+      $nfp->total = $produto['total'];
+      $nfp->save();
+
+      $estoque = $nf->filial->estoque->where('produtos_id', $nfp->produto->id)->first();
+      if (is_null($estoque)){
+        $estoque = new Estoque;
+        $estoque->contatos_id = $nf->filial->id;
+        $estoque->produtos_id = $nfp->id;
+      }
+      $estoque->quantidade = $estoque->quantidade+$nfp->quantidade;
+      $estoque->save();
+
+    }
+
+    Log::info('Criando novo estoque, para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
+    return;
+  }
+
+
+
+
   public function index()
   {
     Log::info('Vendo estoque, para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
@@ -59,36 +151,18 @@ class EstoqueController  extends BaseController
     Log::info('Criando novo estoque, para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
     return view('estoque.nf.index');
   }
-  public function nf_entrada_busca(request $request)
-  {
-    if (!isset(Auth::user()->perms["estoques"]["leitura"]) or Auth::user()->perms["estoques"]["leitura"]!=1){
-      return redirect()->action('HomeController@index')
-                       ->withErrors([__('messages.perms.leitura')]);
-    }
-    $nfs = nf_entradas::all();
-
-    Log::info('Criando novo estoque, para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
-    return view('estoque.nf.lista')->with('nfs', $nfs);
-  }
-  public function nf_entrada()
-  {
-    if (!isset(Auth::user()->perms["estoques"]["adicao"]) or Auth::user()->perms["estoques"]["adicao"]!=1){
-      return redirect()->action('HomeController@index')
-                       ->withErrors([__('messages.perms.adicao')]);
-    }
-    Log::info('Criando novo estoque, para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
-    return view('estoque.nf.entrada');
-  }
-  public function nf_entrada_editar($id)
-  {
-    if (!isset(Auth::user()->perms["estoques"]["adicao"]) or Auth::user()->perms["estoques"]["adicao"]!=1){
-      return redirect()->action('HomeController@index')
-                       ->withErrors([__('messages.perms.adicao')]);
-    }
-    $nf = nf_entradas::find($id);
-    Log::info('Criando novo estoque, para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
-    return view('estoque.nf.entrada')->with('nf', $nf);
-  }
+  //
+  //
+  // public function nf_entrada_editar($id)
+  // {
+  //   if (!isset(Auth::user()->perms["estoques"]["adicao"]) or Auth::user()->perms["estoques"]["adicao"]!=1){
+  //     return redirect()->action('HomeController@index')
+  //                      ->withErrors([__('messages.perms.adicao')]);
+  //   }
+  //   $nf = nf_entradas::find($id);
+  //   Log::info('Criando novo estoque, para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
+  //   return view('estoque.nf.entrada')->with('nf', $nf);
+  // }
   public function nf_entrada_salva(request $request )
   {
     if (!isset(Auth::user()->perms["estoques"]["adicao"]) or Auth::user()->perms["estoques"]["adicao"]!=1){

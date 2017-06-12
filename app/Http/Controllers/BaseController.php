@@ -61,6 +61,7 @@ class BaseController extends Controller {
       $menu['lista']['contas'] = 'lista/contas';
       $menu['lista']['bancos'] = 'lista/bancos';
       $menu['lista']['produtos'] = 'lista/produtos';
+      $menu['lista']['NF Entrada'] = 'lista/nfentrada';
 
       // auto gerando menus depreciado
       // - artur
