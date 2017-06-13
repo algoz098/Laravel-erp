@@ -15,7 +15,7 @@ Auth::routes();
 
 Route::get('/', 'HomeController@index');
 Route::get('/menus', 'BaseController@menus')->middleware('auth');
-Route::get('/home', 'HomeController@index')->middleware('auth');
+// Route::get('/home', 'HomeController@index')->middleware('auth');
 
 Route::get('/lista/combobox/{app}', 'ContatosController@combobox')->middleware('auth');
 
@@ -61,6 +61,11 @@ Route::get('/admin/update/do', 'AdminController@update_do')->middleware('auth')-
 Route::get('/admin/backup', 'AdminController@backup_index')->middleware('auth')->middleware('admin');
 Route::get('/admin/backup/do', 'AdminController@backup_do')->middleware('auth')->middleware('admin');
 Route::get('/admin/backup/download/{file}', 'AdminController@backup_download')->middleware('auth')->middleware('admin');
+//Imagem de destaque
+Route::get('/admin/config/img_destaque', 'AdminController@img_destaque'); // Rota espcial nao colocar middleware de proteção
+// Configuracoes
+Route::get('/admin/config', 'AdminController@configuration')->name('admin')->middleware('auth')->middleware('admin');
+Route::post('/admin/config', 'AdminController@configuration_save')->name('admin')->middleware('auth')->middleware('admin');
 
 
 
@@ -235,11 +240,6 @@ Route::post('attach/{modulo}/{id}/{contatos_id}', 'AttachmentsController@salva')
 Route::get('/lista/cons_int', 'Cons_intController@index')->middleware('auth');
 
 
-Route::get('/admin/config/img_destaque', 'AdminController@img_destaque'); // Rota espcial nao colocar middleware de proteção
-
-
-Route::get('/admin/config', 'AdminController@configuration')->name('admin')->middleware('auth')->middleware('admin');
-Route::post('/admin/config', 'AdminController@configuration_save')->name('admin')->middleware('auth')->middleware('admin');
 
 Route::get('/admin/user/{id}', 'AdminController@user_edit')->middleware('auth')->middleware('admin');
 Route::post('/admin/user/{id}', 'AdminController@user_modify')->middleware('auth')->middleware('admin');

@@ -16,10 +16,8 @@
     <div id="app">
 
       @if (!Auth::guest())
-        @include('partials.sidemenu')
-        <div class="site-overlay"></div>
         <div id="container">
-          @include('partials.topbar')
+          @include('menu')
           @if ( $errors->count() > 0 )
             <div class="row">
               <div class="col-md-3"></div>

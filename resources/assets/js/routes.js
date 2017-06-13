@@ -140,6 +140,11 @@ let routes = [
     name: 'update_lista',
     component: require('./views/admin/update/Home.vue'),
   },
+  {
+    path: '/admin/config',
+    name: 'admin_config',
+    component: require('./views/admin/config/Home.vue'),
+  },
 
 ]
 

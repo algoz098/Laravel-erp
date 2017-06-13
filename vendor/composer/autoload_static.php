@@ -259,6 +259,10 @@ class ComposerStaticInit4d97f355aa96e53aced63fa5c4163ffa
         ),
     );
 
+    public static $fallbackDirsPsr4 = array (
+        0 => __DIR__ . '/..' . '/larapack/config-writer/src',
+    );
+
     public static $prefixesPsr0 = array (
         'P' => 
         array (
@@ -336,7 +340,9 @@ class ComposerStaticInit4d97f355aa96e53aced63fa5c4163ffa
         'App\\Http\\Controllers\\Controller' => __DIR__ . '/../..' . '/app/Http/Controllers/Controller.php',
         'App\\Http\\Controllers\\EstoqueController' => __DIR__ . '/../..' . '/app/Http/Controllers/EstoqueController.php',
         'App\\Http\\Controllers\\FrotasController' => __DIR__ . '/../..' . '/app/Http/Controllers/FrotasController.php',
+        'App\\Http\\Controllers\\GruposController' => __DIR__ . '/../..' . '/app/Http/Controllers/GruposController.php',
         'App\\Http\\Controllers\\HomeController' => __DIR__ . '/../..' . '/app/Http/Controllers/HomeController.php',
+        'App\\Http\\Controllers\\ProdutosController' => __DIR__ . '/../..' . '/app/Http/Controllers/ProdutosController.php',
         'App\\Http\\Controllers\\TicketsController' => __DIR__ . '/../..' . '/app/Http/Controllers/TicketsController.php',
         'App\\Http\\Controllers\\VendasController' => __DIR__ . '/../..' . '/app/Http/Controllers/VendasController.php',
         'App\\Http\\Kernel' => __DIR__ . '/../..' . '/app/Http/Kernel.php',
@@ -1794,6 +1800,8 @@ class ComposerStaticInit4d97f355aa96e53aced63fa5c4163ffa
         'Kodeine\\Acl\\Traits\\HasRole' => __DIR__ . '/..' . '/kodeine/laravel-acl/src/Kodeine/Acl/Traits/HasRole.php',
         'Kodeine\\Acl\\Traits\\HasRoleImplementation' => __DIR__ . '/..' . '/kodeine/laravel-acl/src/Kodeine/Acl/Traits/HasRole.php',
         'Kodeine\\Acl\\Traits\\HasUserPermission' => __DIR__ . '/..' . '/kodeine/laravel-acl/src/Kodeine/Acl/Traits/HasUserPermission.php',
+        'Larapack\\ConfigWriter\\Facade' => __DIR__ . '/..' . '/larapack/config-writer/src/Larapack/ConfigWriter/Facade.php',
+        'Larapack\\ConfigWriter\\Repository' => __DIR__ . '/..' . '/larapack/config-writer/src/Larapack/ConfigWriter/Repository.php',
         'Laravel\\Tinker\\Console\\TinkerCommand' => __DIR__ . '/..' . '/laravel/tinker/src/Console/TinkerCommand.php',
         'Laravel\\Tinker\\TinkerCaster' => __DIR__ . '/..' . '/laravel/tinker/src/TinkerCaster.php',
         'Laravel\\Tinker\\TinkerServiceProvider' => __DIR__ . '/..' . '/laravel/tinker/src/TinkerServiceProvider.php',
@@ -3529,6 +3537,7 @@ class ComposerStaticInit4d97f355aa96e53aced63fa5c4163ffa
         return \Closure::bind(function () use ($loader) {
             $loader->prefixLengthsPsr4 = ComposerStaticInit4d97f355aa96e53aced63fa5c4163ffa::$prefixLengthsPsr4;
             $loader->prefixDirsPsr4 = ComposerStaticInit4d97f355aa96e53aced63fa5c4163ffa::$prefixDirsPsr4;
+            $loader->fallbackDirsPsr4 = ComposerStaticInit4d97f355aa96e53aced63fa5c4163ffa::$fallbackDirsPsr4;
             $loader->prefixesPsr0 = ComposerStaticInit4d97f355aa96e53aced63fa5c4163ffa::$prefixesPsr0;
             $loader->classMap = ComposerStaticInit4d97f355aa96e53aced63fa5c4163ffa::$classMap;
 

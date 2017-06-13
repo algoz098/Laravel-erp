@@ -61,7 +61,6 @@
       data(){
         return {
           combo: '',
-          esquema_tipos: {value: '', label: ''},
           tipos: [],
         }
       },

@@ -73,6 +73,8 @@ class AdminController  extends BaseController
 
   public function img_destaque(){
     $imagem_destaque = Configs::where('field', 'img_destaque')->pluck('options')->first();
+    // return $imagem_destaque;
+
     $attach = Attachs::find($imagem_destaque);
 
     if ($imagem_destaque!=""){
@@ -195,6 +197,23 @@ class AdminController  extends BaseController
     }
 
     $matriz = Contatos::find(1);
+
+    $resposta['configs'] = $configs;
+    $resposta['field_codigo'] = $field_codigo;
+    $resposta['img_destaque'] = $img_destaque;
+    $resposta['modulo_atendimentos'] = $modulo_atendimentos;
+    $resposta['modulo_tickets'] = $modulo_tickets;
+    $resposta['modulo_contas'] = $modulo_contas;
+    $resposta['modulo_caixas'] = $modulo_caixas;
+    $resposta['modulo_vendas'] = $modulo_vendas;
+    $resposta['modulo_estoques'] = $modulo_estoques;
+    $resposta['modulo_frotas'] = $modulo_frotas;
+    $resposta['modulo_bancos'] = $modulo_bancos;
+    $resposta['matriz'] = $matriz;
+    $resposta['app_name'] = Config::get('app.name');
+
+    return $resposta;
+
     return view('admin.configuration')->with('configs', $configs)
                                       ->with('field_codigo', $field_codigo)
                                       ->with('img_destaque', $img_destaque)
@@ -209,9 +228,14 @@ class AdminController  extends BaseController
                                       ->with('matriz', $matriz);
   }
   public function configuration_save(request $request){
+    //  return $request->field_codigo;
     #return $request->img_destaque;
     Log::info('!!!ADMIN!!! Salvando configuration, para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
     $configs = Configs::all();
+
+    $app_name = $request->app_name;
+
+    Config::write('app', ['name' => $app_name]);
 
     $field_codigo = Configs::where('field', 'field_codigo')->first();
     $field_codigo->value = $request->field_codigo;
@@ -246,14 +270,17 @@ class AdminController  extends BaseController
     $modulo_frotas->save();
 
     $img_destaque = Configs::where('field', 'img_destaque')->first();
-    if ($request->img_destaque!=""){
-      $attach = Attachs::find($request->img_destaque);
-      $img_destaque->value = $attach->name;
-      $img_destaque->options = $request->img_destaque;
-      $img_destaque->save();
-    }
 
-    return redirect()->action('AdminController@configuration');
+    if($request->img_destaque['attachmentable_id']=='0'){
+      $img_destaque->options = 0;
+    } else {
+      $attach = Attachs::find($request->img_destaque['attachmentable_id']);
+      $img_destaque->value = $attach->name;
+      $img_destaque->options = $attach->id;
+    }
+    $img_destaque->save();
+
+    return ;
   }
 
 

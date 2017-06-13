@@ -66,6 +66,8 @@ Vue.component('selecionar-filial', require('./components/Selecionar-filial.vue')
 Vue.component('selecionar-banco', require('./components/Selecionar-banco.vue'));
 Vue.component('selecionar-grupo', require('./components/Selecionar-grupo.vue'));
 Vue.component('selecionar-produto', require('./components/Selecionar-produto.vue'));
+Vue.component('selecionar-imagem', require('./components/Selecionar-imagem.vue'));
+Vue.component('imagens-selecionar', require('./views/admin/config/Selecionar_imagem.vue'));
 Vue.component('carta', require('./components/Carta.vue'));
 
 Vue.component('input-texto', require('./components/Input-texto.vue'));
@@ -146,7 +148,7 @@ new Vue({
     },
     methods: {
       deslogar: function() {
-        axios.post(this.base_url+'logout', {_token: window.Laravel.csrfToken})
+        axios.post(base_url+'logout', {_token: window.Laravel.csrfToken})
           .then(function(response){
             location.reload();
           })
