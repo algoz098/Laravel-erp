@@ -18,6 +18,9 @@ class CreateTelefonesTable extends Migration
             $table->integer('contatos_id');
             $table->string('tipo')->nullable();
             $table->string('numero')->nullable();
+            $table->string('contato')->nullable();
+            $table->string('setor')->nullable();
+            $table->string('ramal')->nullable();
             $table->timestamps();
         });
     }

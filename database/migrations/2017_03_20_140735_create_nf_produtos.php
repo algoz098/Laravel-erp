@@ -25,6 +25,7 @@ class CreateNfProdutos extends Migration
             $table->string('total');
             $table->string('total_icms');
             $table->string('total_ipi');
+            $table->string('tipo')->nullable();
             $table->timestamps();
         });
     }

@@ -17,11 +17,8 @@ class CreateCaixasTable extends Migration
             $table->increments('id');
             $table->integer('filial_id');
             $table->integer('funcionario_id');
-            $table->integer('vendas_id');
-            $table->string('tipo');
-            $table->float('valor');
-            $table->string('forma');
-            $table->string('pag');
+            $table->string("estado")->nullable();
+            $table->integer("contatos_id")->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

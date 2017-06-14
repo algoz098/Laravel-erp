@@ -16,14 +16,22 @@ class AttachmentsController  extends BaseController
   public function __construct(){
      parent::__construct();
   }
-  public function novo($modulo, $id, $contatos_id){
-    return view('attachs.novo')->with('modulo', $modulo)->with('id', $id)->with('contatos_id', $contatos_id);
+  public function nome($id, request $request){
+    $attach = Attachs::find($id);
+    $attach->name = $request->name;
+    $attach->save();
+
+    return "ok";
   }
   public function salva($modulo, $id, $contatos_id, request $request){
     $attach = new Attachs;
     $attach->attachmentable_id = $id;
     $attach->attachmentable_type = "App\\".$modulo;
-    $attach->name = $request->name;
+    if ($request->name) {
+      $attach->name = $request->name;
+    } else {
+      $attach->name = $request->file->hashName();
+    }
     $attach->path = $request->file->store('public');
     $attach->contatos_id = $contatos_id;
     $attach->save();
@@ -31,7 +39,7 @@ class AttachmentsController  extends BaseController
     $path = storage_path() . '/' .'app/'. $attach->path;
 
     $type = File::mimeType($path);
-    return $type;
+    return $attach;
     #$file = Image::make($path);
     Log::info('Anexando arquivo para contato -> "'.$id.'", anexo -> "'.$attach.'", para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
   }
@@ -84,6 +92,8 @@ class AttachmentsController  extends BaseController
     Log::info('Virando anexo sentido relogio -> "'.$attach.'", para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
 
     $file->save();
+
+    return redirect()->action('AttachmentsController@show' , ['id' => $id]);
   }
   public function rotate_unclock($id){
     $attach = Attachs::find($id);

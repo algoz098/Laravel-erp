@@ -22,6 +22,98 @@ class EstoqueController  extends BaseController
      parent::__construct();
   }
 
+  public function busca(request $request)
+  {
+    if (!isset(Auth::user()->perms["estoques"]["leitura"]) or Auth::user()->perms["estoques"]["leitura"]!=1){
+      return redirect()->action('HomeController@index')
+                       ->withErrors([__('messages.perms.leitura')]);
+    }
+    $nfs = nf_entradas::with('fornecedor', 'filial', 'nf_produtos')->paginate(15);
+
+    Log::info('Criando novo estoque, para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
+    return $nfs;
+    // return view('estoque.nf.lista')->with('nfs', $nfs);
+  }
+
+  public function nf_entrada_detalhes($id)
+  {
+    if (!isset(Auth::user()->perms["estoques"]["edicao"]) or Auth::user()->perms["estoques"]["edicao"]!=1){
+      return redirect()->action('HomeController@index')
+                       ->withErrors([__('messages.perms.edicao')]);
+    }
+    $nf = nf_entradas::with('fornecedor', 'filial', 'nf_produtos', 'attachs')->find($id);
+
+    Log::info('Detalhes NF_entrada, para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
+    return $nf;
+    // return view('estoque.nf.lista')->with('nfs', $nfs);
+  }
+
+  public function nf_entrada_editar($id)
+  {
+    if (!isset(Auth::user()->perms["estoques"]["edicao"]) or Auth::user()->perms["estoques"]["edicao"]!=1){
+      return redirect()->action('HomeController@index')
+                       ->withErrors([__('messages.perms.edicao')]);
+    }
+    $nf = nf_entradas::with('fornecedor', 'filial', 'nf_produtos')->find($id);
+
+    Log::info('Criando novo estoque, para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
+    return $nf;
+    // return view('estoque.nf.lista')->with('nfs', $nfs);
+  }
+
+  public function nf_entrada(request $request)
+  {
+    if (!isset(Auth::user()->perms["estoques"]["adicao"]) or Auth::user()->perms["estoques"]["adicao"]!=1){
+      return redirect()->action('HomeController@index')
+                       ->withErrors([__('messages.perms.adicao')]);
+    }
+    $nf = new nf_entradas;
+    $nf->filiais_id = $request->filiais_id;
+    $nf->fornecedor_id = $request->contatos_id;
+    $nf->numero = $request->numero;
+    $nf->total = $request->total;
+    $nf->frete = $request->frete;
+    $nf->transportadora = $request->transportadora;
+    $nf->seguro = $request->seguro;
+    $nf->icms = $request->icms_substituicao;
+    $nf->acrescimo = $request->acrescimo;
+    $nf->desconto = $request->desconto;
+    $nf->obs = $request->obs;
+    $nf->criado_por = Auth::user()->contato->id;
+    $nf->save();
+    foreach ($request->produtos as $key => $produto) {
+      $nfp = new nf_produtos;
+      $nfp->notas_id = $nf->id;
+      $nfp->produtos_id = $produto['produtos_id'];
+      $nfp->ncm = $produto['ncm'];
+      $nfp->quantidade = $produto['quantidade'];
+      $nfp->tipo = $produto['tipo'];
+      $nfp->valor = $produto['valor'];
+      $nfp->icms = $produto['icms'];
+      $nfp->ipi = $produto['ipi'];
+      $nfp->total_icms = $produto['total_icms'];
+      $nfp->total_ipi = $produto['total_ipi'];
+      $nfp->total = $produto['total'];
+      $nfp->save();
+
+      $estoque = $nf->filial->estoque->where('produtos_id', $nfp->produto->id)->first();
+      if (is_null($estoque)){
+        $estoque = new Estoque;
+        $estoque->contatos_id = $nf->filial->id;
+        $estoque->produtos_id = $nfp->id;
+      }
+      $estoque->quantidade = $estoque->quantidade+$nfp->quantidade;
+      $estoque->save();
+
+    }
+
+    Log::info('Criando novo estoque, para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
+    return;
+  }
+
+
+
+
   public function index()
   {
     Log::info('Vendo estoque, para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
@@ -59,48 +151,18 @@ class EstoqueController  extends BaseController
     Log::info('Criando novo estoque, para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
     return view('estoque.nf.index');
   }
-
-  public function nf_entrada_detalhes($id)
-  {
-    if (!isset(Auth::user()->perms["estoques"]["leitura"]) or Auth::user()->perms["estoques"]["leitura"]!=1){
-      return redirect()->action('HomeController@index')
-                       ->withErrors([__('messages.perms.leitura')]);
-    }
-    $nf = nf_entradas::find($id);
-    Log::info('Criando novo estoque, para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
-    return view('estoque.nf.detalhes')->with('nf', $nf);
-  }
-
-  public function nf_entrada_busca(request $request)
-  {
-    if (!isset(Auth::user()->perms["estoques"]["leitura"]) or Auth::user()->perms["estoques"]["leitura"]!=1){
-      return redirect()->action('HomeController@index')
-                       ->withErrors([__('messages.perms.leitura')]);
-    }
-    $nfs = nf_entradas::orderBy('created_at', 'desc')->get();
-
-    Log::info('Criando novo estoque, para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
-    return view('estoque.nf.lista')->with('nfs', $nfs);
-  }
-  public function nf_entrada()
-  {
-    if (!isset(Auth::user()->perms["estoques"]["adicao"]) or Auth::user()->perms["estoques"]["adicao"]!=1){
-      return redirect()->action('HomeController@index')
-                       ->withErrors([__('messages.perms.adicao')]);
-    }
-    Log::info('Criando novo estoque, para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
-    return view('estoque.nf.entrada');
-  }
-  public function nf_entrada_editar($id)
-  {
-    if (!isset(Auth::user()->perms["estoques"]["adicao"]) or Auth::user()->perms["estoques"]["adicao"]!=1){
-      return redirect()->action('HomeController@index')
-                       ->withErrors([__('messages.perms.adicao')]);
-    }
-    $nf = nf_entradas::find($id);
-    Log::info('Criando novo estoque, para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
-    return view('estoque.nf.entrada')->with('nf', $nf);
-  }
+  //
+  //
+  // public function nf_entrada_editar($id)
+  // {
+  //   if (!isset(Auth::user()->perms["estoques"]["adicao"]) or Auth::user()->perms["estoques"]["adicao"]!=1){
+  //     return redirect()->action('HomeController@index')
+  //                      ->withErrors([__('messages.perms.adicao')]);
+  //   }
+  //   $nf = nf_entradas::find($id);
+  //   Log::info('Criando novo estoque, para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
+  //   return view('estoque.nf.entrada')->with('nf', $nf);
+  // }
   public function nf_entrada_salva(request $request )
   {
     if (!isset(Auth::user()->perms["estoques"]["adicao"]) or Auth::user()->perms["estoques"]["adicao"]!=1){
@@ -150,25 +212,6 @@ class EstoqueController  extends BaseController
     Log::info('Criando novo estoque, para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
     return view('estoque.nf.index');
   }
-  public function nf_entrada_delete($id)
-  {
-    if (!isset(Auth::user()->perms["estoques"]["edicao"]) or Auth::user()->perms["estoques"]["edicao"]!=1){
-      return redirect()->action('HomeController@index')
-                       ->withErrors([__('messages.perms.edicao')]);
-    }
-    $nf = nf_entradas::find($id);
-    foreach ($nf->nf_produtos as $key => $produto) {
-      $produto->delete();
-      $estoque = $nf->filial->estoque->where('produtos_id', $produto->id)->first();
-      $estoque->delete();
-
-    }
-    $nf->delete();
-
-    Log::info('Criando novo estoque, para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
-    return view('estoque.nf.index');
-  }
-
   public function nf_entrada_atualiza($id, request $request )
   {
     if (!isset(Auth::user()->perms["estoques"]["adicao"]) or Auth::user()->perms["estoques"]["adicao"]!=1){
@@ -215,32 +258,6 @@ class EstoqueController  extends BaseController
 
     }
 
-    foreach ($request->nota_produto_id as $key => $produto_id) {
-      $nfp = nf_produtos::find($request->nfp_id[$key]);
-      $nfp->notas_id = $nf->id;
-      $nfp->produtos_id = $request->nota_produto_idEditar[$key];
-      $nfp->ncm = $request->ncmNotaEditar[$key];
-      $nfp->quantidade = $request->qtdNotaEditar[$key];
-      $nfp->tipo = $request->tipoNotaEditar[$key];
-      $nfp->valor = $request->valorUniNotaEditar[$key];
-      $nfp->icms = $request->IcmsUniNotaEditar[$key];
-      $nfp->ipi = $request->IpiUniNotaEditar[$key];
-      $nfp->total_icms = $request->IcmsTotalNotaEditar[$key];
-      $nfp->total_ipi = $request->IpiTotalNotaEditar[$key];
-      $nfp->total = $request->valorTotalNotaEditar[$key];
-      $nfp->save();
-
-      $estoque = $nf->filial->estoque->where('produtos_id', $nfp->produto->id)->first();
-      if (is_null($estoque)){
-        $estoque = new Estoque;
-        $estoque->contatos_id = $nf->filial->id;
-        $estoque->produtos_id = $nfp->id;
-      }
-      $estoque->quantidade = $estoque->quantidade+$nfp->quantidade;
-      $estoque->save();
-
-    }
-
     Log::info('Criando novo estoque, para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
     return view('estoque.nf.index');
   }
@@ -270,15 +287,7 @@ class EstoqueController  extends BaseController
     Log::info('Criando novo estoque, para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
     return view('estoque.tipos.selecionar');
   }
-  public function grupo_busca(request $request)
-  {
-    if (!isset(Auth::user()->perms["estoques"]["leitura"]) or Auth::user()->perms["estoques"]["leitura"]!=1){
-      return response()->json([__('messages.perms.leitura')], 403);
-    }
-    $grupos = Grupos::all();
-    Log::info('Criando novo estoque, para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
-    return view('estoque.grupos.lista')->with('grupos', $grupos);
-  }
+
   public function tipo_busca(request $request)
   {
     if (!isset(Auth::user()->perms["estoques"]["leitura"]) or Auth::user()->perms["estoques"]["leitura"]!=1){
@@ -297,23 +306,8 @@ class EstoqueController  extends BaseController
     Log::info('Criando novo estoque, para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
     return view('estoque.tipos.lista')->with('tipos', $tipos);
   }
-  public function grupo_novo()
-  {
-    if (!isset(Auth::user()->perms["estoques"]["adicao"]) or Auth::user()->perms["estoques"]["adicao"]!=1){
-      return response()->json([__('messages.perms.adicao')], 403);
-    }
-    Log::info('Criando novo estoque, para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
-    return view('estoque.grupos.novo');
-  }
-  public function grupo_edit($id)
-  {
-    if (!isset(Auth::user()->perms["estoques"]["edicao"]) or Auth::user()->perms["estoques"]["edicao"]!=1){
-      return response()->json([__('messages.perms.edicao')], 403);
-    }
-    Log::info('Criando novo estoque, para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
-    $grupo = Grupos::find($id);
-    return view('estoque.grupos.novo')->with('grupo', $grupo);
-  }
+
+
   public function tipo_novo($id)
   {
     if (!isset(Auth::user()->perms["estoques"]["adicao"]) or Auth::user()->perms["estoques"]["adicao"]!=1){
@@ -332,21 +326,7 @@ class EstoqueController  extends BaseController
     Log::info('Criando novo estoque, para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
     return view('estoque.tipos.novo')->with("tipo", $tipo);
   }
-  public function grupo_salva(request $request)
-  {
-    if (!isset(Auth::user()->perms["estoques"]["adicao"]) or Auth::user()->perms["estoques"]["adicao"]!=1){
-      return response()->json([__('messages.perms.adicao')], 403);
-    }
-    if($request->id!=""){
-      $grupo = Grupos::find($request->id);
-    } else {
-      $grupo = new Grupos;
-    }
-    $grupo->nome = $request->nome;
-    $grupo->save();
-    Log::info('Criando novo estoque, para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
-    return response()->json([__('messages.adicao.sucesso')], 201);
-  }
+
   public function tipo_salva(request $request)
   {
     if (!isset(Auth::user()->perms["estoques"]["adicao"]) or Auth::user()->perms["estoques"]["adicao"]!=1){
@@ -497,20 +477,7 @@ class EstoqueController  extends BaseController
       $campo->delete();
     }
   }
-  public function produto_delete($id)
-  {
-    if (!isset(Auth::user()->perms["estoques"]["edicao"]) or Auth::user()->perms["estoques"]["edicao"]!=1){
-      return redirect()->action('HomeController@index')
-                       ->withErrors([__('messages.perms.edicao')]);
-    }
-    $produto = Produtos::withTrashed()->find($id);
-    if ($produto->trashed()){
-      $produto->restore();
-    }else{
-      $produto->delete();
-    }
-    return redirect()->action('EstoqueController@produto_index');
-  }
+
   public function produto_externos_delete($id)
   {
     if (!isset(Auth::user()->perms["estoques"]["edicao"]) or Auth::user()->perms["estoques"]["edicao"]!=1){
@@ -535,21 +502,7 @@ class EstoqueController  extends BaseController
       ->with('embalagens', $embalagens)
       ->with('medidas', $comboboxes);
   }
-  public function produto_editar($id)
-  {
-    if (!isset(Auth::user()->perms["estoques"]["edicao"]) or Auth::user()->perms["estoques"]["edicao"]!=1){
-      return redirect()->action('HomeController@index')
-                       ->withErrors([__('messages.perms.edicao')]);
-    }
-    Log::info('Criando novo produto, para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
-    $produto = produtos::find($id);
-    $comboboxes = comboboxes::where('combobox_textable_type', 'App\Produtos\Medidas')->get();
-    $embalagens = comboboxes::where('combobox_textable_type', 'App\Produtos\Embalagens')->get();
-    return view('estoque.produto.novo')
-      ->with('medidas', $comboboxes)
-      ->with('embalagens', $embalagens)
-      ->with('produto', $produto);
-  }
+
   public function produto_salva(request $request)
   {
     if (!isset(Auth::user()->perms["estoques"]["adicao"]) or Auth::user()->perms["estoques"]["adicao"]!=1){
@@ -600,6 +553,8 @@ class EstoqueController  extends BaseController
       ];
       $produto->armazenagens()->sync($data, true);
     }
+
+
     if($request->semelhante_id){
       foreach ($request->semelhante_id as $key => $semelhante) {
         $produto->semelhantes_to()->sync([$semelhante]);
@@ -637,112 +592,7 @@ class EstoqueController  extends BaseController
 
     return redirect()->action('EstoqueController@produto_index');
   }
-  public function produto_atualiza($id, request $request)
-  {
-    Log::info('Atualizando novo produto, para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
-    if (!isset(Auth::user()->perms["estoques"]["edicao"]) or Auth::user()->perms["estoques"]["edicao"]!=1){
-      return redirect()->action('HomeController@index')
-                       ->withErrors([__('messages.perms.edicao')]);
-    }
-    $produto = Produtos::find($id);
-    if (Produtos::where('barras', $request->barras)->first() and $produto->barras!=$request->barras){
-      return redirect()->back();
-    }
-    if ($request->barras=="" or !isset($request->barras)){
-      $i = 0;
-      while ($i < 1) {
-        $barras = rand(10000000, 99999999);
-        $produto_achado = Produtos::where('barras', $barras)->first();
-        if ($produto_achado==""){
-          $i++;
-        }
-      }
-    } else {
-      $barras = $request->barras;
-    }
-    $produto->barras = $barras;
-    $produto->produtos_tipo_id = $request->produtos_grupos_id;
-    $produto->nome = $request->nome;
-    $produto->unidade = $request->unidade;
-    $produto->embalagem = $request->embalagem;
-    $produto->fabricante_id = $request->contatos_id;
-    $produto->custo = $request->custo;
-    $produto->margem = $request->margem;
-    $produto->venda = $request->venda;
-    $produto->qtd_minima = $request->minimo;
-    $produto->qtd_maxima = $request->maximo;
-    $produto->estado = $request->estado;
-    // $produto->ncm = $request->ncm;
-    $produto->peso = $request->peso;
-    $produto->aplicacao = $request->aplicacao;
-    $produto->save();
-    if(isset($request->armazenagem)){
-      $data = [
-        $produto->id =>
-        [
-          'filiais_id' => Auth::user()->trabalho_id,
-          'local' => $request->armazenagem,
-        ]
-      ];
-      $produto->armazenagens()->sync($data, true);
-    }
-    if($request->semelhante_id){
-      foreach ($request->semelhante_id as $key => $semelhante) {
-        $produto->semelhantes_to()->sync([$semelhante]);
-      }
-    }
-    if($request->semelhante_id_from){
-      foreach ($request->semelhante_id_from as $key => $semelhante) {
-        $produto->semelhantes_from()->sync([$semelhante]);
-      }
-    }
-    if($request->semelhante_id_to){
-      foreach ($request->semelhante_id_to as $key => $semelhante) {
-        $produto->semelhantes_to()->sync([$semelhante]);
-      }
-    }
-    if(isset($request->codigoExterno)){
-      foreach ($request->codigoExterno as $key => $cod_externo) {
-        $externo = new Externos;
-        $externo->produtos_id = $produto->id;
-        $externo->codigo = $request->codigoExterno[$key];
-        $externo->nome = $request->nomeExterno[$key];
-        $externo->origem = $request->origemExterno[$key];
-        $externo->save();
-      }
-    }
-    if(isset($request->codigoExterno)){
-      foreach ($request->codigoExterno as $key => $cod_externo) {
-        $externo = new Externos;
-        $externo->produtos_id = $produto->id;
-        $externo->codigo = $request->codigoExterno[$key];
-        $externo->nome = $request->nomeExterno[$key];
-        $externo->origem = $request->origemExterno[$key];
-        $externo->save();
-      }
-    }
-    if(isset($request->campo_nome_edit)){
-      foreach ($request->campo_nome_edit as $key => $value) {
-        $campo = Campos::find($request->campo_id_edit[$key]);
-        $campo->tipo = "0";
-        $campo->nome = $request->campo_nome_edit[$key];
-        $campo->valor = $request->campo_valor_edit[$key];
-        $campo->save();
-      }
-    }
-    if(isset($request->campo_nome)){
-      foreach ($request->campo_nome as $key => $value) {
-        $campo = new Campos;
-        $campo->estoque_id = $produto->id;
-        $campo->tipo = "0";
-        $campo->nome = $request->campo_nome[$key];
-        $campo->valor = $request->campo_valor[$key];
-        $campo->save();
-      }
-    }
 
-    return redirect()->action('EstoqueController@produto_index');
-  }
   public function produto_selecionar()
   {
     if (!isset(Auth::user()->perms["estoques"]["leitura"]) or Auth::user()->perms["estoques"]["leitura"]!=1){

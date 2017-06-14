@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use GrahamCampbell\Bitbucket\Facades\Bitbucket as Bitbucket;
+
 use Illuminate\Http\Request;
 use App\User as User;
 use App\Contatos as Contatos;
@@ -25,8 +27,56 @@ class AdminController  extends BaseController
      parent::__construct();
   }
 
+  public function usuarios(request $request){
+
+    Log::info('!!!ADMIN!!! Mostrando index, para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
+    $contatos = contatos::has('user')->with('user')->paginate(15);
+
+    return $contatos;
+  }
+
+  public function usuarios_editar($id){
+    $usuario = User::with('trabalho')->find($id);
+    // $matriz = Contatos::find(1);
+    //
+    // $filiais[]=$matriz;
+    // foreach ($matriz->to as $key => $relacao) {
+    //   if ($relacao->from_text="Filial"){
+    //     $filiais[] = $relacao;
+    //   }
+    // }
+
+    Log::info('!!!ADMIN!!! Editando usuario de -> "'.$usuario.'", para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
+    return $usuario;
+  }
+
+  public function usuarios_salvar(Request $request, $id){
+    $user = User::find($id);
+    $user->email = $request->email;
+    $user->password = bcrypt($request->password);
+    $user->ativo = $request->ativo;
+    $user->save();
+
+    Log::info('!!!ADMIN!!! Salvando usuario -> "'.$user.'", para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
+
+    return $user;
+  }
+
+
+
+
+
+
+
+
+
+
+
+
   public function img_destaque(){
     $imagem_destaque = Configs::where('field', 'img_destaque')->pluck('options')->first();
+    // return $imagem_destaque;
+
     $attach = Attachs::find($imagem_destaque);
 
     if ($imagem_destaque!=""){
@@ -46,12 +96,7 @@ class AdminController  extends BaseController
 
     return $response;
   }
-  public function index(){
 
-    Log::info('!!!ADMIN!!! Mostrando index, para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
-    $contatos = contatos::all();
-    return view('admin.index')->with('contatos', $contatos);
-  }
 
   public function configuration(){
     Log::info('!!!ADMIN!!! Mostrando configuration, para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
@@ -154,6 +199,23 @@ class AdminController  extends BaseController
     }
 
     $matriz = Contatos::find(1);
+
+    $resposta['configs'] = $configs;
+    $resposta['field_codigo'] = $field_codigo;
+    $resposta['img_destaque'] = $img_destaque;
+    $resposta['modulo_atendimentos'] = $modulo_atendimentos;
+    $resposta['modulo_tickets'] = $modulo_tickets;
+    $resposta['modulo_contas'] = $modulo_contas;
+    $resposta['modulo_caixas'] = $modulo_caixas;
+    $resposta['modulo_vendas'] = $modulo_vendas;
+    $resposta['modulo_estoques'] = $modulo_estoques;
+    $resposta['modulo_frotas'] = $modulo_frotas;
+    $resposta['modulo_bancos'] = $modulo_bancos;
+    $resposta['matriz'] = $matriz;
+    $resposta['app_name'] = Config::get('app.name');
+
+    return $resposta;
+
     return view('admin.configuration')->with('configs', $configs)
                                       ->with('field_codigo', $field_codigo)
                                       ->with('img_destaque', $img_destaque)
@@ -168,9 +230,14 @@ class AdminController  extends BaseController
                                       ->with('matriz', $matriz);
   }
   public function configuration_save(request $request){
+    //  return $request->field_codigo;
     #return $request->img_destaque;
     Log::info('!!!ADMIN!!! Salvando configuration, para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
     $configs = Configs::all();
+
+    $app_name = $request->app_name;
+
+    Config::write('app', ['name' => $app_name]);
 
     $field_codigo = Configs::where('field', 'field_codigo')->first();
     $field_codigo->value = $request->field_codigo;
@@ -205,51 +272,20 @@ class AdminController  extends BaseController
     $modulo_frotas->save();
 
     $img_destaque = Configs::where('field', 'img_destaque')->first();
-    if ($request->img_destaque!=""){
-      $attach = Attachs::find($request->img_destaque);
+
+    if($request->img_destaque['attachmentable_id']=='0'){
+      $img_destaque->options = 0;
+    } else {
+      $attach = Attachs::find($request->img_destaque['attachmentable_id']);
       $img_destaque->value = $attach->name;
-      $img_destaque->options = $request->img_destaque;
-      $img_destaque->save();
+      $img_destaque->options = $attach->id;
     }
+    $img_destaque->save();
 
-    return redirect()->action('AdminController@configuration');
+    return ;
   }
 
-  public function user_edit($id){
-    $contato = Contatos::find($id);
-    $matriz = Contatos::find(1);
 
-    $filiais[]=$matriz;
-    foreach ($matriz->to as $key => $relacao) {
-      if ($relacao->from_text="Filial"){
-        $filiais[] = $relacao;
-      }
-    }
-
-    Log::info('!!!ADMIN!!! Editando usuario de -> "'.$contato.'", para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
-    return view('admin.useredit')->with('contato', $contato)->with('filiais', $filiais);
-  }
-
-    public function user_modify(Request $request, $id){
-      $contato = Contatos::find($id);
-      if ($contato->user){
-        $user = User::find($contato->user->id);
-      } else{
-        $user = new User;
-        $user->contatos_id = $id;
-        $user->perms = "{}";
-      }
-      $user->email = $request->email;
-      $user->password = bcrypt($request->password);
-      $user->ativo = $request->ativo;
-      $user->trabalho_id = $request->filial;
-      $user->save();
-
-      Log::info('!!!ADMIN!!! Salvando usuario -> "'.$user.'", para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
-
-      $contatos = contatos::all();
-      return view('admin.index')->with('contatos', $contatos);
-    }
 
     public function access($id){
       $contato = Contatos::find($id);
@@ -332,12 +368,22 @@ class AdminController  extends BaseController
       $file = base_path() . "/manifest.json";
       $manifest = json_decode(file_get_contents($file), true);
       $remoto = json_decode(file_get_contents("http://www.webgs.com.br/clientes/erp/manifest.json"), true);
+
+      $resultado['manifest'] = $manifest;
+      $resultado['remoto'] = $remoto;
+
       Log::info('!!!ADMIN!!! Visualizando update, para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
-      return view('admin.update')->with('manifest', $manifest)->with('remoto', $remoto);
+      return $resultado;
+      // return view('admin.update')->with('manifest', $manifest)->with('remoto', $remoto);
     }
 
     public function update_do(){
       Log::info('!!!ADMIN!!! Realizando update, para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
+
+      // sleep(10);
+
+      // return redirect()->action('AdminController@update_index');
+
 
       $storage = storage_path();
       $base = base_path();
@@ -380,11 +426,19 @@ class AdminController  extends BaseController
         $backups = 0;
         $ultimo = 0;
       }
-      return view('admin.backup')->with('backups', $backups)->with('ultimo', $ultimo);
+      return $backups;
     }
     public function backup_download($file){
       Log::info('!!!ADMIN!!! Download de BKP -> "'.$file.'", para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
       $pathToFile = storage_path('backups').'/'.$file.'.zip';
+
+      $headers = array(
+              'Content-Type: application/zip',
+              'Content-Description: File Transfer',
+              'Content-type: application/octet-stream',
+
+            );
+
       return response()->download($pathToFile);
     }
     public function backup_do(){
@@ -400,12 +454,47 @@ class AdminController  extends BaseController
          $backups = 0;
          $ultimo = 0;
        }
-       return view('admin.backup')->with('backups', $backups)->with('ultimo', $ultimo);
+       return $backups;
     }
     public function logs(){
       Log::info('!!!ADMIN!!! Mostrando logs, para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
 
-      $path = storage_path() . '/' .'logs/laravel.log';
+
+      $files = scandir(storage_path() . '/' .'logs/');
+
+      // $result[] = '';
+      foreach($files as $file) {
+        if (strpos($file, 'log')){
+          $result[] = $file;
+        }
+      }
+
+      return $result;
+
+      // if(!File::exists($path)) abort(404);
+      //
+      // $file = File::get($path);
+      // $type = File::mimeType($path);
+      //
+      // $remove = "\n";
+      //
+      // $split = explode($remove, $file);
+      // foreach ($split as $key => $line) {
+      //   $invalid[] = strpos($line, "ERROR:");
+      //   $invalid[] = strpos($line, "#");
+      //   $invalid[] = strpos($line, "Next");
+      //   $invalid[] = strpos($line, "Stack");
+      //   #return $invalid;
+      //   if (!in_array(true, $invalid)) {
+      //     $result[] = $line;
+      //   }
+      // }
+      // return view('admin.logs')->with('logs', $result);
+    }
+    public function logs_ver($file){
+      Log::info('!!!ADMIN!!! Mostrando logs, para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
+
+      $path = storage_path() . '/' .'logs/' . $file;
 
       if(!File::exists($path)) abort(404);
 
@@ -425,8 +514,8 @@ class AdminController  extends BaseController
           $result[] = $line;
         }
       }
-      #return $result;
-      return view('admin.logs')->with('logs', $result);
+      return $result;
+      // return view('admin.logs')->with('logs', $result);
     }
     public function combobox(){
       Log::info('!!!ADMIN!!! Mostrando edicao de combobox, para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
@@ -573,5 +662,33 @@ class AdminController  extends BaseController
         $combobox->delete();
       }
       return redirect()->action('AdminController@combobox');
+    }
+
+    public function bitbucket(){
+      // return Bitbucket::api('Main')->all();
+      // we're done here - how easy was that, it just works!
+
+      $b['hash'] = 'c6c1d8be06524851ed9de5aa785bb25add3715b0';
+
+      // $a = Bitbucket::api('Repositories\Repository')->get('gentlero', 'bitbucket-api');
+      // $a = Bitbucket::api('Repositories\Commits')->all('webgs', 'erp');
+      $a = Bitbucket::api('Repositories\Commits')->all('webgs', 'erp', $b);
+      // $a = Bitbucket::api('Repositories\PullRequests')->all('webgs', 'erp');
+
+      echo "<pre>";
+      // var_dump(json_decode($a->getContent()));
+      var_dump(json_decode($a->getContent())->values[0]);
+      // var_dump(json_decode($a->getContent())->values[0]);
+      echo "</pre>";
+
+      return ;
+      // this example is simple, and there are far more methods available
+    }
+
+    public function teste() {
+        echo shell_exec("git pull https://artursena:Golpe432@bitbucket.org/webgs/erp.git VueJS-ERP");
+        // $a[] = exec("Golpe!90%");
+
+        return ;
     }
 }

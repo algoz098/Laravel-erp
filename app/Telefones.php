@@ -8,6 +8,7 @@ use App\Combobox_texts;
 class Telefones extends Model
 {
     protected $table = 'telefones';
+    protected $fillable = ['tipo', 'numero', 'contato', 'setor', 'ramal'];
 
     public function contatos()
     {

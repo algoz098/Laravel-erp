@@ -32,6 +32,8 @@ class HomeController  extends BaseController
      */
     public function index()
     {
+      return view('main');
+
       if (isset(Auth::user()->perms["contatos"]["leitura"]) and Auth::user()->perms["contatos"]["leitura"]==1){
         $contatos = contatos::all();
         $funcionarios = Funcionarios::all();

@@ -3,10 +3,10 @@
 use View;
 use Auth;
 use ErpSnippets;
-use App\Erp_configs as Configs;
+use Config;
 
+use App\Erp_configs as Configs;
 use App\Attachments as Attachs;
-//You can create a BaseController:
 
 class BaseController extends Controller {
     #public $variable1 = "I am Data";
@@ -39,6 +39,69 @@ class BaseController extends Controller {
       View::share ( 'modulo_frotas', $modulo_frotas );
       View::share ( 'modulo_bancos', $modulo_bancos );
 
+    }
+
+    public function menus(){
+      $resposta = [];
+
+      $menu = [];
+
+      // Gerando objeto de menu 'novo'
+      // - artur
+      $menu['novo']['contatos'] = 'novo/contatos';
+      $menu['novo']['funcionarios'] = 'novo/funcionarios';
+      $menu['novo']['contas'] = 'novo/contas';
+      $menu['novo']['bancos'] = 'novo/bancos';
+      $menu['novo']['produtos'] = 'novo/produtos';
+      $menu['novo']['NF Entrada'] = 'novo/nfentrada';
+
+      // Gerando objeto de menu 'lista'
+      // - artur
+      $menu['lista']['contatos'] = 'lista/contatos';
+      $menu['lista']['contas'] = 'lista/contas';
+      $menu['lista']['bancos'] = 'lista/bancos';
+      $menu['lista']['produtos'] = 'lista/produtos';
+      $menu['lista']['NF Entrada'] = 'lista/nfentrada';
+
+      // auto gerando menus depreciado
+      // - artur
+      // $modulos = ['contatos', 'atendimentos', 'contas', 'bancos', 'tickets', 'caixas', 'vendas', 'estoques', 'frotas'];
+      // $niveis = ['adicao', 'edicao', 'leitura'];
+      //
+      // foreach ($modulos as $key => $modulo) {
+      //   foreach ($niveis as $key2 => $nivel) {
+      //     if (isset(Auth::user()->perms[$modulo][$nivel]) or Auth::user()->perms[$modulo][$nivel]==1){
+      //       if($nivel='adicao'){
+      //         $menu['Novo'][$modulo] = 'novo/'.$modulo;
+      //       }
+      //       if($nivel='edicao'){
+      //         $menu[$nivel][$modulo] = 'edicao/'.$modulo;
+      //       }
+      //       if($nivel='leitura'){
+      //         $menu['Lista'][$modulo] = 'lista/'.$modulo.'/';
+      //       }
+      //     }
+      //   }
+      // }
+
+      if (isset(Auth::user()->perms["admin"]) and Auth::user()->perms["admin"]==1){
+        $menu['admin']['Controle de Úsuario'] = 'admin/usuarios/lista';
+        $menu['admin']['Configurações'] = 'admin/config';
+        $menu['admin']['Atualização'] = 'admin/update';
+        $menu['admin']['Backup'] = 'admin/backup';
+        $menu['admin']['Logs'] = 'admin/logs';
+
+        $menu['Combobox']['Painel'] = 'admin/combobox';
+        $menu['Combobox']['Tipo de telefones'] = 'novo/combobox/telefone';
+
+      }
+      $resposta['menu'] = $menu;
+
+      $resposta['erp_nome'] =  Config::get('app.name');
+
+      $resposta['perms'] = Auth::user()->perms;
+
+      return $resposta;
     }
 
 }

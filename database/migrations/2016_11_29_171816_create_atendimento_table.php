@@ -19,6 +19,7 @@ class CreateAtendimentoTable extends Migration
             $table->string('assunto');
             $table->text('texto');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

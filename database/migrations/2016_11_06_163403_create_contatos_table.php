@@ -15,22 +15,19 @@ class CreateContatosTable extends Migration
     {
         Schema::create('contatos', function (Blueprint $table) {
             $table->increments('id');
+            $table->string("codigo")->nullable();
+            $table->string('tipo')->nullable();
             $table->string('nome')->nullable();
             $table->string('sobrenome')->nullable();
+            $table->string("nascimento")->nullable();
             $table->string('cpf')->nullable();
             $table->string('rg')->nullable();
-            $table->string('endereco')->nullable();
-            $table->string('bairro')->nullable();
-            $table->string('cidade')->nullable();
-            $table->string('uf')->nullable();
-            $table->string('andar')->nullable();
-            $table->string('sala')->nullable();
-            $table->string('cep')->nullable();
+            $table->string('cod_prefeitura')->nullable();
             $table->string('sociabilidade')->nullable();
             $table->string('active')->nullable();
             $table->text('obs')->nullable();
-            $table->string('deleted')->nullable();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

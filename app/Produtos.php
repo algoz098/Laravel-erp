@@ -41,7 +41,7 @@ class Produtos extends Model
   {
     return $this->belongsTo('App\Contatos', 'fabricante_id');
   }
-  public function tipos()
+  public function tipo()
   {
     return $this->belongsTo('App\Produtos_tipos', 'produtos_tipo_id');
   }
