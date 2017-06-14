@@ -668,14 +668,27 @@ class AdminController  extends BaseController
       // return Bitbucket::api('Main')->all();
       // we're done here - how easy was that, it just works!
 
+      $b['hash'] = 'c6c1d8be06524851ed9de5aa785bb25add3715b0';
+
       // $a = Bitbucket::api('Repositories\Repository')->get('gentlero', 'bitbucket-api');
-      $a = Bitbucket::api('Repositories\Commits')->all('webgs', 'erp');
+      // $a = Bitbucket::api('Repositories\Commits')->all('webgs', 'erp');
+      $a = Bitbucket::api('Repositories\Commits')->all('webgs', 'erp', $b);
+      // $a = Bitbucket::api('Repositories\PullRequests')->all('webgs', 'erp');
 
       echo "<pre>";
+      // var_dump(json_decode($a->getContent()));
       var_dump(json_decode($a->getContent())->values[0]);
+      // var_dump(json_decode($a->getContent())->values[0]);
       echo "</pre>";
 
       return ;
       // this example is simple, and there are far more methods available
+    }
+
+    public function teste() {
+        echo shell_exec("git pull https://artursena:Golpe432@bitbucket.org/webgs/erp.git VueJS-ERP");
+        // $a[] = exec("Golpe!90%");
+
+        return ;
     }
 }

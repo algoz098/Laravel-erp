@@ -71,6 +71,7 @@ Route::get('/admin/logs', 'AdminController@logs')->middleware('auth')->middlewar
 Route::get('/admin/logs/{file}', 'AdminController@logs_ver')->middleware('auth')->middleware('admin');
 
 Route::get('/teste', 'AdminController@bitbucket')->middleware('auth')->middleware('admin');
+Route::get('/teste2', 'AdminController@teste')->middleware('auth')->middleware('admin');
 
 
 
