@@ -178,7 +178,7 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
         Spatie\Backup\BackupServiceProvider::class,
-
+        'GrahamCampbell\Bitbucket\BitbucketServiceProvider',
     ],
 
     /*
@@ -228,6 +228,7 @@ return [
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
         'Image' => Intervention\Image\Facades\Image::class,
+        'Bitbucket' => 'GrahamCampbell\Bitbucket\Facades\Bitbucket',
 
     ],
 

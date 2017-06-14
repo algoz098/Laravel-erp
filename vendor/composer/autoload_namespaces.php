@@ -11,5 +11,8 @@ return array(
     'Mockery' => array($vendorDir . '/mockery/mockery/library'),
     'JakubOnderka\\PhpConsoleHighlighter' => array($vendorDir . '/jakub-onderka/php-console-highlighter/src'),
     'JakubOnderka\\PhpConsoleColor' => array($vendorDir . '/jakub-onderka/php-console-color/src'),
+    'JacobKiers\\OAuth' => array($vendorDir . '/jacobkiers/oauth/src'),
     'Doctrine\\Common\\Inflector\\' => array($vendorDir . '/doctrine/inflector/lib'),
+    'Buzz' => array($vendorDir . '/kriswallsmith/buzz/lib'),
+    'Bitbucket\\' => array($vendorDir . '/gentle/bitbucket-api/lib'),
 );

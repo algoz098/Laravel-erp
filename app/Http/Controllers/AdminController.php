@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use GrahamCampbell\Bitbucket\Facades\Bitbucket as Bitbucket;
+
 use Illuminate\Http\Request;
 use App\User as User;
 use App\Contatos as Contatos;
@@ -660,5 +662,20 @@ class AdminController  extends BaseController
         $combobox->delete();
       }
       return redirect()->action('AdminController@combobox');
+    }
+
+    public function bitbucket(){
+      // return Bitbucket::api('Main')->all();
+      // we're done here - how easy was that, it just works!
+
+      // $a = Bitbucket::api('Repositories\Repository')->get('gentlero', 'bitbucket-api');
+      $a = Bitbucket::api('Repositories\Commits')->all('webgs', 'erp');
+
+      echo "<pre>";
+      var_dump(json_decode($a->getContent())->values[0]);
+      echo "</pre>";
+
+      return ;
+      // this example is simple, and there are far more methods available
     }
 }
