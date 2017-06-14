@@ -429,6 +429,14 @@ class AdminController  extends BaseController
     public function backup_download($file){
       Log::info('!!!ADMIN!!! Download de BKP -> "'.$file.'", para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
       $pathToFile = storage_path('backups').'/'.$file.'.zip';
+
+      $headers = array(
+              'Content-Type: application/zip',
+              'Content-Description: File Transfer',
+              'Content-type: application/octet-stream',
+
+            );
+
       return response()->download($pathToFile);
     }
     public function backup_do(){
@@ -444,12 +452,47 @@ class AdminController  extends BaseController
          $backups = 0;
          $ultimo = 0;
        }
-       return view('admin.backup')->with('backups', $backups)->with('ultimo', $ultimo);
+       return $backups;
     }
     public function logs(){
       Log::info('!!!ADMIN!!! Mostrando logs, para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
 
-      $path = storage_path() . '/' .'logs/laravel.log';
+
+      $files = scandir(storage_path() . '/' .'logs/');
+
+      // $result[] = '';
+      foreach($files as $file) {
+        if (strpos($file, 'log')){
+          $result[] = $file;
+        }
+      }
+
+      return $result;
+
+      // if(!File::exists($path)) abort(404);
+      //
+      // $file = File::get($path);
+      // $type = File::mimeType($path);
+      //
+      // $remove = "\n";
+      //
+      // $split = explode($remove, $file);
+      // foreach ($split as $key => $line) {
+      //   $invalid[] = strpos($line, "ERROR:");
+      //   $invalid[] = strpos($line, "#");
+      //   $invalid[] = strpos($line, "Next");
+      //   $invalid[] = strpos($line, "Stack");
+      //   #return $invalid;
+      //   if (!in_array(true, $invalid)) {
+      //     $result[] = $line;
+      //   }
+      // }
+      // return view('admin.logs')->with('logs', $result);
+    }
+    public function logs_ver($file){
+      Log::info('!!!ADMIN!!! Mostrando logs, para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());
+
+      $path = storage_path() . '/' .'logs/' . $file;
 
       if(!File::exists($path)) abort(404);
 
@@ -469,8 +512,8 @@ class AdminController  extends BaseController
           $result[] = $line;
         }
       }
-      #return $result;
-      return view('admin.logs')->with('logs', $result);
+      return $result;
+      // return view('admin.logs')->with('logs', $result);
     }
     public function combobox(){
       Log::info('!!!ADMIN!!! Mostrando edicao de combobox, para -> ID:'.Auth::user()->contato->id.' nome:'.Auth::user()->contato->nome.' Usuario ID:'.Auth::user()->id.' ip:'.request()->ip());

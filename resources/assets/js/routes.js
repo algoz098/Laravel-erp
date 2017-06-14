@@ -145,6 +145,11 @@ let routes = [
     name: 'admin_config',
     component: require('./views/admin/config/Home.vue'),
   },
+  {
+    path: '/admin/logs',
+    name: 'admin_logs',
+    component: require('./views/admin/logs/Home.vue'),
+  },
 
 ]
 

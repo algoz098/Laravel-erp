@@ -66,6 +66,9 @@ Route::get('/admin/config/img_destaque', 'AdminController@img_destaque'); // Rot
 // Configuracoes
 Route::get('/admin/config', 'AdminController@configuration')->name('admin')->middleware('auth')->middleware('admin');
 Route::post('/admin/config', 'AdminController@configuration_save')->name('admin')->middleware('auth')->middleware('admin');
+// logs
+Route::get('/admin/logs', 'AdminController@logs')->middleware('auth')->middleware('admin');
+Route::get('/admin/logs/{file}', 'AdminController@logs_ver')->middleware('auth')->middleware('admin');
 
 
 
@@ -246,7 +249,6 @@ Route::post('/admin/user/{id}', 'AdminController@user_modify')->middleware('auth
 Route::get('/admin/access/{id}', 'AdminController@access')->middleware('auth')->middleware('admin');
 Route::post('/admin/access/{id}', 'AdminController@access_post')->middleware('auth')->middleware('admin');
 Route::get('/admin/access/{id}/delete/{id_access}', 'AdminController@access_delete')->middleware('auth')->middleware('admin');
-Route::get('/admin/logs', 'AdminController@logs')->middleware('auth')->middleware('admin');
 
 Route::get('/lista/combobox/contas', 'AdminController@combobox_lista_contas')->middleware('auth')->middleware('admin');
 Route::post('/lista/combobox/contas', 'AdminController@combobox_lista_contas_search')->middleware('auth')->middleware('admin');
